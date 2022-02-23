@@ -7,16 +7,19 @@ pool:
 steps:
   - checkout: self
     submodules: true
-  - task: Npm@1
+  - task: Bash@3
+    displayName: NPM install
     inputs:
-      command: 'install'
-      workingDir: './'
-  
-  - task: Npm@1
+      targetType: 'inline'
+      script: |
+        cd $(System.DefaultWorkingDirectory)/inoffice && npm install
+
+  - task: Bash@3
+    displayName: NPM run build
     inputs:
-      command: 'custom'
-      workingDir: './'
-      customCommand: 'run build'
+      targetType: 'inline'
+      script: |
+        cd $(System.DefaultWorkingDirectory)/inoffice && npm run build
   
   - task: AzureStaticWebApp@0
     inputs:
