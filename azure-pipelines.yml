@@ -21,16 +21,9 @@ steps:
       script: |
         cd $(System.DefaultWorkingDirectory)/inoffice && npm run build
 
-  - task: Bash@3
-    displayName: test
-    inputs:
-      targetType: 'inline'
-      script: |
-        echo $PWD
-
   - task: AzureStaticWebApp@0
     inputs:
-      app_location: './src'
+      app_location: '/inoffice/src'
       api_location: ''
       output_location: '../build'
       azure_static_web_apps_api_token: $(deployment_token)
