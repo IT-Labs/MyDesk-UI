@@ -25,6 +25,6 @@ steps:
     inputs:
       app_location: '/inoffice/src'
       api_location: ''
-      output_location: '/inoffice/build'
+      output_location: '../build'
       azure_static_web_apps_api_token: $(deployment_token)
   
