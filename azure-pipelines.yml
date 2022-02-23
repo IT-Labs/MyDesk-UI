@@ -10,12 +10,12 @@ steps:
   - task: Npm@1
     inputs:
       command: 'install'
-      workingDir: '/inoffice'
+      workingDir: './'
   
   - task: Npm@1
     inputs:
       command: 'custom'
-      workingDir: '/inoffice'
+      workingDir: './'
       customCommand: 'run build'
   
   - task: AzureStaticWebApp@0
