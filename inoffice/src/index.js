@@ -1,13 +1,8 @@
 import { render } from "react-dom";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-import MyAccount from "./Pages/MyAccount/MyAccount"
-import Login from "./Components/LoginForm/Login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MyAccount from "./Pages/MyAccount/MyAccount";
+import Login from "./components/LoginForm/Login";
 import Register from "./Pages/Register/Register";
-
 
 const rootElement = document.getElementById("root");
 render(
