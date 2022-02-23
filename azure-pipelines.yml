@@ -7,9 +7,21 @@ pool:
 steps:
   - checkout: self
     submodules: true
+  - task: Npm@1
+    inputs:
+      command: 'install'
+      workingDir: '/inoffice'
+  
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      workingDir: '/inoffice'
+      customCommand: 'run build'
+  
   - task: AzureStaticWebApp@0
     inputs:
       app_location: '/inoffice/src'
       api_location: ''
       output_location: '/inoffice/build'
       azure_static_web_apps_api_token: $(deployment_token)
+  
