@@ -1,11 +1,14 @@
 import { Component } from "react/cjs/react.production.min";
+import Sidebar from "../../components/Sidebar/Sidebar"
 
 
 class MyAccount extends Component{
     render() {
         return (
-      <h1 className='header'>inOffice</h1>
-        )}
+          <div>
+            <Sidebar />
+          </div>
+        );}
 }
 
 export default MyAccount
