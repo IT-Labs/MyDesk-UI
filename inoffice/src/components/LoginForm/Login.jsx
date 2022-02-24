@@ -16,7 +16,7 @@ class Login extends Component {
     };
 
     axios
-      .post("http://localhost:8080/login", data)
+      .post("login", data)
       .then((res) => {
         console.log(res);
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -65,7 +65,7 @@ class Login extends Component {
               {
                 required: true,
                 pattern: new RegExp(
-                  "^(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$"
+                  "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
                 ),
                 message:
                   "Password length must be between 8 and 20 characters, contains a minimum of 1 special character, 1 lowercase, 1 uppercase and a number!",
