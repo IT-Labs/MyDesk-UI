@@ -19,6 +19,7 @@ class Login extends Component {
       .post("http://localhost:8080/login", data)
       .then((res) => {
         console.log(res);
+        localStorage.setItem("user", JSON.stringify(res.data));
       })
       .catch((err) => {
         console.log(err);
