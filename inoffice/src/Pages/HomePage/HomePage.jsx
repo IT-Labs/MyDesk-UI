@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Header from "../../components/Header/Header";
 
 export default class Home extends Component {
   state = {};
   componentDidMount() {
     const config = {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("user"),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     };
-    axios.get("home", config).then(
+    axios.get("employee/home", config).then(
       (res) => {
         console.log(res.data);
         this.setState({
@@ -24,8 +25,18 @@ export default class Home extends Component {
 
   render() {
     if (this.state.user) {
-      return <h1>You are logged in {this.state.user}</h1>;
+      return (
+        <div>
+          <h1>You are logged in as employee!</h1>
+          <Header />
+        </div>
+      );
     }
-    return <div>Home</div>;
+    return (
+      <div>
+        <h1>Must be logged in as employee!</h1>
+        <Header />
+      </div>
+    );
   }
 }

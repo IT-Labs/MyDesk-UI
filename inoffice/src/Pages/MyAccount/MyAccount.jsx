@@ -1,13 +1,13 @@
 import { Component } from "react/cjs/react.production.min";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
-
+import jwt from "jwt-decode";
 class MyAccount extends Component {
   state = {};
   componentDidMount() {
     const config = {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("user"),
+        Authorization: "Bearer " + localStorage.getItem("token"),
       },
     };
     axios.get("admin/myaccount", config).then(
@@ -32,7 +32,7 @@ class MyAccount extends Component {
         </h2>
       );
     }
-    return <div>Must be logged in!</div>;
+    return <h1 style={{ color: "white" }}>Must be logged in as admin!</h1>;
   }
 }
 
