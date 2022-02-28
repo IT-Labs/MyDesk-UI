@@ -1,8 +1,10 @@
 import { Component } from "react/cjs/react.production.min";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
-import jwt from "jwt-decode";
-class MyAccount extends Component {
+import Layout, { Content, Footer } from "antd/lib/layout/layout";
+import UserHeade from "../../components/Head/UserHead";
+
+class Dashboard extends Component {
   state = {};
   componentDidMount() {
     const config = {
@@ -10,7 +12,7 @@ class MyAccount extends Component {
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
     };
-    axios.get("admin/myaccount", config).then(
+    axios.get("admin/dashboard", config).then(
       (res) => {
         console.log(res);
         this.setState({
@@ -25,15 +27,14 @@ class MyAccount extends Component {
   render() {
     if (this.state.user) {
       return (
-        <h2>
-          <div>
-            <Sidebar />
-          </div>
-        </h2>
+        <Layout>
+          <UserHeade />
+          <Sidebar />
+        </Layout>
       );
     }
     return <h1 style={{ color: "white" }}>Must be logged in as admin!</h1>;
   }
 }
 
-export default MyAccount;
+export default Dashboard;

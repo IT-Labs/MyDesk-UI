@@ -10,7 +10,6 @@ import {
   FileOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import Header1 from "../Header/Header";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -29,7 +28,6 @@ class SiderDemo extends Component {
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-          <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
             <Menu.Item
               onClick={() => alert("clicked")}
@@ -61,11 +59,10 @@ class SiderDemo extends Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Header>
-          <h1>ASD</h1>
-          <Header1 />
-        </Header>
-        <Content>Component for a given choice - EX: Dashboard</Content>
+        <Content>CONTEIONOSIDFHOKJHF</Content>
+        <Footer>
+          <p>Footer</p>
+        </Footer>
       </Layout>
     );
   }

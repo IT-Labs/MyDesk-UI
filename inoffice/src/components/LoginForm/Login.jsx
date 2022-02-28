@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import jwt from "jwt-decode";
 import { Header } from "antd/lib/layout/layout";
-import Header1 from "../Header/Header";
+import UserHead from "../Head/UserHead";
 
 class Login extends Component {
   config = {
@@ -27,7 +27,7 @@ class Login extends Component {
         const user = jwt(res.data);
         localStorage.setItem("token", res.data);
         if (user.role == "ADMIN") {
-          window.location = "/admin/myaccount";
+          window.location = "/admin/dashboard";
         } else if (user.role == "EMPLOYEE") {
           window.location = "/employee/home";
         }
@@ -43,8 +43,8 @@ class Login extends Component {
       console.log("jwt not null " + this.config.token);
       return (
         <div>
+          <UserHead />
           <h1>Logged in as {jwt(this.config.token).role}</h1>
-          <Header1 />
         </div>
       );
     } else {

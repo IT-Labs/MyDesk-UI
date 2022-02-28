@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Header from "../../components/Header/Header";
+import UserHead from "../../components/Head/UserHead";
 
 export default class Home extends Component {
   state = {};
@@ -27,15 +27,15 @@ export default class Home extends Component {
     if (this.state.user) {
       return (
         <div>
+          <UserHead />
           <h1>You are logged in as employee!</h1>
-          <Header />
         </div>
       );
     }
     return (
       <div>
+        <UserHead />
         <h1>Must be logged in as employee!</h1>
-        <Header />
       </div>
     );
   }
