@@ -1,12 +1,11 @@
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox } from "antd";
+import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import "../../index.css";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import jwt from "jwt-decode";
-import { Header } from "antd/lib/layout/layout";
 import UserHead from "../Head/UserHead";
 
 class Login extends Component {
@@ -85,14 +84,6 @@ class Login extends Component {
                   required: true,
                   message: "Please input your Password!",
                 },
-                // {
-                //   required: true,
-                //   pattern: new RegExp(
-                //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-                //   ),
-                //   message:
-                //     "Password length must be between 8 and 20 characters, contains a minimum of 1 special character, 1 lowercase, 1 uppercase and a number!",
-                // },
               ]}
             >
               <Input.Password placeholder="Password" />
