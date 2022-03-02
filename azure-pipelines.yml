@@ -7,6 +7,11 @@ pool:
 steps:
   - checkout: self
     submodules: true
+
+  - task: NodeTool@0 
+    inputs:
+      versionSpec: '16.14.0'
+
   - task: AzureStaticWebApp@0
     inputs:
       app_location: "inoffice"
