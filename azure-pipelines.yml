@@ -7,31 +7,9 @@ pool:
 steps:
   - checkout: self
     submodules: true
-  - task: Bash@3
-    displayName: NPM install
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd $(System.DefaultWorkingDirectory)/inoffice && npm install
-
-  - task: Bash@3
-    displayName: NPM run build
-    inputs:
-      targetType: 'inline'
-      script: |
-        cd $(System.DefaultWorkingDirectory)/inoffice && npm run build
-
-  - task: Bash@3
-    displayName: test
-    inputs:
-      targetType: 'inline'
-      script: |
-        echo $PWD
 
   - task: AzureStaticWebApp@0
     inputs:
-      app_location: './src'
-      api_location: ''
-      output_location: '../build'
+      app_location: "inoffice"
+      output_location: "build"
       azure_static_web_apps_api_token: $(deployment_token)
-  

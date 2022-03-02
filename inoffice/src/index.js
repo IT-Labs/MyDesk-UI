@@ -8,7 +8,9 @@ import axios from "axios";
 import MyAccount from "./Pages/MyAccount/MyAccount";
 import Offices from "./Pages/Offices/Offices";
 import Sidebar from "./components/Sidebar/Sidebar";
-axios.defaults.baseURL = "http://localhost:8080/";
+
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const rootElement = document.getElementById("root");
 render(

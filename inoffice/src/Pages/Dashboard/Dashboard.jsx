@@ -31,7 +31,6 @@ class Dashboard extends Component {
           <UserHeade />
           <Layout>
             <Sidebar selected="1" />
-            {/* <Sider>LEFT</Sider> */}
             <Content>Dashboard</Content>
             <Footer>
               <p>Footer</p>
