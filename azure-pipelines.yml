@@ -11,9 +11,21 @@ steps:
   - task: NodeTool@0 
     inputs:
       versionSpec: '16.14.0'
-
+  - task: Bash@3
+    displayName: NPM install
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(System.DefaultWorkingDirectory)/inoffice && npm install
+  - task: Bash@3
+    displayName: NPM run build
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd $(System.DefaultWorkingDirectory)/inoffice && npm run build
   - task: AzureStaticWebApp@0
     inputs:
       app_location: "inoffice"
       output_location: "build"
+      skip_app_build: true
       azure_static_web_apps_api_token: $(deployment_token)
