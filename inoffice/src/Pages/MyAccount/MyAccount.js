@@ -1,11 +1,13 @@
 import { Component } from "react/cjs/react.production.min";
 
+class MyAccount extends Component {
+  render() {
+    return (
+      <h1 className="header">My Account</h1>
 
-class MyAccount extends Component{
-    render() {
-        return (
-      <h1 className='header'>inOffice</h1>
-        )}
+      //onFinish={onFinish}
+    );
+  }
 }
 
-export default MyAccount
+export default MyAccount;

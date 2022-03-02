@@ -1,21 +1,18 @@
-import React from 'react'
-import { ReactDOM } from 'react'
-import Login from '../../Components/LoginForm/Login'
+import React, { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 
-const App = () => {
+const LoginPage = () => {
+  let { loginUser } = useContext(AuthContext);
 
-    const onFinish = (values) => {
-  
-      console.log('Received values of form: ', values);
-  
-    };
-  
-  
-  
-    return (
-  
-      <Login/>
-  
-    );
-  
-  };
+  return (
+    <div>
+      <form onSubmit={loginUser}>
+        <input type="text" name="username" placeholder="Enter Username" />
+        <input type="password" name="password" placeholder="Enter Password" />
+        <input type="submit" />
+      </form>
+    </div>
+  );
+};
+
+export default LoginPage;
