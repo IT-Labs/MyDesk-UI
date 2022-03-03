@@ -1,0 +1,26 @@
+#addOffice {
+  float: right;
+  margin-top: 1%;
+  margin-right: 1%;
+  display: inline-block;
+}
+.formButton {
+  margin-right: 30px;
+  display: inline-block;
+}
+h1 {
+  margin-left: 1%;
+  font-size: 3em;
+  display: inline-block;
+}
+.editButton {
+  float: right;
+  margin-right: 10px;
+  background-color: #2148c0;
+  color: white;
+}
+.deleteButton {
+  float: right;
+  color: white;
+  background-color: #d11a2a;
+}

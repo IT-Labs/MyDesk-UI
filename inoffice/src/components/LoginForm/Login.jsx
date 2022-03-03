@@ -1,12 +1,11 @@
 import "antd/dist/antd.css";
 import { Form, Input, Button, Checkbox } from "antd";
+import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import "../../index.css";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import jwt from "jwt-decode";
-import { Header } from "antd/lib/layout/layout";
 import UserHead from "../Head/UserHead";
 
 class Login extends Component {

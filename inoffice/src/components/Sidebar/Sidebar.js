@@ -1,8 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import "antd/dist/antd.css";
 import "./Sidebar.css";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Menu } from "antd";
 import { Component } from "react/cjs/react.production.min";
 import {
   DesktopOutlined,
@@ -10,48 +8,60 @@ import {
   FileOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-
-const { Header, Content, Footer, Sider } = Layout;
+import Sider from "antd/lib/layout/Sider";
+import jwt from "jwt-decode";
 
 class SiderDemo extends Component {
   state = {
     collapsed: false,
   };
 
+  config = {
+    token: localStorage.getItem("token"),
+  };
+
   onCollapse = (collapsed) => {
-    console.log(collapsed);
     this.setState({ collapsed });
   };
 
   render() {
     const { collapsed } = this.state;
-    return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-          <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+    if (jwt(this.config.token).role == "ADMIN") {
+      return (
+        <Sider
+          style={{ minHeight: "93vh" }}
+          collapsible
+          collapsed={collapsed}
+          onCollapse={this.onCollapse}
+        >
+          <Menu
+            theme="dark"
+            defaultSelectedKeys={[this.props.selected]}
+            mode="inline"
+          >
             <Menu.Item
-              onClick={() => alert("clicked")}
+              onClick={() => (window.location = "/admin/dashboard")}
               key="1"
               icon={<PieChartOutlined />}
             >
               Dashboard
             </Menu.Item>
             <Menu.Item
-              onClick={() => alert("clicked")}
+              onClick={() => (window.location = "/admin/offices")}
               key="2"
               icon={<DesktopOutlined />}
             >
               Offices
             </Menu.Item>
             <Menu.Item
-              onClick={() => alert("clicked")}
+              onClick={() => (window.location = "/admin/configuration")}
               key="3"
               icon={<FileOutlined />}
             >
               Configuration
             </Menu.Item>
             <Menu.Item
-              onClick={() => alert("clicked")}
+              onClick={() => (window.location = "/admin/reservations")}
               key="4"
               icon={<TeamOutlined />}
             >
@@ -59,15 +69,39 @@ class SiderDemo extends Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Content>CONTEIONOSIDFHOKJHF</Content>
-        <Footer>
-          <p>Footer</p>
-        </Footer>
-      </Layout>
+      );
+    }
+
+    return (
+      <Sider
+        style={{ minHeight: "93vh" }}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={this.onCollapse}
+      >
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={[this.props.selected]}
+          mode="inline"
+        >
+          <Menu.Item
+            onClick={() => (window.location = "/admin/configuration")}
+            key="3"
+            icon={<FileOutlined />}
+          >
+            Personal Information
+          </Menu.Item>
+          <Menu.Item
+            onClick={() => (window.location = "/admin/reservations")}
+            key="4"
+            icon={<TeamOutlined />}
+          >
+            My Reservations
+          </Menu.Item>
+        </Menu>
+      </Sider>
     );
   }
 }
 
 export default SiderDemo;
-
-ReactDOM.render(<SiderDemo />, document.getElementById("root"));

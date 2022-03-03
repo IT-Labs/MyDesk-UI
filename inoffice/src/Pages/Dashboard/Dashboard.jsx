@@ -29,7 +29,13 @@ class Dashboard extends Component {
       return (
         <Layout>
           <UserHeade />
-          <Sidebar />
+          <Layout>
+            <Sidebar selected="1" />
+            <Content>Dashboard</Content>
+            <Footer>
+              <p>Footer</p>
+            </Footer>
+          </Layout>
         </Layout>
       );
     }
