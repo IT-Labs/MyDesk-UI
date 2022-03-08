@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import jwt from "jwt-decode";
-import axios from "axios";
+import api from "../../helper/api";
 import { Form, Input, Button } from "antd";
 
 export default class AddOffice extends Component {
@@ -8,28 +7,16 @@ export default class AddOffice extends Component {
 
   handleSubmit = (e) => {
     const data = {
-      name: e.name,
-      location: e.location,
+      Name: e.name + " " + e.location,
+      OfficeImage: "",
     };
 
-    console.log(data.name + " - " + data.location);
-
-    // axios
-    //   .post("login", data)
-    //   .then((res) => {
-    //     const user = jwt(res.data);
-    //     localStorage.setItem("token", res.data);
-    //     if (user.role == "ADMIN") {
-    //       window.location = "/admin/dashboard";
-    //     } else if (user.role == "EMPLOYEE") {
-    //       window.location = "/employee/home";
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     this.setState({
-    //       error: "invalid credentials",
-    //     });
-    //   });
+    api.post("admin/addoffice", data).catch((err) => {
+      this.setState({
+        error: "invalid credentials",
+      });
+    });
+    window.location = "/admin/offices";
   };
 
   render() {

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import "../../index.css";
 import React, { Component } from "react";
-import axios from "axios";
+import api from "../../helper/api";
 import jwt from "jwt-decode";
 import UserHead from "../Head/UserHead";
 
@@ -20,7 +20,7 @@ class Login extends Component {
       password: e.password,
     };
 
-    axios
+    api
       .post("login", data)
       .then((res) => {
         const user = jwt(res.data);
@@ -39,7 +39,6 @@ class Login extends Component {
   };
   render() {
     if (this.config.token != null) {
-      console.log("jwt not null " + this.config.token);
       return (
         <div>
           <UserHead />
@@ -47,7 +46,6 @@ class Login extends Component {
         </div>
       );
     } else {
-      console.log(this.config.token);
       return (
         <div className="FormLogin">
           <h1 className="header">inOffice</h1>
@@ -66,7 +64,7 @@ class Login extends Component {
                 {
                   required: true,
                   pattern: new RegExp(
-                    "^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+.)?[a-zA-Z]+.)?(inoffice).com$"
+                    "^[a-z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+.)?[a-zA-Z]+.)?(inoffice).com$"
                   ),
                   message: "Wrong Format",
                 },
@@ -84,14 +82,6 @@ class Login extends Component {
                   required: true,
                   message: "Please input your Password!",
                 },
-                // {
-                //   required: true,
-                //   pattern: new RegExp(
-                //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
-                //   ),
-                //   message:
-                //     "Password length must be between 8 and 20 characters, contains a minimum of 1 special character, 1 lowercase, 1 uppercase and a number!",
-                // },
               ]}
             >
               <Input.Password placeholder="Password" />

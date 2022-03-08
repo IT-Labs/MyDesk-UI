@@ -85,15 +85,15 @@ class SiderDemo extends Component {
           mode="inline"
         >
           <Menu.Item
-            onClick={() => (window.location = "/admin/configuration")}
-            key="3"
+            onClick={() => (window.location = "/employee/informations")}
+            key="1"
             icon={<FileOutlined />}
           >
             Personal Information
           </Menu.Item>
           <Menu.Item
-            onClick={() => (window.location = "/admin/reservations")}
-            key="4"
+            onClick={() => (window.location = "/employee/reservations")}
+            key="2"
             icon={<TeamOutlined />}
           >
             My Reservations
