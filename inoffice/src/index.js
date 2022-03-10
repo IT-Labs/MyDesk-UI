@@ -54,7 +54,12 @@ render(
       />
       <Route path="/denied" element={<NoPermissions />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/myaccount" element={<MyAccount />} />
+      <Route
+        path="/myaccount"
+        element={
+          <PrivateRoute component={MyAccount} roles={"ADMIN" || "EMPLOYEE"} />
+        }
+      />
     </Routes>
   </BrowserRouter>,
   rootElement
