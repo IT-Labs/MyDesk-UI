@@ -11,12 +11,15 @@ export default class AddOffice extends Component {
       OfficeImage: "",
     };
 
-    api.post("admin/addoffice", data).catch((err) => {
+    api.post("admin/addoffice", data)
+    .then((res) => {
+      window.location = "/admin/offices";
+    })
+    .catch((err) => {
       this.setState({
         error: "invalid credentials",
       });
     });
-    window.location = "/admin/offices";
   };
 
   render() {
