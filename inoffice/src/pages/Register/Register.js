@@ -1,8 +1,10 @@
 import { Component } from "react/cjs/react.production.min";
+import  RegisterForm  from "../../components/RegisterForm"
+
 
 class Register extends Component {
   render() {
-    return <h1 className="header">Register</h1>;
+    return <RegisterForm />
   }
 }
 

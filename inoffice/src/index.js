@@ -2,8 +2,8 @@ import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./components/LoginForm/Login";
-import Register from "./pages/Register/Register";
 import Home from "./pages/HomePage/HomePage";
+import Register from "./components/RegisterForm/Register"
 import MyAccount from "./pages/MyAccount/MyAccount";
 import Offices from "./pages/Offices/Offices";
 import NoPermissions from "./pages/NoPermissions/NoPermissions";
@@ -19,6 +19,7 @@ render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route
         path="/admin/dashboard"
         element={<PrivateRoute component={Dashboard} roles="ADMIN" />}
@@ -53,7 +54,6 @@ render(
         }
       />
       <Route path="/denied" element={<NoPermissions />} />
-      <Route path="/register" element={<Register />} />
       <Route
         path="/myaccount"
         element={

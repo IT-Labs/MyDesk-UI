@@ -10,7 +10,7 @@ const emailcomponent = (props) => {
         {
           required: true,
           pattern: new RegExp(
-            "^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+.)?[a-zA-Z]+.)?(inoffice).com$"
+            "^[a-z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+.)?[a-zA-Z]+.)?(inoffice).com$"
           ),
           message: "Wrong Format",
         },

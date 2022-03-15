@@ -5,8 +5,8 @@ import { Select, Form } from "antd";
 const jobtitle = (props) => {
   const { Option } = Select;
   return (
-    <Form.Item>
-      <Select defaultValue="Job Title" style={{ width: 120 }}>
+    <Form.Item name="jobtitle">
+      <Select style={{ width: 120 }}>
         <Option value="qa">QA</Option>
         <Option value="dev">DEV</Option>
       </Select>
