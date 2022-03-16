@@ -23,7 +23,7 @@ const confirmpassword = (props) => {
           }),
         ]}
       >
-        <Input.Password placeholder="CONFIRM PASSWORD" />
+        <Input.Password placeholder="Confirm password" />
       </Form.Item> 
     );
   };

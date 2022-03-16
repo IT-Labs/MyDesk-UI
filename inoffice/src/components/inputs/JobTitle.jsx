@@ -6,7 +6,7 @@ const jobtitle = (props) => {
   const { Option } = Select;
   return (
     <Form.Item name="jobtitle">
-      <Select style={{ width: 120 }}>
+      <Select style={{ width: 200 }} placeholder="Job Ttitle">
         <Option value="qa">QA</Option>
         <Option value="dev">DEV</Option>
       </Select>

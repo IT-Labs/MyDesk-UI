@@ -56,7 +56,9 @@ class Register extends Component {
     else {
       return (
         <div className="FormLogin">
-          <h1 className="header">inOffice</h1>
+          <div style={{textAlign: "center"}}>
+            <h1 className="header">inOffice</h1>
+          </div>
           <Form
             name="normal_login"
             className="login-form"

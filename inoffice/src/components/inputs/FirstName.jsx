@@ -6,7 +6,7 @@ const firstname = (props) => {
     <Form.Item
       name="firstname"
       rules={[
-        { required: true, message: "Please input your Firstname!" },
+        { required: true, message: "Please input your First name!" },
         {
           required: true,
           pattern: new RegExp("^[A-Za-z -]+$"),
@@ -14,7 +14,7 @@ const firstname = (props) => {
         },
       ]}
     >
-      <Input placeholder="Firstname" />
+      <Input placeholder="First name" />
     </Form.Item>
   );
 };
