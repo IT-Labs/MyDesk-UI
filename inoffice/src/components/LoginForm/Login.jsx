@@ -7,12 +7,14 @@ import React, { Component } from "react";
 import api from "../../helper/api";
 import jwt from "jwt-decode";
 import UserHead from "../Head/UserHead";
+import EmailComponent from "../inputs/EmailComponent"
+import PasswordComponent from "../inputs/PasswordComponent"
 
 class Login extends Component {
   config = {
     token: localStorage.getItem("token"),
   };
-  state = {};
+  state={}
 
   handleSubmit = (e) => {
     const data = {
@@ -48,44 +50,14 @@ class Login extends Component {
     } else {
       return (
         <div className="FormLogin">
-          <h1 className="header">inOffice</h1>
+            <h1 className="header">inOffice</h1>
           <Form
             name="normal_login"
             className="login-form"
-            initialValues={{
-              remember: true,
-            }}
             onFinish={this.handleSubmit}
           >
-            <Form.Item
-              name="email"
-              rules={[
-                { required: true, message: "Please input your Username!" },
-                {
-                  required: true,
-                  pattern: new RegExp(
-                    "^[a-z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+.)?[a-zA-Z]+.)?(inoffice).com$"
-                  ),
-                  message: "Wrong Format",
-                },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-              />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Password!",
-                },
-              ]}
-            >
-              <Input.Password placeholder="Password" />
-            </Form.Item>
+            <EmailComponent />
+            <PasswordComponent />
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox className="rememberMe" style={{ color: "white" }}>
@@ -103,16 +75,9 @@ class Login extends Component {
               >
                 LOG IN
               </Button>
-              <Link to="/register" style={{ color: "white" }}>
+              <Link to="/register" style={{ color: "white", display:"flex", justifyContent:"center" }}>
                 Register
               </Link>
-              <a
-                className="login-form-forgot"
-                href=""
-                style={{ color: "white" }}
-              >
-                Forgot password?
-              </a>
             </Form.Item>
           </Form>
           {this.state.error == "invalid credentials" ? (

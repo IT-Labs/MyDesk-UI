@@ -5,7 +5,7 @@ import { Component } from "react/cjs/react.production.min";
 import {
   DesktopOutlined,
   PieChartOutlined,
-  FileOutlined,
+  FolderOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
@@ -29,7 +29,7 @@ class SiderDemo extends Component {
     if (jwt(this.config.token).role == "ADMIN") {
       return (
         <Sider
-          style={{ minHeight: "93vh" }}
+          style={{  overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0,  }}
           collapsible
           collapsed={collapsed}
           onCollapse={this.onCollapse}
@@ -56,7 +56,7 @@ class SiderDemo extends Component {
             <Menu.Item
               onClick={() => (window.location = "/admin/configuration")}
               key="3"
-              icon={<FileOutlined />}
+              icon={<FolderOutlined />}
             >
               Configuration
             </Menu.Item>
@@ -65,7 +65,7 @@ class SiderDemo extends Component {
               key="4"
               icon={<TeamOutlined />}
             >
-              Reservation List
+              Reservation list
             </Menu.Item>
           </Menu>
         </Sider>
@@ -85,19 +85,20 @@ class SiderDemo extends Component {
           mode="inline"
         >
           <Menu.Item
-            onClick={() => (window.location = "/employee/informations")}
-            key="1"
-            icon={<FileOutlined />}
-          >
-            Personal Information
-          </Menu.Item>
-          <Menu.Item
             onClick={() => (window.location = "/employee/reservations")}
             key="2"
             icon={<TeamOutlined />}
           >
-            My Reservations
+            My reservations
           </Menu.Item>
+          <Menu.Item
+            onClick={() => (window.location = "/employee/informations")}
+            key="1"
+            icon={<FolderOutlined />}
+          >
+            Personal information
+          </Menu.Item>
+          
         </Menu>
       </Sider>
     );

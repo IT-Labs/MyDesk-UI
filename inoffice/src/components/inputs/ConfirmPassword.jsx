@@ -18,12 +18,12 @@ const confirmpassword = (props) => {
               if(!value || getFieldValue("password") === value){
                 return Promise.resolve();
               }
-              return Promise.reject("Passowrds do not match!");
+              return Promise.reject("Password does not match");
             },
           }),
         ]}
       >
-        <Input.Password placeholder="Confirm password" />
+        <Input.Password className="custominput" placeholder="Confirm Password" />
       </Form.Item> 
     );
   };

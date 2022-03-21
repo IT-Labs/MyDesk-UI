@@ -9,11 +9,22 @@
   margin-right: 10px;
 }
 
+a.link:hover{
+  cursor: pointer;
+  color:rgb(252, 252, 252);
+}
+
+.iconLogo{
+  font-size:100%;
+  margin-top: 20px;
+  margin-right: 7px;
+}
+
 #inOfficeLogo {
   position: absolute;
-  font-size: 2em;
-  left: 5%;
+  font-size: 1.5em;
   float: left;
+  left: 25px;
   display: flex;
   justify-content: start;
   color: white;

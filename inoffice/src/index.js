@@ -22,42 +22,42 @@ render(
       <Route path="/register" element={<Register />} />
       <Route
         path="/admin/dashboard"
-        element={<PrivateRoute component={Dashboard} roles="ADMIN" />}
+        element={<PrivateRoute component={Dashboard} roles={["ADMIN"]} />}
       />
       <Route
         path="/admin/offices"
-        element={<PrivateRoute component={Offices} roles="ADMIN" />}
+        element={<PrivateRoute component={Offices} roles={["ADMIN"]} />}
       />
       <Route
         path="/admin/configuration"
-        element={<PrivateRoute component={Configuration} roles="ADMIN" />}
+        element={<PrivateRoute component={Configuration} roles={["ADMIN"]} />}
       />
       <Route
         path="/admin/reservations"
-        element={<PrivateRoute component={ReservationList} roles="ADMIN" />}
+        element={<PrivateRoute component={ReservationList} roles={["ADMIN"]} />}
       />
 
       <Route
         path="/employee/home"
-        element={<PrivateRoute component={Home} roles="EMPLOYEE" />}
+        element={<PrivateRoute component={Home} roles={["EMPLOYEE"]} />}
       />
       <Route
         path="/employee/informations"
         element={
-          <PrivateRoute component={PersonalInformations} roles="EMPLOYEE" />
+          <PrivateRoute component={PersonalInformations} roles={["EMPLOYEE"]} />
         }
       />
       <Route
         path="/employee/reservations"
         element={
-          <PrivateRoute component={EmployeeReservationList} roles="EMPLOYEE" />
+          <PrivateRoute component={EmployeeReservationList} roles={["EMPLOYEE"]} />
         }
       />
       <Route path="/denied" element={<NoPermissions />} />
       <Route
         path="/myaccount"
         element={
-          <PrivateRoute component={MyAccount} roles={"ADMIN" || "EMPLOYEE"} />
+          <PrivateRoute component={MyAccount} roles={["ADMIN","EMPLOYEE"]} />
         }
       />
     </Routes>

@@ -27,7 +27,7 @@ class Offices extends Component {
       });
   }
   render() {
-    const triggerText = "Add office";
+    const addOfficeText = "Add office";
     const onSubmit = (event) => {
       event.preventDefault(event);
     };
@@ -41,7 +41,7 @@ class Offices extends Component {
 
             <AddOfficeContainer
               id="addOffice"
-              triggerText={triggerText}
+              addOfficeText={addOfficeText}
               onSubmit={onSubmit}
             />
 
@@ -59,7 +59,6 @@ class Offices extends Component {
                             data: res.data,
                           });
                         });
-                        //window.location = "offices";
                       });
                     }}
                     className="deleteButton"

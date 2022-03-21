@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Typography, List } from "antd";
 
-const Trigger = ({ triggerText, buttonRef, showModal }) => {
+const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
   return (
     <Button
       onClick={() => (window.location = "/admin/addoffice")}
@@ -11,7 +11,7 @@ const Trigger = ({ triggerText, buttonRef, showModal }) => {
       type="primary"
       shape="round"
     >
-      {triggerText}
+      {addOfficeText}
     </Button>
   );
 };

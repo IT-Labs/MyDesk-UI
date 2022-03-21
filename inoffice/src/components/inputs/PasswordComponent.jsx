@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 
 const passwordcomponent = (props) => {
   return (
-    <Form.Item
+    <Form.Item 
       name="password"
       rules={[
         {
@@ -15,13 +15,12 @@ const passwordcomponent = (props) => {
           pattern: new RegExp(
             "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$"
           ),
-          message:
-            " "
+          message: " ",
         },
       ]}
       hasFeedback
     >
-      <Input.Password placeholder="Password" />
+      <Input.Password className="custominput" placeholder="Password" />
     </Form.Item>
   );
 };

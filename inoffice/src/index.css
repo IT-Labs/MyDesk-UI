@@ -47,7 +47,8 @@ code {
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   font-weight: bold;
   font-size: 300%;
   color: white;
@@ -65,10 +66,19 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 input {
   width: 100%;
   margin-bottom: 100;
 }
+
+.custominput:focus{
+    outline: none !important;
+    border:3px solid red;
+    box-shadow: 0 0 15px #719ECE;
+  
+}
+
 
 body {
   margin: 0;

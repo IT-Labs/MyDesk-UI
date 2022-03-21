@@ -10,11 +10,12 @@ const firstname = (props) => {
         {
           required: true,
           pattern: new RegExp("^[A-Za-z -]+$"),
-          message: "Wrong Format",
+          message: " ",
         },
+       
       ]}
     >
-      <Input placeholder="First name" />
+      <Input className="custominput" placeholder="Firstname" />
     </Form.Item>
   );
 };

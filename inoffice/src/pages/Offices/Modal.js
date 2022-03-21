@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Form from "./Form";
+import Form from "./AddOfficeForm";
 import FocusTrap from "focus-trap-react";
 export const Modal = ({
   onClickOutside,

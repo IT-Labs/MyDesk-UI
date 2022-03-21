@@ -5,10 +5,16 @@ import { Select, Form } from "antd";
 const jobtitle = (props) => {
   const { Option } = Select;
   return (
-    <Form.Item name="jobtitle">
-      <Select style={{ width: 200 }} placeholder="Job Ttitle">
-        <Option value="qa">QA</Option>
+    <Form.Item name="jobtitle"
+    rules={[
+      { required: true, message: "Please input your Job Title!" },
+      {
+        message: "Wrong Format",
+      },
+    ]}>
+      <Select className="custominput" placeholder="Job title">
         <Option value="dev">DEV</Option>
+        <Option value="qa">QA</Option>
       </Select>
     </Form.Item>
   );

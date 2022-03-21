@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal } from "./Modal";
-import TriggerButton from "./TriggerButton";
+import AddOfficeButton from "./AddOfficeButton";
 export class AddOfficeContainer extends Component {
   state = { isShown: false };
   showModal = () => {
@@ -11,7 +11,7 @@ export class AddOfficeContainer extends Component {
   };
   closeModal = () => {
     this.setState({ isShown: false });
-    this.TriggerButton.focus();
+    this.AddOfficeButton.focus();
     this.toggleScrollLock();
   };
   onKeyDown = (event) => {
@@ -30,10 +30,10 @@ export class AddOfficeContainer extends Component {
   render() {
     return (
       <React.Fragment>
-        <TriggerButton
+        <AddOfficeButton
           showModal={this.showModal}
-          buttonRef={(n) => (this.TriggerButton = n)}
-          triggerText={this.props.triggerText}
+          buttonRef={(n) => (this.AddOfficeButton = n)}
+          addOfficeText={this.props.addOfficeText}
         />
         {this.state.isShown ? (
           <Modal

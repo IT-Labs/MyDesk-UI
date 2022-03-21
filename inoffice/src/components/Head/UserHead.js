@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import "./Header.css";
 import { Header } from "antd/lib/layout/layout";
 import jwt from "jwt-decode";
+import { FileOutlined } from '@ant-design/icons'
 
 export default class UserHead extends Component {
   config = {
@@ -12,8 +13,8 @@ export default class UserHead extends Component {
     if (jwt(this.config.token).role == "ADMIN") {
       return (
         <Header id="header">
-          <NavLink id="inOfficeLogo" to="/admin/dashboard">
-            inOffice
+          <NavLink className={"link"}  id="inOfficeLogo" to="/admin/dashboard">
+            <FileOutlined className={"iconLogo"} /> inOffice
           </NavLink>
           <NavLink className={"link"} to="/myaccount">
             My account
@@ -26,17 +27,17 @@ export default class UserHead extends Component {
               window.location = "/";
             }}
           >
-            Logout
+            Log out
           </NavLink>
         </Header>
       );
     }
     return (
       <Header id="header">
-        <NavLink id="inOfficeLogo" to="/employee/home">
-          inOffice
+        <NavLink className={"link"} id="inOfficeLogo" to="/employee/home">
+          <FileOutlined className={"iconLogo"} /> inOffice
         </NavLink>
-        <NavLink className={"link"} to="/employee/informations">
+        <NavLink className={"link"} to="/employee/reservations">
           My account
         </NavLink>
         <NavLink
@@ -47,7 +48,7 @@ export default class UserHead extends Component {
             window.location = "/";
           }}
         >
-          Logout
+          Log out
         </NavLink>
       </Header>
     );

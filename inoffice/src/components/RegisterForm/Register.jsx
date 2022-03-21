@@ -56,9 +56,7 @@ class Register extends Component {
     else {
       return (
         <div className="FormLogin">
-          <div style={{textAlign: "center"}}>
             <h1 className="header">inOffice</h1>
-          </div>
           <Form
             name="normal_login"
             className="login-form"
@@ -68,6 +66,7 @@ class Register extends Component {
             onFinish={this.handleSubmit}
           >
             <EmailComponent />
+              <p style={{ color: "red", fontSize:"20px"}} id="hiddeninput"></p>
             <FirstName />
             <LastName />
             <JobTitle />
@@ -88,7 +87,6 @@ class Register extends Component {
             </Form.Item>
             
           </Form>
-          <h2 id="hiddeninput"></h2>
         </div>
       );
     }
