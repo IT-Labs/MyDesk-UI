@@ -10,6 +10,7 @@ import {
 } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
+import { Link } from "react-router-dom";
 
 class SiderDemo extends Component {
   state = {
@@ -36,36 +37,41 @@ class SiderDemo extends Component {
         >
           <Menu
             theme="dark"
-            defaultSelectedKeys={[this.props.selected]}
+            selectedKeys={[this.props.selected]}
             mode="inline"
           >
             <Menu.Item
-              onClick={() => (window.location = "/admin/dashboard")}
               key="1"
               icon={<PieChartOutlined />}
             >
+              <Link to={"/admin/dashboard"}>
               Dashboard
+              </Link>
             </Menu.Item>
             <Menu.Item
-              onClick={() => (window.location = "/admin/offices")}
               key="2"
               icon={<DesktopOutlined />}
             >
-              Offices
+              <Link to={"/admin/offices"}>
+                Offices
+              </Link>
+             
             </Menu.Item>
             <Menu.Item
-              onClick={() => (window.location = "/admin/configuration")}
               key="3"
               icon={<FolderOutlined />}
             >
+              <Link to={"/admin/configuration"} >
               Configuration
+              </Link>
             </Menu.Item>
             <Menu.Item
-              onClick={() => (window.location = "/admin/reservations")}
               key="4"
               icon={<TeamOutlined />}
             >
-              Reservation list
+              <Link to={"/admin/reservations"} >
+                  Reservation list
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -81,22 +87,24 @@ class SiderDemo extends Component {
       >
         <Menu
           theme="dark"
-          defaultSelectedKeys={[this.props.selected]}
+          selectedKeys={[this.props.selected]}
           mode="inline"
         >
           <Menu.Item
-            onClick={() => (window.location = "/employee/reservations")}
-            key="2"
+            key="1"
             icon={<TeamOutlined />}
           >
-            My reservations
+            <Link to={"/employee/reservations"}>
+              My reservations
+            </Link>
           </Menu.Item>
           <Menu.Item
-            onClick={() => (window.location = "/employee/informations")}
-            key="1"
+            key="2"
             icon={<FolderOutlined />}
           >
-            Personal information
+            <Link to={"/employee/informations"}>
+              Personal information
+            </Link>
           </Menu.Item>
           
         </Menu>
