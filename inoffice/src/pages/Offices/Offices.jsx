@@ -4,7 +4,6 @@ import api from "../../helper/api";
 import Layout, { Content, Footer } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
-import "./Offices.css";
 import AddOfficeContainer from "./AddOfficeContainer";
 
 var data = [];
@@ -66,7 +65,14 @@ class Offices extends Component {
                   >
                     Delete
                   </Button>
-                  <Button className="editButton" shape="round">
+                  <Button
+                    className="editButton"
+                    shape="round"
+                    onClick={() => {
+                      console.log("CLICKED");
+                      window.location = "edit/" + item.name + "/" + item.id;
+                    }}
+                  >
                     Edit
                   </Button>
                 </List.Item>

@@ -13,11 +13,13 @@ import PersonalInformations from "./pages/PersonalInformations/PersonalInformati
 import EmployeeReservationList from "./pages/EmployeeReservations/EmployeeReservations";
 import { PrivateRoute } from "./helper/PrivateRoute";
 
+import EditOffice from "./pages/EditOffice/EditOffice";
 const rootElement = document.getElementById("root");
 
 render(
   <BrowserRouter>
     <Routes>
+      <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route

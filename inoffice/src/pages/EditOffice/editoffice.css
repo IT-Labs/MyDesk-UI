@@ -1,0 +1,11 @@
+.officeImagePlan {
+  display: flexbox;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.imageRow {
+  display: flex;
+  justify-self: center;
+}

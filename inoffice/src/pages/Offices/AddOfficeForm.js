@@ -7,9 +7,10 @@ export default class AddOffice extends Component {
 
   handleSubmit = (e) => {
     const data = {
-      Name: e.name + " " + e.location,
-      OfficeImage: "",
+      officeName: e.name + " " + e.location
     };
+
+    console.log(data)
 
     api.post("admin/addoffice", data)
     .then((res) => {

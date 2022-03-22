@@ -11,6 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.officeName {
+  margin-left: 2%;
+  max-width: 150px;
+}
 
 .FormLogin {
   position: absolute;
@@ -181,4 +185,44 @@ p.lorem-text {
 .scroll-lock {
   overflow: hidden;
   margin-right: 17px;
+}
+#addOffice {
+  float: right;
+  margin-top: 1%;
+  margin-right: 1%;
+  display: inline-block;
+}
+.formButton {
+  margin-right: 30px;
+  display: inline-block;
+}
+h1 {
+  margin-left: 1%;
+  font-size: 3em;
+  display: inline-block;
+}
+.editButton {
+  float: right;
+  margin-right: 10px;
+  background-color: #2148c0;
+  color: white;
+}
+.deleteButton {
+  float: right;
+  color: white;
+  background-color: #d11a2a;
+}
+
+.uploadOfficePlan {
+  color: white;
+  background-color: #2148c0;
+}
+.list {
+  background-color: white;
+}
+.conferenceRoomCapacity {
+  float: right;
+  margin-right: 10px;
+  max-width: 50px;
+  float: inline-end;
 }
