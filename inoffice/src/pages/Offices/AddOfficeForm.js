@@ -12,7 +12,7 @@ export default class AddOffice extends Component {
 
     console.log(data)
 
-    api.post("admin/addoffice", data)
+    api.post("admin/office", data)
     .then((res) => {
       window.location = "/admin/offices";
     })

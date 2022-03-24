@@ -29,7 +29,7 @@ class EditOffice extends Component {
 
   getDesks = () => {
     api
-      .get("admin/desks/" + this.state.officeId)
+      .get("admin/office-desks/" + this.state.officeId)
       .then((res) => {
         this.setState({
           desks: res.data,
@@ -50,7 +50,7 @@ class EditOffice extends Component {
 
   getConferenceRooms = () => {
     api
-      .get("admin/conferencerooms/" + this.state.officeId)
+      .get("admin/office-conferencerooms/" + this.state.officeId)
       .then((res) => {
         this.setState({
           conferenceRooms: res.data,
@@ -65,7 +65,7 @@ class EditOffice extends Component {
 
   getImage = () => {
     api
-      .get("office/image/" + this.state.officeId)
+      .get("admin/office/image/" + this.state.officeId)
       .then((res) => {
         this.setState({
           imageUrl: res.data,
@@ -117,7 +117,7 @@ class EditOffice extends Component {
     };
 
     api
-      .put("admin/offices/update", data)
+      .put("admin/office-entities", data)
       .then((res) => {
         this.getDesks();
         this.getConferenceRooms();
@@ -156,7 +156,7 @@ class EditOffice extends Component {
     };
 
     api
-      .post("admin/edit/" + this.state.officeId, data)
+      .post("admin/office-entities/" + this.state.officeId, data)
       .then((res) => {
         window.location.reload();
       })

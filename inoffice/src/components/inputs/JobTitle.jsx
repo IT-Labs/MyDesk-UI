@@ -7,7 +7,7 @@ const jobtitle = (props) => {
   return (
     <Form.Item name="jobtitle"
     rules={[
-      { required: true, message: "Please input your Job Title!" },
+      { required: true, message: "Please input your Job title!" },
       {
         message: "Wrong Format",
       },

@@ -13,7 +13,7 @@ export default class AddOffice extends Component {
     }
     
     api.put(
-      "admin/edit/" +
+      "admin/office/" +
         window.location.href.split("/")[
           window.location.href.split("/").length - 1
         ],
@@ -63,6 +63,12 @@ export default class AddOffice extends Component {
           <Form.Item>
             <Button type="submit" htmlType="submit" className="formButton">
               Save
+            </Button>
+            <Button
+              className="formButton"
+              onClick={() => (window.location = "/admin/offices")}
+            >
+              Cancel
             </Button>
           </Form.Item>
         </Form>

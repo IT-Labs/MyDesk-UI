@@ -59,21 +59,13 @@ class Login extends Component {
             <EmailComponent />
             <PasswordComponent />
             <Form.Item>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox className="customCheckbox" style={{ color: "white" }}>
-                  Remember me
-                </Checkbox>
-              </Form.Item>
-            </Form.Item>
-
-            <Form.Item>
               <Button
                 type="primary"
                 htmlType="submit"
                 className="login-form-button"
                 style={{ backgroundColor: "white", color: "blue" }}
               >
-                LOG IN
+                Log in
               </Button>
               <Link
                 to="/register"

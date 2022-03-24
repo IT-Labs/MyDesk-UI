@@ -5,6 +5,8 @@ import Layout, { Content, Footer } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
+import { Popconfirm } from "antd";
+
 
 var data = [];
 
@@ -13,7 +15,7 @@ class Offices extends Component {
 
   componentDidMount() {
     api
-      .get("admin/getalloffices")
+      .get("admin/offices")
       .then((res) => {
         this.setState({
           data: res.data,
@@ -24,6 +26,15 @@ class Offices extends Component {
           user: error,
         });
       });
+  }
+  deleteFunc = (value) =>{    
+    api.delete("admin/office/" + value).then(() => {
+      api.get("admin/offices").then((res) => {
+        this.setState({
+          data: res.data,
+        });
+      });
+    });
   }
   render() {
     const addOfficeText = "Add office";
@@ -47,30 +58,25 @@ class Offices extends Component {
             <List
               bordered
               dataSource={this.state.data}
-              renderItem={(item) => (
+              renderItem={(office) => (
                 <List.Item>
-                  <Typography.Text mark></Typography.Text> {item.name}{" "}
-                  <Button
-                    onClick={() => {
-                      api.get("admin/delete/" + item.id).then(() => {
-                        api.get("admin/getalloffices").then((res) => {
-                          this.setState({
-                            data: res.data,
-                          });
-                        });
-                      });
-                    }}
-                    className="deleteButton"
-                    shape="round"
-                  >
-                    Delete
-                  </Button>
+                  <Typography.Text mark></Typography.Text> {office.name}{" "}
+                      <Popconfirm
+                        title="Are you sure to delete this office?"
+                        onConfirm={() => this.deleteFunc(office.id)}
+                        okText="Yes"
+                        cancelText="No"
+                        className="deleteButton"
+                        shape="round"
+                        placement="topRight"
+                        >
+                        <Button> Delete</Button>
+                      </Popconfirm>
                   <Button
                     className="editButton"
                     shape="round"
                     onClick={() => {
-                      console.log("CLICKED");
-                      window.location = "edit/" + item.name + "/" + item.id;
+                      window.location = "edit/" + office.name + "/" + office.id;
                     }}
                   >
                     Edit

@@ -14,7 +14,7 @@ const lastname = (props) => {
         },
       ]}
     >
-      <Input className="custominput" placeholder="Lastname" />
+      <Input className="custominput" placeholder="Last name" />
     </Form.Item>
   );
 };

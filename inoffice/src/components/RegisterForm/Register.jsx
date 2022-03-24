@@ -29,8 +29,9 @@ class Register extends Component {
       password: e.password,
     };
     api
-      .post("register", data)
+      .post("/register", data)
       .then((res) => {
+        console.log(res.data)
         if(res.data=="Success")
           window.location= "/"
         else 
@@ -43,6 +44,7 @@ class Register extends Component {
           error: "invalid credentials",
         });
       });
+     
   };
   render() {
     if(this.config.token != null){
