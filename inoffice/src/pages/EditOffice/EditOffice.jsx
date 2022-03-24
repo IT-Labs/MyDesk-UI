@@ -3,7 +3,16 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import "../EditOffice/editoffice.css";
-import { Checkbox, Form, Input, Button, List, Row, Col } from "antd";
+import {
+  Checkbox,
+  Form,
+  Input,
+  Button,
+  List,
+  Row,
+  Col,
+  notification,
+} from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
 import { withRouter } from "../../helper/withRouterHelper";
@@ -14,7 +23,6 @@ class EditOffice extends Component {
 
     this.state = {
       officeName: this.props.params.name,
-
       officeId: this.props.params.id,
     };
   }
@@ -113,6 +121,7 @@ class EditOffice extends Component {
       .then((res) => {
         this.getDesks();
         this.getConferenceRooms();
+        this.openNotification("top");
       })
       .catch((error) =>
         this.setState({
@@ -129,6 +138,14 @@ class EditOffice extends Component {
 
     this.setState({
       checked: newCheckedArrayState,
+    });
+  };
+
+  openNotification = (placement) => {
+    notification.info({
+      message: `Notification`,
+      description: " You succesfully updated the entities",
+      placement,
     });
   };
 
@@ -180,7 +197,7 @@ class EditOffice extends Component {
                 <Col offset={1} span={17}>
                   <UploadOfficePlan
                     id="addOffice"
-                    triggerText="Update Office Information"
+                    triggerText="Update Office Plan"
                     onSubmit={onSubmit}
                   />
                 </Col>
@@ -217,12 +234,12 @@ class EditOffice extends Component {
               <Row>
                 <Col span={4} className="officeName">
                   <Form.Item name="numberOfDesks">
-                    <Input placeholder="Desks number" />
+                    <Input placeholder="Enter desk number" />
                   </Form.Item>
                 </Col>
                 <Col offset={1} span={4}>
                   <Form.Item name="numberOfConferenceRooms">
-                    <Input placeholder="Conference rooms number" />
+                    <Input placeholder="Enter conference rooms number" />
                   </Form.Item>{" "}
                 </Col>
 
@@ -242,7 +259,7 @@ class EditOffice extends Component {
                     shape="round"
                     onClick={this.save}
                   >
-                    Save Entities
+                    Update Entities
                   </Button>
                 </Col>
               </Row>
@@ -250,34 +267,45 @@ class EditOffice extends Component {
             <Row>
               <Col offset={1} span={10}>
                 <List
-                  header={<h3>All desks</h3>}
+                  header={
+                    <div className="divSpan">
+                      <span className="firstSpan">All desks</span>
+                      <span className="secondSpan">Silent desk</span>
+                    </div>
+                  }
                   className="list"
                   bordered
                   dataSource={this.state.desks}
-                  renderItem={(item) => (
+                  renderItem={(item, index) => (
                     <List.Item>
-                      {item.id}
+                      {index + 1}
                       <Checkbox
-                        style={{ background: "white", color: "black" }}
+                        style={{
+                          background: "white",
+                          color: "black",
+                        }}
                         value={item.id}
                         defaultChecked={this.checkCategory(item)}
                         onChange={this.checked}
-                      >
-                        Silent desk
-                      </Checkbox>
+                      ></Checkbox>
                     </List.Item>
                   )}
                 />
               </Col>
               <Col offset={2} span={10}>
                 <List
-                  header={<h3>All conference rooms</h3>}
+                  header={
+                    <div className="divSpan">
+                      <span className="firstSpan">All Conference Rooms</span>
+                      <span className="secondSpan">Capacity</span>
+                    </div>
+                  }
                   className="list"
                   bordered
                   dataSource={this.state.conferenceRooms}
-                  renderItem={(item) => (
+                  renderItem={(item, index) => (
                     <List.Item>
-                      <Col span={4}>{item.id}</Col>
+                      <Col span={4}>{index + 1}</Col>
                       <Col offset={16} span={4}>
                         <Form.Item name={item.id}>
                           <Input

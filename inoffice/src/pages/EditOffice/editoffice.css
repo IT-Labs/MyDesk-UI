@@ -9,3 +9,18 @@
   display: flex;
   justify-self: center;
 }
+
+.secondSpan {
+  display: flex;
+  justify-content: start;
+}
+
+.firstSpan {
+  display: flex;
+  justify-content: end;
+}
+
+.divSpan {
+  display: flex;
+  justify-content: space-between;
+}

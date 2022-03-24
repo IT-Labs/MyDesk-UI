@@ -50,6 +50,12 @@ code {
   margin-top: 15px;
 }
 
+.login-form-button:focus {
+  outline: none !important;
+  border: 3px solid rgb(0, 0, 0);
+  box-shadow: 0 0 15px #719ece;
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -76,13 +82,11 @@ input {
   margin-bottom: 100;
 }
 
-.custominput:focus{
-    outline: none !important;
-    border:3px solid red;
-    box-shadow: 0 0 15px #719ECE;
-  
+.custominput:focus {
+  outline: none !important;
+  border: 3px solid rgb(0, 0, 0);
+  box-shadow: 0 0 15px #719ece;
 }
-
 
 body {
   margin: 0;

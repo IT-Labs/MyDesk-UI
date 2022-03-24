@@ -7,14 +7,14 @@ import React, { Component } from "react";
 import api from "../../helper/api";
 import jwt from "jwt-decode";
 import UserHead from "../Head/UserHead";
-import EmailComponent from "../inputs/EmailComponent"
-import PasswordComponent from "../inputs/PasswordComponent"
+import EmailComponent from "../inputs/EmailComponent";
+import PasswordComponent from "../inputs/PasswordComponent";
 
 class Login extends Component {
   config = {
     token: localStorage.getItem("token"),
   };
-  state={}
+  state = {};
 
   handleSubmit = (e) => {
     const data = {
@@ -50,7 +50,7 @@ class Login extends Component {
     } else {
       return (
         <div className="FormLogin">
-            <h1 className="header">inOffice</h1>
+          <h1 className="header">inOffice</h1>
           <Form
             name="normal_login"
             className="login-form"
@@ -60,7 +60,7 @@ class Login extends Component {
             <PasswordComponent />
             <Form.Item>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox className="rememberMe" style={{ color: "white" }}>
+                <Checkbox className="customCheckbox" style={{ color: "white" }}>
                   Remember me
                 </Checkbox>
               </Form.Item>
@@ -75,7 +75,14 @@ class Login extends Component {
               >
                 LOG IN
               </Button>
-              <Link to="/register" style={{ color: "white", display:"flex", justifyContent:"center" }}>
+              <Link
+                to="/register"
+                style={{
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
                 Register
               </Link>
             </Form.Item>
