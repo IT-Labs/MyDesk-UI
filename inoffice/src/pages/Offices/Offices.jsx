@@ -7,7 +7,6 @@ import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
 import { Popconfirm } from "antd";
 
-
 var data = [];
 
 class Offices extends Component {
@@ -27,7 +26,7 @@ class Offices extends Component {
         });
       });
   }
-  deleteFunc = (value) =>{    
+  deleteFunc = (value) => {
     api.delete("admin/office/" + value).then(() => {
       api.get("admin/offices").then((res) => {
         this.setState({
@@ -35,7 +34,7 @@ class Offices extends Component {
         });
       });
     });
-  }
+  };
   render() {
     const addOfficeText = "Add office";
     const onSubmit = (event) => {
@@ -61,18 +60,22 @@ class Offices extends Component {
               renderItem={(office) => (
                 <List.Item>
                   <Typography.Text mark></Typography.Text> {office.name}{" "}
-                      <Popconfirm
-                        title="Are you sure to delete this office?"
-                        onConfirm={() => this.deleteFunc(office.id)}
-                        okText="Yes"
-                        cancelText="No"
-                        className="deleteButton"
-                        shape="round"
-                        placement="topRight"
-                        >
-                        <Button> Delete</Button>
-                      </Popconfirm>
+                  <Popconfirm
+                    title="Are you sure to delete this office?"
+                    onConfirm={() => this.deleteFunc(office.id)}
+                    okText="Yes"
+                    cancelText="No"
+                    className="deleteButton"
+                    shape="round"
+                    placement="topRight"
+                  >
+                    <Button type="primary" danger>
+                      {" "}
+                      Delete
+                    </Button>
+                  </Popconfirm>
                   <Button
+                    type="primary"
                     className="editButton"
                     shape="round"
                     onClick={() => {

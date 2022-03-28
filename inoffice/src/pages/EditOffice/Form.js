@@ -1,27 +1,33 @@
 import React, { Component } from "react";
 import api from "../../helper/api";
 import { Form, Input, Button } from "antd";
+import { withRouter } from "../../helper/withRouterHelper";
 
-export default class AddOffice extends Component {
+class AddOffice extends Component {
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      imageUrl: this.props.imageUrl,
+      officeName: this.props.params.name.split(" ")[0],
+      officeLocation: this.props.params.name.split(" ")[1],
+      officeId: this.props.params.id,
+    };
+  }
 
   handleSubmit = (e) => {
-
     const data = {
       officeName: e.officeName + " " + e.officeLocation,
       officePlan: e.officePlan,
     }
-    
+
     api.put(
-      "admin/office/" +
-        window.location.href.split("/")[
-          window.location.href.split("/").length - 1
-        ],
+      "admin/office/" + this.state.officeId,
       data
     )
     .then((res) =>{
     window.location =
-      "/admin/offices" 
+      "/admin/offices"
     }
     )
   };
@@ -32,32 +38,34 @@ export default class AddOffice extends Component {
         <Form
           name="normal_login"
           className="login-form"
-          initialValues={{
-            remember: true,
-          }}
           onFinish={this.handleSubmit}
+          initialValues={{
+            officePlan: this.state.imageUrl,
+            officeName: this.state.officeName,
+            officeLocation: this.state.officeLocation,
+          }}
         >
           <Form.Item
             name="officePlan"
-            rules={[{ required: true, message: "Please enter image url" }]}
+            rules={[{ required: false, message: "Please enter image url" }]}
           >
             <Input placeholder="Image url" />
           </Form.Item>
 
           <Form.Item
-          name="officeName"
-          rules={[{ required: true, message: "Please enter office name" }]}
+            name="officeName"
+            rules={[{ required: false, message: "Please enter office name" }]}
           >
             <Input placeholder="Office Name" />
-
           </Form.Item>
 
           <Form.Item
-          name="officeLocation"
-          rules={[{ required: true, message: "Please enter office location" }]}
+            name="officeLocation"
+            rules={[
+              { required: false, message: "Please enter office location" },
+            ]}
           >
             <Input placeholder="Office Location" />
-
           </Form.Item>
 
           <Form.Item>
@@ -76,3 +84,4 @@ export default class AddOffice extends Component {
     );
   }
 }
+export default withRouter(AddOffice);
