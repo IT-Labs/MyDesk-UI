@@ -1,7 +1,7 @@
 .officeImagePlan {
   display: flexbox;
   justify-content: center;
-  width: 800px;
+  width: 500px;
   height: 300px;
 }
 
@@ -14,6 +14,9 @@
   font-size: 1.35em;
 }
 
+.inputvalue{
+  text-align: center;
+}
 .inlineBlockDiv {
   display: inline-block;
 }

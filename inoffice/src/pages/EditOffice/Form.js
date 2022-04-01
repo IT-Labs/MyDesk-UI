@@ -27,7 +27,7 @@ class AddOffice extends Component {
     )
     .then((res) =>{
     window.location =
-      "/admin/offices"
+      "/admin/edit/"+data.officeName+"/"+this.props.params.id
     }
     )
   };
@@ -47,34 +47,50 @@ class AddOffice extends Component {
         >
           <Form.Item
             name="officePlan"
-            rules={[{ required: false, message: "Please enter image url" }]}
+            rules={[{ required: false, message: "Please enter image url" },
+            ]}
           >
             <Input placeholder="Image url" />
           </Form.Item>
 
           <Form.Item
             name="officeName"
-            rules={[{ required: false, message: "Please enter office name" }]}
+            rules={[{ required: false, message: "Please enter office name" },
+            {
+              required: true,
+              pattern: new RegExp(
+                "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
+              ),
+              message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office name",
+            }]}
           >
-            <Input placeholder="Office Name" />
+            <Input placeholder="Office name" />
           </Form.Item>
 
           <Form.Item
             name="officeLocation"
             rules={[
               { required: false, message: "Please enter office location" },
+              {
+                required: true,
+                pattern: new RegExp(
+                  "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
+                ),
+                message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office location",
+              }
             ]}
           >
-            <Input placeholder="Office Location" />
+            <Input placeholder="Office location" />
           </Form.Item>
 
           <Form.Item>
-            <Button type="submit" htmlType="submit" className="formButton">
+            <Button type="submit" htmlType="submit" className="formButton"
+            >
               Save
             </Button>
             <Button
               className="formButton"
-              onClick={() => (window.location = "/admin/offices")}
+              onClick={() => (window.location = "/admin/edit/"+this.props.params.name+"/"+this.props.params.id)}
             >
               Cancel
             </Button>

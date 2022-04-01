@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Input } from "antd";
 
-
 const emailcomponent = (props) => {
   return (
     <Form.Item
@@ -17,7 +16,12 @@ const emailcomponent = (props) => {
         },
       ]}
     >
-      <Input className="custominput" placeholder="Email" />
+      <Input
+        autoComplete="off"
+        autoFocus={true}
+        className="custominput"
+        placeholder="Email"
+      />
     </Form.Item>
   );
 };

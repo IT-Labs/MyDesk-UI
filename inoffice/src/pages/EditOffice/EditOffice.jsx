@@ -13,6 +13,7 @@ import {
   Col,
   notification,
   Space,
+  Image,
 } from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
@@ -182,12 +183,8 @@ class EditOffice extends Component {
                 </Col>
               </Row>
             </Space>
-            <Row align="middle">
-              <Col span={1}></Col>
-              <Col className="editOffice" span={23}>
-                <div>Edit office</div>
-              </Col>
-            </Row>
+            <h1 className="editOffice">Edit office</h1>
+
             <Row align="middle">
               <Col span={1}></Col>
               <Col className="officeBranch" span={23}>
@@ -195,34 +192,63 @@ class EditOffice extends Component {
               </Col>
             </Row>
             <Form name="normal_login" onFinish={this.handleSubmit}>
-              <Row align="bottom">
+              <Row align="top">
                 <Col span={1}></Col>
-                <Col span={8} className="officeName">
-                  <div className="inlineBlockDiv">
-                    <div>
+
+                <Col span={10} className="officeName">
+                  <Row>
+                    <div className="inlineBlockDiv">
+                      <div>
+                        <div className="officeTitels">
+                          Name:{" "}
+                          <span className="labels">
+                            {this.state.officeName.split(" ")[0]}
+                          </span>
+                        </div>
+                      </div>
                       <div className="officeTitels">
-                        Office name:{" "}
+                        Location:{" "}
                         <span className="labels">
-                          {this.state.officeName.split(" ")[0]}
+                          {this.state.officeName.split(" ")[1]}
                         </span>
                       </div>
                     </div>
-                    <div className="officeTitels">
-                      Office location:{" "}
-                      <span className="labels">
-                        {this.state.officeName.split(" ")[1]}
-                      </span>
+                  </Row>
+                  <Space>
+                    <Row>
+                      <Col span={24}>
+                        <div></div>
+                      </Col>
+                    </Row>
+                  </Space>
+                  <Row>
+                    <UploadOfficePlan
+                      className="uploadOfficePlanButton"
+                      id="addOffice"
+                      triggerText="Update office plan/information"
+                      imageUrl={this.state.imageUrl}
+                    />
+                  </Row>
+                </Col>
+                <Col span={3}></Col>
+
+                <Row align="top">
+                  <Col span={10}>
+                    <div>
+                      {this.state.imageUrl ? (
+                        <Image
+                          src={this.state.imageUrl}
+                          className="officeImagePlan"
+                        ></Image>
+                      ) : (
+                        <Image
+                          className="officeImagePlan"
+                          src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
+                        ></Image>
+                      )}
                     </div>
-                  </div>
-                </Col>
-                <Col span={15}>
-                  <UploadOfficePlan
-                    className="uploadOfficePlanButton"
-                    id="addOffice"
-                    triggerText="Update Office Plan / Information"
-                    imageUrl={this.state.imageUrl}
-                  />
-                </Col>
+                  </Col>
+                </Row>
               </Row>
               <Space>
                 <Row>
@@ -231,25 +257,6 @@ class EditOffice extends Component {
                   </Col>
                 </Row>
               </Space>
-              <Row className="imageRow">
-                <Col span={6}></Col>
-                <Col span={6}>
-                  <div>
-                    {this.state.imageUrl ? (
-                      <img
-                        className="officeImagePlan"
-                        src={this.state.imageUrl}
-                      ></img>
-                    ) : (
-                      <img
-                        className="officeImagePlan"
-                        src="https://i.postimg.cc/9QzYV5q9/Screenshot-3.png"
-                      ></img>
-                    )}
-                  </div>
-                </Col>
-                <Col span={12}></Col>
-              </Row>
               <Space>
                 <Row>
                   <Col span={24}>
@@ -273,27 +280,27 @@ class EditOffice extends Component {
                 <Col span={1}></Col>
                 <Col span={4} className="officeName">
                   <Form.Item name="numberOfDesks">
-                    <Input placeholder="Enter desk number" />
+                    <Input placeholder="Enter number of desks" />
                   </Form.Item>
                 </Col>
                 <Col span={8}></Col>
                 <Col span={4}>
                   <Form.Item name="numberOfConferenceRooms">
-                    <Input placeholder="Enter conference rooms number" />
+                    <Input placeholder="Enter number of conference rooms" />
                   </Form.Item>{" "}
                 </Col>
                 <Col span={2}></Col>
-                <Col offset={2} span={2}>
+                <Col span={4}>
                   <Button
                     type="primary"
                     htmlType="submit"
                     className="uploadOfficePlan"
                     shape="round"
+                    block
                   >
                     Add new entities
                   </Button>
                 </Col>
-                <Col span={1}></Col>
               </Row>
             </Form>
             <Row>
@@ -365,17 +372,16 @@ class EditOffice extends Component {
                     <List.Item>
                       <Col span={4}>{index + 1}</Col>
                       <Col span={4}>
-                        <Form.Item name={item.id}>
-                          <Input
-                            size="small"
-                            name={item.id}
-                            onChange={(e) =>
-                              this.capacityChange(e.target.name, e.target.value)
-                            }
-                            defaultValue={item.capacity}
-                            placeholder="Capacity"
-                          />
-                        </Form.Item>
+                        <Input
+                          className="inputvalue"
+                          size="small"
+                          name={item.id}
+                          onChange={(e) =>
+                            this.capacityChange(e.target.name, e.target.value)
+                          }
+                          defaultValue={item.capacity}
+                          placeholder="Capacity"
+                        />
                       </Col>
                     </List.Item>
                   )}
@@ -391,15 +397,16 @@ class EditOffice extends Component {
             </Space>
             <Row>
               <Col span={1}></Col>
-              <Col span={18}></Col>
-              <Col offset={2} span={2}>
+              <Col span={17}></Col>
+              <Col offset={1} span={4}>
                 <Button
                   type="primary"
                   className="uploadOfficePlan"
                   shape="round"
                   onClick={this.save}
+                  block
                 >
-                  Update Entities
+                  Update entities
                 </Button>
               </Col>
               <Col span={1}></Col>

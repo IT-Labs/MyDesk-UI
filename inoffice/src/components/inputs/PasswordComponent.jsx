@@ -3,7 +3,7 @@ import { Form, Input } from "antd";
 
 const passwordcomponent = (props) => {
   return (
-    <Form.Item 
+    <Form.Item
       name="password"
       rules={[
         {
@@ -20,7 +20,11 @@ const passwordcomponent = (props) => {
       ]}
       hasFeedback
     >
-      <Input.Password className="custominput" placeholder="Password" />
+      <Input.Password
+        autoComplete="off"
+        className="custominput"
+        placeholder="Password"
+      />
     </Form.Item>
   );
 };

@@ -12,10 +12,13 @@ const firstname = (props) => {
           pattern: new RegExp("^[A-Za-z -]+$"),
           message: " ",
         },
-       
       ]}
     >
-      <Input className="custominput" placeholder="First name" />
+      <Input
+        autoComplete="off"
+        className="custominput"
+        placeholder="First name"
+      />
     </Form.Item>
   );
 };

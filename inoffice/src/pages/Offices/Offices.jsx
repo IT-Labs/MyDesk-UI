@@ -5,7 +5,7 @@ import Layout, { Content, Footer } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
-import { Popconfirm } from "antd";
+import { Popconfirm, Row, Col } from "antd";
 
 var data = [];
 
@@ -46,47 +46,56 @@ class Offices extends Component {
         <Layout>
           <Sidebar selected="2" />
           <Content>
-            <h1>Offices</h1>
-
-            <AddOfficeContainer
-              id="addOffice"
-              addOfficeText={addOfficeText}
-              onSubmit={onSubmit}
-            />
-
-            <List
-              bordered
-              dataSource={this.state.data}
-              renderItem={(office) => (
-                <List.Item>
-                  <Typography.Text mark></Typography.Text> {office.name}{" "}
-                  <Popconfirm
-                    title="Are you sure to delete this office?"
-                    onConfirm={() => this.deleteFunc(office.id)}
-                    okText="Yes"
-                    cancelText="No"
-                    className="deleteButton"
-                    shape="round"
-                    placement="topRight"
-                  >
-                    <Button type="primary" danger>
-                      {" "}
-                      Delete
-                    </Button>
-                  </Popconfirm>
-                  <Button
-                    type="primary"
-                    className="editButton"
-                    shape="round"
-                    onClick={() => {
-                      window.location = "edit/" + office.name + "/" + office.id;
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </List.Item>
-              )}
-            />
+            <Row align="middle">
+              <Col span={21}>
+                <h1>Offices</h1>
+              </Col>
+              <Col span={2}>
+                <AddOfficeContainer
+                  id="addOffice"
+                  addOfficeText={addOfficeText}
+                  onSubmit={onSubmit}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <List
+                  bordered
+                  dataSource={this.state.data}
+                  renderItem={(office) => (
+                    <List.Item>
+                      <Typography.Text mark></Typography.Text> {office.name}{" "}
+                      <Popconfirm
+                        title="Are you sure to delete this office?"
+                        onConfirm={() => this.deleteFunc(office.id)}
+                        okText="Yes"
+                        cancelText="No"
+                        className="deleteButton"
+                        shape="round"
+                        placement="topRight"
+                      >
+                        <Button type="primary" danger>
+                          {" "}
+                          Delete
+                        </Button>
+                      </Popconfirm>
+                      <Button
+                        type="primary"
+                        className="editButton"
+                        shape="round"
+                        onClick={() => {
+                          window.location =
+                            "edit/" + office.name + "/" + office.id;
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
           </Content>
         </Layout>
       </Layout>

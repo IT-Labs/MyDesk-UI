@@ -10,7 +10,6 @@ export default class AddOffice extends Component {
       officeName: e.name + " " + e.location
     };
 
-    console.log(data)
 
     api.post("admin/office", data)
     .then((res) => {
@@ -36,14 +35,29 @@ export default class AddOffice extends Component {
         >
           <Form.Item
             name="name"
-            rules={[{ required: true, message: "Please input office name!" }]}
+            rules={[{ required: true, message: "Please input office name!" },
+            {
+              required: true,
+              pattern: new RegExp(
+                "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
+              ),
+              message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office name",
+            },
+          ]}
           >
-            <Input placeholder="Office name" />
+            <Input placeholder="Office name"/>
           </Form.Item>
           <Form.Item
             name="location"
             rules={[
               { required: true, message: "Please input office location!" },
+              {
+                required: true,
+                pattern: new RegExp(
+                  "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
+                ),
+                message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office location",
+              }
             ]}
           >
             <Input placeholder="Office location" />

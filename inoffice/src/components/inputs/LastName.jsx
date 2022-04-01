@@ -14,7 +14,11 @@ const lastname = (props) => {
         },
       ]}
     >
-      <Input className="custominput" placeholder="Last name" />
+      <Input
+        autoComplete="off"
+        className="custominput"
+        placeholder="Last name"
+      />
     </Form.Item>
   );
 };
