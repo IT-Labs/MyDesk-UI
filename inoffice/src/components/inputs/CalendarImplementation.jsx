@@ -4,11 +4,11 @@ import { Space } from "antd";
 import { DatePicker } from "antd";
 import moment from "moment";
 
-const CalendarImplementation = () => {
+const CalendarImplementation = (props) => {
   const { RangePicker } = DatePicker;
   const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
 
-  const dateFormat = "YYYY/MM/DD";
+  const dateFormat = "DD/MM/YYYY";
 
   function range(start, end) {
     const result = [];
@@ -26,21 +26,26 @@ const CalendarImplementation = () => {
     if (range) {
       const startdate = range[0].format("DD-MM-YYYY");
       const enddate = range[1].format("DD-MM-YYYY");
+
+      props.dateFunction(startdate, enddate);
     }
   }
 
   return (
-    <Space direction="vertical" size={12}>
-      <RangePicker
-        disabledDate={disabledDate}
-        defaultValue={[
-          moment(new Date(), dateFormat),
-          moment(new Date(), dateFormat),
-        ]}
-        format={dateFormat}
-        onChange={changedates}
-      />
-    </Space>
+    <div>
+      <label>Select date</label>
+      <Space direction="vertical" size={12}>
+        <RangePicker
+          disabledDate={disabledDate}
+          defaultValue={[
+            moment(new Date(), dateFormat),
+            moment(new Date(), dateFormat),
+          ]}
+          format={dateFormat}
+          onChange={changedates}
+        />
+      </Space>
+    </div>
   );
 };
 export default CalendarImplementation;

@@ -1,0 +1,12 @@
+#scrollableDiv {
+  overflow-y: hidden;
+}
+
+.cardBody {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardContentInformation {
+  font-size: 1.75em;
+}

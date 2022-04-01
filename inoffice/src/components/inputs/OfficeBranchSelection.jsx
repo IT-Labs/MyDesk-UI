@@ -1,47 +1,54 @@
 import React from "react";
 import "antd/dist/antd.css";
-import {Select, Form} from "antd";
+import { Select, Form } from "antd";
 import api from "../../helper/api";
 import { useEffect, useState } from "react";
-import { Spin } from 'antd';
-
+import { Spin } from "antd";
 
 const Officebranchselection = (props) => {
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState([])
-    const { Option } = Select;
-
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const { Option } = Select;
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const {data: response} = await api.get('employee/offices');
+        const { data: response } = await api.get("employee/offices");
         setData(response);
       } catch (error) {
         console.error(error.message);
       }
       setLoading(false);
-    }
+    };
 
     fetchData();
   }, []);
-
 
   function handleChange(value) {
     props.onOfficebranchChange(value);
   }
 
   return (
-      <div>
-       {loading && <div><Spin/></div>}
-       {!loading &&(
-      <Form.Item>
-        <label>Office - Branch</label>
-        <Select onChange={handleChange} placeholder="Select your office">{data.map(item=>(<Option key={item.id} value={item.id}>{item.name}</Option>))}</Select>
-      </Form.Item>
+    <div>
+      {loading && (
+        <div>
+          <Spin />
+        </div>
       )}
-      </div>
-  )    
-}
+      {!loading && (
+        <Form.Item>
+          <label>Office - Branch</label>
+          <Select onChange={handleChange} placeholder="Select office-branch">
+            {data.map((item) => (
+              <Option key={item.id} value={item.id}>
+                {item.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )}
+    </div>
+  );
+};
 export default Officebranchselection;
