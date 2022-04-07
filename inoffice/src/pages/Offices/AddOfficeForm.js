@@ -5,11 +5,11 @@ import { Form, Input, Button } from "antd";
 export default class AddOffice extends Component {
   state = {};
 
+
   handleSubmit = (e) => {
     const data = {
       officeName: e.name + " " + e.location
     };
-
 
     api.post("admin/office", data)
     .then((res) => {
@@ -63,10 +63,12 @@ export default class AddOffice extends Component {
             <Input placeholder="Office location" />
           </Form.Item>
           <Form.Item>
-            <Button type="submit" htmlType="submit" className="formButton">
+            <Button  htmlType="submit" className="formButton" type="primary" shape="round">
               Save
             </Button>
             <Button
+            type="primary"
+            shape="round"
               className="formButton"
               onClick={() => (window.location = "/admin/offices")}
             >

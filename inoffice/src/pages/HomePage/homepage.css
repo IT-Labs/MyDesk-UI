@@ -1,0 +1,47 @@
+.officeImgCol{
+    margin-left: 3% ;
+    border: 2px solid rgba(140, 140, 140, 0.35);
+    margin-right: 1%;
+    
+ }
+ 
+ .cardsCol{
+     margin-right: 3%;
+     margin-left: 1%;
+     
+ }
+
+ .buttonReview{
+     margin-left: 79%;
+ }
+
+ .buttonReserve{
+     margin-left: 1%;
+ }
+
+ .footerText{
+     font-size: 1.5em;
+ }
+
+ .footerSection{
+     margin-top: 4%;
+ }
+
+ .buttonsSection{
+     margin-top: 1%;
+ }
+ 
+ .officeDropdown{
+     margin-left:3%;
+     padding-right: 25%;
+     
+ }
+ 
+ .calendarSection{
+     margin-left: 2%;
+     
+ }
+
+ .firstSection{
+     margin-top: 2%;
+ }

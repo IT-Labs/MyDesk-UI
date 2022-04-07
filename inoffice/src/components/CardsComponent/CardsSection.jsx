@@ -39,7 +39,6 @@ const CardsSection = (props) => {
     };
     fetchData();
   }, [props.officeid, props.refresh]);
-
   return (
     <div>
       {loadingData && <div>Loading</div>}
@@ -61,9 +60,9 @@ const CardsSection = (props) => {
           >
             <Layout>
               <List
-                grid={{ gutter: 5, column: 5 }}
-                dataSource={dataConfRooms.concat(dataDesks)}
-                renderItem={(item, index) => (
+                grid={{ gutter: 0, column: 5 }}
+                dataSource={dataDesks.concat(dataConfRooms)}
+                renderItem={(item) => (
                   <List.Item
                     style={{
                       border:
@@ -82,8 +81,8 @@ const CardsSection = (props) => {
                       <Meta
                         title={
                           !item.categories
-                            ? "Conf Room " + [index + 1]
-                            : "Desk " + [index + 1 - dataConfRooms.length]
+                            ? "Conf Room " + item.indexForOffice
+                            : "Desk " + item.indexForOffice
                         }
                         description={
                           <div
@@ -95,7 +94,7 @@ const CardsSection = (props) => {
                           >
                             {item.capacity >= 0 ? (
                               <p style={{ color: "#000000	" }}>
-                                Capacity:{item.capacity}
+                                Capacity: {item.capacity}
                               </p>
                             ) : (
                               <p
@@ -103,7 +102,7 @@ const CardsSection = (props) => {
                                   color: "#000000	",
                                 }}
                               >
-                                Category:{item.categories}
+                                Category: {item.categories}
                               </p>
                             )}
                           </div>

@@ -7,7 +7,7 @@ h1 {
   display: flex;
   float: right;
   margin-right: 10px;
-  background-color: #2148c0;
+  background-color: #1890ff;
   color: white;
 }
 .deleteButton {
@@ -15,4 +15,8 @@ h1 {
   float: right;
   color: white;
   background-color: #d11a2a;
+}
+
+.addOfficeSectionButton{
+ margin-left: 3%
 }

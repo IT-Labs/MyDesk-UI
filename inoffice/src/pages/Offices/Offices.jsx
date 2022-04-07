@@ -5,12 +5,22 @@ import Layout, { Content, Footer } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
-import { Popconfirm, Row, Col } from "antd";
+import { Popconfirm, Row, Col, notification } from "antd";
+import "../Offices/Offices.css";
 
 var data = [];
 
 class Offices extends Component {
   state = {};
+
+  openNotification = (placement) => {
+    notification.info({
+      message: `Notification`,
+      description: " You succesfully deleted the office",
+      duration: 1,
+      placement,
+    });
+  };
 
   componentDidMount() {
     api
@@ -50,7 +60,7 @@ class Offices extends Component {
               <Col span={21}>
                 <h1>Offices</h1>
               </Col>
-              <Col span={2}>
+              <Col className="addOfficeSectionButton" span={2}>
                 <AddOfficeContainer
                   id="addOffice"
                   addOfficeText={addOfficeText}

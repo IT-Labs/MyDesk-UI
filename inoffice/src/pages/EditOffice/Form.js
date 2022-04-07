@@ -3,6 +3,7 @@ import api from "../../helper/api";
 import { Form, Input, Button } from "antd";
 import { withRouter } from "../../helper/withRouterHelper";
 
+
 class AddOffice extends Component {
   constructor(props) {
     super(props);
@@ -84,12 +85,19 @@ class AddOffice extends Component {
           </Form.Item>
 
           <Form.Item>
-            <Button type="submit" htmlType="submit" className="formButton"
+            <Button 
+            htmlType="submit" 
+            className="formButton" 
+            type="primary"
+            shape="round"
+
             >
               Save
             </Button>
             <Button
+              type="primary"
               className="formButton"
+              shape="round"
               onClick={() => (window.location = "/admin/edit/"+this.props.params.name+"/"+this.props.params.id)}
             >
               Cancel

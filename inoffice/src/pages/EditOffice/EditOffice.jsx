@@ -3,6 +3,8 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import "../EditOffice/editoffice.css";
+import { DeleteFilled } from "@ant-design/icons";
+
 import {
   Checkbox,
   Form,
@@ -148,6 +150,7 @@ class EditOffice extends Component {
     notification.info({
       message: `Notification`,
       description: " You succesfully updated the entities",
+      duration: 1,
       placement,
     });
   };
@@ -169,6 +172,30 @@ class EditOffice extends Component {
         });
       });
   };
+
+  deleteNotification = (target) => {
+    const data = {
+      idOfEntity: target[0],
+      typeOfEntity: target[1],
+    };
+
+    api
+      .delete("admin/entity/", { data: data })
+      .then((response) => {
+        this.getDesks();
+        this.getConferenceRooms();
+        notification.open({
+          message: "Notification",
+          description: "You successfully deleted the entity",
+          placement: "top",
+          duration: 2,
+        });
+      })
+      .catch((error) => {
+        console.error("Error message");
+      });
+  };
+
   render() {
     return (
       <Layout>
@@ -230,7 +257,7 @@ class EditOffice extends Component {
                     />
                   </Row>
                 </Col>
-                <Col span={3}></Col>
+                <Col span={2}></Col>
 
                 <Row align="top">
                   <Col span={10}>
@@ -278,19 +305,19 @@ class EditOffice extends Component {
               </Row>
               <Row align="top">
                 <Col span={1}></Col>
-                <Col span={4} className="officeName">
+                <Col span={5} className="officeName">
                   <Form.Item name="numberOfDesks">
                     <Input placeholder="Enter number of desks" />
                   </Form.Item>
                 </Col>
-                <Col span={8}></Col>
-                <Col span={4}>
+                <Col span={7}></Col>
+                <Col span={5}>
                   <Form.Item name="numberOfConferenceRooms">
                     <Input placeholder="Enter number of conference rooms" />
                   </Form.Item>{" "}
                 </Col>
                 <Col span={2}></Col>
-                <Col span={4}>
+                <Col span={3}>
                   <Button
                     type="primary"
                     htmlType="submit"
@@ -324,14 +351,15 @@ class EditOffice extends Component {
                       <div className="divSpan">
                         <span className="firstSpan">All desks</span>
                         <span className="secondSpan">Silent desk</span>
+                        <span> Delete</span>
                       </div>
                     }
                     className="list"
                     bordered
                     dataSource={this.state.desks}
-                    renderItem={(item, index) => (
+                    renderItem={(item) => (
                       <List.Item>
-                        {index + 1}
+                        {item.indexForOffice}
                         <Checkbox
                           style={{
                             background: "white",
@@ -341,6 +369,16 @@ class EditOffice extends Component {
                           defaultChecked={this.checkCategory(item)}
                           onChange={this.checked}
                         ></Checkbox>
+                        <div>
+                          <DeleteFilled
+                            style={{ cursor: "pointer" }}
+                            key={item.id}
+                            value={item.id}
+                            onClick={() =>
+                              this.deleteNotification([item.id, "D"])
+                            }
+                          />
+                        </div>
                       </List.Item>
                     )}
                   />
@@ -361,16 +399,17 @@ class EditOffice extends Component {
                 <List
                   header={
                     <div className="divSpan">
-                      <span className="firstSpan">All Conference Rooms</span>
+                      <span className="firstSpan">All conference rooms</span>
                       <span className="secondSpan">Capacity</span>
+                      <span>Delete </span>
                     </div>
                   }
                   className="list"
                   bordered
                   dataSource={this.state.conferenceRooms}
-                  renderItem={(item, index) => (
+                  renderItem={(item) => (
                     <List.Item>
-                      <Col span={4}>{index + 1}</Col>
+                      <Col span={4}>{item.indexForOffice}</Col>
                       <Col span={4}>
                         <Input
                           className="inputvalue"
@@ -381,6 +420,18 @@ class EditOffice extends Component {
                           }
                           defaultValue={item.capacity}
                           placeholder="Capacity"
+                        />
+                      </Col>
+                      <Col span={2}>
+                        <DeleteFilled
+                          height={1}
+                          width={1}
+                          style={{ cursor: "pointer" }}
+                          key={item.id}
+                          value={item.id}
+                          onClick={() =>
+                            this.deleteNotification([item.id, "C"])
+                          }
                         />
                       </Col>
                     </List.Item>
@@ -397,8 +448,8 @@ class EditOffice extends Component {
             </Space>
             <Row>
               <Col span={1}></Col>
-              <Col span={17}></Col>
-              <Col offset={1} span={4}>
+              <Col span={18}></Col>
+              <Col offset={1} span={3}>
                 <Button
                   type="primary"
                   className="uploadOfficePlan"

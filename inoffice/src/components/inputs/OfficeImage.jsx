@@ -31,7 +31,7 @@ const OfficeImage = (props) => {
       {loading && <div></div>}
       {!loading && (
         <Form.Item>
-          <Image height={"600px"} width={"750px"} src={data}>
+          <Image src={data}>
             <Spin />
           </Image>
         </Form.Item>

@@ -38,7 +38,9 @@ const Officebranchselection = (props) => {
       )}
       {!loading && (
         <Form.Item>
-          <label>Office - Branch</label>
+          <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+            Office - branch
+          </p>
           <Select onChange={handleChange} placeholder="Select office-branch">
             {data.map((item) => (
               <Option key={item.id} value={item.id}>

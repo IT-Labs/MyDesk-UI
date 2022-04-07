@@ -33,7 +33,7 @@ const CalendarImplementation = (props) => {
 
   return (
     <div>
-      <label>Select date</label>
+      <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>Select date</p>
       <Space direction="vertical" size={12}>
         <RangePicker
           disabledDate={disabledDate}
