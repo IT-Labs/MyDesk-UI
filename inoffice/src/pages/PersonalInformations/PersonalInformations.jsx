@@ -10,7 +10,7 @@ export default class PersonalInformations extends Component {
         <UserHead />
         <Layout>
           <Sidebar selected="2" />
-          <Content>Personal Informations</Content>
+          <Content>Personal informations</Content>
         </Layout>
       </Layout>
     );

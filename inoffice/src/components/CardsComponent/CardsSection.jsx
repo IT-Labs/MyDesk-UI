@@ -46,7 +46,7 @@ const CardsSection = (props) => {
         <div
           id="scrollableDiv"
           style={{
-            height: 600,
+            height: 450,
             overflow: "auto",
             padding: "0 16px",
             border: "2px solid rgba(140, 140, 140, 0.35)",
@@ -80,9 +80,20 @@ const CardsSection = (props) => {
                     >
                       <Meta
                         title={
-                          !item.categories
-                            ? "Conf Room " + item.indexForOffice
-                            : "Desk " + item.indexForOffice
+                          !item.categories ? (
+                            <p style={{ fontSize: "0.8vw" }}>
+                              <p style={{ fontSize: "0.8vw" }}>
+                                {" "}
+                                Conf room {item.indexForOffice}
+                              </p>
+                            </p>
+                          ) : (
+                            <p style={{ fontSize: "0.8vw" }}>
+                              <p style={{ fontSize: "0.8vw" }}>
+                                Desk {item.indexForOffice}
+                              </p>
+                            </p>
+                          )
                         }
                         description={
                           <div
@@ -93,13 +104,16 @@ const CardsSection = (props) => {
                             className="cardContentInformation"
                           >
                             {item.capacity >= 0 ? (
-                              <p style={{ color: "#000000	" }}>
+                              <p
+                                style={{ color: "#000000	", fontSize: "0.6vw" }}
+                              >
                                 Capacity: {item.capacity}
                               </p>
                             ) : (
                               <p
                                 style={{
                                   color: "#000000	",
+                                  fontSize: "0.6vw",
                                 }}
                               >
                                 Category: {item.categories}

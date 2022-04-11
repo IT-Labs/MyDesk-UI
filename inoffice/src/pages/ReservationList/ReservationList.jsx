@@ -10,7 +10,7 @@ export default class ReservationList extends Component {
         <UserHeade />
         <Layout>
           <Sidebar selected="4" />
-          <Content>Reservation List</Content>
+          <Content>Reservation list</Content>
         </Layout>
       </Layout>
     );

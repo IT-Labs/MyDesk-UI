@@ -1,29 +1,24 @@
 import React from "react";
 import "antd/dist/antd.css";
-import {
-  Row,
-  Col,
-  Form,
-  Space,
-  Checkbox,
-  notification,
-  Select,
-  Spin,
-  List,
-  Layout,
-} from "antd";
+import { Row, Col, Space, Spin, List, Layout, Input, Modal,Button } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
+import { BookOutlined } from "@ant-design/icons"
 
 const PastReservations = () => {
-  const { Option } = Select;
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const { TextArea } = Input;
 
   const [loadingData, setLoading] = useState(true);
   const [pastreservations, setPastReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
+  const [visible, setVisible] = useState(false);
+  const [review, setReview] = useState("");
+  const [resid, setResid] = useState();
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [writtenReview, setWrittenReview] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +36,41 @@ const PastReservations = () => {
     };
     fetchData();
   }, [refreshstate]);
+
+  const visibility = (item) => {
+    setVisible(true);
+    setResid(item.id);
+  };
+
+  const showReview = async (item) => {
+    await api
+      .get("employee/review/" + item.reviewId)
+      .then((response) => {
+        setWrittenReview(response.data);
+      })
+      .catch((error) => {
+        console.error("Error message");
+      });
+    setShowReviewModal(true);
+  };
+
+  const writeReview = async () => {
+    setVisible(false);
+    
+    const data = {
+      reservationid: resid,
+      review: review,
+    };
+
+    await api
+      .post("employee/review", data)
+      .then((response) => {
+        setRefreshState({});
+      })
+      .catch((error) => {
+        console.error("Error message");
+      });
+  };
 
   return (
     <div>
@@ -92,9 +122,52 @@ const PastReservations = () => {
                       {item.deskId ? item.deskIndex : item.confRoomIndex}]
                     </Col>
                     <Col span={6}></Col>
-                    <Col span={2}>Write a review</Col>
+                    <Col span={2}>
+                      {item.reviewId ? "Show review" : "Write a review"}
+                    </Col>
                     <Col span={1}>
-                      <EditOutlined style={{ cursor: "pointer" }} />
+                      {!item.reviewId ? (
+                        <EditOutlined
+                          style={{ cursor: "pointer" }}
+                          key={item.id}
+                          onClick={() => visibility(item)}
+                        />
+                      ) : (
+                        <BookOutlined
+                          style={{ cursor: "pointer" }}
+                          key={item.id}
+                          onClick={() => showReview(item)}
+                          type="primary"
+                        />
+                      )}
+
+                          
+                      <Modal
+                        title="Write a review for the selected reservation"
+                        centered
+                        visible={visible}
+                        onOk={() => writeReview()}
+                        onCancel={() => setVisible(false)}
+                        width={800}
+                      >
+                        <TextArea
+                          rows={4}
+                          onChange={(e) => setReview(e.target.value)}
+                          allowClear={true}
+                        />
+                      </Modal>
+                  
+                      <Modal
+                        title="Review for desk"
+                        centered
+                        visible={showReviewModal}
+                        onOk={() => setShowReviewModal(false)}
+                        onCancel={() => setShowReviewModal(false)}
+                        width={800}
+                      >
+                         <p>{writtenReview}</p>
+                      </Modal>
+                   
                     </Col>
                   </Row>
                 </Layout>

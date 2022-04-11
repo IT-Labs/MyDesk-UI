@@ -1,6 +1,5 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Form } from "antd";
 import api from "../../helper/api";
 import { useEffect, useState } from "react";
 import { Image } from "antd";
@@ -30,11 +29,9 @@ const OfficeImage = (props) => {
     <div>
       {loading && <div></div>}
       {!loading && (
-        <Form.Item>
-          <Image src={data}>
-            <Spin />
-          </Image>
-        </Form.Item>
+        <Image src={data}>
+          <Spin />
+        </Image>
       )}
     </div>
   );

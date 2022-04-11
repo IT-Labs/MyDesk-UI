@@ -48,7 +48,7 @@ const Home = () => {
     notification.info({
       message: `Notification`,
       description: " You succesfully made a reservation",
-      duration: 1,
+      duration: 2,
       placement,
     });
   };
@@ -83,12 +83,12 @@ const Home = () => {
       <Layout>
         <Content>
           <Row className="firstSection">
-            <Col className="officeDropdown" span={11}>
+            <Col className="officeDropdown" span={11} xl={11} lg={11} md={11} >
               <OfficeBranchSelection
                 onOfficebranchChange={changeofficebranch}
               />
             </Col>
-            <Col className="calendarSection" span={11}>
+            <Col className="calendarSection" span={11} xl={11} lg={11} md={11} >
               <CalendarImplementation
                 dateFunction={setDate}
                 onSelectCard={selectedCard}
@@ -96,7 +96,7 @@ const Home = () => {
               />
             </Col>
           </Row>
-          <Row>
+          <Row align="center">
             <Col className="officeImgCol" span={11} xl={11} lg={11} md={11}>
               <OfficeImage officeid={officeid} />
             </Col>
@@ -120,7 +120,16 @@ const Home = () => {
                 size="large"
                 onClick={() => showReviewsForSelectedCard()}
               >
-                Show reviews
+                <p
+                  style={{
+                    fontSize: "0.8vw",
+                    justifyContent: "center",
+                    marginBottom: 0,
+                  }}
+                >
+                  {" "}
+                  Show reviews
+                </p>
               </Button>
               <Modal
                 title="Reviews for selected entity"
@@ -146,14 +155,22 @@ const Home = () => {
                 shape="round"
                 size="large"
               >
-                Reserve
+                <p
+                  style={{
+                    fontSize: "0.8vw",
+                    justifyContent: "center",
+                    marginBottom: 0,
+                  }}
+                >
+                  Reserve
+                </p>
               </Button>
             </Col>
           </Row>
           <Row className="footerSection" align="center">
             <Col align="center" span={24}>
               <p className="footerText">
-                inOffice ©2022 Created by ScrumDogMillionaires
+                inOffice ©2022 Created by inOfficeTeam
               </p>
             </Col>
           </Row>

@@ -6,6 +6,8 @@ import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
 import { Popconfirm, Row, Col, notification } from "antd";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
 import "../Offices/Offices.css";
 
 var data = [];
@@ -17,7 +19,7 @@ class Offices extends Component {
     notification.info({
       message: `Notification`,
       description: " You succesfully deleted the office",
-      duration: 1,
+      duration: 2,
       placement,
     });
   };
@@ -77,13 +79,15 @@ class Offices extends Component {
                     <List.Item>
                       <Typography.Text mark></Typography.Text> {office.name}{" "}
                       <Popconfirm
-                        title="Are you sure to delete this office?"
+                        title="Do you want to delete this office?"
                         onConfirm={() => this.deleteFunc(office.id)}
                         okText="Yes"
                         cancelText="No"
                         className="deleteButton"
                         shape="round"
                         placement="topRight"
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                       
                       >
                         <Button type="primary" danger>
                           {" "}

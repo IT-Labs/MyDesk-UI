@@ -62,7 +62,7 @@ class AddOffice extends Component {
               pattern: new RegExp(
                 "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
               ),
-              message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office name",
+              message: "You exceeded the maximum number of characters",
             }]}
           >
             <Input placeholder="Office name" />
@@ -77,7 +77,7 @@ class AddOffice extends Component {
                 pattern: new RegExp(
                   "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
                 ),
-                message: "Whitespace is not allowed or you exceeded the maximum number of characters for Office location",
+                message: "You exceeded the maximum number of characters",
               }
             ]}
           >

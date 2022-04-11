@@ -29,6 +29,29 @@
 .secondSpan {
   display: flex;
   justify-content: start;
+
+}
+
+.secondSpanconf{
+  display: flex;
+  justify-content: start;
+  padding-right: 13%;
+}
+
+.deleteiconDesks{
+  cursor: pointer;
+  padding-left: 27%;
+}
+
+.deleteiconconf{
+  cursor: pointer;
+  padding-left: 27%;
+}
+
+.deleteButton {
+  display:flex;
+  float: right;
+
 }
 
 .firstSpan {
