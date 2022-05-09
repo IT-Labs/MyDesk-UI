@@ -18,7 +18,7 @@ class SiderDemo extends Component {
   };
 
   config = {
-    token: localStorage.getItem("token"),
+    token: localStorage.getItem("msal.idtoken"),
   };
 
   onCollapse = (collapsed) => {
@@ -27,51 +27,35 @@ class SiderDemo extends Component {
 
   render() {
     const { collapsed } = this.state;
-    if (jwt(this.config.token).role == "ADMIN") {
+    if (jwt(this.config.token).roles[0] == "ADMIN") {
       return (
         <Sider
-          style={{  overflow: 'auto', height: '100vh', position: 'sticky', top: 0, left: 0,  }}
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "sticky",
+            top: 0,
+            left: 0,
+          }}
           collapsible
           collapsed={collapsed}
           onCollapse={this.onCollapse}
         >
-          <Menu
-            theme="dark"
-            selectedKeys={[this.props.selected]}
-            mode="inline"
-          >
-            <Menu.Item
-              key="1"
-              icon={<PieChartOutlined />}
-            >
-              <Link to={"/admin/dashboard"}>
-              Dashboard
-              </Link>
+          <Menu theme="dark" selectedKeys={[this.props.selected]} mode="inline">
+            <Menu.Item key="1" icon={<PieChartOutlined />}>
+              <Link to={"/admin/dashboard"}>Dashboard</Link>
             </Menu.Item>
-            <Menu.Item
-              key="2"
-              icon={<DesktopOutlined />}
-            >
-              <Link to={"/admin/offices"}>
-                Offices
-              </Link>
-             
+            <Menu.Item key="2" icon={<DesktopOutlined />}>
+              <Link to={"/admin/offices"}>Offices</Link>
             </Menu.Item>
-            <Menu.Item
-              key="3"
-              icon={<FolderOutlined />}
-            >
-              <Link to={"/admin/configuration"} >
-              Configuration
-              </Link>
+            <Menu.Item key="3" icon={<FolderOutlined />}>
+              <Link to={"/admin/configuration"}>Configuration</Link>
             </Menu.Item>
-            <Menu.Item
-              key="4"
-              icon={<TeamOutlined />}
-            >
-              <Link to={"/admin/reservations"} >
-                  Reservation list
-              </Link>
+            <Menu.Item key="4" icon={<TeamOutlined />}>
+              <Link to={"/admin/reservations"}>Reservation list</Link>
+            </Menu.Item>
+            <Menu.Item key="5" icon={<TeamOutlined />}>
+              <Link to={"/employee/reservations"}>My reservations</Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -85,28 +69,10 @@ class SiderDemo extends Component {
         collapsed={collapsed}
         onCollapse={this.onCollapse}
       >
-        <Menu
-          theme="dark"
-          selectedKeys={[this.props.selected]}
-          mode="inline"
-        >
-          <Menu.Item
-            key="1"
-            icon={<TeamOutlined />}
-          >
-            <Link to={"/employee/reservations"}>
-              My reservations
-            </Link>
+        <Menu theme="dark" selectedKeys={[this.props.selected]} mode="inline">
+          <Menu.Item key="1" icon={<TeamOutlined />}>
+            <Link to={"/employee/reservations"}>My reservations</Link>
           </Menu.Item>
-          <Menu.Item
-            key="2"
-            icon={<FolderOutlined />}
-          >
-            <Link to={"/employee/informations"}>
-              Personal information
-            </Link>
-          </Menu.Item>
-          
         </Menu>
       </Sider>
     );

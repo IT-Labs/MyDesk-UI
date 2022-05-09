@@ -1,93 +1,58 @@
 import "antd/dist/antd.css";
-import { Form, Input, Button, Checkbox } from "antd";
-import { Link } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
 import "../../index.css";
 import React, { Component } from "react";
+import MicrosoftLogin from "react-microsoft-login";
+import { useEffect } from "react";
 import api from "../../helper/api";
+import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
-import UserHead from "../Head/UserHead";
-import EmailComponent from "../inputs/EmailComponent";
-import PasswordComponent from "../inputs/PasswordComponent";
 
-class Login extends Component {
-  config = {
-    token: localStorage.getItem("token"),
-  };
-  state = {};
+function Login(props) {
+  let navigate = useNavigate();
 
-  handleSubmit = (e) => {
-    const data = {
-      email: e.email,
-      password: e.password,
+  const loginHandler = (err, data) => {
+    const info = {
+      Email: data.mail,
+      Firstname: data.givenName,
+      Surname: data.surname,
+      JobTitle: data.jobTitle,
     };
 
+    const token = localStorage.getItem("msal.idtoken");
+
     api
-      .post("login", data)
+      .post("/authentication", info)
       .then((res) => {
-        const user = jwt(res.data);
-        localStorage.setItem("token", res.data);
-        if (user.role == "ADMIN") {
-          window.location = "/admin/dashboard";
-        } else if (user.role == "EMPLOYEE") {
-          window.location = "/employee/home";
-        }
+        roleRouting(token);
       })
       .catch((err) => {
-        this.setState({
-          error: "invalid credentials",
-        });
+        console.error("error");
       });
   };
-  render() {
-    if (this.config.token != null) {
-      return (
-        <div>
-          <UserHead />
-          <h1>Logged in as {jwt(this.config.token).role}</h1>
-        </div>
-      );
-    } else {
-      return (
-        <div className="FormLogin">
-          <h1 className="header">inOffice</h1>
-          <Form
-            name="normal_login"
-            className="login-form"
-            onFinish={this.handleSubmit}
-          >
-            <EmailComponent />
-            <PasswordComponent />
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-                style={{ backgroundColor: "white", color: "blue" }}
-              >
-                Log in
-              </Button>
-              <Link
-                to="/register"
-                style={{
-                  color: "white",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                Register
-              </Link>
-            </Form.Item>
-          </Form>
-          {this.state.error == "invalid credentials" ? (
-            <p style={{ color: "red" }}>Invalid credentials</p>
-          ) : (
-            <p></p>
-          )}
-        </div>
-      );
-    }
-  }
-}
 
+  const roleRouting = (token) => {
+    const decodedToken = jwt(token);
+    if (decodedToken.roles.includes("ADMIN")) {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/employee/home");
+    }
+  };
+
+  useEffect(() => {}, []);
+
+  return (
+    <MicrosoftLogin
+      clientId={"431c5d21-13d1-43af-a3bc-65484a0bca29"}
+      authCallback={loginHandler}
+      tenantUrl={
+        "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
+      }
+      redirectUri={"http://localhost:3000"}
+      forceRedirectStrategy={true}
+      useLocalStorageCache={true}
+      withUserData={true}
+    />
+  );
+}
 export default Login;
