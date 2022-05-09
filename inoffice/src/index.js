@@ -3,12 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./components/LoginForm/Login";
 import Home from "./pages/HomePage/HomePage";
-import MyAccount from "./pages/MyAccount/MyAccount";
 import Offices from "./pages/Offices/Offices";
 import NoPermissions from "./pages/NoPermissions/NoPermissions";
 import Configuration from "./pages/Configuration/Configuration";
 import ReservationList from "./pages/ReservationList/ReservationList";
-import PersonalInformations from "./pages/PersonalInformations/PersonalInformations";
 import EmployeeReservationList from "./pages/EmployeeReservations/EmployeeReservations";
 import { PrivateRoute } from "./helper/PrivateRoute";
 
@@ -47,7 +45,7 @@ render(
         element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
       />
       {/* <Route
-        path="/employee/informations"
+        path="/employeee/informations"
         element={
           <PrivateRoute
             component={PersonalInformations}
