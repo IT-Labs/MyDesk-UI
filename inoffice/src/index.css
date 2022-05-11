@@ -71,10 +71,10 @@ code {
 
 body {
   height: 100%;
-  background-image: url("./assets/bg.png");
+  /* background-image: url("./assets/bg.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: cover; */
 }
 
 input {
@@ -212,13 +212,12 @@ h1 {
   color: rgb(255, 255, 255);
 }
 .deleteButton {
-  color:white;
+  color: white;
   float: right;
   background-color: #d11a2a;
   border-radius: 17px;
   cursor: pointer;
 }
-
 
 .uploadOfficePlan {
   color: white;

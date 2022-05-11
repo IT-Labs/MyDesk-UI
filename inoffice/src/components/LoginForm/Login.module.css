@@ -1,0 +1,48 @@
+.bg {
+  display: flex;
+  background: url("../../assets/Path\ 467.svg");
+  background-position: 0 -17rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #eeeeee;
+}
+
+.logo {
+  background: url("../../assets/Group\ 190.svg") no-repeat;
+  width: 142px;
+  height: 54px;
+  margin: 5px;
+}
+
+.login {
+  width: 476px;
+  height: 300px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f7fafc;
+  flex-direction: column;
+  box-shadow: 0px 3px 17px #2c28281c;
+  border-radius: 10px;
+  opacity: 1;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title > p {
+  color: #172b4d;
+  text-align: center;
+  font: normal normal normal 15px/20px Gotham;
+  letter-spacing: 0px;
+  color: #172b4d;
+  opacity: 1;
+}
