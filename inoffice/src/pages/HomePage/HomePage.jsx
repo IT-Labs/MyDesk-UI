@@ -6,6 +6,7 @@ import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection
 import CalendarImplementation from "../../components/inputs/CalendarImplementation";
 import OfficeImage from "../../components/inputs/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
+import Availability from "../../components/inputs/Availability";
 import { useState } from "react";
 import api from "../../helper/api";
 import "../EditOffice/editoffice.css";
@@ -18,6 +19,7 @@ const Home = () => {
   const [endDateRes, setEndDate] = useState([]);
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -47,11 +49,15 @@ const Home = () => {
   const openNotification = (placement) => {
     notification.info({
       message: `Notification`,
-      description: " You succesfully made a reservation",
+      description: "You have successfully made a reservation",
       duration: 2,
       placement,
     });
   };
+
+  useEffect(() => {
+    setReload(true);
+  });
 
   const sendReservation = (data) => {
     api

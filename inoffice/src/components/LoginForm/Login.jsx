@@ -1,26 +1,29 @@
 import "antd/dist/antd.css";
 import "../../index.css";
-import React, { Component } from "react";
+import React from "react";
 import MicrosoftLogin from "react-microsoft-login";
 import { useEffect } from "react";
 import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import styles from "./Login.module.css";
+import { useState } from "react";
 
-function Login(props) {
+const Login = () => {
   let navigate = useNavigate();
+  const [info, setInfo] = useState();
 
   const loginHandler = (err, data) => {
-    const info = {
+    setInfo({
       Email: data.mail,
       Firstname: data.givenName,
       Surname: data.surname,
       JobTitle: data.jobTitle,
-    };
+    });
+  };
 
+  const sendData = (info) => {
     const token = localStorage.getItem("msal.idtoken");
-
     api
       .post("/authentication", info)
       .then((res) => {
@@ -40,7 +43,13 @@ function Login(props) {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (localStorage.getItem("msal.idtoken")) {
+      if (info != {}) {
+        sendData(info);
+      }
+    }
+  }, info);
 
   return (
     <div className={styles.bg}>
@@ -55,7 +64,7 @@ function Login(props) {
           tenantUrl={
             "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
           }
-          redirectUri={"https://salmon-grass-030b2a503.1.azurestaticapps.net/"}
+          redirectUri={"http://localhost:3000/"}
           forceRedirectStrategy={true}
           useLocalStorageCache={true}
           withUserData={true}
@@ -64,5 +73,5 @@ function Login(props) {
       </div>
     </div>
   );
-}
+};
 export default Login;

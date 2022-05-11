@@ -4,6 +4,14 @@ import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
 
 class Dashboard extends Component {
+  state = {
+    reload: false,
+  };
+
+  refreshPage = () => {
+    this.setState({ reload: true }, () => this.setState({ reload: false }));
+  };
+
   render() {
     return (
       <Layout>
@@ -16,5 +24,4 @@ class Dashboard extends Component {
     );
   }
 }
-
 export default Dashboard;
