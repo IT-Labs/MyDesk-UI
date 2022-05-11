@@ -14,18 +14,23 @@ const Login = () => {
   const [info, setInfo] = useState();
 
   const loginHandler = (err, data) => {
-    setInfo({
+    const userInfo = {
       Email: data.mail,
       Firstname: data.givenName,
       Surname: data.surname,
       JobTitle: data.jobTitle,
-    });
+    };
+    setInfo(userInfo);
+    sendData(userInfo);
   };
 
-  const sendData = (info) => {
+  const sendData = (userInfo) => {
     const token = localStorage.getItem("msal.idtoken");
+    if (token) {
+      navigate("/admin/dashboard");
+    }
     api
-      .post("/authentication", info)
+      .post("/authentication", userInfo)
       .then((res) => {
         roleRouting(token);
       })
@@ -42,14 +47,6 @@ const Login = () => {
       navigate("/employee/home");
     }
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("msal.idtoken")) {
-      if (info != {}) {
-        sendData(info);
-      }
-    }
-  }, info);
 
   return (
     <div className={styles.bg}>

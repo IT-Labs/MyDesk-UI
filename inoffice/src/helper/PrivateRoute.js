@@ -1,11 +1,10 @@
 import { Navigate } from "react-router-dom";
 import jwt from "jwt-decode";
 
-const token = localStorage.getItem("msal.idtoken");
-
 export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
-  var isAuthenticated = false;
-  var dateNow = new Date();
+  const token = localStorage.getItem("msal.idtoken");
+  let isAuthenticated = false;
+  let dateNow = new Date();
   if (jwt(token).exp * 1000 < dateNow.getTime()) {
     localStorage.clear();
   }
