@@ -13,23 +13,27 @@ export default class UserHead extends Component {
     if (jwt(this.config.token).roles[0] == "ADMIN") {
       return (
         <Header id="header">
-          <NavLink className={"link"} id="inOfficeLogo" to="/employee/home">
-            <FileOutlined className={"iconLogo"} /> inOffice
-          </NavLink>
+          <div id="logoContainer">
+            <NavLink className={"link"} id="inOfficeLogo" to="/employee/home">
+              <FileOutlined className={"iconLogo"} /> inOffice
+            </NavLink>
+          </div>
           {/* Hello x user here without the my account tab, no need */}
-          <NavLink className={"link"} to="/employee/reservations">
-            My account
-          </NavLink>
-          <NavLink
-            className={"link"}
-            to="/"
-            onClick={() => {
-              localStorage.clear();
-              window.location = "/";
-            }}
-          >
-            Log out
-          </NavLink>
+          <div>
+            <NavLink className={"link accountFunc"} to="/employee/reservations">
+              My account
+            </NavLink>
+            <NavLink
+              className={"link accountFunc"}
+              to="/"
+              onClick={() => {
+                localStorage.clear();
+                window.location = "/";
+              }}
+            >
+              Log out
+            </NavLink>
+          </div>
         </Header>
       );
     }

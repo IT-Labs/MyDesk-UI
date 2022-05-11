@@ -8,6 +8,19 @@ import PastReservations from "./PastReservations";
 import { useState, useEffect } from "react";
 import jwt from "jwt-decode";
 
+const cardStyles = {
+  width: "80%",
+  backgroundColor: "",
+  boxShadow: "0px 2px 6px #2C28281C",
+  borderRadius: "10px",
+};
+
+const contentStyle = {
+  display: "flex",
+  justifyContent: "center",
+  height: "100%",
+};
+
 const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
 
@@ -38,9 +51,9 @@ const EmployeeReservationList = () => {
         <UserHead />
         <Layout>
           <Sidebar selected="1" />
-          <Content>
+          <Content style={contentStyle}>
             <Card
-              style={{ width: "100%" }}
+              style={cardStyles}
               title="My reservations"
               tabList={tabList}
               activeTabKey={activeTabKey1}
@@ -60,9 +73,9 @@ const EmployeeReservationList = () => {
         <UserHead />
         <Layout>
           <Sidebar selected="5" />
-          <Content>
+          <Content style={contentStyle}>
             <Card
-              style={{ width: "100%" }}
+              style={cardStyles}
               title="My reservations"
               tabList={tabList}
               activeTabKey={activeTabKey1}

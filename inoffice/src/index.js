@@ -15,36 +15,37 @@ const rootElement = document.getElementById("root");
 
 render(
   <BrowserRouter>
-    <Routes>
-      <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
-      <Route path="/" element={<Login />} />
-      {/* <Route path="/register" element={<Register />} /> */}
-      <Route
-        path="/admin/dashboard"
-        element={<PrivateRoute component={Dashboard} compRoles={["ADMIN"]} />}
-      />
-      <Route
-        path="/admin/offices"
-        element={<PrivateRoute component={Offices} compRoles={["ADMIN"]} />}
-      />
-      <Route
-        path="/admin/configuration"
-        element={
-          <PrivateRoute component={Configuration} compRoles={["ADMIN"]} />
-        }
-      />
-      <Route
-        path="/admin/reservations"
-        element={
-          <PrivateRoute component={ReservationList} compRoles={["ADMIN"]} />
-        }
-      />
+    <div className="container">
+      <Routes>
+        <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
+        <Route path="/" element={<Login />} />
+        {/* <Route path="/register" element={<Register />} /> */}
+        <Route
+          path="/admin/dashboard"
+          element={<PrivateRoute component={Dashboard} compRoles={["ADMIN"]} />}
+        />
+        <Route
+          path="/admin/offices"
+          element={<PrivateRoute component={Offices} compRoles={["ADMIN"]} />}
+        />
+        <Route
+          path="/admin/configuration"
+          element={
+            <PrivateRoute component={Configuration} compRoles={["ADMIN"]} />
+          }
+        />
+        <Route
+          path="/admin/reservations"
+          element={
+            <PrivateRoute component={ReservationList} compRoles={["ADMIN"]} />
+          }
+        />
 
-      <Route
-        path="/employee/home"
-        element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
-      />
-      {/* <Route
+        <Route
+          path="/employee/home"
+          element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
+        />
+        {/* <Route
         path="/employeee/informations"
         element={
           <PrivateRoute
@@ -53,23 +54,24 @@ render(
           />
         }
       /> */}
-      <Route
-        path="/employee/reservations"
-        element={
-          <PrivateRoute
-            component={EmployeeReservationList}
-            compRoles={["EMPLOYEE", "ADMIN"]}
-          />
-        }
-      />
-      <Route path="/denied" element={<NoPermissions />} />
-      {/* <Route
+        <Route
+          path="/employee/reservations"
+          element={
+            <PrivateRoute
+              component={EmployeeReservationList}
+              compRoles={["EMPLOYEE", "ADMIN"]}
+            />
+          }
+        />
+        <Route path="/denied" element={<NoPermissions />} />
+        {/* <Route
         path="/myaccount"
         element={
           <PrivateRoute component={MyAccount} roles={["ADMIN", "EMPLOYEE"]} />
         }
       /> */}
-    </Routes>
+      </Routes>
+    </div>
   </BrowserRouter>,
   rootElement
 );

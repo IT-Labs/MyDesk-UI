@@ -7,6 +7,11 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
-[data-theme="dark"] .site-layout .site-layout-background {
+[data-theme="light"] .site-layout .site-layout-background {
   background: #141414;
+}
+
+.ant-menu > .ant-menu-submenu-selected {
+  color: red;
+  border-bottom: 2px solid red;
 }

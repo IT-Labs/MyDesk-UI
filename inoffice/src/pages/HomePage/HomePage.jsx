@@ -77,18 +77,23 @@ const Home = () => {
     sendReservation(data);
   };
 
+  const colStyle = {
+    border: 0,
+    borderRadius: "12px",
+  };
+
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
       <UserHead />
       <Layout>
         <Content>
           <Row className="firstSection">
-            <Col className="officeDropdown" span={11} xl={11} lg={11} md={11} >
+            <Col className="officeDropdown" span={11} xl={11} lg={11} md={11}>
               <OfficeBranchSelection
                 onOfficebranchChange={changeofficebranch}
               />
             </Col>
-            <Col className="calendarSection" span={11} xl={11} lg={11} md={11} >
+            <Col className="calendarSection" span={11} xl={11} lg={11} md={11}>
               <CalendarImplementation
                 dateFunction={setDate}
                 onSelectCard={selectedCard}
@@ -97,11 +102,25 @@ const Home = () => {
             </Col>
           </Row>
           <Row align="center">
-            <Col className="officeImgCol" span={11} xl={11} lg={11} md={11}>
+            <Col
+              style={colStyle}
+              className="officeImgCol cardColColor"
+              span={11}
+              xl={11}
+              lg={11}
+              md={11}
+            >
               <OfficeImage officeid={officeid} />
             </Col>
 
-            <Col className="cardsCol" span={11} xl={11} lg={11} md={11}>
+            <Col
+              style={colStyle}
+              className="cardsCol cardColColor"
+              span={11}
+              xl={11}
+              lg={11}
+              md={11}
+            >
               <CardsSection
                 refresh={refreshCards}
                 selectedCard={selectedCard}
@@ -116,8 +135,10 @@ const Home = () => {
                 block
                 disabled={selectedCardId.length == 0 ? true : false}
                 type="primary"
-                shape="round"
                 size="large"
+                style={{
+                  borderRadius: "7px",
+                }}
                 onClick={() => showReviewsForSelectedCard()}
               >
                 <p
@@ -152,7 +173,9 @@ const Home = () => {
                 }
                 onClick={() => makeReservation()}
                 type="primary"
-                shape="round"
+                style={{
+                  borderRadius: "7px",
+                }}
                 size="large"
               >
                 <p

@@ -7,16 +7,26 @@ h1 {
   display: flex;
   float: right;
   margin-right: 10px;
-  background-color: #1890ff;
-  color: white;
+  background-color: white;
+  color: teal;
 }
 .deleteButton {
-  display:flex;
+  display: flex;
   float: right;
   color: white;
   background-color: #d11a2a;
 }
 
-.addOfficeSectionButton{
- margin-left: 3%
+.addOfficeSectionButton {
+  margin-left: 3%;
+}
+
+.ant-row {
+  border: 0;
+  border-radius: 14px;
+}
+
+.ant-list {
+  border: 0;
+  border-radius: 14px;
 }

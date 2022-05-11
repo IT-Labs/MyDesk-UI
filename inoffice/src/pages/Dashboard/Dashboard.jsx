@@ -7,8 +7,8 @@ class Dashboard extends Component {
   render() {
     return (
       <Layout>
-        <UserHead/>
-        <Layout>
+        <UserHead />
+        <Layout className="panelBg">
           <Sidebar selected="1" />
           <Content>Dashboard</Content>
         </Layout>

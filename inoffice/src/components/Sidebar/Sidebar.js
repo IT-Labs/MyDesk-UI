@@ -8,6 +8,7 @@ import {
   FolderOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
+import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
 import { Link } from "react-router-dom";
@@ -37,25 +38,36 @@ class SiderDemo extends Component {
             top: 0,
             left: 0,
           }}
+          theme="light"
           collapsible
           collapsed={collapsed}
           onCollapse={this.onCollapse}
         >
-          <Menu theme="dark" selectedKeys={[this.props.selected]} mode="inline">
-            <Menu.Item key="1" icon={<PieChartOutlined />}>
-              <Link to={"/admin/dashboard"}>Dashboard</Link>
+          <Menu selectedKeys={[this.props.selected]} mode="inline">
+            <Menu.Item key="1" icon={<FeatherIcon icon="home" />}>
+              <Link to={"/admin/dashboard"}>
+                {!this.state.collapsed && <>Dashboard</>}
+              </Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<DesktopOutlined />}>
-              <Link to={"/admin/offices"}>Offices</Link>
+            <Menu.Item key="2" icon={<FeatherIcon icon="code" />}>
+              <Link to={"/admin/offices"}>
+                {!this.state.collapsed && <>Offices</>}
+              </Link>
             </Menu.Item>
-            <Menu.Item key="3" icon={<FolderOutlined />}>
-              <Link to={"/admin/configuration"}>Configuration</Link>
+            <Menu.Item key="3" icon={<FeatherIcon icon="settings" />}>
+              <Link to={"/admin/configuration"}>
+                {!this.state.collapsed && <>Configuration</>}
+              </Link>
             </Menu.Item>
-            <Menu.Item key="4" icon={<TeamOutlined />}>
-              <Link to={"/admin/reservations"}>Reservation list</Link>
+            <Menu.Item key="4" icon={<FeatherIcon icon="coffee" />}>
+              <Link to={"/admin/reservations"}>
+                {!this.state.collapsed && <>Reservation List</>}
+              </Link>
             </Menu.Item>
-            <Menu.Item key="5" icon={<TeamOutlined />}>
-              <Link to={"/employee/reservations"}>My reservations</Link>
+            <Menu.Item key="5" icon={<FeatherIcon icon="coffee" />}>
+              <Link to={"/employee/reservations"}>
+                {!this.state.collapsed && <>My Reservations</>}
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -69,7 +81,7 @@ class SiderDemo extends Component {
         collapsed={collapsed}
         onCollapse={this.onCollapse}
       >
-        <Menu theme="dark" selectedKeys={[this.props.selected]} mode="inline">
+        <Menu theme="light" selectedKeys={[this.props.selected]} mode="inline">
           <Menu.Item key="1" icon={<TeamOutlined />}>
             <Link to={"/employee/reservations"}>My reservations</Link>
           </Menu.Item>

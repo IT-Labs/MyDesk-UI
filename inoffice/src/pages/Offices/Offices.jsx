@@ -6,7 +6,7 @@ import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
 import { Popconfirm, Row, Col, notification } from "antd";
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import "../Offices/Offices.css";
 
@@ -57,8 +57,15 @@ class Offices extends Component {
         <UserHeade />
         <Layout>
           <Sidebar selected="2" />
-          <Content>
-            <Row align="middle">
+          <Content
+            style={{
+              display: "flex",
+              justifyContent: "top",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Row align="middle" style={{ width: "100%" }}>
               <Col span={21}>
                 <h1>Offices</h1>
               </Col>
@@ -70,7 +77,14 @@ class Offices extends Component {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row
+              style={{
+                background: "#fff",
+                width: "80%",
+                borderRadius: "14px",
+                border: 0,
+              }}
+            >
               <Col span={24}>
                 <List
                   bordered
@@ -86,8 +100,9 @@ class Offices extends Component {
                         className="deleteButton"
                         shape="round"
                         placement="topRight"
-                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                       
+                        icon={
+                          <QuestionCircleOutlined style={{ color: "red" }} />
+                        }
                       >
                         <Button type="primary" danger>
                           {" "}
