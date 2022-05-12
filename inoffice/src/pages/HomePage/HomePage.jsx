@@ -7,12 +7,14 @@ import CalendarImplementation from "../../components/inputs/CalendarImplementati
 import OfficeImage from "../../components/inputs/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
 import Availability from "../../components/inputs/Availability";
+import moment from "moment";
 import { useState } from "react";
 import api from "../../helper/api";
 import "../EditOffice/editoffice.css";
 import "../HomePage/homepage.css";
 
 const Home = () => {
+  const dateFormat = "DD/MM/YYYY";
   const [officeid, setofficeid] = useState();
   const [selectedCardId, setSelectedCard] = useState([]);
   const [startDateRes, setStartDate] = useState([]);
@@ -20,6 +22,8 @@ const Home = () => {
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);
+
+  console.log(startDateRes);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -60,8 +64,11 @@ const Home = () => {
   });
 
   const sendReservation = (data) => {
+    const config = {
+      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
+    };
     api
-      .post("employee/reserve", data)
+      .post("employee/reserve", data, config)
       .then((response) => {
         refresh();
         openNotification("top");
@@ -81,11 +88,6 @@ const Home = () => {
     };
 
     sendReservation(data);
-  };
-
-  const colStyle = {
-    border: 0,
-    borderRadius: "12px",
   };
 
   return (
@@ -109,7 +111,6 @@ const Home = () => {
           </Row>
           <Row align="center">
             <Col
-              style={colStyle}
               className="officeImgCol cardColColor"
               span={11}
               xl={11}
@@ -120,7 +121,6 @@ const Home = () => {
             </Col>
 
             <Col
-              style={colStyle}
               className="cardsCol cardColColor"
               span={11}
               xl={11}
@@ -173,9 +173,12 @@ const Home = () => {
               <Button
                 block
                 disabled={
-                  selectedCardId.length === 0 || selectedCardId.reservationId
+                  (selectedCardId.length === 0 || selectedCardId.reservationId
                     ? true
-                    : false
+                    : false) ||
+                  (startDateRes.length === 0 || endDateRes.length === 0
+                    ? true
+                    : false)
                 }
                 onClick={() => makeReservation()}
                 type="primary"

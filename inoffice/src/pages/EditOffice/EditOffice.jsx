@@ -205,77 +205,83 @@ class EditOffice extends Component {
           <Sidebar selected="2" />
           <Content>
             <Space>
-              <Row>
-                <Col span={24}>
-                  <div></div>
-                </Col>
-              </Row>
+              <Row></Row>
             </Space>
             <h1 className="editOffice">Edit office</h1>
 
-            <Row align="middle">
-              <Col span={1}></Col>
-              <Col className="officeBranch" span={23}>
-                <div>Office information:</div>
-              </Col>
-            </Row>
             <Form name="normal_login" onFinish={this.handleSubmit}>
-              <Row align="top">
-                <Col span={1}></Col>
-
-                <Col span={10} className="officeName">
-                  <Row>
-                    <div className="inlineBlockDiv">
-                      <div>
-                        <div className="officeTitels">
-                          Name:{" "}
-                          <span className="labels">
-                            {this.state.officeName.split(" ")[0]}
-                          </span>
+              <Row
+                align="top"
+                style={{ display: "flex", justifyContent: "center" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignContent: "center",
+                    width: "80%",
+                  }}
+                >
+                  <Col span={10} className="officeName">
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        left: "-50px",
+                      }}
+                    >
+                      <Row>
+                        <Col className="officeBranch" span={23}>
+                          <div>Office information:</div>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <div className="inlineBlockDiv">
+                          <div>
+                            <div className="officeTitels">
+                              Name:{" "}
+                              <span className="labels">
+                                {this.state.officeName.split(" ")[0]}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="officeTitels">
+                            Location:{" "}
+                            <span className="labels">
+                              {this.state.officeName.split(" ")[1]}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="officeTitels">
-                        Location:{" "}
-                        <span className="labels">
-                          {this.state.officeName.split(" ")[1]}
-                        </span>
-                      </div>
-                    </div>
-                  </Row>
-                  <Space>
-                    <Row>
-                      <Col span={24}>
-                        <div></div>
-                      </Col>
-                    </Row>
-                  </Space>
-                  <Row>
-                    <UploadOfficePlan
-                      className="uploadOfficePlanButton"
-                      triggerText="Update office plan/information"
-                      imageUrl={this.state.imageUrl}
-                    />
-                  </Row>
-                </Col>
-                <Col span={2}></Col>
-
-                <Row align="top">
-                  <Col span={10}>
-                    <div>
-                      {this.state.imageUrl ? (
-                        <Image
-                          src={this.state.imageUrl}
-                          className="officeImagePlan"
-                        ></Image>
-                      ) : (
-                        <Image
-                          className="officeImagePlan"
-                          src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
-                        ></Image>
-                      )}
+                      </Row>
+                      <Row>
+                        <UploadOfficePlan
+                          className="uploadOfficePlanButton"
+                          triggerText="Update office plan/information"
+                          imageUrl={this.state.imageUrl}
+                        />
+                      </Row>
                     </div>
                   </Col>
-                </Row>
+                  <Col span={2}></Col>
+
+                  <Row align="top">
+                    <Col span={10}>
+                      <div>
+                        {this.state.imageUrl ? (
+                          <Image
+                            src={this.state.imageUrl}
+                            className="officeImagePlan"
+                          ></Image>
+                        ) : (
+                          <Image
+                            className="officeImagePlan"
+                            src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
+                          ></Image>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
               </Row>
               <Space>
                 <Row>
@@ -307,13 +313,16 @@ class EditOffice extends Component {
                 <Col span={1}></Col>
                 <Col span={5} className="officeName">
                   <Form.Item name="numberOfDesks">
-                    <Input placeholder="Enter number of desks" />
+                    <Input placeholder="Enter number of desks" type="number" />
                   </Form.Item>
                 </Col>
                 <Col span={7}></Col>
                 <Col span={5}>
                   <Form.Item name="numberOfConferenceRooms">
-                    <Input placeholder="Enter number of conference rooms" />
+                    <Input
+                      placeholder="Enter number of conference rooms"
+                      type="number"
+                    />
                   </Form.Item>{" "}
                 </Col>
                 <Col span={2}></Col>
@@ -432,6 +441,7 @@ class EditOffice extends Component {
                           className="inputvalue"
                           size="small"
                           name={item.id}
+                          type="number"
                           onChange={(e) =>
                             this.capacityChange(e.target.name, e.target.value)
                           }

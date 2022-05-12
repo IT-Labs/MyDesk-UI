@@ -18,7 +18,9 @@ class Dashboard extends Component {
         <UserHead />
         <Layout className="panelBg">
           <Sidebar selected="1" />
-          <Content>Dashboard</Content>
+          <Content>
+            <h1>Dashboard</h1>
+          </Content>
         </Layout>
       </Layout>
     );

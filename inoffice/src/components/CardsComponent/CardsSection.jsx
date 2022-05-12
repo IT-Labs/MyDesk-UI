@@ -82,16 +82,11 @@ const CardsSection = (props) => {
                         title={
                           !item.categories ? (
                             <p style={{ fontSize: "0.8vw" }}>
-                              <p style={{ fontSize: "0.8vw" }}>
-                                {" "}
-                                Conf room {item.indexForOffice}
-                              </p>
+                              Conf room {item.indexForOffice}
                             </p>
                           ) : (
                             <p style={{ fontSize: "0.8vw" }}>
-                              <p style={{ fontSize: "0.8vw" }}>
-                                Desk {item.indexForOffice}
-                              </p>
+                              Desk {item.indexForOffice}
                             </p>
                           )
                         }

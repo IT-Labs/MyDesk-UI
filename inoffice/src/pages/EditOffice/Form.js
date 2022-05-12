@@ -3,7 +3,6 @@ import api from "../../helper/api";
 import { Form, Input, Button } from "antd";
 import { withRouter } from "../../helper/withRouterHelper";
 
-
 class AddOffice extends Component {
   constructor(props) {
     super(props);
@@ -20,17 +19,12 @@ class AddOffice extends Component {
     const data = {
       officeName: e.officeName + " " + e.officeLocation,
       officePlan: e.officePlan,
-    }
+    };
 
-    api.put(
-      "admin/office/" + this.state.officeId,
-      data
-    )
-    .then((res) =>{
-    window.location =
-      "/admin/edit/"+data.officeName+"/"+this.props.params.id
-    }
-    )
+    api.put("admin/office/" + this.state.officeId, data).then((res) => {
+      window.location =
+        "/admin/edit/" + data.officeName + "/" + this.props.params.id;
+    });
   };
 
   render() {
@@ -48,22 +42,21 @@ class AddOffice extends Component {
         >
           <Form.Item
             name="officePlan"
-            rules={[{ required: false, message: "Please enter image url" },
-            ]}
+            rules={[{ required: false, message: "Please enter image url" }]}
           >
             <Input placeholder="Image url" />
           </Form.Item>
 
           <Form.Item
             name="officeName"
-            rules={[{ required: false, message: "Please enter office name" },
-            {
-              required: true,
-              pattern: new RegExp(
-                "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
-              ),
-              message: "You exceeded the maximum number of characters",
-            }]}
+            rules={[
+              { required: false, message: "Please enter office name" },
+              {
+                required: true,
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
+                message: "You exceeded the maximum number of characters",
+              },
+            ]}
           >
             <Input placeholder="Office name" />
           </Form.Item>
@@ -74,23 +67,20 @@ class AddOffice extends Component {
               { required: false, message: "Please enter office location" },
               {
                 required: true,
-                pattern: new RegExp(
-                  "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
-                ),
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
                 message: "You exceeded the maximum number of characters",
-              }
+              },
             ]}
           >
             <Input placeholder="Office location" />
           </Form.Item>
 
           <Form.Item>
-            <Button 
-            htmlType="submit" 
-            className="formButton" 
-            type="primary"
-            shape="round"
-
+            <Button
+              htmlType="submit"
+              className="formButton"
+              type="primary"
+              shape="round"
             >
               Save
             </Button>
@@ -98,7 +88,13 @@ class AddOffice extends Component {
               type="primary"
               className="formButton"
               shape="round"
-              onClick={() => (window.location = "/admin/edit/"+this.props.params.name+"/"+this.props.params.id)}
+              onClick={() =>
+                (window.location =
+                  "/admin/edit/" +
+                  this.props.params.name +
+                  "/" +
+                  this.props.params.id)
+              }
             >
               Cancel
             </Button>

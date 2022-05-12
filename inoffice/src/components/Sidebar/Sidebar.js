@@ -7,15 +7,17 @@ import {
   PieChartOutlined,
   FolderOutlined,
   TeamOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 class SiderDemo extends Component {
   state = {
     collapsed: false,
+    width: "100%",
   };
 
   config = {
@@ -24,6 +26,11 @@ class SiderDemo extends Component {
 
   onCollapse = (collapsed) => {
     this.setState({ collapsed });
+    if (collapsed) {
+      this.setState({ width: "75%" });
+    } else {
+      this.setState({ width: "100%" });
+    }
   };
 
   render() {
@@ -34,8 +41,8 @@ class SiderDemo extends Component {
           style={{
             overflow: "auto",
             height: "100vh",
-            position: "sticky",
-            top: 0,
+            position: "relative",
+            top: "-70px",
             left: 0,
           }}
           theme="light"
@@ -43,7 +50,18 @@ class SiderDemo extends Component {
           collapsed={collapsed}
           onCollapse={this.onCollapse}
         >
-          <Menu selectedKeys={[this.props.selected]} mode="inline">
+          <Menu
+            selectedKeys={[this.props.selected]}
+            mode="inline"
+            className="sideMenu"
+          >
+            <Menu.Item
+              key="0"
+              className="sideBarLogo"
+              style={{ width: this.state.width }}
+            >
+              <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+            </Menu.Item>
             <Menu.Item key="1" icon={<FeatherIcon icon="home" />}>
               <Link to={"/admin/dashboard"}>
                 {!this.state.collapsed && <>Dashboard</>}

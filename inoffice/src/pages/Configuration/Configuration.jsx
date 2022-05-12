@@ -10,7 +10,9 @@ export default class Configuration extends Component {
         <UserHeade />
         <Layout className="panelBg">
           <Sidebar selected="3" />
-          <Content>Configuration</Content>
+          <Content>
+            <h1>Configuration</h1>
+          </Content>
         </Layout>
       </Layout>
     );

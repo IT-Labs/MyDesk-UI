@@ -1,5 +1,5 @@
 .officeImagePlan {
-  display: flexbox;
+  display: flex;
   justify-content: center;
   width: 500px;
   height: 300px;
@@ -14,7 +14,7 @@
   font-size: 1.35em;
 }
 
-.inputvalue{
+.inputvalue {
   text-align: center;
 }
 .inlineBlockDiv {
@@ -29,29 +29,27 @@
 .secondSpan {
   display: flex;
   justify-content: start;
-
 }
 
-.secondSpanconf{
+.secondSpanconf {
   display: flex;
   justify-content: start;
   padding-right: 13%;
 }
 
-.deleteiconDesks{
+.deleteiconDesks {
   cursor: pointer;
   padding-left: 27%;
 }
 
-.deleteiconconf{
+.deleteiconconf {
   cursor: pointer;
   padding-left: 27%;
 }
 
 .deleteButton {
-  display:flex;
+  display: flex;
   float: right;
-
 }
 
 .firstSpan {
@@ -66,4 +64,8 @@
 .uploadOfficePlanButton {
   display: flex;
   justify-content: center;
+}
+
+.ant-col {
+  border: 0 !important;
 }

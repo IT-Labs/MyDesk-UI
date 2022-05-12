@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   float: right;
-  justify-content: flex-end;
+  justify-content: space-between;
   background-color: transparent;
 }
 
@@ -18,27 +18,4 @@
 a.link:hover {
   cursor: pointer;
   color: rgb(252, 252, 252);
-}
-
-.iconLogo {
-  font-size: 100%;
-  margin-top: 20px;
-  margin-right: 7px;
-}
-
-#inOfficeLogo {
-  position: relative;
-  left: 25px;
-  color: black;
-}
-
-#logoContainer {
-  background-color: white;
-  width: 13.18%;
-  position: absolute;
-  font-size: 1.5em;
-  float: left;
-  left: 0;
-  display: flex;
-  justify-content: start;
 }

@@ -2,7 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import { useEffect } from "react";
 
-export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
+const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   const token = localStorage.getItem("msal.idtoken");
   const navigate = useNavigate();
   if (!token) {
@@ -33,3 +33,5 @@ export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   }
   return <Navigate to="/" />;
 };
+
+export default PrivateRoute;
