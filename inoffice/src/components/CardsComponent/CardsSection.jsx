@@ -66,7 +66,7 @@ const CardsSection = (props) => {
                   <List.Item
                     style={{
                       border:
-                        item == selectedCardInSection ? "solid 2px" : "none",
+                        item === selectedCardInSection ? "solid 2px" : "none",
                     }}
                   >
                     <Card

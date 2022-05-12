@@ -139,7 +139,7 @@ const Home = () => {
             <Col className="buttonReview" span={2}>
               <Button
                 block
-                disabled={selectedCardId.length == 0 ? true : false}
+                disabled={selectedCardId.length === 0 ? true : false}
                 type="primary"
                 size="large"
                 style={{
@@ -173,7 +173,7 @@ const Home = () => {
               <Button
                 block
                 disabled={
-                  selectedCardId.length == 0 || selectedCardId.reservationId
+                  selectedCardId.length === 0 || selectedCardId.reservationId
                     ? true
                     : false
                 }

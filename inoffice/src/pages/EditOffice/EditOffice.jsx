@@ -4,7 +4,7 @@ import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import "../EditOffice/editoffice.css";
 import { DeleteFilled } from "@ant-design/icons";
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import {
   Checkbox,
   Form,
@@ -16,7 +16,7 @@ import {
   notification,
   Space,
   Image,
-  Popconfirm
+  Popconfirm,
 } from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
@@ -40,10 +40,10 @@ class EditOffice extends Component {
         this.setState({
           desks: res.data,
           checked: res.data
-            .filter((x) => x.categories == "silent")
+            .filter((x) => x.categories === "silent")
             .map((x) => x.id),
           initialdesks: res.data
-            .filter((x) => x.categories == "silent")
+            .filter((x) => x.categories === "silent")
             .map((x) => x.id),
         });
       })
@@ -94,14 +94,14 @@ class EditOffice extends Component {
     var items = this.state.conferenceRooms;
 
     for (let i = 0; i < items.length; i++) {
-      if (items[i].id == name) {
+      if (items[i].id === name) {
         items[i].capacity = parseInt(value);
       }
     }
   };
 
   checkCategory = (e) => {
-    if (e.categories == "silent") {
+    if (e.categories === "silent") {
       return true;
     } else {
       return false;
@@ -254,7 +254,6 @@ class EditOffice extends Component {
                       className="uploadOfficePlanButton"
                       triggerText="Update office plan/information"
                       imageUrl={this.state.imageUrl}
-                      
                     />
                   </Row>
                 </Col>
@@ -349,11 +348,10 @@ class EditOffice extends Component {
                 >
                   <List
                     header={
-                      
                       <div className="divSpan">
                         <span className="firstSpan">All desks</span>
                         <span className="secondSpan">Silent desk</span>
-                        <span > Delete</span>
+                        <span> Delete</span>
                       </div>
                     }
                     className="list"
@@ -361,38 +359,42 @@ class EditOffice extends Component {
                     dataSource={this.state.desks}
                     renderItem={(item) => (
                       <List.Item>
-                        <Col span={4}>
-                        {item.indexForOffice}
+                        <Col span={4}>{item.indexForOffice}</Col>
+                        <Col span={3}>
+                          <Checkbox
+                            style={{
+                              background: "white",
+                              color: "black",
+                              paddingLeft: "3%",
+                            }}
+                            value={item.id}
+                            defaultChecked={this.checkCategory(item)}
+                            onChange={this.checked}
+                          ></Checkbox>
                         </Col>
-                       <Col span={3}>
-                        <Checkbox
-                          style={{
-                            background: "white",
-                            color: "black",
-                            paddingLeft:"3%"
-                          }}
-                          value={item.id}
-                          defaultChecked={this.checkCategory(item)}
-                          onChange={this.checked}
-                        ></Checkbox>
-                        </Col>
-                       
+
                         <Col span={2}>
-                        <Popconfirm
+                          <Popconfirm
                             title="Are you sure to delete this desk?"
-                            onConfirm={() => this.deleteNotification([item.id, "D"])}
+                            onConfirm={() =>
+                              this.deleteNotification([item.id, "D"])
+                            }
                             okText="Yes"
                             cancelText="No"
                             shape="round"
                             placement="topRight"
-                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                        >
-                          <DeleteFilled
-                            className="deleteiconDesks"
-                            key={item.id}
-                            value={item.id}
-                          />
-                      </Popconfirm>
+                            icon={
+                              <QuestionCircleOutlined
+                                style={{ color: "red" }}
+                              />
+                            }
+                          >
+                            <DeleteFilled
+                              className="deleteiconDesks"
+                              key={item.id}
+                              value={item.id}
+                            />
+                          </Popconfirm>
                         </Col>
                       </List.Item>
                     )}
@@ -416,7 +418,7 @@ class EditOffice extends Component {
                     <div className="divSpan">
                       <span className="firstSpan">All conference rooms</span>
                       <span className="secondSpanconf">Capacity</span>
-                      <span >Delete </span>
+                      <span>Delete </span>
                     </div>
                   }
                   className="list"
@@ -438,24 +440,27 @@ class EditOffice extends Component {
                         />
                       </Col>
                       <Col span={2}>
-                      <Popconfirm
-                            title="Are you sure to delete this conference room?"
-                            onConfirm={() => this.deleteNotification([item.id, "C"])}
-                            okText="Yes"
-                            cancelText="No"
-                            shape="round"
-                            placement="topRight"
-                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        <Popconfirm
+                          title="Are you sure to delete this conference room?"
+                          onConfirm={() =>
+                            this.deleteNotification([item.id, "C"])
+                          }
+                          okText="Yes"
+                          cancelText="No"
+                          shape="round"
+                          placement="topRight"
+                          icon={
+                            <QuestionCircleOutlined style={{ color: "red" }} />
+                          }
                         >
-                        <DeleteFilled
-                          height={1}
-                          width={1}
-                          className="deleteiconconf"
-                          key={item.id}
-                          value={item.id}
-                        />
-                      </Popconfirm>
-
+                          <DeleteFilled
+                            height={1}
+                            width={1}
+                            className="deleteiconconf"
+                            key={item.id}
+                            value={item.id}
+                          />
+                        </Popconfirm>
                       </Col>
                     </List.Item>
                   )}

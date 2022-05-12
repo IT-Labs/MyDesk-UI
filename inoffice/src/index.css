@@ -232,20 +232,11 @@ h1 {
   float: inline-end;
 }
 
-.container {
-  background: url("./assets/Path\ 467.svg");
-  height: 100%;
-  width: 100%;
-  background-position: 0 -17rem;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .ant-layout {
   background: url("./assets/Path\ 467.svg");
   height: 100%;
   width: 100%;
-  background-position: 0 -17rem;
   background-repeat: no-repeat;
+  background-position: 0 -25rem;
   background-size: cover;
 }

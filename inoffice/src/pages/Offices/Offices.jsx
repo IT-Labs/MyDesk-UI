@@ -104,7 +104,17 @@ class Offices extends Component {
                           <QuestionCircleOutlined style={{ color: "red" }} />
                         }
                       >
-                        <Button type="primary" danger>
+                        <Button
+                          type="primary"
+                          danger
+                          style={{
+                            background: "red",
+                            color: "white",
+                            border: "0",
+                            borderRadius: "5px",
+                            boxShadow: " 0px 3px 6px #2C28281C",
+                          }}
+                        >
                           {" "}
                           Delete
                         </Button>
@@ -112,7 +122,13 @@ class Offices extends Component {
                       <Button
                         type="primary"
                         className="editButton"
-                        shape="round"
+                        style={{
+                          background: "white",
+                          color: "teal",
+                          border: "0",
+                          borderRadius: "5px",
+                          boxShadow: " 0px 3px 6px #2C28281C",
+                        }}
                         onClick={() => {
                           window.location =
                             "edit/" + office.name + "/" + office.id;

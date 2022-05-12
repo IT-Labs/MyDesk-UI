@@ -10,7 +10,7 @@ export default class UserHead extends Component {
     token: localStorage.getItem("msal.idtoken"),
   };
   render() {
-    if (jwt(this.config.token).roles[0] == "ADMIN") {
+    if (jwt(this.config.token).roles[0] === "ADMIN") {
       return (
         <Header id="header">
           <div id="logoContainer">

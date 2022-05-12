@@ -45,7 +45,7 @@ const EmployeeReservationList = () => {
     setActiveTabKey1(key);
   };
 
-  if (token.roles[0] == "EMPLOYEE") {
+  if (token.roles[0] === "EMPLOYEE") {
     return (
       <Layout>
         <UserHead />

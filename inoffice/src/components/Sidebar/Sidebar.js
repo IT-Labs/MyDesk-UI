@@ -28,7 +28,7 @@ class SiderDemo extends Component {
 
   render() {
     const { collapsed } = this.state;
-    if (jwt(this.config.token).roles[0] == "ADMIN") {
+    if (jwt(this.config.token).roles[0] === "ADMIN") {
       return (
         <Sider
           style={{

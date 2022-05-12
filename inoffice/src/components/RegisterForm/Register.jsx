@@ -31,7 +31,7 @@ class Register extends Component {
     api
       .post("/register", data)
       .then((res) => {
-        if (res.data == "Success") window.location = "/";
+        if (res.data === "Success") window.location = "/";
         else {
           document.getElementById("hiddeninput").textContent =
             "Email already exist";
@@ -46,9 +46,9 @@ class Register extends Component {
   render() {
     if (this.config.token != null) {
       const m = jwt(this.config.token);
-      if (m.role == "ADMIN") {
+      if (m.role === "ADMIN") {
         window.location = "/admin/dashboard";
-      } else if (m.role == "EMPLOYEE") {
+      } else if (m.role === "EMPLOYEE") {
         window.location = "/employee/home";
       }
     } else {

@@ -21,7 +21,6 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
       id="addOffice"
       ref={buttonRef}
       type="primary"
-      shape="round"
     >
       {addOfficeText}
     </Button>

@@ -1,8 +1,14 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
+import { useEffect } from "react";
 
 export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   const token = localStorage.getItem("msal.idtoken");
+  const navigate = useNavigate();
+  if (!token) {
+    navigate("/");
+  }
+
   let isAuthenticated = false;
   let dateNow = new Date();
   if (jwt(token).exp * 1000 < dateNow.getTime()) {
@@ -10,8 +16,8 @@ export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   }
 
   if (
-    compRoles[0] == jwt(token).roles[0] ||
-    compRoles[0] == jwt(token).roles[1]
+    compRoles[0] === jwt(token).roles[0] ||
+    compRoles[0] === jwt(token).roles[1]
   ) {
     isAuthenticated = true;
   }
@@ -20,8 +26,8 @@ export const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
     return <RouteComponent />;
   }
   if (
-    compRoles[0] != jwt(token).roles[0] ||
-    compRoles[0] != jwt(token).roles[1]
+    compRoles[0] !== jwt(token).roles[0] ||
+    compRoles[0] !== jwt(token).roles[1]
   ) {
     return <Navigate to="/denied" />;
   }

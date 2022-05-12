@@ -26,9 +26,6 @@ const Login = () => {
 
   const sendData = (userInfo) => {
     const token = localStorage.getItem("msal.idtoken");
-    if (token) {
-      navigate("/admin/dashboard");
-    }
     api
       .post("/authentication", userInfo)
       .then((res) => {
@@ -47,7 +44,8 @@ const Login = () => {
       navigate("/employee/home");
     }
   };
-
+  //https://salmon-grass-030b2a503.1.azurestaticapps.net/
+  //http://localhost:3000
   return (
     <div className={styles.bg}>
       <div className={styles.login}>
