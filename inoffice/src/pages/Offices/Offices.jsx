@@ -89,6 +89,10 @@ class Offices extends Component {
                 <List
                   bordered
                   dataSource={this.state.data}
+                  style={{
+                    boxShadow: "0 2px 2px 1px #2c28283c",
+                    padding: "10px",
+                  }}
                   renderItem={(office) => (
                     <List.Item>
                       <Typography.Text mark></Typography.Text> {office.name}{" "}

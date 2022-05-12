@@ -15,6 +15,7 @@ const Officebranchselection = (props) => {
       setLoading(true);
       try {
         const { data: response } = await api.get("employee/offices");
+        props.onOfficebranchChange(response[0].id);
         setData(response);
       } catch (error) {
         console.error(error.message);
@@ -41,7 +42,11 @@ const Officebranchselection = (props) => {
           <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
             Office - branch
           </p>
-          <Select onChange={handleChange} placeholder="Select office-branch">
+          <Select
+            onChange={handleChange}
+            placeholder="Select office-branch"
+            defaultValue={data[0].name}
+          >
             {data.map((item) => (
               <Option key={item.id} value={item.id}>
                 {item.name}

@@ -17,8 +17,12 @@ const Home = () => {
   const dateFormat = "DD/MM/YYYY";
   const [officeid, setofficeid] = useState();
   const [selectedCardId, setSelectedCard] = useState([]);
-  const [startDateRes, setStartDate] = useState([]);
-  const [endDateRes, setEndDate] = useState([]);
+  const [startDateRes, setStartDate] = useState(
+    moment(new Date(), dateFormat).add(1, "days").format("DD-MM-YYYY")
+  );
+  const [endDateRes, setEndDate] = useState(
+    moment(new Date(), dateFormat).add(2, "days").format("DD-MM-YYYY")
+  );
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);

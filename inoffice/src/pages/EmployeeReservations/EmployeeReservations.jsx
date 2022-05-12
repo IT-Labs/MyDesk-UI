@@ -10,7 +10,7 @@ import jwt from "jwt-decode";
 
 const cardStyles = {
   width: "80%",
-  backgroundColor: "",
+  backgroundColor: "white",
   boxShadow: "0px 2px 6px #2C28281C",
   borderRadius: "10px",
 };
