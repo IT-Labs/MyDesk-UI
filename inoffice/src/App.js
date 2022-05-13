@@ -29,6 +29,7 @@ const App = () => {
   const token = localStorage.getItem("msal.idtoken");
   React.useEffect(() => {
     if (!token) {
+      // localStorage.clear();
       navigate("/");
     }
   }, [token]);

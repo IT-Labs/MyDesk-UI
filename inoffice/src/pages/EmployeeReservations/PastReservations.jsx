@@ -10,6 +10,7 @@ import {
   Input,
   Modal,
   Button,
+  Select,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import api from "../../helper/api";
@@ -29,15 +30,37 @@ const PastReservations = () => {
   const [resid, setResid] = useState();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [writtenReview, setWrittenReview] = useState();
+  const [filter, setFilter] = useState("Sort by newest");
 
   const sortByOldest = (reservations) => {
     const sorted = reservations.sort((a, b) => {
-      return a.StartDate > b.startDate ? -1 : a.StartDate < b.StartDate ? 1 : 0;
+      const date1 = new Date(a.startDate).getTime();
+      const date2 = new Date(b.startDate).getTime();
+
+      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
     });
 
     setPastReservations(sorted);
   };
 
+  const sortByNewest = (reservations) => {
+    const sorted = reservations.sort((a, b) => {
+      const date1 = new Date(a.startDate).getTime();
+      const date2 = new Date(b.startDate).getTime();
+
+      return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+    });
+
+    setPastReservations(sorted);
+  };
+
+  const sortByTime = (value) => {
+    if (value === "Sort By oldest") {
+      sortByOldest(pastreservations);
+    } else if (value === "Sort By newest") {
+      sortByNewest(pastreservations);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -92,106 +115,90 @@ const PastReservations = () => {
 
   return (
     <div>
-      {" "}
-      {loadingData && <Spin indicator={antIcon} />}
-      {!loadingData && (
-        <div>
-          <Row>
-            <Col span={2}></Col>
+      <Select
+        style={{ width: "50%", marginBottom: "20px" }}
+        onSelect={(value) => {
+          setFilter(value);
+          sortByTime(value);
+        }}
+        value={filter}
+      >
+        <Select.Option key={1} value={"Sort By oldest"}>
+          Sort By oldest
+        </Select.Option>
+        <Select.Option key={2} value={"Sort By newest"}>
+          Sort By newest
+        </Select.Option>
+      </Select>
+      <table style={{ width: "100%", textAlign: "center" }}>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Office</th>
+            <th>Entity</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pastreservations.map((item, id) => {
+            return (
+              <tr key={id}>
+                <td>
+                  {item.startDate.split("T")[0].split("-").reverse().join("/")}{" "}
+                  - {item.endDate.split("T")[0].split("-").reverse().join("/")}
+                </td>
+                <td>{item.officeName}</td>
+                <td>
+                  {item.deskId ? "Desk" : "Conference room"} [
+                  {item.deskId ? item.deskIndex : item.confRoomIndex}]
+                </td>
+                <td>
+                  {item.reviewId ? "Show review" : "Write a review"}
+                  {!item.reviewId ? (
+                    <EditOutlined
+                      style={{ cursor: "pointer" }}
+                      key={item.id}
+                      onClick={() => visibility(item)}
+                    />
+                  ) : (
+                    <BookOutlined
+                      style={{ cursor: "pointer" }}
+                      key={item.id}
+                      onClick={() => showReview(item)}
+                      type="primary"
+                    />
+                  )}
+                  <Modal
+                    title="Write a review for the selected reservation"
+                    centered
+                    visible={visible}
+                    onOk={() => writeReview()}
+                    onCancel={() => setVisible(false)}
+                    width={800}
+                  >
+                    <TextArea
+                      rows={4}
+                      onChange={(e) => setReview(e.target.value)}
+                      allowClear={true}
+                    />
+                  </Modal>
 
-            <Col span={4}>Date</Col>
-            <Col span={5}></Col>
-            <Col span={4}>
-              <label>Entity</label>
-            </Col>
-            <Col span={7}></Col>
-            <Col span={2}>Options</Col>
-          </Row>
-          <Space>
-            <Row>
-              <Col span={24}>
-                <div></div>
-              </Col>
-            </Row>
-          </Space>
-          <List
-            dataSource={pastreservations}
-            renderItem={(item, index) => (
-              <List.Item>
-                <Layout>
-                  <Row align="middle">
-                    <Col span={1}></Col>
-                    <Col span={6}>
-                      {item.startDate
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("/")}{" "}
-                      -{" "}
-                      {item.endDate
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("/")}
-                    </Col>
-                    <Col span={3}></Col>
-                    <Col span={5}>
-                      {item.deskId ? "Desk" : "Conference room"} [
-                      {item.deskId ? item.deskIndex : item.confRoomIndex}]
-                    </Col>
-                    <Col span={6}></Col>
-                    <Col span={2}>
-                      {item.reviewId ? "Show review" : "Write a review"}
-                    </Col>
-                    <Col span={1}>
-                      {!item.reviewId ? (
-                        <EditOutlined
-                          style={{ cursor: "pointer" }}
-                          key={item.id}
-                          onClick={() => visibility(item)}
-                        />
-                      ) : (
-                        <BookOutlined
-                          style={{ cursor: "pointer" }}
-                          key={item.id}
-                          onClick={() => showReview(item)}
-                          type="primary"
-                        />
-                      )}
-
-                      <Modal
-                        title="Write a review for the selected reservation"
-                        centered
-                        visible={visible}
-                        onOk={() => writeReview()}
-                        onCancel={() => setVisible(false)}
-                        width={800}
-                      >
-                        <TextArea
-                          rows={4}
-                          onChange={(e) => setReview(e.target.value)}
-                          allowClear={true}
-                        />
-                      </Modal>
-
-                      <Modal
-                        title="Review for desk"
-                        centered
-                        visible={showReviewModal}
-                        onOk={() => setShowReviewModal(false)}
-                        onCancel={() => setShowReviewModal(false)}
-                        width={800}
-                      >
-                        <p>{writtenReview}</p>
-                      </Modal>
-                    </Col>
-                  </Row>
-                </Layout>
-              </List.Item>
-            )}
-          />
-        </div>
-      )}{" "}
+                  <Modal
+                    title="Review for desk"
+                    centered
+                    visible={showReviewModal}
+                    onOk={() => setShowReviewModal(false)}
+                    onCancel={() => setShowReviewModal(false)}
+                    width={800}
+                  >
+                    <p>{writtenReview}</p>
+                  </Modal>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };

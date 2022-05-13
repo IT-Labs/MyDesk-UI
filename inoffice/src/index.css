@@ -240,3 +240,11 @@ h1 {
 .thisisaplaceholderplzdontt {
   color: #2c28283c;
 }
+
+td {
+  width: 25%;
+}
+
+th {
+  margin-bottom: 10px;
+}

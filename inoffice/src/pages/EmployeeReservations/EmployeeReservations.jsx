@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
-import { Card } from "antd";
+import { Card, Select } from "antd";
 import FutureReservations from "./FutureReservations";
 import PastReservations from "./PastReservations";
 import { useState, useEffect } from "react";
@@ -25,6 +25,22 @@ const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
 
   const token = jwt(localStorage.getItem("msal.idtoken"));
+
+  const sortByOldest = (reservations) => {
+    const sorted = reservations.sort((a, b) => {
+      return a.StartDate < b.startDate ? -1 : a.StartDate > b.StartDate ? 1 : 0;
+    });
+
+    return sorted;
+  };
+
+  const sortByNewest = (reservations) => {
+    const sorted = reservations.sort((a, b) => {
+      return a.StartDate > b.startDate ? -1 : a.StartDate < b.StartDate ? 1 : 0;
+    });
+
+    return sorted;
+  };
 
   const tabList = [
     {
@@ -51,6 +67,7 @@ const EmployeeReservationList = () => {
         <UserHead />
         <Layout>
           <Sidebar selected="1" />
+
           <Content style={contentStyle}>
             <Card
               style={cardStyles}

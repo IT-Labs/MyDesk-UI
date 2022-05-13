@@ -19,6 +19,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 
 const FutureReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const [filter, setFilter] = useState("Sort By oldest");
 
   const [loadingData, setLoading] = useState(true);
   const [futurereservations, setFutureReservations] = useState([]);
@@ -26,13 +27,25 @@ const FutureReservations = () => {
 
   const sortByOldest = (reservations) => {
     const sorted = reservations.sort((a, b) => {
-      return a.StartDate < b.startDate ? -1 : a.StartDate > b.StartDate ? 1 : 0;
+      const date1 = new Date(a.startDate).getTime();
+      const date2 = new Date(b.startDate).getTime();
+
+      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
     });
 
     setFutureReservations(sorted);
   };
 
-  console.log(futurereservations);
+  const sortByNewest = (reservations) => {
+    const sorted = reservations.sort((a, b) => {
+      const date1 = new Date(a.startDate).getTime();
+      const date2 = new Date(b.startDate).getTime();
+
+      return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+    });
+
+    setFutureReservations(sorted);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +63,14 @@ const FutureReservations = () => {
     };
     fetchData();
   }, []);
+
+  const sortByTime = (value) => {
+    if (value === "Sort By oldest") {
+      sortByOldest(futurereservations);
+    } else if (value === "Sort By newest") {
+      sortByNewest(futurereservations);
+    }
+  };
 
   const deleteNotification = async (id) => {
     await api
@@ -70,40 +91,62 @@ const FutureReservations = () => {
         console.error("Error message");
       });
   };
+
   return (
-    <table style={{ width: "100%", textAlign: "center" }}>
-      <tr>
-        <th>Date</th>
-        <th>Office</th>
-        <th>Entity</th>
-        <th>Options</th>
-      </tr>
-      {futurereservations.map((item, index) => (
-        <tr key={index} style={{ transition: "all 0.2s ease-in-out" }}>
-          <td>
-            {item.startDate.split("T")[0].split("-").reverse().join("/")} -{" "}
-            {item.endDate.split("T")[0].split("-").reverse().join("/")}
-          </td>
-          <td>{item.officeName}</td>
-          <td>
-            {item.deskId ? "Desk" : "Conference room"} [
-            {item.deskId ? item.deskIndex : item.confRoomIndex}]
-          </td>
-          <td>
-            <Button
-              onClick={() => deleteNotification(item.id)}
-              style={{
-                color: "teal",
-                fontWeight: "bold",
-                borderRadius: "7px",
-              }}
-            >
-              Cancel
-            </Button>
-          </td>
-        </tr>
-      ))}
-    </table>
+    <div className="">
+      <Select
+        style={{ width: "50%", marginBottom: "20px" }}
+        onSelect={(value) => {
+          setFilter(value);
+          sortByTime(value);
+        }}
+        value={filter}
+      >
+        <Select.Option key={1} value={"Sort By oldest"}>
+          Sort By oldest
+        </Select.Option>
+        <Select.Option key={2} value={"Sort By newest"}>
+          Sort By newest
+        </Select.Option>
+      </Select>
+      <table style={{ width: "100%", textAlign: "center" }}>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Office</th>
+            <th>Entity</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {futurereservations.map((item, index) => (
+            <tr key={index} style={{ transition: "all 0.2s ease-in-out" }}>
+              <td>
+                {item.startDate.split("T")[0].split("-").reverse().join("/")} -{" "}
+                {item.endDate.split("T")[0].split("-").reverse().join("/")}
+              </td>
+              <td>{item.officeName}</td>
+              <td>
+                {item.deskId ? "Desk" : "Conference room"} [
+                {item.deskId ? item.deskIndex : item.confRoomIndex}]
+              </td>
+              <td>
+                <Button
+                  onClick={() => deleteNotification(item.id)}
+                  style={{
+                    color: "teal",
+                    fontWeight: "bold",
+                    borderRadius: "7px",
+                  }}
+                >
+                  Cancel
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

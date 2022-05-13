@@ -17,6 +17,7 @@ const Login = () => {
       ? "http://localhost:3000"
       : "https://salmon-grass-030b2a503.1.azurestaticapps.net/"
   );
+  console.log(url);
   const loginHandler = (err, data) => {
     const userInfo = {
       Email: data.mail,
