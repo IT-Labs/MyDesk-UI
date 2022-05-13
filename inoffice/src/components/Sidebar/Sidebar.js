@@ -94,12 +94,29 @@ class SiderDemo extends Component {
 
     return (
       <Sider
-        style={{ minHeight: "93vh" }}
         collapsible
         collapsed={collapsed}
         onCollapse={this.onCollapse}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "relative",
+          top: "-70px",
+          left: 0,
+        }}
+        theme="light"
       >
-        <Menu theme="light" selectedKeys={[this.props.selected]} mode="inline">
+        <Menu
+          theme="light"
+          selectedKeys={[this.props.selected]}
+          mode="inline"
+          className="sideMenu"
+        >
+          <Menu.Item
+            key="0"
+            className="sideBarLogo"
+            style={{ width: this.state.width }}
+          ></Menu.Item>
           <Menu.Item key="1" icon={<TeamOutlined />}>
             <Link to={"/employee/reservations"}>My reservations</Link>
           </Menu.Item>

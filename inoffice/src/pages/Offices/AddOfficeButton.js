@@ -15,7 +15,7 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
       }}
       block
       onClick={() => {
-        window.location = "/admin/addoffice";
+        // window.location = "/admin/addoffice";
         showModal();
       }}
       id="addOffice"

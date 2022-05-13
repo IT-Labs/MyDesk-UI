@@ -26,9 +26,6 @@ const Login = () => {
 
   const sendData = (userInfo) => {
     const token = localStorage.getItem("msal.idtoken");
-    if (token) {
-      navigate("/admin/dashboard");
-    }
     api
       .post("/authentication", userInfo)
       .then((res) => {
@@ -41,7 +38,8 @@ const Login = () => {
 
   const roleRouting = (token) => {
     const decodedToken = jwt(token);
-    if (decodedToken.roles.includes("ADMIN")) {
+
+    if (decodedToken.roles.join("") === "ADMIN") {
       navigate("/admin/dashboard");
     } else {
       navigate("/employee/home");

@@ -38,19 +38,22 @@ export default class UserHead extends Component {
     return (
       <Header id="header">
         {/* Hello x user here without the my account tab, same as the admin page*/}
-        <NavLink className={"link"} to="/employee/reservations">
-          My account
-        </NavLink>
-        <NavLink
-          className={"link"}
-          to="/"
-          onClick={() => {
-            localStorage.clear();
-            window.location = "/";
-          }}
-        >
-          Log out
-        </NavLink>
+        <HeaderImg />
+        <div>
+          <NavLink className={"link"} to="/employee/reservations">
+            My account
+          </NavLink>
+          <NavLink
+            className={"link"}
+            to="/"
+            onClick={() => {
+              localStorage.clear();
+              window.location = "/";
+            }}
+          >
+            Log out
+          </NavLink>
+        </div>
       </Header>
     );
   }

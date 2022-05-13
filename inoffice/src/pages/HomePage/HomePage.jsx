@@ -27,8 +27,6 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);
 
-  console.log(startDateRes);
-
   const closeModalFunction = () => {
     setIsModalVisible(false);
   };

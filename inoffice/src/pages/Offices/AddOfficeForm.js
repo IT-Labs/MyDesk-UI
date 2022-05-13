@@ -5,21 +5,21 @@ import { Form, Input, Button } from "antd";
 export default class AddOffice extends Component {
   state = {};
 
-
   handleSubmit = (e) => {
     const data = {
-      officeName: e.name + " " + e.location
+      officeName: e.name + " " + e.location,
     };
 
-    api.post("admin/office", data)
-    .then((res) => {
-      window.location = "/admin/offices";
-    })
-    .catch((err) => {
-      this.setState({
-        error: "invalid credentials",
+    api
+      .post("admin/office", data)
+      .then((res) => {
+        window.location = "/admin/offices";
+      })
+      .catch((err) => {
+        this.setState({
+          error: "invalid credentials",
+        });
       });
-    });
   };
 
   render() {
@@ -35,17 +35,20 @@ export default class AddOffice extends Component {
         >
           <Form.Item
             name="name"
-            rules={[{ required: true, message: "Please input office name!" },
-            {
-              required: true,
-              pattern: new RegExp(
-                "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
-              ),
-              message: "You exceeded the maximum number of characters",
-            },
-          ]}
+            rules={[
+              {
+                required: true,
+                message: "Please input office name!",
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,0}$"),
+              },
+              {
+                required: true,
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{1,50}$"),
+                message: "You exceeded the maximum number of characters",
+              },
+            ]}
           >
-            <Input placeholder="Office name"/>
+            <Input placeholder="Office name" />
           </Form.Item>
           <Form.Item
             name="location"
@@ -53,22 +56,25 @@ export default class AddOffice extends Component {
               { required: true, message: "Please input office location!" },
               {
                 required: true,
-                pattern: new RegExp(
-                  "^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"
-                ),
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
                 message: "You exceeded the maximum number of characters",
-              }
+              },
             ]}
           >
             <Input placeholder="Office location" />
           </Form.Item>
           <Form.Item>
-            <Button  htmlType="submit" className="formButton" type="primary" shape="round">
+            <Button
+              htmlType="submit"
+              className="formButton"
+              type="primary"
+              shape="round"
+            >
               Save
             </Button>
             <Button
-            type="primary"
-            shape="round"
+              type="primary"
+              shape="round"
               className="formButton"
               onClick={() => (window.location = "/admin/offices")}
             >
