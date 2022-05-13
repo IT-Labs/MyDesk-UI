@@ -1,11 +1,21 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Row, Col, Space, Spin, List, Layout, Input, Modal,Button } from "antd";
+import {
+  Row,
+  Col,
+  Space,
+  Spin,
+  List,
+  Layout,
+  Input,
+  Modal,
+  Button,
+} from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
-import { BookOutlined } from "@ant-design/icons"
+import { BookOutlined } from "@ant-design/icons";
 
 const PastReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -19,6 +29,14 @@ const PastReservations = () => {
   const [resid, setResid] = useState();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [writtenReview, setWrittenReview] = useState();
+
+  const sortByOldest = (reservations) => {
+    const sorted = reservations.sort((a, b) => {
+      return a.StartDate > b.startDate ? -1 : a.StartDate < b.StartDate ? 1 : 0;
+    });
+
+    setPastReservations(sorted);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +74,7 @@ const PastReservations = () => {
 
   const writeReview = async () => {
     setVisible(false);
-    
+
     const data = {
       reservationid: resid,
       review: review,
@@ -141,7 +159,6 @@ const PastReservations = () => {
                         />
                       )}
 
-                          
                       <Modal
                         title="Write a review for the selected reservation"
                         centered
@@ -156,7 +173,7 @@ const PastReservations = () => {
                           allowClear={true}
                         />
                       </Modal>
-                  
+
                       <Modal
                         title="Review for desk"
                         centered
@@ -165,9 +182,8 @@ const PastReservations = () => {
                         onCancel={() => setShowReviewModal(false)}
                         width={800}
                       >
-                         <p>{writtenReview}</p>
+                        <p>{writtenReview}</p>
                       </Modal>
-                   
                     </Col>
                   </Row>
                 </Layout>

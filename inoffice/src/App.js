@@ -37,9 +37,13 @@ const App = () => {
     <React.Suspense fallback={<Loading />}>
       <div className="container">
         <Routes>
-          <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
+          <Route
+            path="/employee/home"
+            element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
+          />
           <Route path="/" element={<Login />} />
           {/* <Route path="/register" element={<Register />} /> */}
+          <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
           <Route
             path="/admin/dashboard"
             element={
@@ -63,10 +67,6 @@ const App = () => {
             }
           />
 
-          <Route
-            path="/employee/home"
-            element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
-          />
           {/* <Route
         path="/employeee/informations"
         element={

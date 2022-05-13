@@ -61,7 +61,10 @@ const FutureReservations = () => {
           placement: "top",
           duration: 1,
         });
-        setRefreshState({});
+        const filteredReservations = futurereservations.filter(
+          (item) => item.id !== id
+        );
+        setFutureReservations(filteredReservations);
       })
       .catch((error) => {
         console.error("Error message");
@@ -75,8 +78,8 @@ const FutureReservations = () => {
         <th>Entity</th>
         <th>Options</th>
       </tr>
-      {futurereservations?.map((item, index) => (
-        <tr key={index}>
+      {futurereservations.map((item, index) => (
+        <tr key={index} style={{ transition: "all 0.2s ease-in-out" }}>
           <td>
             {item.startDate.split("T")[0].split("-").reverse().join("/")} -{" "}
             {item.endDate.split("T")[0].split("-").reverse().join("/")}

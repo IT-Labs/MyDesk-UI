@@ -12,7 +12,11 @@ import { useState } from "react";
 const Login = () => {
   let navigate = useNavigate();
   const [info, setInfo] = useState();
-
+  const [url, setUrl] = useState(
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://salmon-grass-030b2a503.1.azurestaticapps.net/"
+  );
   const loginHandler = (err, data) => {
     const userInfo = {
       Email: data.mail,
@@ -45,6 +49,7 @@ const Login = () => {
       navigate("/employee/home");
     }
   };
+
   //https://salmon-grass-030b2a503.1.azurestaticapps.net/
   //http://localhost:3000
   return (
@@ -60,7 +65,7 @@ const Login = () => {
           tenantUrl={
             "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
           }
-          redirectUri={`https://salmon-grass-030b2a503.1.azurestaticapps.net/`}
+          redirectUri={url}
           forceRedirectStrategy={true}
           useLocalStorageCache={true}
           withUserData={true}

@@ -102,6 +102,7 @@ class SiderDemo extends Component {
           height: "100vh",
           position: "relative",
           top: "-70px",
+
           left: 0,
         }}
         theme="light"
