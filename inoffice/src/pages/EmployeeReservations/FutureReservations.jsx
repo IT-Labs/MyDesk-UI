@@ -10,6 +10,7 @@ import {
   List,
   Layout,
   Button,
+  Table,
 } from "antd";
 import { DeleteFilled } from "@ant-design/icons";
 import { useState, useEffect } from "react";
@@ -31,6 +32,8 @@ const FutureReservations = () => {
     setFutureReservations(sorted);
   };
 
+  console.log(futurereservations);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -46,7 +49,7 @@ const FutureReservations = () => {
       setLoading(false);
     };
     fetchData();
-  }, [refreshstate]);
+  }, []);
 
   const deleteNotification = async (id) => {
     await api
@@ -65,83 +68,40 @@ const FutureReservations = () => {
       });
   };
   return (
-    <div>
-      {" "}
-      {loadingData && <Spin indicator={antIcon} />}
-      {!loadingData && (
-        <div>
-          <Row style={{ display: "flex", justifyContent: "space-between" }}>
-            <Col span={2}></Col>
-            <Col span={4}>Date</Col>
-            <Col span={5}></Col>
-            <Col span={4}>
-              <label>Entity</label>
-            </Col>
-            <Col span={7}></Col>
-            <Col span={2} style={{ right: "5%" }}>
-              Options
-            </Col>
-          </Row>
-          <Space>
-            <Row>
-              <Col span={24}>
-                <div></div>
-              </Col>
-            </Row>
-          </Space>
-          <List
-            dataSource={futurereservations}
-            renderItem={(item, index) => (
-              <List.Item>
-                <Layout>
-                  <Row
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Col span={6}>
-                      <p>
-                        {item.startDate
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("/")}{" "}
-                        -{" "}
-                        {item.endDate
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("/")}
-                      </p>
-                    </Col>
-
-                    <Col span={5}>
-                      {item.deskId ? "Desk" : "Conference room"} [
-                      {item.deskId ? item.deskIndex : item.confRoomIndex}]
-                    </Col>
-                    <Col span={3}>
-                      <Button
-                        onClick={() => deleteNotification(item.id)}
-                        style={{
-                          left: "-15px",
-                          color: "teal",
-                          fontWeight: "bold",
-                          borderRadius: "7px",
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </Col>
-                  </Row>
-                </Layout>
-              </List.Item>
-            )}
-          />
-        </div>
-      )}{" "}
-    </div>
+    <table style={{ width: "100%", textAlign: "center" }}>
+      <tr>
+        <th>Date</th>
+        <th>Office</th>
+        <th>Entity</th>
+        <th>Options</th>
+      </tr>
+      {futurereservations?.map((item, index) => (
+        <tr key={index}>
+          <td>
+            {item.startDate.split("T")[0].split("-").reverse().join("/")} -{" "}
+            {item.endDate.split("T")[0].split("-").reverse().join("/")}
+          </td>
+          <td>{item.officeName}</td>
+          <td>
+            {item.deskId ? "Desk" : "Conference room"} [
+            {item.deskId ? item.deskIndex : item.confRoomIndex}]
+          </td>
+          <td>
+            <Button
+              onClick={() => deleteNotification(item.id)}
+              style={{
+                color: "teal",
+                fontWeight: "bold",
+                borderRadius: "7px",
+              }}
+            >
+              Cancel
+            </Button>
+          </td>
+        </tr>
+      ))}
+    </table>
   );
 };
+
 export default FutureReservations;

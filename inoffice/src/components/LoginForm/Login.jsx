@@ -60,7 +60,7 @@ const Login = () => {
           tenantUrl={
             "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
           }
-          redirectUri={`https://salmon-grass-030b2a503.1.azurestaticapps.net/`}
+          redirectUri={`http://localhost:3000`}
           forceRedirectStrategy={true}
           useLocalStorageCache={true}
           withUserData={true}

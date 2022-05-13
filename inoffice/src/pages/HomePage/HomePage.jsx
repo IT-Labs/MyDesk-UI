@@ -94,7 +94,7 @@ const Home = () => {
 
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
-      <UserHead />
+      <UserHead isHome={true} />
       <Layout>
         <Content>
           <Row className="firstSection">

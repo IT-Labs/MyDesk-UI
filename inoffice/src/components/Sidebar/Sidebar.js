@@ -120,7 +120,9 @@ class SiderDemo extends Component {
             <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
           </Menu.Item>
           <Menu.Item key="1" icon={<TeamOutlined />}>
-            <Link to={"/employee/reservations"}>My reservations</Link>
+            <Link to={"/employee/reservations"}>
+              {!this.state.collapsed && <>My reservations</>}
+            </Link>
           </Menu.Item>
         </Menu>
       </Sider>

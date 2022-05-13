@@ -23,6 +23,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDataDesks(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("error message");
@@ -31,6 +32,7 @@ const CardsSection = (props) => {
         .get("employee/office-conferencerooms/" + props.officeid)
         .then((response) => {
           setDataConfRooms(response.data);
+          console.log(response.data);
         })
         .catch((error) => {
           console.error("error message");
@@ -58,7 +60,7 @@ const CardsSection = (props) => {
             scrollableTarget="scrollableDiv"
             display="flex"
           >
-            <Layout>
+            <Layout style={{ background: "transparent" }}>
               <List
                 grid={{ gutter: 0, column: 5 }}
                 dataSource={dataDesks.concat(dataConfRooms)}

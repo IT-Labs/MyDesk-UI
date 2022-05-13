@@ -15,7 +15,7 @@ export default class UserHead extends Component {
     if (jwt(this.config.token).roles[0] === "ADMIN") {
       return (
         <Header id="header">
-          <HeaderImg />
+          <div>{this.props.isHome && <HeaderImg />}</div>
           {/* Hello x user here without the my account tab, no need */}
           <div>
             <NavLink className={"link accountFunc"} to="/employee/reservations">
@@ -38,7 +38,7 @@ export default class UserHead extends Component {
     return (
       <Header id="header">
         {/* Hello x user here without the my account tab, same as the admin page*/}
-        <HeaderImg />
+        <div>{this.props.isHome && <HeaderImg />}</div>
         <div>
           <NavLink className={"link"} to="/employee/reservations">
             My account
