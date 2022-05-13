@@ -116,7 +116,9 @@ class SiderDemo extends Component {
             key="0"
             className="sideBarLogo"
             style={{ width: this.state.width }}
-          ></Menu.Item>
+          >
+            <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+          </Menu.Item>
           <Menu.Item key="1" icon={<TeamOutlined />}>
             <Link to={"/employee/reservations"}>My reservations</Link>
           </Menu.Item>
