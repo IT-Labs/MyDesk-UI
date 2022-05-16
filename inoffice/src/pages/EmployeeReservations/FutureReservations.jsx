@@ -149,6 +149,7 @@ const FutureReservations = () => {
                 visible={visible}
                 onOk={() => {
                   deleteNotification(item.id);
+                  setVisible(false);
                 }}
                 onCancel={() => setVisible(false)}
               >

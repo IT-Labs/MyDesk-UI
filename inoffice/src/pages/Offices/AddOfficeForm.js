@@ -39,11 +39,10 @@ export default class AddOffice extends Component {
               {
                 required: true,
                 message: "Please input office name!",
-                pattern: new RegExp("^[A-Za-z]*, $"),
               },
               {
                 required: true,
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{1,50}$"),
+                pattern: new RegExp("^W*(?:w+\bW*){10,100}$"),
                 message: "You exceeded the maximum number of characters",
               },
             ]}

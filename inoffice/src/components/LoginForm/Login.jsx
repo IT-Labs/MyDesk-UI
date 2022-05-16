@@ -44,6 +44,7 @@ const Login = () => {
 
   const roleRouting = (token) => {
     const decodedToken = jwt(token);
+    console.log(decodedToken);
 
     if (decodedToken.roles.join("") === "ADMIN") {
       navigate("/admin/dashboard");

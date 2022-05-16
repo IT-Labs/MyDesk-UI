@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import api from "../../helper/api";
 import Layout, { Content, Footer } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Typography, List } from "antd";
+import { Button, Typography, List, Card } from "antd";
 import AddOfficeContainer from "./AddOfficeContainer";
 import { Popconfirm, Row, Col, notification } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -65,10 +65,16 @@ class Offices extends Component {
               alignItems: "center",
             }}
           >
-            <Row align="middle" style={{ width: "100%" }}>
-              <Col span={21}>
-                <h1>Offices</h1>
-              </Col>
+            <Row
+              align="middle"
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                margin: 30,
+                marginRight: 100,
+              }}
+            >
               <Col className="addOfficeSectionButton" span={2}>
                 <AddOfficeContainer
                   id="addOffice"
@@ -79,70 +85,75 @@ class Offices extends Component {
             </Row>
             <Row
               style={{
-                background: "#fff",
+                background: "transparent",
                 width: "80%",
                 borderRadius: "14px",
                 border: 0,
               }}
             >
               <Col span={24}>
-                <List
-                  bordered
-                  dataSource={this.state.data}
+                <Card
+                  title="Offices"
                   style={{
                     boxShadow: "0 2px 2px 1px #2c28283c",
                     padding: "10px",
+                    borderRadius: 7,
                   }}
-                  renderItem={(office) => (
-                    <List.Item>
-                      <Typography.Text mark></Typography.Text> {office.name}{" "}
-                      <Popconfirm
-                        title="Do you want to delete this office?"
-                        onConfirm={() => this.deleteFunc(office.id)}
-                        okText="Yes"
-                        cancelText="No"
-                        className="deleteButton"
-                        shape="round"
-                        placement="topRight"
-                        icon={
-                          <QuestionCircleOutlined style={{ color: "red" }} />
-                        }
-                      >
+                >
+                  <List
+                    bordered
+                    dataSource={this.state.data}
+                    renderItem={(office) => (
+                      <List.Item style={{ marginBottom: 10 }}>
+                        <Typography.Text mark></Typography.Text> {office.name}{" "}
+                        <Popconfirm
+                          title="Do you want to delete this office?"
+                          onConfirm={() => this.deleteFunc(office.id)}
+                          okText="Yes"
+                          cancelText="No"
+                          className="deleteButton"
+                          shape="round"
+                          placement="topRight"
+                          icon={
+                            <QuestionCircleOutlined style={{ color: "red" }} />
+                          }
+                        >
+                          <Button
+                            type="primary"
+                            danger
+                            style={{
+                              background: "#f53c56",
+                              color: "white",
+                              border: "0",
+                              borderRadius: "5px",
+                              boxShadow: " 0px 3px 6px #2C28281C",
+                            }}
+                          >
+                            {" "}
+                            Delete
+                          </Button>
+                        </Popconfirm>
                         <Button
                           type="primary"
-                          danger
+                          className="editButton"
                           style={{
-                            background: "red",
+                            background: "#2dce98",
                             color: "white",
                             border: "0",
                             borderRadius: "5px",
                             boxShadow: " 0px 3px 6px #2C28281C",
                           }}
+                          onClick={() => {
+                            window.location =
+                              "edit/" + office.name + "/" + office.id;
+                          }}
                         >
-                          {" "}
-                          Delete
+                          Edit
                         </Button>
-                      </Popconfirm>
-                      <Button
-                        type="primary"
-                        className="editButton"
-                        style={{
-                          background: "white",
-                          color: "teal",
-                          border: "0",
-                          borderRadius: "5px",
-                          boxShadow: " 0px 3px 6px #2C28281C",
-                        }}
-                        onClick={() => {
-                          window.location =
-                            "edit/" + office.name + "/" + office.id;
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </List.Item>
-                  )}
-                />
+                      </List.Item>
+                    )}
+                  />
+                </Card>
               </Col>
             </Row>
           </Content>

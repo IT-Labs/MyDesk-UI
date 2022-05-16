@@ -245,6 +245,28 @@ td {
   width: 25%;
 }
 
-th {
-  margin-bottom: 10px;
+.ant-menu-item-selected {
+  color: teal !important;
+}
+
+.ant-menu-inline .ant-menu-item::after {
+  border-right-color: teal;
+}
+.ant-menu-item-selected .ant-menu-title-content a {
+  color: teal;
+}
+
+.ant-menu > .ant-menu-item:hover,
+.ant-menu > .ant-menu-submenu:hover,
+.ant-menu > .ant-menu-item-active,
+.ant-menu > .ant-menu-submenu-active,
+.ant-menu > .ant-menu-item-open,
+.ant-menu > .ant-menu-submenu-open,
+.ant-menu > .ant-menu-item-selected,
+.ant-menu > .ant-menu-submenu-selected {
+  color: teal;
+}
+
+.ant-menu-item-active a:hover {
+  color: teal;
 }
