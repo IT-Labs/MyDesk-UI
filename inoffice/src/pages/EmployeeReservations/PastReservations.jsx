@@ -67,7 +67,7 @@ const PastReservations = () => {
       await api
         .get("employee/past-reservations")
         .then((response) => {
-          setPastReservations(response.data);
+          sortByNewest(response.data);
         })
         .catch((error) => {
           console.error("Error message");
@@ -123,11 +123,11 @@ const PastReservations = () => {
         }}
         value={filter}
       >
-        <Select.Option key={1} value={"Sort By oldest"}>
-          Sort By oldest
-        </Select.Option>
-        <Select.Option key={2} value={"Sort By newest"}>
+        <Select.Option key={1} value={"Sort By newest"}>
           Sort By newest
+        </Select.Option>
+        <Select.Option key={2} value={"Sort By oldest"}>
+          Sort By oldest
         </Select.Option>
       </Select>
       <table style={{ width: "100%", textAlign: "center" }}>

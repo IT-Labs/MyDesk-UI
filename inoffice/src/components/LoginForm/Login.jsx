@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import styles from "./Login.module.css";
 import { useState } from "react";
+import logo from "../../assets/Microsoft logo.png";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -71,7 +72,15 @@ const Login = () => {
           useLocalStorageCache={true}
           withUserData={true}
           className={styles.loginBtn}
-        />
+        >
+          <button>
+            <img
+              style={{ width: "150px", height: "50px" }}
+              src={logo}
+              alt="Sign on with microsoft"
+            />
+          </button>
+        </MicrosoftLogin>
       </div>
     </div>
   );
