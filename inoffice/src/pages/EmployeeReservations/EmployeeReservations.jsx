@@ -26,22 +26,6 @@ const EmployeeReservationList = () => {
 
   const token = jwt(localStorage.getItem("msal.idtoken"));
 
-  const sortByOldest = (reservations) => {
-    const sorted = reservations.sort((a, b) => {
-      return a.StartDate < b.startDate ? -1 : a.StartDate > b.StartDate ? 1 : 0;
-    });
-
-    return sorted;
-  };
-
-  const sortByNewest = (reservations) => {
-    const sorted = reservations.sort((a, b) => {
-      return a.StartDate > b.startDate ? -1 : a.StartDate < b.StartDate ? 1 : 0;
-    });
-
-    return sorted;
-  };
-
   const tabList = [
     {
       key: "tab1",

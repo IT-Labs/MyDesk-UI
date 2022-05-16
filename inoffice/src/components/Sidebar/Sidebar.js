@@ -2,13 +2,7 @@ import React from "react";
 import "./Sidebar.css";
 import { Menu } from "antd";
 import { Component } from "react/cjs/react.production.min";
-import {
-  DesktopOutlined,
-  PieChartOutlined,
-  FolderOutlined,
-  TeamOutlined,
-  FileOutlined,
-} from "@ant-design/icons";
+import { TeamOutlined } from "@ant-design/icons";
 import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";

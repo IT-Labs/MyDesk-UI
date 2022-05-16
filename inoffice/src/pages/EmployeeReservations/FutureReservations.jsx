@@ -11,11 +11,15 @@ import {
   Layout,
   Button,
   Table,
+  Modal,
 } from "antd";
+
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { DeleteFilled } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import api from "../../helper/api";
 import { LoadingOutlined } from "@ant-design/icons";
+import Icon from "@ant-design/icons/lib/components/AntdIcon";
 
 const FutureReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -24,6 +28,11 @@ const FutureReservations = () => {
   const [loadingData, setLoading] = useState(true);
   const [futurereservations, setFutureReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
+  const [arrow, setArrow] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const visibility = (item) => {
+    setVisible(true);
+  };
 
   const sortByOldest = (reservations) => {
     const sorted = reservations.sort((a, b) => {
@@ -53,6 +62,7 @@ const FutureReservations = () => {
       await api
         .get("employee/reserve")
         .then((response) => {
+          setArrow(true);
           sortByOldest(response.data);
         })
         .catch((error) => {
@@ -64,12 +74,11 @@ const FutureReservations = () => {
     fetchData();
   }, []);
 
-  const sortByTime = (value) => {
-    if (value === "Sort By oldest") {
+  const sortByTime = (flag) => {
+    setArrow(flag);
+    if (flag) {
       sortByOldest(futurereservations);
-    } else if (value === "Sort By newest") {
-      sortByNewest(futurereservations);
-    }
+    } else sortByNewest(futurereservations);
   };
 
   const deleteNotification = async (id) => {
@@ -80,7 +89,7 @@ const FutureReservations = () => {
           message: "Notification",
           description: "You successfully canceled a reservation",
           placement: "top",
-          duration: 1,
+          duration: 4,
         });
         const filteredReservations = futurereservations.filter(
           (item) => item.id !== id
@@ -94,25 +103,16 @@ const FutureReservations = () => {
 
   return (
     <div className="">
-      <Select
-        style={{ width: "50%", marginBottom: "20px" }}
-        onSelect={(value) => {
-          setFilter(value);
-          sortByTime(value);
-        }}
-        value={filter}
-      >
-        <Select.Option key={1} value={"Sort By oldest"}>
-          Sort By oldest
-        </Select.Option>
-        <Select.Option key={2} value={"Sort By newest"}>
-          Sort By newest
-        </Select.Option>
-      </Select>
       <table style={{ width: "100%", textAlign: "center" }}>
         <thead>
           <tr>
-            <th>Date</th>
+            <th
+              onClick={() => sortByTime(!arrow)}
+              style={{ cursor: "pointer", userSelect: "none" }}
+            >
+              Date
+              {arrow ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
+            </th>
             <th>Office</th>
             <th>Entity</th>
             <th>Options</th>
@@ -132,7 +132,7 @@ const FutureReservations = () => {
               </td>
               <td>
                 <Button
-                  onClick={() => deleteNotification(item.id)}
+                  onClick={() => setVisible(true)}
                   style={{
                     color: "teal",
                     fontWeight: "bold",
@@ -142,6 +142,20 @@ const FutureReservations = () => {
                   Cancel
                 </Button>
               </td>
+              <Modal
+                title="Are you sure you want to cancel your reservation?"
+                centered
+                visible={visible}
+                onOk={() => {
+                  deleteNotification(item.id);
+                }}
+                onCancel={() => setVisible(false)}
+              >
+                <p>
+                  You are able to reserve your seat again, but know someone can
+                  reserve it before you.
+                </p>
+              </Modal>
             </tr>
           ))}
         </tbody>

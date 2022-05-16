@@ -12,7 +12,11 @@ import {
   Button,
   Select,
 } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -31,6 +35,7 @@ const PastReservations = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [writtenReview, setWrittenReview] = useState();
   const [filter, setFilter] = useState("Sort by newest");
+  const [arrow, setArrow] = useState(false);
 
   const sortByOldest = (reservations) => {
     const sorted = reservations.sort((a, b) => {
@@ -54,10 +59,11 @@ const PastReservations = () => {
     setPastReservations(sorted);
   };
 
-  const sortByTime = (value) => {
-    if (value === "Sort By oldest") {
+  const sortByTime = (flag) => {
+    setArrow(flag);
+    if (flag) {
       sortByOldest(pastreservations);
-    } else if (value === "Sort By newest") {
+    } else {
       sortByNewest(pastreservations);
     }
   };
@@ -115,25 +121,13 @@ const PastReservations = () => {
 
   return (
     <div>
-      <Select
-        style={{ width: "50%", marginBottom: "20px" }}
-        onSelect={(value) => {
-          setFilter(value);
-          sortByTime(value);
-        }}
-        value={filter}
-      >
-        <Select.Option key={1} value={"Sort By newest"}>
-          Sort By newest
-        </Select.Option>
-        <Select.Option key={2} value={"Sort By oldest"}>
-          Sort By oldest
-        </Select.Option>
-      </Select>
       <table style={{ width: "100%", textAlign: "center" }}>
         <thead>
           <tr>
-            <th>Date</th>
+            <th onClick={() => sortByTime(!arrow)}>
+              Date
+              {arrow ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
+            </th>
             <th>Office</th>
             <th>Entity</th>
             <th>Options</th>
@@ -152,21 +146,38 @@ const PastReservations = () => {
                   {item.deskId ? "Desk" : "Conference room"} [
                   {item.deskId ? item.deskIndex : item.confRoomIndex}]
                 </td>
-                <td>
-                  {item.reviewId ? "Show review" : "Write a review"}
+                <td onClick={() => {}}>
                   {!item.reviewId ? (
-                    <EditOutlined
-                      style={{ cursor: "pointer" }}
-                      key={item.id}
+                    <div
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                       onClick={() => visibility(item)}
-                    />
+                    >
+                      <p style={{ margin: "10px" }}>Write Review</p>
+                      <EditOutlined key={item.id} />
+                    </div>
                   ) : (
-                    <BookOutlined
-                      style={{ cursor: "pointer" }}
-                      key={item.id}
+                    <div
                       onClick={() => showReview(item)}
-                      type="primary"
-                    />
+                      style={{
+                        cursor: "pointer",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <p style={{ margin: "10px" }}>Read Review</p>
+                      <BookOutlined
+                        style={{ cursor: "pointer" }}
+                        key={item.id}
+                        type="primary"
+                      />
+                    </div>
                   )}
                   <Modal
                     title="Write a review for the selected reservation"

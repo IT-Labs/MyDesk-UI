@@ -12,6 +12,7 @@ import { useState } from "react";
 import api from "../../helper/api";
 import "../EditOffice/editoffice.css";
 import "../HomePage/homepage.css";
+import Input from "antd/lib/input/Input";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -109,6 +110,17 @@ const Home = () => {
                 onSelectCard={selectedCard}
                 officeid={officeid}
               />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: "100px",
+                }}
+              >
+                <label htmlFor="available">Filter by available</label>
+                <input name="available" type="checkbox" />
+              </div>
             </Col>
           </Row>
           <Row align="center">
