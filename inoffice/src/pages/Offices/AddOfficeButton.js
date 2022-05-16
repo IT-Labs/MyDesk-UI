@@ -9,9 +9,8 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
       style={{
         background: "white",
         color: "teal",
-        border: "0",
+        border: "1px solid teal",
         borderRadius: "5px",
-        boxShadow: " 0px 3px 6px #2C28281C",
       }}
       block
       onClick={() => {

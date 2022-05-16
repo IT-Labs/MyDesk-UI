@@ -9,6 +9,7 @@ import { Popconfirm, Row, Col, notification } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import "../Offices/Offices.css";
+import Title from "./Title";
 
 var data = [];
 
@@ -66,24 +67,6 @@ class Offices extends Component {
             }}
           >
             <Row
-              align="middle"
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-                margin: 30,
-                marginRight: 100,
-              }}
-            >
-              <Col className="addOfficeSectionButton" span={2}>
-                <AddOfficeContainer
-                  id="addOffice"
-                  addOfficeText={addOfficeText}
-                  onSubmit={onSubmit}
-                />
-              </Col>
-            </Row>
-            <Row
               style={{
                 background: "transparent",
                 width: "80%",
@@ -93,7 +76,9 @@ class Offices extends Component {
             >
               <Col span={24}>
                 <Card
-                  title="Offices"
+                  title={
+                    <Title onSubmit={onSubmit} addOfficeText={addOfficeText} />
+                  }
                   style={{
                     boxShadow: "0 2px 2px 1px #2c28283c",
                     padding: "10px",
