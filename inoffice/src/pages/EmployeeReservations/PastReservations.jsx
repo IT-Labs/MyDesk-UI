@@ -180,6 +180,7 @@ const PastReservations = () => {
                     </div>
                   )}
                   <Modal
+                    maskClosable={false}
                     title="Write a review for the selected reservation"
                     centered
                     visible={visible}
@@ -197,6 +198,7 @@ const PastReservations = () => {
                   <Modal
                     title="Review for desk"
                     centered
+                    maskClosable={false}
                     visible={showReviewModal}
                     onOk={() => setShowReviewModal(false)}
                     onCancel={() => setShowReviewModal(false)}

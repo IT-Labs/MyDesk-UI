@@ -143,6 +143,7 @@ const FutureReservations = () => {
                 </Button>
               </td>
               <Modal
+                maskClosable={false}
                 title="Are you sure you want to cancel your reservation?"
                 centered
                 visible={visible}

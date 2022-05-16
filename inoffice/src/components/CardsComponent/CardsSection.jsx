@@ -9,6 +9,8 @@ const CardsSection = (props) => {
   const [dataConfRooms, setDataConfRooms] = useState([]);
   const [selectedCardInSection, setselectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
+  const [initialDesks, setInitnialDesks] = useState([]);
+  const [initialConf, setInitialConf] = useState([]);
   const { Meta } = Card;
 
   function selectCard(e) {
@@ -16,14 +18,28 @@ const CardsSection = (props) => {
     setselectedCardInSection(e);
   }
 
+  const setDesks = (desks) => {
+    if (props.available) {
+      const filtered = desks.filter((item) => !item.reservationId);
+      setDataDesks(filtered);
+    } else setDataDesks(desks);
+  };
+
+  const setConference = (rooms) => {
+    if (props.available) {
+      const filtered = rooms.filter((item) => !item.reservationId);
+      setDataConfRooms(filtered);
+    } else setDataConfRooms(rooms);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       await api
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
-          setDataDesks(response.data);
-          console.log(response.data);
+          setDesks(response.data);
+          setInitnialDesks(response.data);
         })
         .catch((error) => {
           console.error("error message");
@@ -31,8 +47,8 @@ const CardsSection = (props) => {
       await api
         .get("employee/office-conferencerooms/" + props.officeid)
         .then((response) => {
-          setDataConfRooms(response.data);
-          console.log(response.data);
+          setConference(response.data);
+          setInitialConf(response.data);
         })
         .catch((error) => {
           console.error("error message");
@@ -41,6 +57,11 @@ const CardsSection = (props) => {
     };
     fetchData();
   }, [props.officeid, props.refresh]);
+
+  useEffect(() => {
+    setDesks(initialDesks);
+    setConference(initialConf);
+  }, [props.available]);
   return (
     <div>
       {loadingData && <div>Loading</div>}
@@ -48,10 +69,10 @@ const CardsSection = (props) => {
         <div
           id="scrollableDiv"
           style={{
-            height: 450,
+            height: 500,
             overflow: "auto",
             padding: "0 16px",
-            border: "2px solid rgba(140, 140, 140, 0.35)",
+            // border: "2px solid rgba(140, 140, 140, 0.35)",
           }}
         >
           <br></br>

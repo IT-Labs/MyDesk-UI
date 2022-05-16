@@ -39,7 +39,7 @@ export default class AddOffice extends Component {
               {
                 required: true,
                 message: "Please input office name!",
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,0}$"),
+                pattern: new RegExp("^[A-Za-z]*, $"),
               },
               {
                 required: true,

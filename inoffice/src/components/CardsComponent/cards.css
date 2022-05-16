@@ -1,5 +1,6 @@
 #scrollableDiv {
   overflow-y: hidden;
+  height: 90%;
 }
 
 .cardBody {
@@ -8,5 +9,5 @@
 }
 
 .cardContentInformation {
-  width:max-content;
+  width: max-content;
 }

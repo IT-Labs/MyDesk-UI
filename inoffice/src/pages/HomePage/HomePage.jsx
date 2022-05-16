@@ -93,6 +93,13 @@ const Home = () => {
     sendReservation(data);
   };
 
+  const [checked, setChecked] = useState(false);
+
+  const filterByEmpty = (flag) => {
+    console.log(flag);
+    setChecked(flag);
+  };
+
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
       <UserHead isHome={true} />
@@ -115,11 +122,17 @@ const Home = () => {
                   display: "flex",
                   justifyContent: "flex-start",
                   alignItems: "center",
-                  width: "100px",
+                  width: "150px",
                 }}
               >
                 <label htmlFor="available">Filter by available</label>
-                <input name="available" type="checkbox" />
+                <input
+                  style={{ width: "20px " }}
+                  name="available"
+                  type="checkbox"
+                  value={checked}
+                  onClick={() => filterByEmpty(!checked)}
+                />
               </div>
             </Col>
           </Row>
@@ -145,6 +158,7 @@ const Home = () => {
                 refresh={refreshCards}
                 selectedCard={selectedCard}
                 officeid={officeid}
+                available={checked}
               />
             </Col>
           </Row>
@@ -173,6 +187,7 @@ const Home = () => {
                 </p>
               </Button>
               <Modal
+                maskClosable={false}
                 title="Reviews for selected entity"
                 visible={isModalVisible}
                 onOk={closeModalFunction}

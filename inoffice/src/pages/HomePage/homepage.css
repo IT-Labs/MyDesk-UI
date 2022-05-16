@@ -1,17 +1,19 @@
 .officeImgCol {
   margin-left: 3%;
-  border: 2px solid rgba(140, 140, 140, 0.35) !important;
+
   margin-right: 1%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  height: 500px;
 }
 
 .cardsCol {
   margin-right: 3%;
   margin-left: 1%;
+  height: 500px;
 }
 
 .cardColColor {
@@ -45,6 +47,13 @@
 
 .calendarSection {
   margin-left: 2%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.calendarSection label {
+  font-size: 15px;
+  color: black;
 }
 
 .firstSection {

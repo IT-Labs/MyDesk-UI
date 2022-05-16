@@ -37,6 +37,7 @@ export class AddOfficeContainer extends Component {
         />
         {this.state.isShown ? (
           <Modal
+            maskClosable={false}
             onSubmit={this.props.onSubmit}
             modalRef={(n) => (this.modal = n)}
             buttonRef={(n) => (this.closeButton = n)}

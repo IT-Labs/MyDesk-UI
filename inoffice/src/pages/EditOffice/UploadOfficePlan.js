@@ -37,6 +37,7 @@ export class UploadOfficePlan extends Component {
         />
         {this.state.isShown ? (
           <Modal
+            maskClosable={false}
             imageUrl={this.props.imageUrl}
             modalRef={(n) => (this.modal = n)}
             buttonRef={(n) => (this.closeButton = n)}
