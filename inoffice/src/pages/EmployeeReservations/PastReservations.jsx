@@ -11,6 +11,7 @@ import {
   Modal,
   Button,
   Select,
+  notification,
 } from "antd";
 import {
   ArrowDownOutlined,
@@ -113,6 +114,12 @@ const PastReservations = () => {
       .post("employee/review", data)
       .then((response) => {
         setRefreshState({});
+        notification.open({
+          message: "Notification",
+          description: "Review written",
+          placement: "top",
+          duration: 4,
+        });
       })
       .catch((error) => {
         console.error("Error message");
@@ -204,7 +211,45 @@ const PastReservations = () => {
                     onCancel={() => setShowReviewModal(false)}
                     width={800}
                   >
-                    <p>{writtenReview}</p>
+                    <div
+                      style={{
+                        maxHeight: 100,
+                        overflow: "scroll",
+                        overflowX: "hidden",
+                      }}
+                    >
+                      <p>
+                        I'm beginnin' to feel like a Rap God, Rap God All my
+                        people from the front to the back nod, back nod The way
+                        I'm racin' around the track, call me NASCAR, NASCAR Dale
+                        Earnhardt of the trailer park, the White Trash God Kneel
+                        before General Zod This planet's Krypton-, no, Asgard,
+                        Asgard So you'll be Thor and I'll be Odin You rodent,
+                        I'm omnipotent Let off, then I'm reloadin' Immediately
+                        with these bombs I'm totin' And I should not be woken
+                        I'm the walkin' dead, but I'm just a talkin' head, a
+                        zombie floatin' But I got your mom deep-throatin' I'm
+                        out my Ramen Noodle We have nothin' in common, poodle
+                        I'm a Doberman, pinch yourself in the arm and pay
+                        homage, pupil It's me, my honesty's brutal But it's
+                        honestly futile if I don't utilize what I do though For
+                        good at least once in a while So I wanna make sure
+                        somewhere in this chicken scratch I scribble and doodle
+                        enough rhymes To maybe try to help get some people
+                        through tough times But I gotta keep a few punchlines
+                        Just in case 'cause even you unsigned Rappers are hungry
+                        lookin' at me like it's lunchtime I know there was a
+                        time where once I Was king of the underground But I
+                        still rap like I'm on my Pharoahe Monch grind So I
+                        crunch rhymes, but sometimes when you combine Appeal
+                        with the skin color of mine You get too big and here
+                        they come tryin' To censor you like that one line I said
+                        on "I'm Back" from The Mathers LP 1 when I Tried to say
+                        I'll take seven kids from Columbine Put 'em all in a
+                        line, add an AK-47, a revolver and a .9 See if I get
+                        away with it now that I ain't as big as I was, but I'm
+                      </p>
+                    </div>
                   </Modal>
                 </td>
               </tr>

@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from "react";
 import UserHead from "../../components/Head/UserHead";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Row, Col, notification, Modal } from "antd";
+import { Button, Row, Col, notification, Modal, Select } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/CalendarImplementation";
 import OfficeImage from "../../components/inputs/OfficeImage";
@@ -27,6 +27,7 @@ const Home = () => {
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);
+  const [selectValue, setSelectValue] = useState(1);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -95,9 +96,12 @@ const Home = () => {
 
   const [checked, setChecked] = useState(false);
 
-  const filterByEmpty = (flag) => {
-    console.log(flag);
-    setChecked(flag);
+  useEffect(() => {
+    console.log(selectValue);
+  }, [selectValue]);
+
+  const changeVal = (e) => {
+    setSelectValue(e);
   };
 
   return (
@@ -117,22 +121,25 @@ const Home = () => {
                 onSelectCard={selectedCard}
                 officeid={officeid}
               />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  width: "150px",
-                }}
-              >
-                <label htmlFor="available">Filter by available</label>
-                <input
-                  style={{ width: "20px " }}
-                  name="available"
-                  type="checkbox"
-                  value={checked}
-                  onClick={() => filterByEmpty(!checked)}
-                />
+              <div>
+                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                  Filter by availability
+                </p>
+                <Select
+                  style={{ width: 200 }}
+                  defaultValue={selectValue}
+                  onChange={changeVal}
+                >
+                  <Select.Option value={1} key={1}>
+                    All
+                  </Select.Option>
+                  <Select.Option value={2} key={2}>
+                    Available
+                  </Select.Option>
+                  <Select.Option value={3} key={3}>
+                    Reserved
+                  </Select.Option>
+                </Select>
               </div>
             </Col>
           </Row>
@@ -158,7 +165,7 @@ const Home = () => {
                 refresh={refreshCards}
                 selectedCard={selectedCard}
                 officeid={officeid}
-                available={checked}
+                available={selectValue}
               />
             </Col>
           </Row>

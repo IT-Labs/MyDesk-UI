@@ -19,15 +19,21 @@ const CardsSection = (props) => {
   }
 
   const setDesks = (desks) => {
-    if (props.available) {
+    if (props.available === 2) {
       const filtered = desks.filter((item) => !item.reservationId);
+      setDataDesks(filtered);
+    } else if (props.available === 3) {
+      const filtered = desks.filter((item) => item.reservationId);
       setDataDesks(filtered);
     } else setDataDesks(desks);
   };
 
   const setConference = (rooms) => {
-    if (props.available) {
+    if (props.available === 2) {
       const filtered = rooms.filter((item) => !item.reservationId);
+      setDataConfRooms(filtered);
+    } else if (props.available === 3) {
+      const filtered = rooms.filter((item) => item.reservationId);
       setDataConfRooms(filtered);
     } else setDataConfRooms(rooms);
   };
@@ -39,6 +45,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
+          console.log(response.data);
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -48,6 +55,7 @@ const CardsSection = (props) => {
         .get("employee/office-conferencerooms/" + props.officeid)
         .then((response) => {
           setConference(response.data);
+          console.log(response.data);
           setInitialConf(response.data);
         })
         .catch((error) => {
