@@ -143,7 +143,7 @@ const PastReservations = () => {
         <tbody>
           {pastreservations.map((item, id) => {
             return (
-              <tr key={id}>
+              <tr key={id} style={{ padding: 10 }}>
                 <td>
                   {item.startDate.split("T")[0].split("-").reverse().join("/")}{" "}
                   - {item.endDate.split("T")[0].split("-").reverse().join("/")}
@@ -155,35 +155,30 @@ const PastReservations = () => {
                 </td>
                 <td onClick={() => {}}>
                   {!item.reviewId ? (
-                    <div
-                      style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      onClick={() => visibility(item)}
-                    >
-                      <p style={{ margin: "10px" }}>Write Review</p>
-                      <EditOutlined key={item.id} />
+                    <div onClick={() => visibility(item)}>
+                      <Button
+                        style={{
+                          color: "teal",
+                          fontWeight: "bold",
+                          borderRadius: "7px",
+                          width: 120,
+                        }}
+                      >
+                        Write review
+                      </Button>
                     </div>
                   ) : (
-                    <div
-                      onClick={() => showReview(item)}
-                      style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <p style={{ margin: "10px" }}>Read Review</p>
-                      <BookOutlined
-                        style={{ cursor: "pointer" }}
-                        key={item.id}
-                        type="primary"
-                      />
+                    <div onClick={() => showReview(item)}>
+                      <Button
+                        style={{
+                          color: "teal",
+                          fontWeight: "bold",
+                          borderRadius: "7px",
+                          width: 120,
+                        }}
+                      >
+                        Read review
+                      </Button>
                     </div>
                   )}
                   <Modal
