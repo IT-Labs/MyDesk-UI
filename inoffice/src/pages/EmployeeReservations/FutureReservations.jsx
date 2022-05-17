@@ -59,15 +59,33 @@ const FutureReservations = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await api
-        .get("employee/reserve")
-        .then((response) => {
+      await fetch(`${process.env.REACT_APP_API_URL}/employee/reserve`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          sortByOldest(data);
           setArrow(true);
-          sortByOldest(response.data);
         })
-        .catch((error) => {
-          console.error("Error message");
-        });
+        .catch((err) =>
+          notification.open({
+            message: "Error",
+            description: "There appears to be problem at our end",
+            placement: "top",
+            duration: 4,
+          })
+        );
+      // await api
+      //   .get("employee/reserve")
+      //   .then((response) => {
+      //     setArrow(true);
+      //     sortByOldest(response.data);
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error message");
+      //   });
 
       setLoading(false);
     };
