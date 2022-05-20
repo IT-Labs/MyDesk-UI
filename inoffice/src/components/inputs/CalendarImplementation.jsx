@@ -3,10 +3,14 @@ import "antd/dist/antd.css";
 import { Space } from "antd";
 import { DatePicker } from "antd";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const CalendarImplementation = (props) => {
   const { RangePicker } = DatePicker;
   const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+  const start = useSelector((state) => state.date.start);
+
+  console.log(start);
 
   const dateFormat = "DD/MM/YYYY";
 

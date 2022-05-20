@@ -22,11 +22,12 @@ import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { BookOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const PastReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { TextArea } = Input;
-
+  const { officeSelect } = useSelector((state) => state.officeSelect);
   const [loadingData, setLoading] = useState(true);
   const [pastreservations, setPastReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
@@ -159,85 +160,92 @@ const PastReservations = () => {
           </tr>
         </thead>
         <tbody>
-          {pastreservations.map((item, id) => {
-            return (
-              <tr key={id} style={{ padding: 10 }}>
-                <td>
-                  {item.startDate.split("T")[0].split("-").reverse().join("/")}{" "}
-                  - {item.endDate.split("T")[0].split("-").reverse().join("/")}
-                </td>
-                <td>{item.officeName}</td>
-                <td>
-                  {item.deskId ? "Desk" : "Conference room"} [
-                  {item.deskId ? item.deskIndex : item.confRoomIndex}]
-                </td>
-                <td onClick={() => {}}>
-                  {!item.reviewId ? (
-                    <div onClick={() => visibility(item)}>
-                      <Button
-                        style={{
-                          color: "teal",
-                          fontWeight: "bold",
-                          borderRadius: "7px",
-                          width: 120,
-                        }}
-                      >
-                        Write review
-                      </Button>
-                    </div>
-                  ) : (
-                    <div onClick={() => showReview(item)}>
-                      <Button
-                        style={{
-                          color: "teal",
-                          fontWeight: "bold",
-                          borderRadius: "7px",
-                          width: 120,
-                        }}
-                      >
-                        Read review
-                      </Button>
-                    </div>
-                  )}
-                  <Modal
-                    maskClosable={false}
-                    title="Write a review for the selected reservation"
-                    centered
-                    visible={visible}
-                    onOk={() => writeReview()}
-                    onCancel={() => setVisible(false)}
-                    width={800}
-                  >
-                    <TextArea
-                      rows={4}
-                      onChange={(e) => setReview(e.target.value)}
-                      allowClear={true}
-                    />
-                  </Modal>
-
-                  <Modal
-                    title="Review for desk"
-                    centered
-                    maskClosable={false}
-                    visible={showReviewModal}
-                    onOk={() => setShowReviewModal(false)}
-                    width={800}
-                    cancelButtonProps={{ style: { display: "none" } }}
-                  >
-                    <div
-                      style={{
-                        maxHeight: 100,
-                        overflow: "scroll",
-                        overflowX: "hidden",
-                      }}
+          {pastreservations
+            .filter(({ officeName }) => officeName.includes(officeSelect))
+            .map((item, id) => {
+              return (
+                <tr key={id} style={{ padding: 10 }}>
+                  <td>
+                    {item.startDate
+                      .split("T")[0]
+                      .split("-")
+                      .reverse()
+                      .join("/")}{" "}
+                    -{" "}
+                    {item.endDate.split("T")[0].split("-").reverse().join("/")}
+                  </td>
+                  <td>{item.officeName}</td>
+                  <td>
+                    {item.deskId ? "Desk" : "Conference room"} [
+                    {item.deskId ? item.deskIndex : item.confRoomIndex}]
+                  </td>
+                  <td onClick={() => {}}>
+                    {!item.reviewId ? (
+                      <div onClick={() => visibility(item)}>
+                        <Button
+                          style={{
+                            color: "teal",
+                            fontWeight: "bold",
+                            borderRadius: "7px",
+                            width: 120,
+                          }}
+                        >
+                          Write review
+                        </Button>
+                      </div>
+                    ) : (
+                      <div onClick={() => showReview(item)}>
+                        <Button
+                          style={{
+                            color: "teal",
+                            fontWeight: "bold",
+                            borderRadius: "7px",
+                            width: 120,
+                          }}
+                        >
+                          Read review
+                        </Button>
+                      </div>
+                    )}
+                    <Modal
+                      maskClosable={false}
+                      title="Write a review for the selected reservation"
+                      centered
+                      visible={visible}
+                      onOk={() => writeReview()}
+                      onCancel={() => setVisible(false)}
+                      width={800}
                     >
-                      <p>{writtenReview}</p>
-                    </div>
-                  </Modal>
-                </td>
-              </tr>
-            );
-          })}
+                      <TextArea
+                        rows={4}
+                        onChange={(e) => setReview(e.target.value)}
+                        allowClear={true}
+                      />
+                    </Modal>
+
+                    <Modal
+                      title="Review for desk"
+                      centered
+                      maskClosable={false}
+                      visible={showReviewModal}
+                      onOk={() => setShowReviewModal(false)}
+                      width={800}
+                      cancelButtonProps={{ style: { display: "none" } }}
+                    >
+                      <div
+                        style={{
+                          maxHeight: 100,
+                          overflow: "scroll",
+                          overflowX: "hidden",
+                        }}
+                      >
+                        <p>{writtenReview}</p>
+                      </div>
+                    </Modal>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </div>

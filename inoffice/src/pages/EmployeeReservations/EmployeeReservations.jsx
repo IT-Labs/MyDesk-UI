@@ -7,6 +7,8 @@ import FutureReservations from "./FutureReservations";
 import PastReservations from "./PastReservations";
 import { useState, useEffect } from "react";
 import jwt from "jwt-decode";
+import { CardTitle } from "./CardTitle";
+import api from "../../helper/api";
 
 const cardStyles = {
   width: "80%",
@@ -26,6 +28,20 @@ const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
 
   const token = jwt(sessionStorage.getItem("msal.idtoken"));
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    api
+      .get("admin/offices")
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const tabList = [
     {
@@ -56,7 +72,7 @@ const EmployeeReservationList = () => {
           <Content style={contentStyle}>
             <Card
               style={cardStyles}
-              title="My reservations"
+              title={<CardTitle data={data} />}
               tabList={tabList}
               activeTabKey={activeTabKey1}
               onTabChange={(key) => {
@@ -78,7 +94,7 @@ const EmployeeReservationList = () => {
           <Content style={contentStyle}>
             <Card
               style={cardStyles}
-              title="My reservations"
+              title={<CardTitle data={data} />}
               tabList={tabList}
               activeTabKey={activeTabKey1}
               onTabChange={(key) => {

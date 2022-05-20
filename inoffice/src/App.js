@@ -32,7 +32,7 @@ const App = () => {
       // sessionStorage.clear();
       navigate("/");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <React.Suspense fallback={<Loading />}>
