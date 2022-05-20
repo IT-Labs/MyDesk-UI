@@ -1,95 +1,79 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import api from "../../helper/api";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, notification } from "antd";
 
-export default class AddOffice extends Component {
-  state = {
-    value: "",
-  };
-
-  handleSubmit = (e) => {
+const AddOfficeForm = () => {
+  const handleSubmit = (e) => {
     const data = {
       officeName: e.name + " " + e.location,
     };
 
-    api
-      .post("admin/office", data)
-      .then((res) => {
+    try {
+      if (e.name.length > 25 || e.location.length > 25)
+        // eslint-disable-next-line no-throw-literal
+        throw "You have exceeded the allowed 25 characters at one of the fields ";
+      api.post("admin/office", data).then((res) => {
         window.location = "/admin/offices";
-      })
-      .catch((err) => {
-        this.setState({
-          error: "invalid credentials",
-        });
       });
+    } catch (err) {
+      notification.open({
+        message: "Error",
+        description: err,
+        placement: "top",
+        duration: 3,
+      });
+    }
   };
 
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-    console.log(e.target.value);
-  };
-
-  render() {
-    return (
-      <div>
-        <Form
-          name="normal_login"
-          className="login-form"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={this.handleSubmit}
+  return (
+    <div>
+      <Form
+        name="normal_login"
+        className="login-form"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={handleSubmit}
+      >
+        <Form.Item
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Please input office name!",
+            },
+          ]}
         >
-          <Form.Item
-            name="name"
-            onValuesChange={this.handleChange}
-            rules={[
-              {
-                required: true,
-                message: "Please input office name!",
-              },
-              {
-                required: true,
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
-                message: "You exceeded the maximum number of characters",
-              },
-            ]}
+          <Input placeholder="Office name" />
+        </Form.Item>
+        <Form.Item
+          name="location"
+          on
+          rules={[{ required: true, message: "Please input office location!" }]}
+        >
+          <Input placeholder="Office location" />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            htmlType="submit"
+            className="formButton"
+            type="primary"
+            shape="round"
           >
-            <Input placeholder="Office name" />
-          </Form.Item>
-          <Form.Item
-            name="location"
-            rules={[
-              { required: true, message: "Please input office location!" },
-              {
-                required: true,
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
-                message: "You exceeded the maximum number of characters",
-              },
-            ]}
+            Save
+          </Button>
+          <Button
+            type="primary"
+            shape="round"
+            className="formButton"
+            onClick={() => (window.location = "/admin/offices")}
           >
-            <Input placeholder="Office location" />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              htmlType="submit"
-              className="formButton"
-              type="primary"
-              shape="round"
-            >
-              Save
-            </Button>
-            <Button
-              type="primary"
-              shape="round"
-              className="formButton"
-              onClick={() => (window.location = "/admin/offices")}
-            >
-              Cancel
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-    );
-  }
-}
+            Cancel
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
+
+export default AddOfficeForm;

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { List, Card, Layout, Button } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import api from "../../helper/api";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
 const CardsSection = (props) => {
   const [loadingData, setLoading] = useState(true);
@@ -12,6 +14,8 @@ const CardsSection = (props) => {
   const [initialDesks, setInitnialDesks] = useState([]);
   const [initialConf, setInitialConf] = useState([]);
   const { Meta } = Card;
+  const start = useSelector((state) => state.date.start);
+  const end = useSelector((state) => state.date.end);
 
   function selectCard(e) {
     props.selectedCard(e);
@@ -68,8 +72,25 @@ const CardsSection = (props) => {
 
   useEffect(() => {
     setDesks(initialDesks);
+    console.log(initialDesks);
     setConference(initialConf);
   }, [props.available]);
+
+  const checkAvailable = (reservation) => {
+    if (reservation) {
+      const startSelected = moment(reservation.startdate).format("DD-MM-YYYY");
+      const endSelected = moment(reservation.enddate).format("DD-MM-YYYY");
+      if (start <= startSelected && startSelected <= end) {
+        return "#f37076";
+      } else if (start <= endSelected && endSelected <= end) return "#f37076";
+      else if (startSelected < start && endSelected < end) return "#f37076";
+      else return "#69e28d";
+    } else {
+      return "#69e28d";
+    }
+    // return "#f37076" : "#69e28d",
+  };
+
   return (
     <div>
       {loadingData && <div>Loading</div>}
@@ -103,8 +124,8 @@ const CardsSection = (props) => {
                     <Card
                       onClick={() => selectCard(item)}
                       bodyStyle={{
-                        backgroundColor:
-                          item.reservationId != null ? "#f37076" : "#69e28d",
+                        backgroundColor: checkAvailable(item.reservation),
+                        // item.reservationId != null ? "#f37076" : "#69e28d",
                       }}
                       hoverable={true}
                       bordered={true}
