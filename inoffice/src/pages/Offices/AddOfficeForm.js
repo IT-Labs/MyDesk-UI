@@ -3,7 +3,9 @@ import api from "../../helper/api";
 import { Form, Input, Button } from "antd";
 
 export default class AddOffice extends Component {
-  state = {};
+  state = {
+    value: "",
+  };
 
   handleSubmit = (e) => {
     const data = {
@@ -22,6 +24,11 @@ export default class AddOffice extends Component {
       });
   };
 
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+    console.log(e.target.value);
+  };
+
   render() {
     return (
       <div>
@@ -35,6 +42,7 @@ export default class AddOffice extends Component {
         >
           <Form.Item
             name="name"
+            onValuesChange={this.handleChange}
             rules={[
               {
                 required: true,
@@ -42,7 +50,7 @@ export default class AddOffice extends Component {
               },
               {
                 required: true,
-                pattern: new RegExp("^W*(?:w+\bW*){10,100}$"),
+                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
                 message: "You exceeded the maximum number of characters",
               },
             ]}

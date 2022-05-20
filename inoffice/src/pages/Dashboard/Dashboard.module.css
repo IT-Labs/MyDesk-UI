@@ -1,0 +1,17 @@
+.dashboardCard {
+  border: 1px solid teal;
+  width: 150px;
+  height: 120px;
+  border-radius: 7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  margin: 15px;
+}
+
+.dashboardCard h1,
+.dashboardCard h2 {
+  color: rgb(2, 94, 94);
+}

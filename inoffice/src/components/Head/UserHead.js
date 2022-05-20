@@ -5,43 +5,23 @@ import { Header } from "antd/lib/layout/layout";
 import jwt from "jwt-decode";
 import { FileOutlined } from "@ant-design/icons";
 import HeaderImg from "./HeaderImg";
+import avatar from "../../assets/avatar.png";
 
 export default class UserHead extends Component {
   config = {
     token: localStorage.getItem("msal.idtoken"),
+    decoded: jwt(localStorage.getItem("msal.idtoken")),
   };
 
   render() {
-    if (jwt(this.config.token).roles[0] === "ADMIN") {
-      return (
-        <Header id="header">
-          <div>{this.props.isHome && <HeaderImg />}</div>
-          {/* Hello x user here without the my account tab, no need */}
-          <div>
-            <NavLink className={"link accountFunc"} to="/employee/reservations">
-              My account
-            </NavLink>
-            <NavLink
-              className={"link accountFunc"}
-              to="/"
-              onClick={() => {
-                localStorage.clear();
-                window.location = "/";
-              }}
-            >
-              Log out
-            </NavLink>
-          </div>
-        </Header>
-      );
-    }
     return (
       <Header id="header">
         {/* Hello x user here without the my account tab, same as the admin page*/}
         <div>{this.props.isHome && <HeaderImg />}</div>
         <div>
+          <img src={avatar} alt="avatar" style={{ width: 90, height: 50 }} />
           <NavLink className={"link"} to="/employee/reservations">
-            My account
+            {this.config.decoded.name}
           </NavLink>
           <NavLink
             className={"link"}

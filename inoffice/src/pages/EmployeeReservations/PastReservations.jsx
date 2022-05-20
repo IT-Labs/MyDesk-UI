@@ -131,7 +131,10 @@ const PastReservations = () => {
       <table style={{ width: "100%", textAlign: "center" }}>
         <thead>
           <tr>
-            <th onClick={() => sortByTime(!arrow)}>
+            <th
+              style={{ cursor: "pointer", userSelect: "none" }}
+              onClick={() => sortByTime(!arrow)}
+            >
               Date
               {arrow ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
             </th>
