@@ -20,10 +20,12 @@ import { useState, useEffect } from "react";
 import api from "../../helper/api";
 import { LoadingOutlined } from "@ant-design/icons";
 import Icon from "@ant-design/icons/lib/components/AntdIcon";
+import { useSelector } from "react-redux";
 
 const FutureReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [filter, setFilter] = useState("Sort By oldest");
+  const { officeSelect } = useSelector((state) => state.officeSelect);
 
   const [loadingData, setLoading] = useState(true);
   const [futurereservations, setFutureReservations] = useState([]);
@@ -125,47 +127,49 @@ const FutureReservations = () => {
           </tr>
         </thead>
         <tbody>
-          {futurereservations.map((item, index) => (
-            <tr key={index} style={{ transition: "all 0.2s ease-in-out" }}>
-              <td>
-                {item.startDate.split("T")[0].split("-").reverse().join("/")} -{" "}
-                {item.endDate.split("T")[0].split("-").reverse().join("/")}
-              </td>
-              <td>{item.officeName}</td>
-              <td>
-                {item.deskId ? "Desk" : "Conference room"} [
-                {item.deskId ? item.deskIndex : item.confRoomIndex}]
-              </td>
-              <td>
-                <Button
-                  onClick={() => setVisible(true)}
-                  style={{
-                    color: "teal",
-                    fontWeight: "bold",
-                    borderRadius: "7px",
+          {futurereservations
+            .filter(({ officeName }) => officeName.includes(officeSelect))
+            .map((item, index) => (
+              <tr key={index} style={{ transition: "all 0.2s ease-in-out" }}>
+                <td>
+                  {item.startDate.split("T")[0].split("-").reverse().join("/")}{" "}
+                  - {item.endDate.split("T")[0].split("-").reverse().join("/")}
+                </td>
+                <td>{item.officeName}</td>
+                <td>
+                  {item.deskId ? "Desk" : "Conference room"} [
+                  {item.deskId ? item.deskIndex : item.confRoomIndex}]
+                </td>
+                <td>
+                  <Button
+                    onClick={() => setVisible(true)}
+                    style={{
+                      color: "teal",
+                      fontWeight: "bold",
+                      borderRadius: "7px",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </td>
+                <Modal
+                  maskClosable={false}
+                  title="Are you sure you want to cancel your reservation?"
+                  centered
+                  visible={visible}
+                  onOk={() => {
+                    deleteNotification(item.id);
+                    setVisible(false);
                   }}
+                  onCancel={() => setVisible(false)}
                 >
-                  Cancel
-                </Button>
-              </td>
-              <Modal
-                maskClosable={false}
-                title="Are you sure you want to cancel your reservation?"
-                centered
-                visible={visible}
-                onOk={() => {
-                  deleteNotification(item.id);
-                  setVisible(false);
-                }}
-                onCancel={() => setVisible(false)}
-              >
-                <p>
-                  You are able to reserve your seat again, but know someone can
-                  reserve it before you.
-                </p>
-              </Modal>
-            </tr>
-          ))}
+                  <p>
+                    You are able to reserve your seat again, but know someone
+                    can reserve it before you.
+                  </p>
+                </Modal>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
