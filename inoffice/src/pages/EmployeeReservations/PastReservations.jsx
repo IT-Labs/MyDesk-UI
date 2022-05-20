@@ -103,16 +103,25 @@ const PastReservations = () => {
   };
 
   const writeReview = async () => {
-    setVisible(false);
-
     const data = {
       reservationid: resid,
       review: review,
     };
 
+    if (data.review.length <= 6) {
+      notification.open({
+        message: "Notification",
+        description: "Please write a review with more than 6 character",
+        placement: "top",
+        duration: 4,
+      });
+      return;
+    }
+
     await api
       .post("employee/review", data)
       .then((response) => {
+        setVisible(false);
         setRefreshState({});
         notification.open({
           message: "Notification",
@@ -122,7 +131,13 @@ const PastReservations = () => {
         });
       })
       .catch((error) => {
-        console.error("Error message");
+        notification.open({
+          message: "Notification",
+          description: "Review written",
+          placement: "top",
+          duration: 4,
+        });
+        setVisible(false);
       });
   };
 
@@ -206,8 +221,8 @@ const PastReservations = () => {
                     maskClosable={false}
                     visible={showReviewModal}
                     onOk={() => setShowReviewModal(false)}
-                    onCancel={() => setShowReviewModal(false)}
                     width={800}
+                    cancelButtonProps={{ style: { display: "none" } }}
                   >
                     <div
                       style={{

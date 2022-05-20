@@ -69,7 +69,7 @@ const Home = () => {
 
   const sendReservation = (data) => {
     const config = {
-      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
+      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
     api
       .post("employee/reserve", data, config)

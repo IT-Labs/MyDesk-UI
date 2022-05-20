@@ -31,7 +31,8 @@ const Login = () => {
   };
 
   const sendData = (userInfo) => {
-    const token = localStorage.getItem("msal.idtoken");
+    const token = sessionStorage.getItem("msal.idtoken");
+
     api
       .post("/authentication", userInfo)
       .then((res) => {
@@ -40,6 +41,7 @@ const Login = () => {
       .catch((err) => {
         console.error("error");
       });
+    return;
   };
 
   const roleRouting = (token) => {
@@ -70,7 +72,7 @@ const Login = () => {
           }
           redirectUri={url}
           forceRedirectStrategy={true}
-          useLocalStorageCache={true}
+          // useLocalStorageCache={true}
           withUserData={true}
           className={styles.loginBtn}
         >

@@ -270,3 +270,7 @@ td {
 .ant-menu-item-active a:hover {
   color: teal;
 }
+
+.ant-modal-close-x {
+  display: none;
+}

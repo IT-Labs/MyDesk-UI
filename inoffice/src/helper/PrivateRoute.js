@@ -3,7 +3,7 @@ import jwt from "jwt-decode";
 import { useEffect } from "react";
 
 const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
-  const token = localStorage.getItem("msal.idtoken");
+  const token = sessionStorage.getItem("msal.idtoken");
   const navigate = useNavigate();
   if (!token) {
     navigate("/");
@@ -12,7 +12,7 @@ const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   let isAuthenticated = false;
   let dateNow = new Date();
   if (jwt(token).exp * 1000 < dateNow.getTime()) {
-    localStorage.clear();
+    sessionStorage.clear();
   }
 
   if (

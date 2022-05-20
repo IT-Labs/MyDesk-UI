@@ -16,7 +16,7 @@ import UserHead from "../Head/UserHead";
 
 class Register extends Component {
   config = {
-    token: localStorage.getItem("token"),
+    token: sessionStorage.getItem("token"),
   };
   state = {};
 

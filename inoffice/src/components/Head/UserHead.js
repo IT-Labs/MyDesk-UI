@@ -9,8 +9,8 @@ import avatar from "../../assets/avatar.png";
 
 export default class UserHead extends Component {
   config = {
-    token: localStorage.getItem("msal.idtoken"),
-    decoded: jwt(localStorage.getItem("msal.idtoken")),
+    token: sessionStorage.getItem("msal.idtoken"),
+    decoded: jwt(sessionStorage.getItem("msal.idtoken")),
   };
 
   render() {
@@ -27,7 +27,7 @@ export default class UserHead extends Component {
             className={"link"}
             to="/"
             onClick={() => {
-              localStorage.clear();
+              sessionStorage.clear();
               window.location = "/";
             }}
           >

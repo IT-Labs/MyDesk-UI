@@ -15,7 +15,7 @@ class SiderDemo extends Component {
   };
 
   config = {
-    token: localStorage.getItem("msal.idtoken"),
+    token: sessionStorage.getItem("msal.idtoken"),
   };
 
   onCollapse = (collapsed) => {
