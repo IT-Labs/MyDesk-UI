@@ -6,6 +6,7 @@ import { Button, Card, Table } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
+import { moment } from "moment";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -13,7 +14,19 @@ const ReservationList = () => {
   const sortResStruct = (res) => {
     console.log(res);
     const results = res.map(
-      ({ employee, officeName, indexForOffice, conferenceRoom }, id) => {
+      (
+        {
+          employee,
+          officeName,
+          indexForOffice,
+          conferenceRoom,
+          startDate,
+          endDate,
+        },
+        id
+      ) => {
+        const start = new Date(startDate);
+        const end = new Date(endDate);
         return {
           employee: `${employee.firstName} ${employee.lastName}`,
           office: officeName ? officeName : "Undefined office",
@@ -21,6 +34,8 @@ const ReservationList = () => {
             ? `Desk [${indexForOffice}]`
             : "Undefined Desk",
           key: id,
+          startDate: Date.parse(startDate),
+          date: `${start.getDate()}/${start.getMonth()}/${start.getFullYear()}-${end.getDate()}/${end.getMonth()}/${end.getFullYear()}`,
         };
       }
     );
@@ -43,9 +58,22 @@ const ReservationList = () => {
   }, []);
 
   const columns = [
-    { title: "Employee", dataIndex: "employee", key: 1 },
+    {
+      title: "Employee",
+      dataIndex: "employee",
+      key: 1,
+    },
     { title: "Office", dataIndex: "office", key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: 3,
+      sorter: {
+        compare: (a, b) => a.startDate - b.startDate,
+        multiple: 1,
+      },
+    },
   ];
   return (
     <Layout>

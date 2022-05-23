@@ -11,7 +11,6 @@ const CalendarImplementation = (props) => {
   const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
   const start = useSelector((state) => state.date.start);
   const dispatch = useDispatch();
-  console.log(start);
 
   const dateFormat = "DD/MM/YYYY";
 

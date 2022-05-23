@@ -27,7 +27,7 @@ const PastReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { TextArea } = Input;
 
-  const [loadingData, setLoading] = useState(true);
+  const [loadingData, setLoading] = useState(false);
   const [pastreservations, setPastReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
   const [visible, setVisible] = useState(false);
