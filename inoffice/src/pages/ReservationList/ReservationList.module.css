@@ -1,0 +1,17 @@
+.content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.resList {
+  width: 100%;
+  border-radius: 7px;
+  min-height: 500px;
+  max-height: 500px;
+}
+
+.table {
+  max-height: 400px;
+  min-height: 400px;
+}
