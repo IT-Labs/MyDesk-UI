@@ -13,11 +13,13 @@ const ReservationList = () => {
   const sortResStruct = (res) => {
     console.log(res);
     const results = res.map(
-      ({ employee, officeName, desk, conferenceRoom }, id) => {
+      ({ employee, officeName, indexForOffice, conferenceRoom }, id) => {
         return {
           employee: `${employee.firstName} ${employee.lastName}`,
           office: officeName ? officeName : "Undefined office",
-          entity: desk ? `Desk [${desk.indexForOffice}]` : "Undefined Desk",
+          entity: indexForOffice
+            ? `Desk [${indexForOffice}]`
+            : "Undefined Desk",
           key: id,
         };
       }
