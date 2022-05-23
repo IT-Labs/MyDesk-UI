@@ -124,8 +124,9 @@ const CardsSection = (props) => {
                     <Card
                       onClick={() => selectCard(item)}
                       bodyStyle={{
-                        backgroundColor: checkAvailable(item.reservation),
-                        // item.reservationId != null ? "#f37076" : "#69e28d",
+                        // backgroundColor: checkAvailable(item.reservation),
+                        background:
+                          item.reservationId != null ? "#f37076" : "#69e28d",
                       }}
                       hoverable={true}
                       bordered={true}
