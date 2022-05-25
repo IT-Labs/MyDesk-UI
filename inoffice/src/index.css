@@ -89,6 +89,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
+  max-height: 100vh;
 }
 
 *,
@@ -295,4 +296,9 @@ td {
 .ant-pagination-item-active a {
   color: teal;
   border-color: teal;
+}
+
+.ant-layout {
+  max-height: 100vh;
+  background-color: #f1f3f9;
 }

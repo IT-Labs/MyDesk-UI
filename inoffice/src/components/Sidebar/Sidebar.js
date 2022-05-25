@@ -33,8 +33,8 @@ class SiderDemo extends Component {
       return (
         <Sider
           style={{
-            overflow: "auto",
-            height: "100vh",
+            overflow: "none",
+            height: "100.7vh",
             position: "relative",
             top: "-70px",
             left: 0,

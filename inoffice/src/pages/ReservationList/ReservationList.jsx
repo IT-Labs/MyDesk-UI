@@ -6,6 +6,7 @@ import { Button, Card, Input, notification, Select, Table } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
+import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -208,24 +209,31 @@ const ReservationList = () => {
               }}
             >
               <div className={styles.inputs}>
-                <Select
-                  defaultValue="All"
-                  onChange={(val) => setFilterVal(val)}
-                  style={{ width: 200 }}
-                >
-                  <Select.Option key={0} value="">
-                    All
-                  </Select.Option>
-                  {offices.map(({ name, id }) => (
-                    <Select.Option key={id} value={name}>
-                      {name}
+                <div>
+                  <SearchOutlined style={{ margin: 10 }} />
+                  <Select
+                    defaultValue="Select Office"
+                    onChange={(val) => setFilterVal(val)}
+                    style={{ width: 200 }}
+                  >
+                    <Select.Option key={0} value="">
+                      All
                     </Select.Option>
-                  ))}
-                </Select>
-                <Input
-                  onChange={(e) => setFilterInput(e.target.value)}
-                  className={styles.searchInput}
-                />
+                    {offices.map(({ name, id }) => (
+                      <Select.Option key={id} value={name}>
+                        {name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </div>
+                <div>
+                  <FileSearchOutlined style={{ margin: 10 }} />
+                  <Input
+                    onChange={(e) => setFilterInput(e.target.value)}
+                    className={styles.searchInput}
+                    placeholder="Search username"
+                  />
+                </div>
               </div>
               <Table
                 columns={tabKey === "past" ? pastColumns : futureColumns}

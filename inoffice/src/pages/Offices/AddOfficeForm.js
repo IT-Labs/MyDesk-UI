@@ -58,13 +58,17 @@ const AddOfficeForm = () => {
             htmlType="submit"
             className="formButton"
             type="primary"
-            shape="round"
+            style={{ background: "teal", borderRadius: 7, border: "none" }}
           >
             Save
           </Button>
           <Button
             type="primary"
-            shape="round"
+            style={{
+              background: "rgb(255,70,70)",
+              borderRadius: 7,
+              border: "none",
+            }}
             className="formButton"
             onClick={() => (window.location = "/admin/offices")}
           >
