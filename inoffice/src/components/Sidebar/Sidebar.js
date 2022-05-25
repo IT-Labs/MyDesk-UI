@@ -66,11 +66,6 @@ class SiderDemo extends Component {
                 {!this.state.collapsed && <>Offices</>}
               </Link>
             </Menu.Item>
-            <Menu.Item key="3" icon={<FeatherIcon icon="settings" />}>
-              <Link to={"/admin/configuration"}>
-                {!this.state.collapsed && <>Configuration</>}
-              </Link>
-            </Menu.Item>
             <Menu.Item key="4" icon={<FeatherIcon icon="coffee" />}>
               <Link to={"/admin/reservations"}>
                 {!this.state.collapsed && <>Reservation List</>}

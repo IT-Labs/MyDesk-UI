@@ -2,45 +2,55 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Card, Table } from "antd";
+import { Button, Card, Input, Select, Table } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
-import { moment } from "moment";
+import jwtDecode from "jwt-decode";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
+  const [filterInput, setFilterInput] = useState("");
 
   const sortResStruct = (res) => {
-    console.log(res);
-    const results = res.map(
-      (
-        {
-          employee,
-          officeName,
-          indexForOffice,
-          conferenceRoom,
-          startDate,
-          endDate,
-        },
-        id
-      ) => {
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        return {
-          employee: `${employee.firstName} ${employee.lastName}`,
-          office: officeName ? officeName : "Undefined office",
-          entity: indexForOffice
-            ? `Desk [${indexForOffice}]`
-            : "Undefined Desk",
-          key: id,
-          startDate: Date.parse(startDate),
-          date: `${start.getDate()}/${start.getMonth()}/${start.getFullYear()}-${end.getDate()}/${end.getMonth()}/${end.getFullYear()}`,
-        };
-      }
-    );
+    const results = res
+      .map(
+        (
+          {
+            employee,
+            officeName,
+            indexForOffice,
+            conferenceRoom,
+            startDate,
+            endDate,
+          },
+          id
+        ) => {
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          return {
+            employee: `${employee.firstName} ${employee.lastName}`,
+            office: officeName ? officeName : "Undefined office",
+            entity: indexForOffice
+              ? `Desk [${indexForOffice}]`
+              : "Undefined Desk",
+            key: id,
+            startDate: Date.parse(startDate),
+            date: `${start.getDate()}/${
+              start.getMonth() + 1
+            }/${start.getFullYear()}-${end.getDate()}/${end.getMonth()}/${end.getFullYear()}`,
+          };
+        }
+      )
+      .sort((a, b) => {
+        const date1 = new Date(a.startDate).getTime();
+        const date2 = new Date(b.startDate).getTime();
+
+        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+      });
     setReservations(results);
   };
+  const [offices, setOffices] = useState([]);
 
   const getAllRes = () => {
     api
@@ -51,6 +61,13 @@ const ReservationList = () => {
       .catch((err) => {
         console.log(err);
       });
+    api
+      .get("admin/offices")
+      .then(({ data }) => {
+        setOffices(data);
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -70,11 +87,18 @@ const ReservationList = () => {
       dataIndex: "date",
       key: 3,
       sorter: {
-        compare: (a, b) => a.startDate - b.startDate,
+        compare: (a, b) => {
+          const date1 = new Date(a.startDate).getTime();
+          const date2 = new Date(b.startDate).getTime();
+
+          return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+        },
         multiple: 1,
       },
+      sortDirections: ["ascend"],
     },
   ];
+  const [filterVal, setFilterVal] = useState("");
   return (
     <Layout>
       <UserHeade />
@@ -86,11 +110,36 @@ const ReservationList = () => {
               title={<Title reservations={reservations} columns={columns} />}
               className={styles.resList}
             >
+              <div className={styles.inputs}>
+                <Select
+                  defaultValue="All"
+                  onChange={(val) => setFilterVal(val)}
+                  style={{ width: 200 }}
+                >
+                  <Select.Option key={0} value="">
+                    All
+                  </Select.Option>
+                  {offices.map(({ name, id }) => (
+                    <Select.Option key={id} value={name}>
+                      {name}
+                    </Select.Option>
+                  ))}
+                </Select>
+                <Input
+                  onChange={(e) => setFilterInput(e.target.value)}
+                  className={styles.searchInput}
+                />
+              </div>
               <Table
                 columns={columns}
-                dataSource={reservations}
+                dataSource={reservations.filter(
+                  ({ office, employee }) =>
+                    office.includes(filterVal) &&
+                    employee.toLowerCase().includes(filterInput.toLowerCase())
+                )}
                 pagination={{ pageSize: 5 }}
                 className={styles.table}
+                sortDirections={["ascend", "descend"]}
               ></Table>
             </Card>
           </div>

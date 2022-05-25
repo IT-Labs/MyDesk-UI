@@ -22,6 +22,7 @@ import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { BookOutlined } from "@ant-design/icons";
+import Loading from "../../components/Loading/Loading";
 
 const PastReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -70,7 +71,6 @@ const PastReservations = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       await api
         .get("employee/past-reservations")
         .then((response) => {
@@ -79,8 +79,6 @@ const PastReservations = () => {
         .catch((error) => {
           console.error("Error message");
         });
-
-      setLoading(false);
     };
     fetchData();
   }, [refreshstate]);
@@ -107,6 +105,7 @@ const PastReservations = () => {
       reservationid: resid,
       review: review,
     };
+    setLoading(true);
 
     if (data.review.length < 6 || data.review.length > 200) {
       notification.open({
@@ -115,6 +114,7 @@ const PastReservations = () => {
         placement: "top",
         duration: 4,
       });
+      setLoading(false);
       return;
     }
 
@@ -123,6 +123,7 @@ const PastReservations = () => {
       .then((response) => {
         setVisible(false);
         setRefreshState({});
+        setLoading(false);
         notification.open({
           message: "Notification",
           description: "Review written",
@@ -137,6 +138,7 @@ const PastReservations = () => {
           placement: "top",
           duration: 4,
         });
+        setLoading(false);
         setVisible(false);
       });
   };
@@ -207,12 +209,28 @@ const PastReservations = () => {
                     onOk={() => writeReview()}
                     onCancel={() => setVisible(false)}
                     width={800}
+                    // style={{ height: 120 }}
                   >
-                    <TextArea
-                      rows={4}
-                      onChange={(e) => setReview(e.target.value)}
-                      allowClear={true}
-                    />
+                    {loadingData ? (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 120,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          overflowY: "hidden",
+                        }}
+                      >
+                        <Loading />
+                      </div>
+                    ) : (
+                      <TextArea
+                        rows={4}
+                        onChange={(e) => setReview(e.target.value)}
+                        allowClear={true}
+                      />
+                    )}
                   </Modal>
 
                   <Modal

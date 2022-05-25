@@ -28,6 +28,7 @@ export default class UserHead extends Component {
             to="/"
             onClick={() => {
               sessionStorage.clear();
+              localStorage.clear();
               window.location = "/";
             }}
           >

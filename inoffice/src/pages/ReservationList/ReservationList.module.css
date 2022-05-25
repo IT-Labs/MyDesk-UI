@@ -7,11 +7,28 @@
 .resList {
   width: 100%;
   border-radius: 7px;
-  min-height: 500px;
-  max-height: 500px;
+  min-height: 600px;
+  max-height: 600px;
 }
 
 .table {
-  max-height: 400px;
-  min-height: 400px;
+  max-height: 350px;
+  min-height: 350px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.searchInput {
+  width: 300px;
+}
+
+.searchInput:focus,
+.searchInput:hover {
+  border: 1px solid teal;
 }
