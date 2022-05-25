@@ -55,7 +55,7 @@ const Home = () => {
   const showReviewsForSelectedCard = () => {
     setIsModalVisible(true);
     api
-      .get(`entitiy/reviews/${selectedCardId.id}`)
+      .get(`entity/reviews/${selectedCardId.id}`)
       .then(({ data }) => {
         setReviews(data.allReviews);
       })
