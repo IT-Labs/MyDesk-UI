@@ -28,9 +28,11 @@ const Home = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);
   const [selectValue, setSelectValue] = useState(1);
+  const [reviews, setReviews] = useState([]);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
+    setReviews([]);
   };
 
   function setDate(startDate, endDate) {
@@ -52,6 +54,14 @@ const Home = () => {
 
   const showReviewsForSelectedCard = () => {
     setIsModalVisible(true);
+    api
+      .get(`entitiy/reviews/${selectedCardId.id}`)
+      .then(({ data }) => {
+        setReviews(data.allReviews);
+      })
+      .catch(() => {
+        setReviews(["There were no available reviews"]);
+      });
   };
 
   const openNotification = (placement) => {
@@ -189,7 +199,6 @@ const Home = () => {
                     marginBottom: 0,
                   }}
                 >
-                  {" "}
                   Show reviews
                 </p>
               </Button>
@@ -200,9 +209,10 @@ const Home = () => {
                 onOk={closeModalFunction}
                 onCancel={closeModalFunction}
               >
-                <p>Desk was very good</p>
-                <p>I didn't have a good time</p>
-                <p>The desk was broken and the mouse was getting stuck</p>
+                <ul>
+                  {reviews &&
+                    reviews.map((item, id) => <li key={id}>{item}</li>)}
+                </ul>
               </Modal>
             </Col>
             <Col className="buttonReserve" span={2}>

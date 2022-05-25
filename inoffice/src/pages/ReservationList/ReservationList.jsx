@@ -138,8 +138,6 @@ const ReservationList = () => {
                     employee.toLowerCase().includes(filterInput.toLowerCase())
                 )}
                 pagination={{ pageSize: 5 }}
-                className={styles.table}
-                sortDirections={["ascend", "descend"]}
               ></Table>
             </Card>
           </div>
