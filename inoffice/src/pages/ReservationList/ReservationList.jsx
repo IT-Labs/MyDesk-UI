@@ -2,30 +2,20 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Card, Input, Select, Table } from "antd";
+import { Button, Card, Input, notification, Select, Table } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
-import jwtDecode from "jwt-decode";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [filterInput, setFilterInput] = useState("");
+  const [initRes, setInitRes] = useState([]);
 
   const sortResStruct = (res) => {
     const results = res
       .map(
-        (
-          {
-            employee,
-            officeName,
-            indexForOffice,
-            conferenceRoom,
-            startDate,
-            endDate,
-          },
-          id
-        ) => {
+        ({ employee, officeName, indexForOffice, startDate, endDate, id }) => {
           const start = new Date(startDate);
           const end = new Date(endDate);
           return {
@@ -36,6 +26,7 @@ const ReservationList = () => {
               : "Undefined Desk",
             key: id,
             startDate: Date.parse(startDate),
+            endDate: Date.parse(endDate),
             date: `${start.getDate()}/${
               start.getMonth() + 1
             }/${start.getFullYear()}-${end.getDate()}/${end.getMonth()}/${end.getFullYear()}`,
@@ -48,9 +39,30 @@ const ReservationList = () => {
 
         return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
       });
-    setReservations(results);
+    setInitRes([...results]);
+    sortFuture(results);
   };
   const [offices, setOffices] = useState([]);
+
+  const sortFuture = (res) => {
+    const future = res.filter(
+      (item) =>
+        item.startDate >= new Date().getTime() ||
+        item.endDate >= new Date().getTime()
+    );
+
+    setReservations(future);
+  };
+
+  const sortPast = (res) => {
+    const past = res.filter(
+      (item) =>
+        item.startDate < new Date().getTime() ||
+        item.endDate < new Date().getTime()
+    );
+
+    setReservations(past);
+  };
 
   const getAllRes = () => {
     api
@@ -74,7 +86,49 @@ const ReservationList = () => {
     getAllRes();
   }, []);
 
-  const columns = [
+  const futureColumns = [
+    {
+      title: "Employee",
+      dataIndex: "employee",
+      key: 1,
+    },
+    { title: "Office", dataIndex: "office", key: 2 },
+    { title: "Entity", dataIndex: "entity", key: 3 },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: 3,
+      sorter: {
+        compare: (a, b) => {
+          const date1 = new Date(a.startDate).getTime();
+          const date2 = new Date(b.startDate).getTime();
+
+          return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+        },
+        multiple: 1,
+      },
+      sortDirections: ["ascend"],
+    },
+    {
+      title: "Cancel",
+      dataIndex: "cancel",
+      key: 4,
+      render: (text, record, index) => {
+        return (
+          <Button
+            className={styles.cancelBtn}
+            onClick={() => {
+              cancelReservation(record.key);
+            }}
+          >
+            Cancel
+          </Button>
+        );
+      },
+    },
+  ];
+
+  const pastColumns = [
     {
       title: "Employee",
       dataIndex: "employee",
@@ -99,6 +153,40 @@ const ReservationList = () => {
     },
   ];
   const [filterVal, setFilterVal] = useState("");
+
+  const tabList = [
+    {
+      key: "future",
+      tab: "Future",
+    },
+    {
+      key: "past",
+      tab: "Past",
+    },
+  ];
+
+  const [tabKey, setTabKey] = useState("");
+
+  const cancelReservation = async (id) => {
+    await api
+      .delete("employee/reserve/" + id)
+      .then((response) => {
+        notification.open({
+          message: "Notification",
+          description: "You successfully canceled a reservation",
+          placement: "top",
+          duration: 4,
+        });
+        const filteredRes = initRes.filter((item) => item.key !== id);
+
+        setInitRes(filteredRes);
+        sortFuture(filteredRes);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <Layout>
       <UserHeade />
@@ -107,8 +195,17 @@ const ReservationList = () => {
         <Content className={styles.content}>
           <div style={{ width: "80%" }}>
             <Card
-              title={<Title reservations={reservations} columns={columns} />}
+              title={<Title reservations={initRes} columns={pastColumns} />}
               className={styles.resList}
+              tabList={tabList}
+              onTabChange={(key) => {
+                setTabKey(key);
+                if (key === "past") {
+                  sortPast(initRes);
+                } else {
+                  sortFuture(initRes);
+                }
+              }}
             >
               <div className={styles.inputs}>
                 <Select
@@ -131,7 +228,7 @@ const ReservationList = () => {
                 />
               </div>
               <Table
-                columns={columns}
+                columns={tabKey === "past" ? pastColumns : futureColumns}
                 dataSource={reservations.filter(
                   ({ office, employee }) =>
                     office.includes(filterVal) &&

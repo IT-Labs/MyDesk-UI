@@ -274,3 +274,25 @@ td {
 .ant-modal-close-x {
   display: none;
 }
+
+.ant-pagination-item {
+  color: teal;
+}
+
+.ant-pagination-item:hover,
+.ant-pagination-item a:hover {
+  color: teal;
+  border-color: teal;
+}
+
+.ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-pagination-next:hover .ant-pagination-item-link {
+  color: teal;
+  border-color: teal;
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item-active a {
+  color: teal;
+  border-color: teal;
+}
