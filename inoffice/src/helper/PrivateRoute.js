@@ -13,6 +13,7 @@ const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
   let dateNow = new Date();
   if (jwt(token).exp * 1000 < dateNow.getTime()) {
     sessionStorage.clear();
+    navigate("/");
   }
 
   if (

@@ -63,8 +63,9 @@
   border: 1px solid teal;
   transition: all 0.2s ease-in-out;
   border-radius: 7px;
-  width: 120px;
+  width: 130px;
   font-weight: bold;
+  text-align: center !important;
 }
 
 .reviewBtn:hover {
@@ -72,4 +73,5 @@
   color: white;
   border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
+  text-align: center !important;
 }

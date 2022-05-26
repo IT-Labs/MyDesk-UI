@@ -97,6 +97,10 @@ const PastReservations = () => {
     fetchData();
   }, [refreshstate]);
 
+  useState(() => {
+    setWrittenReview("");
+  }, []);
+
   const visibility = (item) => {
     setVisible(true);
     setResid(item.id);

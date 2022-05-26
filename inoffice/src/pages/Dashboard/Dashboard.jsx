@@ -159,6 +159,7 @@ const Dashboard = () => {
       dataIndex: "options",
       key: 4,
       align: "center",
+      width: "150px",
       render: (text, data, id) => {
         return (
           <Button
@@ -255,7 +256,7 @@ const Dashboard = () => {
               <div
                 style={{
                   background: "#fff",
-                  width: 750,
+                  width: 800,
                   height: 430,
                   borderRadius: 7,
                   display: "flex",
@@ -270,7 +271,7 @@ const Dashboard = () => {
                 <Table
                   columns={colums}
                   dataSource={reviews}
-                  style={{ maxHeight: 250, padding: 20 }}
+                  style={{ maxHeight: 250, padding: 5 }}
                   pagination={{ pageSize: 4, position: ["topCenter"] }}
                 />
               </div>
