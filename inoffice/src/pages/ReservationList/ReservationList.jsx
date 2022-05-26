@@ -38,7 +38,7 @@ const ReservationList = () => {
         const date1 = new Date(a.startDate).getTime();
         const date2 = new Date(b.startDate).getTime();
 
-        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
       });
     setInitRes([...results]);
     sortFuture(results);
@@ -46,21 +46,35 @@ const ReservationList = () => {
   const [offices, setOffices] = useState([]);
 
   const sortFuture = (res) => {
-    const future = res.filter(
-      (item) =>
-        item.startDate >= new Date().getTime() ||
-        item.endDate >= new Date().getTime()
-    );
+    const future = res
+      .filter(
+        (item) =>
+          item.startDate >= new Date().getTime() ||
+          item.endDate >= new Date().getTime()
+      )
+      .sort((a, b) => {
+        const date1 = new Date(a.startDate).getTime();
+        const date2 = new Date(b.startDate).getTime();
+
+        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+      });
 
     setReservations(future);
   };
 
   const sortPast = (res) => {
-    const past = res.filter(
-      (item) =>
-        item.startDate < new Date().getTime() ||
-        item.endDate < new Date().getTime()
-    );
+    const past = res
+      .filter(
+        (item) =>
+          item.startDate < new Date().getTime() ||
+          item.endDate < new Date().getTime()
+      )
+      .sort((a, b) => {
+        const date1 = new Date(a.startDate).getTime();
+        const date2 = new Date(b.startDate).getTime();
+
+        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
+      });
 
     setReservations(past);
   };
@@ -107,7 +121,7 @@ const ReservationList = () => {
         },
         multiple: 1,
       },
-      sortDirections: ["ascend"],
+      sortDirections: ["descend"],
     },
     {
       title: "Cancel",
