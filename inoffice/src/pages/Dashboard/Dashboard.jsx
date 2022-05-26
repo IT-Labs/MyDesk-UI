@@ -5,7 +5,7 @@ import UserHead from "../../components/Head/UserHead";
 import { Pie } from "@ant-design/charts";
 import api from "../../helper/api";
 import styles from "./Dashboard.module.css";
-import { Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 
 const Dashboard = () => {
@@ -16,6 +16,8 @@ const Dashboard = () => {
   const [availableDesks, setAvailableDesks] = useState(0);
   const [reservedDesks, setReservedDesks] = useState(0);
   const [allDesks, setAllDesks] = useState(0);
+  const [writtenReview, setWrittenReview] = useState("");
+  const [activeModal, setActiveModal] = useState(false);
 
   const fetchOfficeData = async () => {
     await api
@@ -115,12 +117,7 @@ const Dashboard = () => {
           ) : (
             <MehOutlined className={styles.icon} />
           ),
-          review:
-            item.review.length > 0
-              ? item.review.length > 50
-                ? `${item.review.slice(0, 50)}...`
-                : item.review
-              : "This review is blank",
+          review: item.review.length > 0 ? item.review : "This review is blank",
           key: id,
         };
       });
@@ -140,7 +137,7 @@ const Dashboard = () => {
       dataIndex: "review",
       key: 1,
       ellipsis: true,
-      width: "50%",
+      width: "45%",
     },
     {
       title: "Review output",
@@ -149,7 +146,27 @@ const Dashboard = () => {
 
       align: "center",
     },
-    { title: "Desk number", dataIndex: "deskIndex", key: 3 },
+    { title: "Desk number", dataIndex: "deskIndex", key: 3, align: "center" },
+    {
+      title: "Options",
+      dataIndex: "options",
+      key: 4,
+      align: "center",
+      render: (text, data, id) => {
+        console.log(data);
+        return (
+          <Button
+            onClick={() => {
+              setWrittenReview(data.review);
+              setActiveModal(true);
+            }}
+            className={styles.reviewBtn}
+          >
+            Check Review
+          </Button>
+        );
+      },
+    },
   ];
 
   return (
@@ -236,6 +253,28 @@ const Dashboard = () => {
                   pagination={{ pageSize: 4 }}
                 />
               </div>
+              <Modal
+                title="Review for desk"
+                centered
+                maskClosable={false}
+                visible={activeModal}
+                onOk={() => {
+                  setWrittenReview("");
+                  setActiveModal(false);
+                }}
+                width={800}
+                cancelButtonProps={{ style: { display: "none" } }}
+              >
+                <div
+                  style={{
+                    maxHeight: 100,
+                    overflow: "scroll",
+                    overflowX: "hidden",
+                  }}
+                >
+                  <p>{writtenReview}</p>
+                </div>
+              </Modal>
             </div>
           </div>
         </Content>

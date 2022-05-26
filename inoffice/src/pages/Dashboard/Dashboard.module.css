@@ -26,3 +26,20 @@
   background: yellow;
   border-radius: 50%;
 }
+
+.reviewBtn,
+.reviewBtn::after,
+.reviewBtn:focus,
+.reviewBtn .antd-btn .antd-btn-default {
+  background-color: white;
+  color: teal;
+  border: 1px solid teal;
+  transition: all 0.2s ease-in-out;
+}
+
+.reviewBtn:hover {
+  background-color: rgb(45, 206, 152);
+  color: white;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
