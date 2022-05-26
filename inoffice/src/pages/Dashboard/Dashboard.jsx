@@ -6,7 +6,14 @@ import { Pie } from "@ant-design/charts";
 import api from "../../helper/api";
 import styles from "./Dashboard.module.css";
 import { Button, Modal, Table } from "antd";
-import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  FrownOutlined,
+  InfoCircleFilled,
+  MehOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -110,18 +117,18 @@ const Dashboard = () => {
           ...item,
           reviewOutput: item.reviewOutput ? (
             item.reviewOutput === "Positive" ? (
-              <SmileOutlined className={styles.icon} />
+              <SmileOutlined className={styles.emoji} />
             ) : (
-              <FrownOutlined className={styles.icon} />
+              <FrownOutlined className={styles.emoji} />
             )
           ) : (
-            <MehOutlined className={styles.icon} />
+            <MehOutlined className={styles.emoji} />
           ),
           review: item.review.length > 0 ? item.review : "This review is blank",
           key: id,
         };
       });
-      console.log(better);
+
       setReviews(better);
     });
   };
@@ -153,7 +160,6 @@ const Dashboard = () => {
       key: 4,
       align: "center",
       render: (text, data, id) => {
-        console.log(data);
         return (
           <Button
             onClick={() => {
@@ -192,30 +198,43 @@ const Dashboard = () => {
             }}
           >
             <div className={styles.dashboardCard}>
-              <h2>Available</h2>
-              <h1>{availableDesks}</h1>
+              <p>AVAILABLE</p>
+              <div className={styles.tile}>
+                <h2>{availableDesks}</h2>
+                <CheckCircleFilled
+                  className={`${styles.tabIcon} ${styles.checkmark}`}
+                />
+              </div>
             </div>
             <div className={styles.dashboardCard}>
-              <h2>Reserved</h2>
-              <h1>{reservedDesks}</h1>
+              <p>RESERVED</p>
+              <div className={styles.tile}>
+                <h2>{reservedDesks}</h2>
+                <CloseCircleFilled
+                  className={`${styles.tabIcon} ${styles.xmark}`}
+                />
+              </div>
             </div>
             <div className={styles.dashboardCard}>
-              <h2>Total</h2>
-              <h1>{allDesks}</h1>
+              <p>TOTAL</p>
+              <div className={styles.tile}>
+                <h2>{allDesks}</h2>
+                <InfoCircleFilled
+                  className={`${styles.tabIcon} ${styles.imark}`}
+                />
+              </div>
             </div>
           </div>
           <div
             style={{
               width: "100%",
-              display: "flex",
-              justifyContent: "center",
             }}
           >
             <div
               style={{
-                width: "90%",
+                width: "100%",
                 display: "flex",
-                justifyContent: "space-between",
+                justifyContent: "space-around",
               }}
             >
               <div
@@ -225,7 +244,7 @@ const Dashboard = () => {
                   height: 400,
                   borderRadius: 7,
                   display: "flex",
-
+                  padding: 20,
                   boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
                   flexDirection: "column",
                 }}
@@ -237,7 +256,7 @@ const Dashboard = () => {
                 style={{
                   background: "#fff",
                   width: 750,
-                  height: 400,
+                  height: 430,
                   borderRadius: 7,
                   display: "flex",
 
@@ -245,12 +264,14 @@ const Dashboard = () => {
                   flexDirection: "column",
                 }}
               >
-                <h3>User Reviews</h3>
+                <h3 style={{ position: "relative", left: 20, top: 5 }}>
+                  User reviews
+                </h3>
                 <Table
                   columns={colums}
                   dataSource={reviews}
-                  style={{ maxHeight: 250 }}
-                  pagination={{ pageSize: 4 }}
+                  style={{ maxHeight: 250, padding: 20 }}
+                  pagination={{ pageSize: 4, position: ["topCenter"] }}
                 />
               </div>
               <Modal

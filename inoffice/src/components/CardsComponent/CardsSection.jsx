@@ -49,7 +49,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
-          console.log(response.data);
+
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -59,7 +59,6 @@ const CardsSection = (props) => {
         .get("employee/office-conferencerooms/" + props.officeid)
         .then((response) => {
           setConference(response.data);
-          console.log(response.data);
           setInitialConf(response.data);
         })
         .catch((error) => {

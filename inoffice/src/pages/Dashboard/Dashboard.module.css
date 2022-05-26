@@ -6,25 +6,52 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  padding: 10px;
   background-color: white;
-  margin: 15px;
+  margin: 25px;
+  margin-left: 44px;
 }
 
-.dashboardCard h1,
-.dashboardCard h2 {
-  color: rgb(2, 94, 94);
+.dashboardCard p {
+  text-align: left;
+  font: normal normal medium 11px/13px Gotham;
+  letter-spacing: 0px;
+  color: #626262;
+  opacity: 1;
 }
 
-.icon,
-.icon svg {
+.emoji,
+.emoji svg {
   width: 25px;
   height: 25px;
 }
 
-.icon {
+.emoji {
   background: yellow;
   border-radius: 50%;
+}
+
+.tabIcon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.checkmark svg {
+  fill: teal;
+}
+
+.xmark svg {
+  fill: rgb(255, 70, 70);
+}
+
+.imark svg {
+  fill: rgb(35, 89, 237);
+}
+
+.tile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .reviewBtn,
@@ -35,6 +62,9 @@
   color: teal;
   border: 1px solid teal;
   transition: all 0.2s ease-in-out;
+  border-radius: 7px;
+  width: 120px;
+  font-weight: bold;
 }
 
 .reviewBtn:hover {

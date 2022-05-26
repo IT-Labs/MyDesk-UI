@@ -32,11 +32,21 @@
 }
 
 .cancelBtn,
-.cancelBtn:hover,
 .cancelBtn::after,
 .cancelBtn:focus,
 .cancelBtn .antd-btn .antd-btn-default {
+  background-color: white;
+  color: teal;
+  border: 1px solid teal;
+  transition: all 0.2s ease-in-out;
+  border-radius: 7px;
+  width: 120px;
+  font-weight: bold;
+}
+
+.cancelBtn:hover {
   background-color: rgb(45, 206, 152);
   color: white;
-  border: none;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
 }

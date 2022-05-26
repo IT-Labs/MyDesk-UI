@@ -106,9 +106,7 @@ const Home = () => {
 
   const [checked, setChecked] = useState(false);
 
-  useEffect(() => {
-    console.log(selectValue);
-  }, [selectValue]);
+  useEffect(() => {}, [selectValue]);
 
   const changeVal = (e) => {
     setSelectValue(e);

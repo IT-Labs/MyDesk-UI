@@ -18,7 +18,7 @@ const Login = () => {
       ? "http://localhost:3000"
       : "https://salmon-grass-030b2a503.1.azurestaticapps.net/"
   );
-  console.log(url);
+
   const loginHandler = (err, data) => {
     const userInfo = {
       Email: data.mail,
@@ -46,7 +46,6 @@ const Login = () => {
 
   const roleRouting = (token) => {
     const decodedToken = jwt(token);
-    console.log(decodedToken);
 
     if (decodedToken.roles.join("") === "ADMIN") {
       navigate("/admin/dashboard");

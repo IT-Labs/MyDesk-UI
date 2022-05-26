@@ -78,7 +78,6 @@ const ReservationList = () => {
       .get("admin/offices")
       .then(({ data }) => {
         setOffices(data);
-        console.log(data);
       })
       .catch((err) => console.log(err));
   };
@@ -212,12 +211,12 @@ const ReservationList = () => {
                 <div>
                   <SearchOutlined style={{ margin: 10 }} />
                   <Select
-                    defaultValue="Select Office"
+                    defaultValue="Select office"
                     onChange={(val) => setFilterVal(val)}
                     style={{ width: 200 }}
                   >
                     <Select.Option key={0} value="">
-                      All
+                      All offices
                     </Select.Option>
                     {offices.map(({ name, id }) => (
                       <Select.Option key={id} value={name}>
@@ -242,7 +241,7 @@ const ReservationList = () => {
                     office.includes(filterVal) &&
                     employee.toLowerCase().includes(filterInput.toLowerCase())
                 )}
-                pagination={{ pageSize: 5 }}
+                pagination={{ pageSize: 5, position: ["topCenter"] }}
               ></Table>
             </Card>
           </div>
@@ -271,15 +270,10 @@ const Title = ({ reservations, columns }) => {
         alignItems: "center",
       }}
     >
-      <div className="ant-card-head-title">Reservation List</div>
+      <div className="ant-card-head-title">Reservation list</div>
       <Button
-        style={{
-          border: "1px solid teal",
-          borderRadius: 7,
-          width: 120,
-          height: 40,
-          color: "teal",
-        }}
+        className={styles.cancelBtn}
+        style={{ width: 120, height: 40 }}
         onClick={handleClick}
       >
         Export Data

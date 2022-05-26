@@ -35,7 +35,6 @@ const EmployeeReservationList = () => {
     api
       .get("admin/offices")
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((error) => {

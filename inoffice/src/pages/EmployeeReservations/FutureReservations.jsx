@@ -21,6 +21,8 @@ import api from "../../helper/api";
 import { LoadingOutlined } from "@ant-design/icons";
 import Icon from "@ant-design/icons/lib/components/AntdIcon";
 import { useSelector } from "react-redux";
+import moment from "moment";
+import styles from "./Reservation.module.css";
 
 const FutureReservations = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -32,17 +34,29 @@ const FutureReservations = () => {
   const [refreshstate, setRefreshState] = useState();
   const [arrow, setArrow] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [toBeCancelled, setToBeCancelled] = useState(null);
   const visibility = (item) => {
     setVisible(true);
   };
 
   const sortByOldest = (reservations) => {
-    const sorted = reservations.sort((a, b) => {
-      const date1 = new Date(a.startDate).getTime();
-      const date2 = new Date(b.startDate).getTime();
+    const sorted = reservations
+      .sort((a, b) => {
+        const date1 = new Date(a.startDate).getTime();
+        const date2 = new Date(b.startDate).getTime();
 
-      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-    });
+        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+      })
+      .map((item, id) => {
+        return {
+          ...item,
+          key: id,
+          date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
+            item.endDate
+          ).format("DD/MM/YYYY")}`,
+          entity: `Desk [${item.deskIndex}]`,
+        };
+      });
 
     setFutureReservations(sorted);
   };
@@ -109,9 +123,79 @@ const FutureReservations = () => {
       });
   };
 
+  const columns = [
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: 1,
+      sorter: {
+        compare: (a, b) => {
+          const date1 = new Date(a.startDate).getTime();
+          const date2 = new Date(b.startDate).getTime();
+
+          return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+        },
+        multiple: 1,
+      },
+      sortDirections: ["descend"],
+    },
+    { title: "Office", dataIndex: "officeName", key: 2 },
+    { title: "Entity", dataIndex: "entity", key: 3 },
+    {
+      title: "Options",
+      dataIndex: "options",
+      key: 4,
+      align: "center",
+      render: (useless1, data, useless2) => {
+        return (
+          <Button
+            onClick={() => {
+              setVisible(true);
+              setToBeCancelled(data.deskId);
+            }}
+            className={styles.btn}
+          >
+            Cancel
+          </Button>
+        );
+      },
+    },
+  ];
+
+  console.log(futurereservations);
+
   return (
-    <div className="">
-      <table style={{ width: "100%", textAlign: "center" }}>
+    <div>
+      <Table
+        columns={columns}
+        dataSource={futurereservations}
+        style={{ maxHeight: 400, height: 400 }}
+        pagination={{ pageSize: 4, position: ["topCenter"] }}
+      />
+      <Modal
+        maskClosable={false}
+        title="Are you sure you want to cancel your reservation?"
+        centered
+        visible={visible}
+        onOk={() => {
+          deleteNotification(toBeCancelled);
+          setToBeCancelled();
+          setVisible(false);
+        }}
+        onCancel={() => setVisible(false)}
+      >
+        <p>
+          You are able to reserve your seat again, but know someone can reserve
+          it before you.
+        </p>
+      </Modal>
+    </div>
+  );
+};
+
+export default FutureReservations;
+
+/*<table style={{ width: "100%", textAlign: "center" }}>
         <thead>
           <tr>
             <th
@@ -152,28 +236,8 @@ const FutureReservations = () => {
                     Cancel
                   </Button>
                 </td>
-                <Modal
-                  maskClosable={false}
-                  title="Are you sure you want to cancel your reservation?"
-                  centered
-                  visible={visible}
-                  onOk={() => {
-                    deleteNotification(item.id);
-                    setVisible(false);
-                  }}
-                  onCancel={() => setVisible(false)}
-                >
-                  <p>
-                    You are able to reserve your seat again, but know someone
-                    can reserve it before you.
-                  </p>
-                </Modal>
+                
               </tr>
             ))}
         </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default FutureReservations;
+      </table>\*/
