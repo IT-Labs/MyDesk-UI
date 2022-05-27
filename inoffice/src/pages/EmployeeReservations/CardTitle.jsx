@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setOfficeSelect } from "../../redux/MyReservationsSelect/MyReservationsSelect";
 
 export const CardTitle = ({ data }) => {
-  const { officeSelect } = useSelector((state) => state.officeSelect);
   const dispatch = useDispatch();
   const handleChange = (value) => {
     dispatch(setOfficeSelect(value));

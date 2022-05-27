@@ -15,8 +15,12 @@ const Officebranchselection = (props) => {
       setLoading(true);
       try {
         const { data: response } = await api.get("employee/offices");
-        props.onOfficebranchChange(response[0].id);
-        setData(response);
+        const sorted = response.sort((a, b) => {
+          return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
+        });
+
+        props.onOfficebranchChange(sorted[0].id);
+        setData(sorted);
       } catch (error) {
         console.error(error.message);
       }

@@ -61,17 +61,6 @@ const FutureReservations = ({ officeName }) => {
     setFutureReservations(sorted);
   };
 
-  const sortByNewest = (reservations) => {
-    const sorted = reservations.sort((a, b) => {
-      const date1 = new Date(a.startDate).getTime();
-      const date2 = new Date(b.startDate).getTime();
-
-      return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
-    });
-
-    setFutureReservations(sorted);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -94,12 +83,6 @@ const FutureReservations = ({ officeName }) => {
     };
     fetchData();
   }, []);
-
-  const sortByTime = (flag) => {
-    if (flag) {
-      sortByOldest(futurereservations);
-    } else sortByNewest(futurereservations);
-  };
 
   const deleteNotification = async (id) => {
     await api
@@ -159,8 +142,6 @@ const FutureReservations = ({ officeName }) => {
       },
     },
   ];
-
-  console.log(futurereservations);
 
   return (
     <div>

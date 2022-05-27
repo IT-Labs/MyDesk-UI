@@ -35,8 +35,10 @@ const EmployeeReservationList = () => {
     api
       .get("admin/offices")
       .then((res) => {
-        console.log(res.data);
-        setData(res.data);
+        const sorted = res.data.sort((a, b) => {
+          return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
+        });
+        setData(sorted);
       })
       .catch((error) => {
         console.log(error);
