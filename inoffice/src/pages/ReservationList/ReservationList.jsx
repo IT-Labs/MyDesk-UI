@@ -225,6 +225,7 @@ const ReservationList = () => {
                 <div>
                   <SearchOutlined style={{ margin: 10 }} />
                   <Select
+                    showSearch
                     defaultValue="Select office"
                     onChange={(val) => setFilterVal(val)}
                     style={{ width: 200 }}

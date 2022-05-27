@@ -134,6 +134,7 @@ const Home = () => {
                   Filter by availability
                 </p>
                 <Select
+                  showSearch
                   style={{ width: 200 }}
                   defaultValue={selectValue}
                   onChange={changeVal}

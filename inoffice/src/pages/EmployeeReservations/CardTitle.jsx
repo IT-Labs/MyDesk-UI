@@ -18,9 +18,15 @@ export const CardTitle = ({ data }) => {
       }}
     >
       <p>My reservations</p>
-      <Select defaultValue={""} style={{ width: 200 }} onChange={handleChange}>
+      <Select
+        showSearch
+        placeholder="Select office"
+        defaultValue={""}
+        style={{ width: 200 }}
+        onChange={handleChange}
+      >
         <Select.Option key={0} value="">
-          Select office
+          All offices
         </Select.Option>
         {data?.map((item, id) => {
           return (

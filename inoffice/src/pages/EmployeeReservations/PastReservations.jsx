@@ -1,28 +1,11 @@
 import React from "react";
 import "antd/dist/antd.css";
-import {
-  Row,
-  Col,
-  Space,
-  Spin,
-  List,
-  Layout,
-  Input,
-  Modal,
-  Button,
-  Select,
-  notification,
-  Table,
-} from "antd";
-import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { Input, Modal, Button, notification, Table } from "antd";
+
 import api from "../../helper/api";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
-import { BookOutlined } from "@ant-design/icons";
+
 import Loading from "../../components/Loading/Loading";
 import styles from "./Reservation.module.css";
 import moment from "moment";
