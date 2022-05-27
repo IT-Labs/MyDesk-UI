@@ -188,7 +188,7 @@ const Home = () => {
                 size="large"
                 style={{
                   borderRadius: "7px",
-                  background: "teal",
+                  background: "#5cb1b8",
                   border: "transparent",
                 }}
                 onClick={() => showReviewsForSelectedCard()}
@@ -231,7 +231,7 @@ const Home = () => {
                 type="primary"
                 style={{
                   borderRadius: "7px",
-                  background: "teal",
+                  background: "#5cb1b8",
                   border: "transparent",
                 }}
                 size="large"

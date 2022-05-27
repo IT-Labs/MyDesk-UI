@@ -8,8 +8,8 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
     <Button
       style={{
         background: "white",
-        color: "teal",
-        border: "1px solid teal",
+        color: "#5cb1b8",
+        border: "1px solid #5cb1b8",
         borderRadius: "5px",
       }}
       block

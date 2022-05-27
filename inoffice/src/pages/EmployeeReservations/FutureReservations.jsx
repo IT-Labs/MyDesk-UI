@@ -228,7 +228,7 @@ export default FutureReservations;
                   <Button
                     onClick={() => setVisible(true)}
                     style={{
-                      color: "teal",
+                      color: "#5cb1b8",
                       fontWeight: "bold",
                       borderRadius: "7px",
                     }}

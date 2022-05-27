@@ -8,7 +8,7 @@ h1 {
   float: right;
   margin-right: 10px;
   background-color: white;
-  color: teal;
+  color: #5cb1b8;
 }
 .deleteButton {
   display: flex;

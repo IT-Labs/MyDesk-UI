@@ -24,6 +24,7 @@ const PastReservations = () => {
   const [writtenReview, setWrittenReview] = useState();
   const [filter, setFilter] = useState("Sort by newest");
   const [arrow, setArrow] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const sortByOldest = (reservations) => {
     const sorted = reservations.sort((a, b) => {
@@ -107,6 +108,7 @@ const PastReservations = () => {
       review: review,
     };
     setLoading(true);
+    setBtnDisabled(true);
 
     if (data.review.length < 6 || data.review.length > 200) {
       notification.open({
@@ -116,6 +118,7 @@ const PastReservations = () => {
         duration: 4,
       });
       setLoading(false);
+      setBtnDisabled(false);
       return;
     }
 
@@ -123,6 +126,7 @@ const PastReservations = () => {
       .post("employee/review", data)
       .then((response) => {
         setVisible(false);
+        setBtnDisabled(false);
         setRefreshState({});
         setLoading(false);
         notification.open({
@@ -195,6 +199,7 @@ const PastReservations = () => {
         centered
         visible={visible}
         onOk={() => writeReview()}
+        okButtonProps={{ disabled: btnDisabled }}
         onCancel={() => setVisible(false)}
         width={800}
         // style={{ height: 120 }}

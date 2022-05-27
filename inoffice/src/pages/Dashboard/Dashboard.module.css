@@ -1,5 +1,5 @@
 .dashboardCard {
-  border: 1px solid teal;
+  border: 1px solid #5cb1b8;
   width: 150px;
   height: 120px;
   border-radius: 7px;
@@ -37,7 +37,7 @@
 }
 
 .checkmark svg {
-  fill: teal;
+  fill: #5cb1b8;
 }
 
 .xmark svg {
@@ -59,8 +59,8 @@
 .reviewBtn:focus,
 .reviewBtn .antd-btn .antd-btn-default {
   background-color: white;
-  color: teal;
-  border: 1px solid teal;
+  color: #5cb1b8;
+  border: 1px solid #5cb1b8;
   transition: all 0.2s ease-in-out;
   border-radius: 7px;
   width: 130px;

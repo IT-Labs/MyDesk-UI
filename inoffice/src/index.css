@@ -255,14 +255,14 @@ td {
 }
 
 .ant-menu-item-selected {
-  color: teal !important;
+  color: #5cb1b8 !important;
 }
 
 .ant-menu-inline .ant-menu-item::after {
-  border-right-color: teal;
+  border-right-color: #5cb1b8;
 }
 .ant-menu-item-selected .ant-menu-title-content a {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-menu > .ant-menu-item:hover,
@@ -273,11 +273,11 @@ td {
 .ant-menu > .ant-menu-submenu-open,
 .ant-menu > .ant-menu-item-selected,
 .ant-menu > .ant-menu-submenu-selected {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-menu-item-active a:hover {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-modal-close-x {
@@ -285,25 +285,25 @@ td {
 }
 
 .ant-pagination-item {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-pagination-item:hover,
 .ant-pagination-item a:hover {
-  color: teal;
-  border-color: teal;
+  color: #5cb1b8;
+  border-color: #5cb1b8;
 }
 
 .ant-pagination-prev:hover .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link {
-  color: teal;
-  border-color: teal;
+  color: #5cb1b8;
+  border-color: #5cb1b8;
 }
 
 .ant-pagination-item-active,
 .ant-pagination-item-active a {
-  color: teal;
-  border-color: teal;
+  color: #5cb1b8;
+  border-color: #5cb1b8;
 }
 
 .ant-layout {
@@ -322,16 +322,16 @@ td {
 .ant-tabs-tab-btn:hover,
 .ant-tabs-tab:hover,
 .ant-tabs-tab-btn:active {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: teal;
+  color: #5cb1b8;
 }
 
 .ant-tabs-ink-bar {
   height: 5px;
-  background: teal !important;
+  background: #5cb1b8 !important;
 }
 
 .ant-btn-primary[disabled],

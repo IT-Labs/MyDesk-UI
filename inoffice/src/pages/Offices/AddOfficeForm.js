@@ -58,7 +58,7 @@ const AddOfficeForm = () => {
             htmlType="submit"
             className="formButton"
             type="primary"
-            style={{ background: "teal", borderRadius: 7, border: "none" }}
+            style={{ background: "#5cb1b8", borderRadius: 7, border: "none" }}
           >
             Save
           </Button>

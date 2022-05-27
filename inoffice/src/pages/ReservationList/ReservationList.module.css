@@ -28,7 +28,7 @@
 
 .searchInput:focus,
 .searchInput:hover {
-  border: 1px solid teal;
+  border: 1px solid #5cb1b8;
 }
 
 .cancelBtn,
@@ -36,8 +36,8 @@
 .cancelBtn:focus,
 .cancelBtn .antd-btn .antd-btn-default {
   background-color: white;
-  color: teal;
-  border: 1px solid teal;
+  color: #5cb1b8;
+  border: 1px solid #5cb1b8;
   transition: all 0.2s ease-in-out;
   border-radius: 7px;
   width: 120px;
