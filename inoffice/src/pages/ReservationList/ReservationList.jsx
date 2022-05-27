@@ -101,7 +101,7 @@ const ReservationList = () => {
     api
       .get("admin/offices")
       .then(({ data }) => {
-        const sorted = data.sort((a, b) => {
+        let sorted = data.sort((a, b) => {
           return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
         });
         setOffices(sorted);
@@ -262,7 +262,7 @@ const ReservationList = () => {
                     <Input
                       onChange={(e) => setFilterInput(e.target.value)}
                       className={styles.searchInput}
-                      placeholder="Search username"
+                      placeholder="Search by name"
                     />
                   </Tooltip>
                 </div>
