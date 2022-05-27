@@ -7,6 +7,7 @@ import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
 import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
+import moment from "moment";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -28,9 +29,9 @@ const ReservationList = () => {
             key: id,
             startDate: Date.parse(startDate),
             endDate: Date.parse(endDate),
-            date: `${start.getDate()}/${
-              start.getMonth() + 1
-            }/${start.getFullYear()}-${end.getDate()}/${end.getMonth()}/${end.getFullYear()}`,
+            date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
+              "DD/MM/YYYY"
+            )}`,
           };
         }
       )
