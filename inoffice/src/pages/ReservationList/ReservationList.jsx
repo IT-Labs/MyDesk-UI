@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   Input,
+  Modal,
   notification,
   Select,
   Table,
@@ -21,28 +22,28 @@ const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [initRes, setInitRes] = useState([]);
-
+  const [visible, setVisible] = useState(false);
+  const [toBeCancelled, setToBeCancelled] = useState(null);
   const sortResStruct = (res) => {
     const results = res
-      .map(
-        ({ employee, officeName, indexForOffice, startDate, endDate, id }) => {
-          const start = new Date(startDate);
-          const end = new Date(endDate);
-          return {
-            employee: `${employee.firstName} ${employee.lastName}`,
-            office: officeName ? officeName : "Undefined office",
-            entity: indexForOffice
-              ? `Desk [${indexForOffice}]`
-              : "Undefined Desk",
-            key: id,
-            startDate: Date.parse(startDate),
-            endDate: Date.parse(endDate),
-            date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
-              "DD/MM/YYYY"
-            )}`,
-          };
-        }
-      )
+      .map((item) => {
+        const start = new Date(item.startDate);
+        const end = new Date(item.endDate);
+        return {
+          ...item,
+          employee: `${item.employee.firstName} ${item.employee.lastName}`,
+          office: item.officeName ? item.officeName : "Undefined office",
+          entity: item.indexForOffice
+            ? `Desk [${item.indexForOffice}]`
+            : "Undefined Desk",
+          key: item.id,
+          startDate: Date.parse(item.startDate),
+          endDate: Date.parse(item.endDate),
+          date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
+            "DD/MM/YYYY"
+          )}`,
+        };
+      })
       .sort((a, b) => {
         const date1 = new Date(a.startDate).getTime();
         const date2 = new Date(b.startDate).getTime();
@@ -139,12 +140,13 @@ const ReservationList = () => {
       title: "Cancel",
       dataIndex: "cancel",
       key: 4,
-      render: (text, record, index) => {
+      render: (text, data, index) => {
         return (
           <Button
             className={styles.cancelBtn}
             onClick={() => {
-              cancelReservation(record.key);
+              setToBeCancelled(data.id);
+              setVisible(true);
             }}
           >
             Cancel
@@ -199,7 +201,7 @@ const ReservationList = () => {
       .then((response) => {
         notification.open({
           message: "Notification",
-          description: "You successfully canceled a reservation",
+          description: "You have successfully canceled a reservation",
           placement: "top",
           duration: 4,
         });
@@ -274,6 +276,23 @@ const ReservationList = () => {
                 )}
                 pagination={{ pageSize: 5, position: ["topCenter"] }}
               ></Table>
+              <Modal
+                maskClosable={false}
+                title="Are you sure you want to cancel your reservation?"
+                centered
+                visible={visible}
+                onOk={() => {
+                  cancelReservation(toBeCancelled);
+                  setToBeCancelled(null);
+                  setVisible(false);
+                }}
+                onCancel={() => setVisible(false)}
+              >
+                <p>
+                  You are able to reserve your seat again but someone can
+                  reserve it before you.
+                </p>
+              </Modal>
             </Card>
           </div>
         </Content>
