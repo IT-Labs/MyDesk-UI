@@ -186,7 +186,6 @@ const PastReservations = ({ officeName }) => {
           item.officeName.includes(officeSelect)
         )}
         pagination={{ pageSize: 4, position: ["topCenter"] }}
-        style={{ maxHeight: 400, height: 400 }}
       />
       <Modal
         maskClosable={false}

@@ -242,7 +242,7 @@ const Dashboard = () => {
                 style={{
                   background: "#fff",
                   width: 400,
-                  height: 400,
+                  height: 431,
                   borderRadius: 7,
                   display: "flex",
                   padding: 20,
@@ -257,10 +257,9 @@ const Dashboard = () => {
                 style={{
                   background: "#fff",
                   width: 800,
-                  height: 430,
                   borderRadius: 7,
                   display: "flex",
-
+                  padding: 10,
                   boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
                   flexDirection: "column",
                 }}
@@ -271,7 +270,6 @@ const Dashboard = () => {
                 <Table
                   columns={colums}
                   dataSource={reviews}
-                  style={{ maxHeight: 250, padding: 5 }}
                   pagination={{ pageSize: 4, position: ["topCenter"] }}
                 />
               </div>

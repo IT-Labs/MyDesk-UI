@@ -150,7 +150,6 @@ const FutureReservations = ({ officeName }) => {
         dataSource={futurereservations.filter(({ officeName }) =>
           officeName.includes(officeSelect)
         )}
-        style={{ maxHeight: 400, height: 400 }}
         pagination={{ pageSize: 4, position: ["topCenter"] }}
       />
       <Modal

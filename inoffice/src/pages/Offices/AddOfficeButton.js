@@ -6,12 +6,7 @@ const showModalFunc = () => {};
 const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
   return (
     <Button
-      style={{
-        background: "white",
-        color: "#5cb1b8",
-        border: "1px solid #5cb1b8",
-        borderRadius: "5px",
-      }}
+      className="btn"
       block
       onClick={() => {
         // window.location = "/admin/addoffice";

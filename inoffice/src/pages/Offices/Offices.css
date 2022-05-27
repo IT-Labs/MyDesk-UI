@@ -7,9 +7,18 @@ h1 {
   display: flex;
   float: right;
   margin-right: 10px;
-  background-color: white;
-  color: #5cb1b8;
+
+  background: #2dce98;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0px 3px 6px #2c28281c;
 }
+
+.editButton:hover {
+  background: #56d9ad;
+}
+
 .deleteButton {
   display: flex;
   float: right;

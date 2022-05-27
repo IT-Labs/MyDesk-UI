@@ -107,27 +107,17 @@ class Offices extends Component {
                             type="primary"
                             danger
                             style={{
-                              background: "#f53c56",
-                              color: "white",
                               border: "0",
                               borderRadius: "5px",
                               boxShadow: " 0px 3px 6px #2C28281C",
                             }}
                           >
-                            {" "}
                             Delete
                           </Button>
                         </Popconfirm>
                         <Button
                           type="primary"
                           className="editButton"
-                          style={{
-                            background: "#2dce98",
-                            color: "white",
-                            border: "0",
-                            borderRadius: "5px",
-                            boxShadow: " 0px 3px 6px #2C28281C",
-                          }}
                           onClick={() => {
                             window.location =
                               "edit/" + office.name + "/" + office.id;

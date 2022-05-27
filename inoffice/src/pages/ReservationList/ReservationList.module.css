@@ -9,11 +9,6 @@
   border-radius: 7px;
 }
 
-.table {
-  max-height: 350px;
-  min-height: 350px;
-}
-
 .inputs {
   display: flex;
   justify-content: space-between;

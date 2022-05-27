@@ -91,93 +91,81 @@ const CardsSection = (props) => {
   };
 
   return (
-    <div>
+    <>
       {loadingData && <div>Loading</div>}
       {!loadingData && (
-        <div
-          id="scrollableDiv"
-          style={{
-            height: 500,
-            overflow: "auto",
-            padding: "0 16px",
-            // border: "2px solid rgba(140, 140, 140, 0.35)",
-          }}
+        <InfiniteScroll
+          dataLength={dataConfRooms.length + dataDesks.length}
+          scrollableTarget="scrollableDiv"
+          display="flex"
+          style={{ height: 500, maxHeight: 500 }}
         >
-          <br></br>
-          <InfiniteScroll
-            dataLength={dataConfRooms.length + dataDesks.length}
-            scrollableTarget="scrollableDiv"
-            display="flex"
-          >
-            <Layout style={{ background: "transparent" }}>
-              <List
-                grid={{ gutter: 0, column: 5 }}
-                dataSource={dataDesks.concat(dataConfRooms)}
-                renderItem={(item) => (
-                  <List.Item
-                    style={{
-                      border:
-                        item === selectedCardInSection ? "solid 2px" : "none",
+          <Layout style={{ background: "transparent" }}>
+            <List
+              grid={{ gutter: 0, column: 5 }}
+              dataSource={dataDesks.concat(dataConfRooms)}
+              renderItem={(item) => (
+                <List.Item
+                  style={{
+                    border:
+                      item === selectedCardInSection ? "solid 2px" : "none",
+                  }}
+                >
+                  <Card
+                    onClick={() => selectCard(item)}
+                    bodyStyle={{
+                      // backgroundColor: checkAvailable(item.reservation),
+                      background:
+                        item.reservationId != null ? "#f37076" : "#69e28d",
                     }}
+                    hoverable={true}
+                    bordered={true}
                   >
-                    <Card
-                      onClick={() => selectCard(item)}
-                      bodyStyle={{
-                        // backgroundColor: checkAvailable(item.reservation),
-                        background:
-                          item.reservationId != null ? "#f37076" : "#69e28d",
-                      }}
-                      hoverable={true}
-                      bordered={true}
-                    >
-                      <Meta
-                        title={
-                          !item.categories ? (
-                            <p style={{ fontSize: "0.8vw" }}>
-                              Conf room {item.indexForOffice}
+                    <Meta
+                      title={
+                        !item.categories ? (
+                          <p style={{ fontSize: "0.8vw" }}>
+                            Conf room {item.indexForOffice}
+                          </p>
+                        ) : (
+                          <p style={{ fontSize: "0.8vw" }}>
+                            Desk {item.indexForOffice}
+                          </p>
+                        )
+                      }
+                      description={
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "start",
+                          }}
+                          className="cardContentInformation"
+                        >
+                          {item.capacity >= 0 ? (
+                            <p style={{ color: "#000000	", fontSize: "0.6vw" }}>
+                              Capacity: {item.capacity}
                             </p>
                           ) : (
-                            <p style={{ fontSize: "0.8vw" }}>
-                              Desk {item.indexForOffice}
+                            <p
+                              style={{
+                                color: "#000000	",
+                                fontSize: "0.6vw",
+                              }}
+                            >
+                              Category: {item.categories}
                             </p>
-                          )
-                        }
-                        description={
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "start",
-                            }}
-                            className="cardContentInformation"
-                          >
-                            {item.capacity >= 0 ? (
-                              <p
-                                style={{ color: "#000000	", fontSize: "0.6vw" }}
-                              >
-                                Capacity: {item.capacity}
-                              </p>
-                            ) : (
-                              <p
-                                style={{
-                                  color: "#000000	",
-                                  fontSize: "0.6vw",
-                                }}
-                              >
-                                Category: {item.categories}
-                              </p>
-                            )}
-                          </div>
-                        }
-                      />
-                    </Card>
-                  </List.Item>
-                )}
-              />
-            </Layout>
-          </InfiniteScroll>
-        </div>
+                          )}
+                        </div>
+                      }
+                    />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          </Layout>
+        </InfiniteScroll>
       )}
-    </div>
+    </>
   );
 };
 export default CardsSection;
