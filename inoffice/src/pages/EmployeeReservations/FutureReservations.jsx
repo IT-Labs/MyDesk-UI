@@ -109,7 +109,7 @@ const FutureReservations = () => {
       .then((response) => {
         notification.open({
           message: "Notification",
-          description: "You successfully canceled a reservation",
+          description: "You have successfully cancelled a reservation",
           placement: "top",
           duration: 4,
         });
@@ -185,8 +185,8 @@ const FutureReservations = () => {
         onCancel={() => setVisible(false)}
       >
         <p>
-          You are able to reserve your seat again, but know someone can reserve
-          it before you.
+          You are able to reserve your seat again but someone can reserve it
+          before you.
         </p>
       </Modal>
     </div>
