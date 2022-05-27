@@ -42,10 +42,6 @@ const CalendarImplementation = (props) => {
       <Space direction="vertical" size={12}>
         <RangePicker
           disabledDate={disabledDate}
-          defaultValue={[
-            moment(new Date(), dateFormat).add(1, "days"),
-            moment(new Date(), dateFormat).add(2, "days"),
-          ]}
           format={dateFormat}
           onChange={changedates}
         />
