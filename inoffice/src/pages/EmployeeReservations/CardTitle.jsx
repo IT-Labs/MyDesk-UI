@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { Select, Tooltip } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { setOfficeSelect } from "../../redux/MyReservationsSelect/MyReservationsSelect";
 
@@ -17,24 +17,26 @@ export const CardTitle = ({ data }) => {
       }}
     >
       <p>My reservations</p>
-      <Select
-        showSearch
-        placeholder="Select office"
-        defaultValue={""}
-        style={{ width: 200 }}
-        onChange={handleChange}
-      >
-        <Select.Option key={0} value="">
-          All offices
-        </Select.Option>
-        {data?.map((item, id) => {
-          return (
-            <Select.Option key={id + 1} value={item.name}>
-              {item.name}
-            </Select.Option>
-          );
-        })}
-      </Select>
+      <Tooltip title="Select which office you want to filter by">
+        <Select
+          showSearch
+          placeholder="Select office"
+          defaultValue={""}
+          style={{ width: 200 }}
+          onChange={handleChange}
+        >
+          <Select.Option key={0} value="">
+            All offices
+          </Select.Option>
+          {data?.map((item, id) => {
+            return (
+              <Select.Option key={id + 1} value={item.name}>
+                {item.name}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      </Tooltip>
     </div>
   );
 };

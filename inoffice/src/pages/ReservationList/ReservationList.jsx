@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Card, Input, notification, Select, Table } from "antd";
+import {
+  Button,
+  Card,
+  Input,
+  notification,
+  Select,
+  Table,
+  Tooltip,
+} from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
@@ -228,29 +236,33 @@ const ReservationList = () => {
               <div className={styles.inputs}>
                 <div>
                   <SearchOutlined style={{ margin: 10 }} />
-                  <Select
-                    showSearch
-                    defaultValue="Select office"
-                    onChange={(val) => setFilterVal(val)}
-                    style={{ width: 200 }}
-                  >
-                    <Select.Option key={0} value="">
-                      All offices
-                    </Select.Option>
-                    {offices.map(({ name, id }) => (
-                      <Select.Option key={id} value={name}>
-                        {name}
+                  <Tooltip title="Select which office you want to filter by">
+                    <Select
+                      showSearch
+                      defaultValue="Select office"
+                      onChange={(val) => setFilterVal(val)}
+                      style={{ width: 200 }}
+                    >
+                      <Select.Option key={0} value="">
+                        All offices
                       </Select.Option>
-                    ))}
-                  </Select>
+                      {offices.map(({ name, id }) => (
+                        <Select.Option key={id} value={name}>
+                          {name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Tooltip>
                 </div>
                 <div>
                   <FileSearchOutlined style={{ margin: 10 }} />
-                  <Input
-                    onChange={(e) => setFilterInput(e.target.value)}
-                    className={styles.searchInput}
-                    placeholder="Search username"
-                  />
+                  <Tooltip title="Searches for a specific user's reservations">
+                    <Input
+                      onChange={(e) => setFilterInput(e.target.value)}
+                      className={styles.searchInput}
+                      placeholder="Search username"
+                    />
+                  </Tooltip>
                 </div>
               </div>
               <Table

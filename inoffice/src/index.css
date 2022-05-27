@@ -341,3 +341,7 @@ td {
   background-color: #f5f5f5 !important;
   border: 1px solid grey !important;
 }
+
+html {
+  --antd-wave-shadow-color: #5cb1b8 !important;
+}
