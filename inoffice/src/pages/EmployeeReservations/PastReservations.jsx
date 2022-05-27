@@ -9,10 +9,12 @@ import { LoadingOutlined } from "@ant-design/icons";
 import Loading from "../../components/Loading/Loading";
 import styles from "./Reservation.module.css";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
-const PastReservations = () => {
+const PastReservations = ({ officeName }) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { TextArea } = Input;
+  const { officeSelect } = useSelector((state) => state.officeSelect);
 
   const [loadingData, setLoading] = useState(false);
   const [pastreservations, setPastReservations] = useState([]);
@@ -22,8 +24,7 @@ const PastReservations = () => {
   const [resid, setResid] = useState();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [writtenReview, setWrittenReview] = useState();
-  const [filter, setFilter] = useState("Sort by newest");
-  const [arrow, setArrow] = useState(false);
+
   const [btnDisabled, setBtnDisabled] = useState(false);
 
   const sortByOldest = (reservations) => {
@@ -59,14 +60,6 @@ const PastReservations = () => {
     setPastReservations(sorted);
   };
 
-  const sortByTime = (flag) => {
-    setArrow(flag);
-    if (flag) {
-      sortByOldest(pastreservations);
-    } else {
-      sortByNewest(pastreservations);
-    }
-  };
   useEffect(() => {
     const fetchData = async () => {
       await api
@@ -189,7 +182,9 @@ const PastReservations = () => {
     <div>
       <Table
         columns={columns}
-        dataSource={pastreservations}
+        dataSource={pastreservations.filter((item) =>
+          item.officeName.includes(officeSelect)
+        )}
         pagination={{ pageSize: 4, position: ["topCenter"] }}
         style={{ maxHeight: 400, height: 400 }}
       />

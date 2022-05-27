@@ -15,7 +15,7 @@ const cardStyles = {
   height: "100%",
   backgroundColor: "white",
   boxShadow: "0px 2px 6px #2C28281C",
-  borderRadius: "10px",
+  borderRadius: "7px",
 };
 
 const contentStyle = {
@@ -35,6 +35,7 @@ const EmployeeReservationList = () => {
     api
       .get("admin/offices")
       .then((res) => {
+        console.log(res.data);
         setData(res.data);
       })
       .catch((error) => {

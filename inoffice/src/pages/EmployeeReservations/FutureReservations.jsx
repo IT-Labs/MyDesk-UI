@@ -24,7 +24,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import styles from "./Reservation.module.css";
 
-const FutureReservations = () => {
+const FutureReservations = ({ officeName }) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [filter, setFilter] = useState("Sort By oldest");
   const { officeSelect } = useSelector((state) => state.officeSelect);
@@ -32,7 +32,7 @@ const FutureReservations = () => {
   const [loadingData, setLoading] = useState(true);
   const [futurereservations, setFutureReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
-  const [arrow, setArrow] = useState(true);
+
   const [visible, setVisible] = useState(false);
   const [toBeCancelled, setToBeCancelled] = useState(null);
   const visibility = (item) => {
@@ -78,7 +78,6 @@ const FutureReservations = () => {
       await api
         .get("employee/reserve")
         .then((response) => {
-          setArrow(true);
           sortByOldest(response.data);
         })
         .catch((error) => {
@@ -97,7 +96,6 @@ const FutureReservations = () => {
   }, []);
 
   const sortByTime = (flag) => {
-    setArrow(flag);
     if (flag) {
       sortByOldest(futurereservations);
     } else sortByNewest(futurereservations);
@@ -168,7 +166,9 @@ const FutureReservations = () => {
     <div>
       <Table
         columns={columns}
-        dataSource={futurereservations}
+        dataSource={futurereservations.filter(({ officeName }) =>
+          officeName.includes(officeSelect)
+        )}
         style={{ maxHeight: 400, height: 400 }}
         pagination={{ pageSize: 4, position: ["topCenter"] }}
       />

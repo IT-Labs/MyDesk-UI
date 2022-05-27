@@ -285,7 +285,7 @@ const Title = ({ reservations, columns }) => {
         alignItems: "center",
       }}
     >
-      <div className="ant-card-head-title">Reservation list</div>
+      <p>Reservation list</p>
       <Button
         className={styles.cancelBtn}
         style={{ width: 120, height: 40 }}
