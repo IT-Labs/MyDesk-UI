@@ -203,14 +203,19 @@ const PastReservations = ({ officeName }) => {
           <div
             style={{
               width: "100%",
-              height: 120,
+              height: 160,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               overflowY: "hidden",
+              flexDirection: "column",
             }}
           >
             <Loading />
+            <p>
+              Please wait for a moment. Your review is currently being
+              processed.
+            </p>
           </div>
         ) : (
           <TextArea
