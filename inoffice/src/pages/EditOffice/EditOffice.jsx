@@ -204,11 +204,6 @@ class EditOffice extends Component {
         <Layout>
           <Sidebar selected="2" />
           <Content>
-            <Space>
-              <Row></Row>
-            </Space>
-            <h1 className="editOffice">Edit office</h1>
-
             <Form name="normal_login" onFinish={this.handleSubmit}>
               <Row
                 align="top"
@@ -231,13 +226,9 @@ class EditOffice extends Component {
                       }}
                     >
                       <Row>
-                        <Col className="officeBranch" span={23}>
-                          <div>Office information:</div>
-                        </Col>
-                      </Row>
-                      <Row>
                         <div className="inlineBlockDiv">
                           <div>
+                            <h3 className="editOffice">Edit office</h3>
                             <div className="officeTitels">
                               Name:{" "}
                               <span className="labels">
@@ -283,30 +274,11 @@ class EditOffice extends Component {
                   </Row>
                 </div>
               </Row>
-              <Space>
-                <Row>
-                  <Col span={24}>
-                    <div></div>
-                  </Col>
-                </Row>
-              </Space>
-              <Space>
-                <Row>
-                  <Col span={24}>
-                    <div></div>
-                  </Col>
-                </Row>
-              </Space>
+
               <Row>
                 <Col span={1}></Col>
                 <Col span={4} className="officeName">
                   <label className="officeName">Number of desks:</label>
-                </Col>
-                <Col span={8}></Col>
-                <Col span={4}>
-                  <label className="officeName">
-                    Number of conference rooms:
-                  </label>
                 </Col>
               </Row>
               <Row align="top">
@@ -315,27 +287,6 @@ class EditOffice extends Component {
                   <Form.Item name="numberOfDesks">
                     <Input placeholder="Enter number of desks" type="number" />
                   </Form.Item>
-                </Col>
-                <Col span={7}></Col>
-                <Col span={5}>
-                  <Form.Item name="numberOfConferenceRooms">
-                    <Input
-                      placeholder="Enter number of conference rooms"
-                      type="number"
-                    />
-                  </Form.Item>{" "}
-                </Col>
-                <Col span={2}></Col>
-                <Col span={3}>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="uploadOfficePlan"
-                    shape="round"
-                    block
-                  >
-                    Add new entities
-                  </Button>
                 </Col>
               </Row>
             </Form>
@@ -359,7 +310,7 @@ class EditOffice extends Component {
                     header={
                       <div className="divSpan">
                         <span className="firstSpan">All desks</span>
-                        <span className="secondSpan">Silent desk</span>
+                        <span className="secondSpan">Disable Deskk</span>
                         <span> Delete</span>
                       </div>
                     }
@@ -409,104 +360,36 @@ class EditOffice extends Component {
                     )}
                   />
                 </InfiniteScroll>
-              </Col>
-              <Col
-                id="scrollableDiv"
-                style={{
-                  height: 400,
-                  marginBottom: 10,
-                  overflow: "auto",
-                  padding: "0 16px",
-                  border: "1px solid rgba(140, 140, 140, 0.35)",
-                }}
-                offset={2}
-                span={10}
-              >
-                <List
-                  header={
-                    <div className="divSpan">
-                      <span className="firstSpan">All conference rooms</span>
-                      <span className="secondSpanconf">Capacity</span>
-                      <span>Delete </span>
-                    </div>
-                  }
-                  className="list"
-                  bordered
-                  dataSource={this.state.conferenceRooms}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <Col span={4}>{item.indexForOffice}</Col>
-                      <Col span={4}>
-                        <Input
-                          className="inputvalue"
-                          size="small"
-                          name={item.id}
-                          type="number"
-                          onChange={(e) =>
-                            this.capacityChange(e.target.name, e.target.value)
-                          }
-                          defaultValue={item.capacity}
-                          placeholder="Capacity"
-                        />
-                      </Col>
-                      <Col span={2}>
-                        <Popconfirm
-                          title="Are you sure to delete this conference room?"
-                          onConfirm={() =>
-                            this.deleteNotification([item.id, "C"])
-                          }
-                          okText="Yes"
-                          cancelText="No"
-                          shape="round"
-                          placement="topRight"
-                          icon={
-                            <QuestionCircleOutlined style={{ color: "red" }} />
-                          }
-                        >
-                          <DeleteFilled
-                            height={1}
-                            width={1}
-                            className="deleteiconconf"
-                            key={item.id}
-                            value={item.id}
-                          />
-                        </Popconfirm>
-                      </Col>
-                    </List.Item>
-                  )}
-                />
-              </Col>
-            </Row>
-            <Space>
-              <Row>
-                <Col span={24}>
-                  <div></div>
-                </Col>
-              </Row>
-            </Space>
-            <Row>
-              <Col span={1}></Col>
-              <Col span={18}></Col>
-              <Col offset={1} span={3}>
-                <Button
-                  type="primary"
-                  className="uploadOfficePlan"
-                  shape="round"
-                  onClick={this.save}
-                  block
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-evenly",
+                    alignItems: "center",
+                    marginTop: 10,
+                  }}
                 >
-                  Update entities
-                </Button>
+                  <Button
+                    type="primary"
+                    className="uploadOfficePlan btn"
+                    onClick={this.save}
+                    style={{ width: "45%" }}
+                    block
+                  >
+                    Update entities
+                  </Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="uploadOfficePlan btn"
+                    style={{ width: "45%" }}
+                    block
+                  >
+                    Add new entities
+                  </Button>
+                </div>
               </Col>
-              <Col span={1}></Col>
             </Row>
-            <Space>
-              <Row>
-                <Col span={24}>
-                  <div></div>
-                </Col>
-              </Row>
-            </Space>
           </Content>
         </Layout>
       </Layout>

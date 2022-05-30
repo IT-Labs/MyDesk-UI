@@ -258,7 +258,7 @@ const ReservationList = () => {
                 </div>
                 <div>
                   <FileSearchOutlined style={{ margin: 10 }} />
-                  <Tooltip title="Searches for a specific user's reservations">
+                  <Tooltip title="Enter the First or the Last name of the user you want to search">
                     <Input
                       onChange={(e) => setFilterInput(e.target.value)}
                       className={styles.searchInput}
@@ -278,7 +278,7 @@ const ReservationList = () => {
               ></Table>
               <Modal
                 maskClosable={false}
-                title="Are you sure you want to cancel your reservation?"
+                title="Cancel user's reservation?"
                 centered
                 visible={visible}
                 onOk={() => {
@@ -288,10 +288,7 @@ const ReservationList = () => {
                 }}
                 onCancel={() => setVisible(false)}
               >
-                <p>
-                  You are able to reserve your seat again but someone can
-                  reserve it before you.
-                </p>
+                <p>Do you really want to cancel this user’s reservation?</p>
               </Modal>
             </Card>
           </div>

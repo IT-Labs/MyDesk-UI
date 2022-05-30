@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
 import { Space } from "antd";
 import { DatePicker } from "antd";
@@ -29,10 +29,11 @@ const CalendarImplementation = (props) => {
   function changedates(range) {
     if (range) {
       const startdate = range[0].format("DD-MM-YYYY");
+      // console.log();
       const enddate = range[1].format("DD-MM-YYYY");
-      dispatch(setStart(startdate));
-      dispatch(setEnd(enddate));
-      props.dateFunction(startdate, enddate);
+      dispatch(setStart(moment(range[0]).toISOString()));
+      dispatch(setEnd(moment(range[1]).toISOString()));
+      props.dateFunction(startdate, enddate, range);
     }
   }
 
@@ -44,6 +45,8 @@ const CalendarImplementation = (props) => {
           disabledDate={disabledDate}
           format={dateFormat}
           onChange={changedates}
+          value={[props.dates[0], props.dates[1]]}
+          onClick={props.clearDate}
         />
       </Space>
     </div>

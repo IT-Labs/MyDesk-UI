@@ -19,10 +19,6 @@ export class AddOfficeContainer extends Component {
       this.closeModal();
     }
   };
-  onClickOutside = (event) => {
-    if (this.modal && this.modal.contains(event.target)) return;
-    this.closeModal();
-  };
 
   toggleScrollLock = () => {
     document.querySelector("html").classList.toggle("scroll-lock");
@@ -37,13 +33,11 @@ export class AddOfficeContainer extends Component {
         />
         {this.state.isShown ? (
           <Modal
-            maskClosable={false}
             onSubmit={this.props.onSubmit}
             modalRef={(n) => (this.modal = n)}
             buttonRef={(n) => (this.closeButton = n)}
             closeModal={this.closeModal}
             onKeyDown={this.onKeyDown}
-            onClickOutside={this.onClickOutside}
           />
         ) : null}
       </React.Fragment>

@@ -25,15 +25,17 @@ const Home = () => {
   const [reload, setReload] = useState(false);
   const [selectValue, setSelectValue] = useState(1);
   const [reviews, setReviews] = useState([]);
+  const [dates, setDates] = useState([]);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
     setReviews([]);
   };
 
-  function setDate(startDate, endDate) {
+  function setDate(startDate, endDate, range) {
     setStartDate(startDate);
     setEndDate(endDate);
+    setDates(range);
   }
 
   function changeofficebranch(value) {
@@ -81,11 +83,16 @@ const Home = () => {
       .post("employee/reserve", data, config)
       .then((response) => {
         refresh();
+        setDates([]);
         openNotification("top");
       })
       .catch((error) => {
         console.error("error");
       });
+  };
+
+  const clearDate = () => {
+    setDates([]);
   };
 
   const makeReservation = () => {
@@ -124,6 +131,10 @@ const Home = () => {
                 dateFunction={setDate}
                 onSelectCard={selectedCard}
                 officeid={officeid}
+                startDate={startDateRes}
+                endDate={endDateRes}
+                dates={dates}
+                clearDate={clearDate}
               />
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
@@ -205,6 +216,7 @@ const Home = () => {
                 visible={isModalVisible}
                 onOk={closeModalFunction}
                 onCancel={closeModalFunction}
+                style={{ maxHeight: 500, height: 500, minHeight: 500 }}
               >
                 <ul>
                   {reviews &&

@@ -49,7 +49,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
-
+          console.log(response.data);
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -77,12 +77,19 @@ const CardsSection = (props) => {
 
   const checkAvailable = (reservation) => {
     if (reservation) {
-      const startSelected = moment(reservation.startdate).format("DD-MM-YYYY");
-      const endSelected = moment(reservation.enddate).format("DD-MM-YYYY");
-      if (start <= startSelected && startSelected <= end) {
+      const startSelected = moment(reservation.startdate).toISOString();
+      const endSelected = moment(reservation.endDate).toISOString();
+      const momentStart = moment(start);
+      const momentEnd = moment(end);
+      console.log(momentStart.isBefore(endSelected));
+      if (
+        (momentStart.isAfter(startSelected) &&
+          momentStart.isBefore(endSelected)) ||
+        (momentStart.isBefore(startSelected) &&
+          momentEnd.isAfter(endSelected)) ||
+        (momentStart.isBefore(startSelected) && momentEnd.isBefore(endSelected))
+      )
         return "#f37076";
-      } else if (start <= endSelected && endSelected <= end) return "#f37076";
-      else if (startSelected < start && endSelected < end) return "#f37076";
       else return "#69e28d";
     } else {
       return "#69e28d";
@@ -115,8 +122,7 @@ const CardsSection = (props) => {
                     onClick={() => selectCard(item)}
                     bodyStyle={{
                       // backgroundColor: checkAvailable(item.reservation),
-                      background:
-                        item.reservationId != null ? "#f37076" : "#69e28d",
+                      background: checkAvailable(item.reservation),
                     }}
                     hoverable={true}
                     bordered={true}
