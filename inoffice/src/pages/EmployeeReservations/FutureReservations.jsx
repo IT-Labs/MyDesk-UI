@@ -94,13 +94,20 @@ const FutureReservations = ({ officeName }) => {
           placement: "top",
           duration: 4,
         });
+        setToBeCancelled();
+        setVisible(false);
         const filteredReservations = futurereservations.filter(
           (item) => item.id !== id
         );
         setFutureReservations(filteredReservations);
       })
       .catch((error) => {
-        console.error("Error message");
+        notification.open({
+          message: "Error",
+          description: "Something went wrong",
+          placement: "top",
+          duration: 4,
+        });
       });
   };
 
@@ -132,7 +139,7 @@ const FutureReservations = ({ officeName }) => {
           <Button
             onClick={() => {
               setVisible(true);
-              setToBeCancelled(data.deskId);
+              setToBeCancelled(data.id);
             }}
             className={styles.btn}
           >
@@ -159,8 +166,6 @@ const FutureReservations = ({ officeName }) => {
         visible={visible}
         onOk={() => {
           deleteNotification(toBeCancelled);
-          setToBeCancelled();
-          setVisible(false);
         }}
         onCancel={() => setVisible(false)}
       >
