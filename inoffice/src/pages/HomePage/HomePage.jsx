@@ -216,7 +216,7 @@ const Home = () => {
                 visible={isModalVisible}
                 onOk={closeModalFunction}
                 onCancel={closeModalFunction}
-                style={{ maxHeight: 500, height: 500, minHeight: 500 }}
+                style={{ maxHeight: 300, height: 300, minHeight: 300 }}
               >
                 <ul>
                   {reviews &&

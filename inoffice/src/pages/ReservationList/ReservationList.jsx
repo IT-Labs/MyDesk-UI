@@ -59,8 +59,8 @@ const ReservationList = () => {
     const future = res
       .filter(
         (item) =>
-          item.startDate >= new Date().getTime() ||
-          item.endDate >= new Date().getTime()
+          moment(item.startDate).isAfter(moment()) &&
+          moment(item.endDate).isAfter(moment())
       )
       .sort((a, b) => {
         const date1 = new Date(a.startDate).getTime();
@@ -76,8 +76,8 @@ const ReservationList = () => {
     const past = res
       .filter(
         (item) =>
-          item.startDate < new Date().getTime() ||
-          item.endDate < new Date().getTime()
+          moment(item.startDate).isBefore(moment()) &&
+          moment(item.endDate).isBefore(moment())
       )
       .sort((a, b) => {
         const date1 = new Date(a.startDate).getTime();

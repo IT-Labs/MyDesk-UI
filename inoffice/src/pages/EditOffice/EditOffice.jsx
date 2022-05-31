@@ -283,10 +283,41 @@ class EditOffice extends Component {
               </Row>
               <Row align="top">
                 <Col span={1}></Col>
-                <Col span={5} className="officeName">
+                <Col
+                  // span={5}
+                  className="officeName"
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    marginLeft: 15,
+                    width: "80%",
+                  }}
+                >
                   <Form.Item name="numberOfDesks">
-                    <Input placeholder="Enter number of desks" type="number" />
+                    <Input
+                      style={{ width: 250, margin: 5 }}
+                      placeholder="Enter number of desks"
+                      type="number"
+                    />
                   </Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="uploadOfficePlan btn"
+                    block
+                    style={{ width: 150, margin: 5 }}
+                  >
+                    Add new entities
+                  </Button>
+                  <Button
+                    type="primary"
+                    className="uploadOfficePlan btn"
+                    onClick={this.save}
+                    block
+                    style={{ width: 150, margin: 5 }}
+                  >
+                    Update entities
+                  </Button>
                 </Col>
               </Row>
             </Form>
@@ -360,34 +391,6 @@ class EditOffice extends Component {
                     )}
                   />
                 </InfiniteScroll>
-                <div
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                    marginTop: 10,
-                  }}
-                >
-                  <Button
-                    type="primary"
-                    className="uploadOfficePlan btn"
-                    onClick={this.save}
-                    style={{ width: "45%" }}
-                    block
-                  >
-                    Update entities
-                  </Button>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    className="uploadOfficePlan btn"
-                    style={{ width: "45%" }}
-                    block
-                  >
-                    Add new entities
-                  </Button>
-                </div>
               </Col>
             </Row>
           </Content>
