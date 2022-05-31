@@ -10,14 +10,16 @@
   margin-right: 10px;
   color: white;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
 .accountFunc {
   font-size: larger;
 }
 
-a.link:hover {
+.link:hover {
   cursor: pointer;
   color: rgb(252, 252, 252);
+  text-shadow: 0 0 3px white;
 }
