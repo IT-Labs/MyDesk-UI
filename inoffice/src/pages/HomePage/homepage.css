@@ -60,3 +60,8 @@
 .firstSection {
   margin-top: 2%;
 }
+
+.reviewModal {
+  max-height: 200px !important;
+  min-height: 200px !important;
+}

@@ -13,6 +13,7 @@ import api from "../../helper/api";
 import "../EditOffice/editoffice.css";
 import "../HomePage/homepage.css";
 import Input from "antd/lib/input/Input";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -216,12 +217,13 @@ const Home = () => {
                 visible={isModalVisible}
                 onOk={closeModalFunction}
                 onCancel={closeModalFunction}
-                style={{ maxHeight: 300, height: 300, minHeight: 300 }}
               >
-                <ul>
-                  {reviews &&
-                    reviews.map((item, id) => <li key={id}>{item}</li>)}
-                </ul>
+                <InfiniteScroll className="reviewModal" dataLength={3}>
+                  <ul>
+                    {reviews &&
+                      reviews.map((item, id) => <li key={id}>{item}</li>)}
+                  </ul>
+                </InfiniteScroll>
               </Modal>
             </Col>
             <Col className="buttonReserve" span={2}>

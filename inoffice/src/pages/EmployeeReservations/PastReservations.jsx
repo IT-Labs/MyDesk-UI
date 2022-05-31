@@ -221,6 +221,7 @@ const PastReservations = ({ officeName }) => {
             rows={4}
             onChange={(e) => setReview(e.target.value)}
             allowClear={true}
+            maxLength={200}
           />
         )}
       </Modal>
