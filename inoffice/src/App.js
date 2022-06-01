@@ -4,6 +4,7 @@ import EditOffice from "./pages/EditOffice/EditOffice";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./components/LoginForm/Login";
 import Loading from "./components/Loading/Loading";
+import jwtDecode from "jwt-decode";
 
 const Dashboard = React.lazy(() => import("./pages/Dashboard/Dashboard"));
 
@@ -27,6 +28,7 @@ const App = () => {
   //Routes
   const navigate = useNavigate();
   const token = sessionStorage.getItem("msal.idtoken");
+
   React.useEffect(() => {
     if (!token) {
       // sessionStorage.clear();

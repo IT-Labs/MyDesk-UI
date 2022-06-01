@@ -29,15 +29,18 @@ const Dashboard = () => {
   const [initialReviews, setInitialReviews] = useState([]);
   const filterData = (deskInfo) => {
     setDesks(deskInfo);
-    const availableDesk = deskInfo.filter((item) => !item.reservationId);
-    const unavailableDesk = deskInfo.filter((item) => item.reservationId);
-    setAvailableDesks(availableDesk.length);
+    console.log(deskInfo);
+    const unavailableDesk = deskInfo.filter(
+      (item) => item.reservations.length > 0
+    );
+    const availableDesk = deskInfo.length - unavailableDesk.length;
+    setAvailableDesks(availableDesk);
     setReservedDesks(unavailableDesk.length);
-    setAllDesks(unavailableDesk.length + availableDesk.length);
+    setAllDesks(deskInfo.length);
     setDeskData([
       {
         type: "Available",
-        value: availableDesk.length,
+        value: availableDesk,
       },
       {
         type: "Unavailable",
@@ -72,7 +75,9 @@ const Dashboard = () => {
   const fetchDeskData = async (officeId) => {
     return api
       .get("employee/office-desks/" + officeId)
-      .then((response) => response.data)
+      .then((response) => {
+        return response.data;
+      })
       .catch((error) => {
         console.error("error message");
       });
@@ -84,6 +89,7 @@ const Dashboard = () => {
       setReviews(initialReviews);
       return;
     }
+    console.log(office);
     const deskInfo = initialDesk.filter((item) => item.officeId === office.id);
     filterData(deskInfo);
     const foundOffice = offices.find((item) => item.id === office);
@@ -152,7 +158,7 @@ const Dashboard = () => {
           key: id,
         };
       });
-      console.log(better);
+
       setInitialReviews(better);
       setReviews(better);
     });

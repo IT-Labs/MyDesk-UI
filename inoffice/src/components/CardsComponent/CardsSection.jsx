@@ -18,7 +18,15 @@ const CardsSection = (props) => {
   const end = useSelector((state) => state.date.end);
 
   function selectCard(e) {
-    props.selectedCard(e);
+    let isAvailable;
+    if (e.reservations.length > 0) {
+      isAvailable = e.reservations.find((item) => {
+        return findAvailable(item);
+      });
+    } else isAvailable = true;
+    console.log(isAvailable);
+    const availability = isAvailable ? true : false;
+    props.selectedCard(e, availability);
     setselectedCardInSection(e);
   }
 
@@ -55,15 +63,15 @@ const CardsSection = (props) => {
         .catch((error) => {
           console.error("error message");
         });
-      await api
-        .get("employee/office-conferencerooms/" + props.officeid)
-        .then((response) => {
-          setConference(response.data);
-          setInitialConf(response.data);
-        })
-        .catch((error) => {
-          console.error("error message");
-        });
+      // await api
+      //   .get("employee/office-conferencerooms/" + props.officeid)
+      //   .then((response) => {
+      //     setConference(response.data);
+      //     setInitialConf(response.data);
+      //   })
+      //   .catch((error) => {
+      //     console.error("error message");
+      //   });
       setLoading(false);
     };
     fetchData();
@@ -75,30 +83,38 @@ const CardsSection = (props) => {
     setConference(initialConf);
   }, [props.available]);
 
-  const checkAvailable = (reservation) => {
-    if (reservation) {
-      const startSelected = moment(reservation.startdate).toISOString();
-      const endSelected = moment(reservation.endDate).toISOString();
-      const momentStart = moment(start);
-      const momentEnd = moment(end);
+  const findAvailable = (item) => {
+    const startSelected = moment(item.startdate).toISOString();
+    const endSelected = moment(item.endDate).toISOString();
+    const momentStart = moment(start);
+    const momentEnd = moment(end);
 
-      //   (momentStart.isAfter(startSelected) &&
-      //   momentStart.isBefore(endSelected)) ||
-      // (momentStart.isBefore(startSelected) &&
-      //   momentEnd.isAfter(endSelected)) ||
-      // (momentStart.isBefore(startSelected) &&
-      //   momentEnd.isBefore(endSelected)) ||
-      // (momentStart.isBefore(endSelected) && momentEnd.isAfter(endSelected))
-      if (
-        (momentStart.isBefore(startSelected) &&
-          momentEnd.isBefore(startSelected)) ||
-        (momentStart.isAfter(endSelected) && momentEnd.isAfter(endSelected)) ||
-        (startSelected === null && endSelected === null)
-      )
-        return "#69e28d";
-      else return "#f37076";
+    //   (momentStart.isAfter(startSelected) &&
+    //   momentStart.isBefore(endSelected)) ||
+    // (momentStart.isBefore(startSelected) &&
+    //   momentEnd.isAfter(endSelected)) ||
+    // (momentStart.isBefore(startSelected) &&
+    //   momentEnd.isBefore(endSelected)) ||
+    // (momentStart.isBefore(endSelected) && momentEnd.isAfter(endSelected))
+    if (
+      (momentStart.isBefore(startSelected) &&
+        momentEnd.isBefore(startSelected)) ||
+      (momentStart.isAfter(endSelected) && momentEnd.isAfter(endSelected)) ||
+      (startSelected === null && endSelected === null)
+    )
+      return true;
+    else return false;
+  };
+
+  const checkAvailable = (res) => {
+    console.log(res);
+    if (res.length > 0) {
+      const reservations = res.find((item) => {
+        return findAvailable(item);
+      });
+      return reservations ? true : false;
     } else {
-      return "#69e28d";
+      return true;
     }
     // return "#f37076" : "#69e28d",
   };
@@ -128,22 +144,18 @@ const CardsSection = (props) => {
                     onClick={() => selectCard(item)}
                     bodyStyle={{
                       // backgroundColor: checkAvailable(item.reservation),
-                      background: checkAvailable(item.reservation),
+                      background: checkAvailable(item.reservations)
+                        ? "#69e28d"
+                        : "#f37076",
                     }}
                     hoverable={true}
                     bordered={true}
                   >
                     <Meta
                       title={
-                        !item.categories ? (
-                          <p style={{ fontSize: "0.8vw" }}>
-                            Conf room {item.indexForOffice}
-                          </p>
-                        ) : (
-                          <p style={{ fontSize: "0.8vw" }}>
-                            Desk {item.indexForOffice}
-                          </p>
-                        )
+                        <p style={{ fontSize: "0.8vw" }}>
+                          Desk {item.indexForOffice}
+                        </p>
                       }
                       description={
                         <div

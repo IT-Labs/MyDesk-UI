@@ -94,6 +94,7 @@ const ReservationList = () => {
       .get("employee/reservations/all")
       .then(({ data }) => {
         sortResStruct(data.reservations);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);

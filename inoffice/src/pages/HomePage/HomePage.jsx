@@ -27,6 +27,7 @@ const Home = () => {
   const [selectValue, setSelectValue] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
+  const [isAvailable, setIsAvailable] = useState(true);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -43,8 +44,9 @@ const Home = () => {
     setofficeid(value);
   }
 
-  function selectedCard(value) {
+  function selectedCard(value, availability) {
     setSelectedCard(value);
+    setIsAvailable(availability);
   }
 
   function refresh() {
@@ -81,10 +83,15 @@ const Home = () => {
       Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
     api
-      .post("employee/reserve", data, config)
+      .post("employee/reserve", data, {
+        Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+      })
       .then((response) => {
         refresh();
         setDates([]);
+        setSelectedCard([]);
+        setStartDate([]);
+        setEndDate([]);
         openNotification("top");
       })
       .catch((error) => {
@@ -97,12 +104,11 @@ const Home = () => {
   };
 
   const makeReservation = () => {
-    const typeDefined = selectedCardId.categories ? "Desk" : "ConferenceRoom";
-
     const data = {
-      [typeDefined]: selectedCardId,
+      desk: { ...selectedCardId, categories: "Desk" },
       startDate: startDateRes,
       endDate: endDateRes,
+      officeName: selectValue,
     };
 
     sendReservation(data);
@@ -230,7 +236,7 @@ const Home = () => {
               <Button
                 block
                 disabled={
-                  (selectedCardId.length === 0 || selectedCardId.reservationId
+                  (selectedCardId.length === 0 || !isAvailable
                     ? true
                     : false) ||
                   (startDateRes.length === 0 || endDateRes.length === 0
