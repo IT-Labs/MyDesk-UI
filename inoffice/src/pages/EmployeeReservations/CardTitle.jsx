@@ -21,16 +21,16 @@ export const CardTitle = ({ data }) => {
         <Select
           showSearch
           placeholder="Select office"
-          defaultValue={""}
+          defaultValue={"Select office"}
           style={{ width: 200 }}
           onChange={handleChange}
         >
-          <Select.Option key={0} value="">
+          <Select.Option key={1} value="">
             All offices
           </Select.Option>
-          {data?.map((item, id) => {
+          {data?.map((item) => {
             return (
-              <Select.Option key={id + 1} value={item.name}>
+              <Select.Option key={item.id} value={item.name}>
                 {item.name}
               </Select.Option>
             );

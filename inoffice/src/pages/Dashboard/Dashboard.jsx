@@ -5,7 +5,7 @@ import UserHead from "../../components/Head/UserHead";
 import { Pie } from "@ant-design/charts";
 import api from "../../helper/api";
 import styles from "./Dashboard.module.css";
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, Select, Table } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
@@ -17,42 +17,52 @@ import {
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
-  const [conference, setConference] = useState([]);
   const [deskData, setDeskData] = useState([]);
-  const [confData, setConfData] = useState([]);
+  const [initialDesk, setInitialDesk] = useState([]);
   const [availableDesks, setAvailableDesks] = useState(0);
   const [reservedDesks, setReservedDesks] = useState(0);
   const [allDesks, setAllDesks] = useState(0);
   const [writtenReview, setWrittenReview] = useState("");
   const [activeModal, setActiveModal] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [offices, setOffices] = useState([]);
+  const [initialReviews, setInitialReviews] = useState([]);
+  const filterData = (deskInfo) => {
+    setDesks(deskInfo);
+    const availableDesk = deskInfo.filter((item) => !item.reservationId);
+    const unavailableDesk = deskInfo.filter((item) => item.reservationId);
+    setAvailableDesks(availableDesk.length);
+    setReservedDesks(unavailableDesk.length);
+    setAllDesks(unavailableDesk.length + availableDesk.length);
+    setDeskData([
+      {
+        type: "Available",
+        value: availableDesk.length,
+      },
+      {
+        type: "Unavailable",
+        value: unavailableDesk.length,
+      },
+    ]);
+  };
 
   const fetchOfficeData = async () => {
     await api
       .get("admin/offices")
       .then(async ({ data }) => {
+        setOffices(data);
         const deskRes = await Promise.all(
           data.map((item) => {
             const val = fetchDeskData(item.id).then((res) => res);
             return val;
           })
         );
-        const deskInfo = [].concat.apply([], deskRes);
-        setDesks(deskInfo);
-        const availableDesk = deskInfo.filter((item) => !item.reservationId);
-        const unavailableDesk = deskInfo.filter((item) => item.reservationId);
-        setAvailableDesks(availableDesk.length);
-        setReservedDesks(unavailableDesk.length);
-        setAllDesks(unavailableDesk.length + availableDesk.length);
-        setDeskData([
-          {
-            type: "Available",
-            value: availableDesk.length,
-          },
-          {
-            type: "Unavailable",
-            value: unavailableDesk.length,
-          },
-        ]);
+        const desk = [].concat.apply([], deskRes);
+        const deskInfo = desk.map((item, id) => {
+          return { ...item, key: id };
+        });
+        setInitialDesk(deskInfo);
+        filterData(deskInfo);
       })
       .catch((error) => {
         console.error("error message");
@@ -66,6 +76,22 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("error message");
       });
+  };
+
+  const selectFilter = (office) => {
+    if (!office) {
+      filterData(initialDesk);
+      setReviews(initialReviews);
+      return;
+    }
+    const deskInfo = initialDesk.filter((item) => item.officeId === office.id);
+    filterData(deskInfo);
+    const foundOffice = offices.find((item) => item.id === office);
+
+    const reviewFilter = initialReviews.filter((item) =>
+      item.officeName.includes(foundOffice.name)
+    );
+    setReviews(reviewFilter);
   };
 
   const config = {
@@ -108,11 +134,9 @@ const Dashboard = () => {
     },
   };
 
-  const [reviews, setReviews] = useState([]);
-
   const fetchReviews = () => {
     api.get("employee/reviews/all").then(({ data }, id) => {
-      const better = data.listOfReviews.map((item) => {
+      const better = data.listOfReviews.map((item, id) => {
         return {
           ...item,
           reviewOutput: item.reviewOutput ? (
@@ -128,7 +152,8 @@ const Dashboard = () => {
           key: id,
         };
       });
-
+      console.log(better);
+      setInitialReviews(better);
       setReviews(better);
     });
   };
@@ -182,15 +207,31 @@ const Dashboard = () => {
       <Layout className="panelBg" style={{ width: "100%" }}>
         <Sidebar selected="1" />
         <Content>
-          <h2
-            style={{
-              position: "relative",
-              left: 20,
-              color: "white",
-            }}
-          >
-            Dashboard
-          </h2>
+          <div style={{ position: "relative", left: 20 }}>
+            <h2
+              style={{
+                color: "white",
+              }}
+            >
+              Dashboard
+            </h2>
+            <Select
+              defaultValue="Select Office"
+              onChange={selectFilter}
+              style={{ width: 200 }}
+              showSearch
+            >
+              <Select.Option key={0} value={null}>
+                All offices
+              </Select.Option>
+              {offices &&
+                offices.map((item) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+            </Select>
+          </div>
           <div
             style={{
               width: "100%",

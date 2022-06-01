@@ -49,7 +49,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
-          console.log(response.data);
+
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -71,7 +71,7 @@ const CardsSection = (props) => {
 
   useEffect(() => {
     setDesks(initialDesks);
-    console.log(initialDesks);
+
     setConference(initialConf);
   }, [props.available]);
 
@@ -81,16 +81,22 @@ const CardsSection = (props) => {
       const endSelected = moment(reservation.endDate).toISOString();
       const momentStart = moment(start);
       const momentEnd = moment(end);
-      console.log(momentStart.isBefore(endSelected));
+
+      //   (momentStart.isAfter(startSelected) &&
+      //   momentStart.isBefore(endSelected)) ||
+      // (momentStart.isBefore(startSelected) &&
+      //   momentEnd.isAfter(endSelected)) ||
+      // (momentStart.isBefore(startSelected) &&
+      //   momentEnd.isBefore(endSelected)) ||
+      // (momentStart.isBefore(endSelected) && momentEnd.isAfter(endSelected))
       if (
-        (momentStart.isAfter(startSelected) &&
-          momentStart.isBefore(endSelected)) ||
         (momentStart.isBefore(startSelected) &&
-          momentEnd.isAfter(endSelected)) ||
-        (momentStart.isBefore(startSelected) && momentEnd.isBefore(endSelected))
+          momentEnd.isBefore(startSelected)) ||
+        (momentStart.isAfter(endSelected) && momentEnd.isAfter(endSelected)) ||
+        (startSelected === null && endSelected === null)
       )
-        return "#f37076";
-      else return "#69e28d";
+        return "#69e28d";
+      else return "#f37076";
     } else {
       return "#69e28d";
     }
