@@ -14,6 +14,7 @@ import {
   MehOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
+import Loading from "../../components/Loading/Loading";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -54,6 +55,7 @@ const Dashboard = () => {
       .get("admin/offices")
       .then(async ({ data }) => {
         setOffices(data);
+        console.log(data);
         const deskRes = await Promise.all(
           data.map((item) => {
             const val = fetchDeskData(item.id).then((res) => res);
@@ -298,7 +300,20 @@ const Dashboard = () => {
                 }}
               >
                 <h3>Desks available/reserved</h3>
-                <Pie {...config} />
+                {deskData.length > 0 ? (
+                  <Pie {...config} />
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 357,
+                    }}
+                  >
+                    <Loading />
+                  </div>
+                )}
               </div>
               <div
                 style={{

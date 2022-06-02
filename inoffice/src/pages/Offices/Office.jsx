@@ -91,7 +91,7 @@ const Offices = () => {
                   <List
                     bordered
                     pagination={{ pageSize: 5, position: "top" }}
-                    dataSource={data.filter(({ name }) =>
+                    dataSource={data?.filter(({ name }) =>
                       name.includes(inputFilter)
                     )}
                     renderItem={(office) => (

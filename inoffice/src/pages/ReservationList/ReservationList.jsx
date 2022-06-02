@@ -17,6 +17,7 @@ import styles from "./ReservationList.module.css";
 import { Excel } from "antd-table-saveas-excel";
 import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
+import Loading from "../../components/Loading/Loading";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -268,15 +269,28 @@ const ReservationList = () => {
                   </Tooltip>
                 </div>
               </div>
-              <Table
-                columns={tabKey === "past" ? pastColumns : futureColumns}
-                dataSource={reservations.filter(
-                  ({ office, employee }) =>
-                    office.includes(filterVal) &&
-                    employee.toLowerCase().includes(filterInput.toLowerCase())
-                )}
-                pagination={{ pageSize: 5, position: ["topCenter"] }}
-              ></Table>
+              {reservations.length > 0 ? (
+                <Table
+                  columns={tabKey === "past" ? pastColumns : futureColumns}
+                  dataSource={reservations.filter(
+                    ({ office, employee }) =>
+                      office.includes(filterVal) &&
+                      employee.toLowerCase().includes(filterInput.toLowerCase())
+                  )}
+                  pagination={{ pageSize: 5, position: ["topCenter"] }}
+                ></Table>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: 444,
+                  }}
+                >
+                  <Loading />
+                </div>
+              )}
               <Modal
                 maskClosable={false}
                 title="Cancel user's reservation?"

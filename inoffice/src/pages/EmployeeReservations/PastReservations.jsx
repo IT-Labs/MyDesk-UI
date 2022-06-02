@@ -27,17 +27,6 @@ const PastReservations = ({ officeName }) => {
 
   const [btnDisabled, setBtnDisabled] = useState(false);
 
-  const sortByOldest = (reservations) => {
-    const sorted = reservations.sort((a, b) => {
-      const date1 = new Date(a.startDate).getTime();
-      const date2 = new Date(b.startDate).getTime();
-
-      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-    });
-
-    setPastReservations(sorted);
-  };
-
   const sortByNewest = (reservations) => {
     const sorted = reservations
       .sort((a, b) => {
@@ -262,40 +251,3 @@ const PastReservations = ({ officeName }) => {
   );
 };
 export default PastReservations;
-
-/*<table style={{ width: "100%", textAlign: "center" }}>
-        <thead>
-          <tr>
-            <th
-              style={{ cursor: "pointer", userSelect: "none" }}
-              onClick={() => sortByTime(!arrow)}
-            >
-              Date
-              {arrow ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-            </th>
-            <th>Office</th>
-            <th>Entity</th>
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pastreservations.map((item, id) => {
-            return (
-              <tr key={id} style={{ padding: 10 }}>
-                <td>
-                  {item.startDate.split("T")[0].split("-").reverse().join("/")}{" "}
-                  - {item.endDate.split("T")[0].split("-").reverse().join("/")}
-                </td>
-                <td>{item.officeName}</td>
-                <td>
-                  {item.deskId ? "Desk" : "Conference room"} [
-                  {item.deskId ? item.deskIndex : item.confRoomIndex}]
-                </td>
-                <td onClick={() => {}}>
-                  
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>*/

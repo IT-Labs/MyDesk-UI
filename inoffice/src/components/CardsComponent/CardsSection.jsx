@@ -19,9 +19,13 @@ const CardsSection = (props) => {
 
   function selectCard(e) {
     let isAvailable;
-    if (e.reservations.length > 0) {
-      isAvailable = e.reservations.find((item) => {
-        return findAvailable(item);
+    const res = e.reservations;
+    if (res.length > 0) {
+      res.forEach((item) => {
+        const availability = findAvailable(item);
+        if (!availability) {
+          isAvailable = false;
+        }
       });
     } else isAvailable = true;
     console.log(isAvailable);
@@ -57,6 +61,7 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
+          console.log(response.data);
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -106,12 +111,15 @@ const CardsSection = (props) => {
   };
 
   const checkAvailable = (res) => {
-    console.log(res);
+    let isAvailable = true;
     if (res.length > 0) {
-      const reservations = res.find((item) => {
-        return findAvailable(item);
+      res.forEach((item) => {
+        const availability = findAvailable(item);
+        if (!availability) {
+          isAvailable = false;
+        }
       });
-      return reservations ? true : false;
+      return isAvailable ? true : false;
     } else {
       return true;
     }
