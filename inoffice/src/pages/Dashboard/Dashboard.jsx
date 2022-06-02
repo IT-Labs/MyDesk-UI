@@ -32,7 +32,7 @@ const Dashboard = () => {
     setDesks(deskInfo);
     console.log(deskInfo);
     const unavailableDesk = deskInfo.filter(
-      (item) => item.reservations.length > 0
+      (item) => item.reservations?.length > 0
     );
     const availableDesk = deskInfo.length - unavailableDesk.length;
     setAvailableDesks(availableDesk);
@@ -70,7 +70,7 @@ const Dashboard = () => {
         filterData(deskInfo);
       })
       .catch((error) => {
-        console.error("error message");
+        console.error(error);
       });
   };
 
@@ -78,7 +78,10 @@ const Dashboard = () => {
     return api
       .get("employee/office-desks/" + officeId)
       .then((response) => {
-        return response.data;
+        const data = response.data.map((item) => {
+          return { ...item, officeId };
+        });
+        return data;
       })
       .catch((error) => {
         console.error("error message");
@@ -92,7 +95,7 @@ const Dashboard = () => {
       return;
     }
     console.log(office);
-    const deskInfo = initialDesk.filter((item) => item.officeId === office.id);
+    const deskInfo = initialDesk.filter((item) => item.officeId === office);
     filterData(deskInfo);
     const foundOffice = offices.find((item) => item.id === office);
 

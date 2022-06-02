@@ -88,11 +88,10 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = moment(item.startdate).toISOString();
-    const endSelected = moment(item.endDate).toISOString();
+    const startSelected = moment(item.startdate)._i;
+    const endSelected = moment(item?.endDate)._i;
     const momentStart = moment(start);
     const momentEnd = moment(end);
-
     //   (momentStart.isAfter(startSelected) &&
     //   momentStart.isBefore(endSelected)) ||
     // (momentStart.isBefore(startSelected) &&

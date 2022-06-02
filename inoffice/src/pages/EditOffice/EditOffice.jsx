@@ -341,7 +341,7 @@ class EditOffice extends Component {
                     header={
                       <div className="divSpan">
                         <span className="firstSpan">All desks</span>
-                        <span className="secondSpan">Disable Deskk</span>
+                        <span className="secondSpan">Unavaiable Desk</span>
                         <span> Delete</span>
                       </div>
                     }

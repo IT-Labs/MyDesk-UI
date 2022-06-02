@@ -92,7 +92,7 @@ const Offices = () => {
                     bordered
                     pagination={{ pageSize: 5, position: "top" }}
                     dataSource={data.filter(({ name }) =>
-                      name.includes(inputFilter)
+                      name.toLowerCase().includes(inputFilter.toLowerCase())
                     )}
                     renderItem={(office) => (
                       <List.Item style={{ marginBottom: 10 }}>
