@@ -65,7 +65,7 @@ const FutureReservations = ({ officeName }) => {
     const fetchData = async () => {
       setLoading(true);
       await api
-        .get("employee/reserve")
+        .get("employee/future-reservation")
         .then((response) => {
           sortByOldest(response.data);
         })

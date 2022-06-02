@@ -57,7 +57,6 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
-
           setInitnialDesks(response.data);
         })
         .catch((error) => {
