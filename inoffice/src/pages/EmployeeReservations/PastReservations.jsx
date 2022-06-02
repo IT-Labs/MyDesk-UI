@@ -180,13 +180,26 @@ const PastReservations = ({ officeName }) => {
 
   return (
     <div>
-      <Table
-        columns={columns}
-        dataSource={pastreservations.filter((item) =>
-          item.officeName.includes(officeSelect)
-        )}
-        pagination={{ pageSize: 4, position: ["topCenter"] }}
-      />
+      {pastreservations.length > 0 ? (
+        <Table
+          columns={columns}
+          dataSource={pastreservations.filter((item) =>
+            item.officeName.includes(officeSelect)
+          )}
+          pagination={{ pageSize: 4, position: ["topCenter"] }}
+        />
+      ) : (
+        <div
+          style={{
+            height: 380,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loading />
+        </div>
+      )}
       <Modal
         maskClosable={false}
         title="Write a review for the selected reservation"

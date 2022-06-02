@@ -14,12 +14,11 @@ import {
   Modal,
 } from "antd";
 
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { DeleteFilled } from "@ant-design/icons";
+import Loading from "../../components/Loading/Loading";
 import { useState, useEffect } from "react";
 import api from "../../helper/api";
 import { LoadingOutlined } from "@ant-design/icons";
-import Icon from "@ant-design/icons/lib/components/AntdIcon";
+
 import { useSelector } from "react-redux";
 import moment from "moment";
 import styles from "./Reservation.module.css";
@@ -152,13 +151,26 @@ const FutureReservations = ({ officeName }) => {
 
   return (
     <div>
-      <Table
-        columns={columns}
-        dataSource={futurereservations.filter(({ officeName }) =>
-          officeName.includes(officeSelect)
-        )}
-        pagination={{ pageSize: 4, position: ["topCenter"] }}
-      />
+      {futurereservations.length > 0 ? (
+        <Table
+          columns={columns}
+          dataSource={futurereservations.filter(({ officeName }) =>
+            officeName.includes(officeSelect)
+          )}
+          pagination={{ pageSize: 4, position: ["topCenter"] }}
+        />
+      ) : (
+        <div
+          style={{
+            height: 380,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loading />
+        </div>
+      )}
       <Modal
         maskClosable={false}
         title="Are you sure you want to cancel your reservation?"
