@@ -163,7 +163,6 @@ const Dashboard = () => {
           key: id,
         };
       });
-
       setInitialReviews(better);
       setReviews(better);
     });

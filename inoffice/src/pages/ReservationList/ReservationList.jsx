@@ -217,6 +217,23 @@ const ReservationList = () => {
       });
   };
 
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      console.log("User pressed: ", event.key);
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+
+        setFilterInput("");
+      }
+    };
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   return (
     <Layout>
       <UserHeade />
@@ -262,8 +279,10 @@ const ReservationList = () => {
                   <FileSearchOutlined style={{ margin: 10 }} />
                   <Tooltip title="Enter the First or the Last name of the user you want to search">
                     <Input
+                      value={filterInput}
                       onChange={(e) => setFilterInput(e.target.value)}
                       className={styles.searchInput}
+                      onPress
                       placeholder="Search by name"
                     />
                   </Tooltip>
