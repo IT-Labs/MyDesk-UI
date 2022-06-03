@@ -146,32 +146,27 @@ const Dashboard = () => {
   };
 
   const fetchReviews = () => {
-    api
-      .get("employee/reviews/all", {
-        "Access-Control-Allow-Origin": "*",
-      })
-      .then(({ data }, id) => {
-        const better = data.listOfReviews.map((item, id) => {
-          return {
-            ...item,
-            reviewOutput: item.reviewOutput ? (
-              item.reviewOutput === "Positive" ? (
-                <SmileOutlined className={styles.emoji} />
-              ) : (
-                <FrownOutlined className={styles.emoji} />
-              )
+    api.get("employee/reviews/all").then(({ data }, id) => {
+      const better = data.listOfReviews.map((item, id) => {
+        return {
+          ...item,
+          reviewOutput: item.reviewOutput ? (
+            item.reviewOutput === "Positive" ? (
+              <SmileOutlined className={styles.emoji} />
             ) : (
-              <MehOutlined className={styles.emoji} />
-            ),
-            review:
-              item.review.length > 0 ? item.review : "This review is blank",
-            key: id,
-          };
-        });
-
-        setInitialReviews(better);
-        setReviews(better);
+              <FrownOutlined className={styles.emoji} />
+            )
+          ) : (
+            <MehOutlined className={styles.emoji} />
+          ),
+          review: item.review.length > 0 ? item.review : "This review is blank",
+          key: id,
+        };
       });
+
+      setInitialReviews(better);
+      setReviews(better);
+    });
   };
 
   useEffect(() => {

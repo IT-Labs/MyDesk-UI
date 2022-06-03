@@ -269,7 +269,7 @@ const Home = () => {
                   employees.map((item) => (
                     <Select.Option
                       key={item.id}
-                      value={`${item.firstName} ${item.lastName}`}
+                      value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
                     >
                       <h4
                         style={{ fontSize: 14 }}
