@@ -37,7 +37,7 @@ const EditOffice = (props) => {
       .get("admin/office-desks/" + officeId)
       .then((res) => {
         console.log(res.data.deskList);
-        setDesks(res.data.deskList);
+        setDesks(res.data);
         const check = res.data.map((x) => x.id);
         setChecked(check);
         const init = res.data.map((x) => x.id);

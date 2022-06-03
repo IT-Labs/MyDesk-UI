@@ -28,7 +28,6 @@ const CardsSection = (props) => {
         }
       });
     } else isAvailable = true;
-    console.log(res);
     const availability = isAvailable ? true : false;
     props.selectedCard(e, availability);
     setselectedCardInSection(e);
@@ -61,7 +60,6 @@ const CardsSection = (props) => {
         .get("employee/office-desks/" + props.officeid)
         .then((response) => {
           setDesks(response.data);
-          console.log(response.data);
           setInitnialDesks(response.data);
         })
         .catch((error) => {
@@ -118,11 +116,9 @@ const CardsSection = (props) => {
           isAvailable = false;
         }
       });
-      Object.assign(res, { isAvailable });
-      console.log(res);
+
       return isAvailable ? true : false;
     } else {
-      Object.assign(res, isAvailable);
       return true;
     }
     // return "#f37076" : "#69e28d",

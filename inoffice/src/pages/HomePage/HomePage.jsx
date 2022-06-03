@@ -14,6 +14,7 @@ import "../EditOffice/editoffice.css";
 import "../HomePage/homepage.css";
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
+import jwtDecode from "jwt-decode";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -28,6 +29,9 @@ const Home = () => {
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [employees, setEmployees] = useState([]);
+  const [selectedCoworker, setSelectedCoworker] = useState("");
+  const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -78,14 +82,39 @@ const Home = () => {
     setReload(true);
   });
 
+  const getUsers = async () => {
+    await api
+      .get("employee/all")
+      .then(({ data }) => {
+        const { preferred_username } = jwtDecode(
+          sessionStorage.getItem("msal.idtoken")
+        );
+        const filteredData = data.filter(
+          ({ email }) => email !== preferred_username
+        );
+        setEmployees(filteredData);
+      })
+      .catch((err) => {
+        notification.info({
+          message: `Notification`,
+          description:
+            "We could not get employees, you cannot reserve for other people.",
+          duration: 2,
+          placement: "top",
+        });
+      });
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   const sendReservation = (data) => {
     const config = {
       Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
     api
-      .post("employee/reserve", data, {
-        Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
-      })
+      .post("employee/reserve", data, config)
       .then((response) => {
         refresh();
         setDates([]);
@@ -120,6 +149,36 @@ const Home = () => {
 
   const changeVal = (e) => {
     setSelectValue(e);
+  };
+
+  const reserveForCoworker = async (person) => {
+    const foundEmployee = employees.find(
+      (item) => `${item.firstName} ${item.lastName}` === person
+    );
+
+    const data = {
+      startDate: startDateRes,
+      endDate: endDateRes,
+      coworkerMail: foundEmployee.email,
+      deskId: selectedCardId.id,
+    };
+    const config = {
+      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+    };
+    api
+      .post("employee/reserve/coworker", data, config)
+      .then((response) => {
+        refresh();
+        setDates([]);
+        setSelectedCard([]);
+        setStartDate([]);
+        setEndDate([]);
+        openNotification("top");
+        setShowReserveForCoworker(false);
+      })
+      .catch((error) => {
+        console.error("error");
+      });
   };
 
   return (
@@ -193,8 +252,84 @@ const Home = () => {
             </Col>
           </Row>
 
-          <Row className="buttonsSection">
-            <Col className="buttonReview" span={2}>
+          <Row
+            className="buttonsSection"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                marginLeft: 50,
+                display: "flex",
+                justifyContent: "space-evenly",
+                width: "48%",
+                alignItems: "center",
+              }}
+            >
+              <Select
+                defaultValue={"Reserve for coworker"}
+                placement={"topRight"}
+                style={{ width: 250 }}
+                showSearch
+                onChange={(val) => setSelectedCoworker(val)}
+              >
+                {employees &&
+                  employees.map((item) => (
+                    <Select.Option
+                      key={item.id}
+                      value={`${item.firstName} ${item.lastName}`}
+                    >
+                      <h4
+                        style={{ fontSize: 14 }}
+                      >{`${item.firstName} ${item.lastName}`}</h4>
+                      <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
+                    </Select.Option>
+                  ))}
+              </Select>
+              <Button
+                block
+                disabled={
+                  (selectedCardId.length === 0 || !isAvailable
+                    ? true
+                    : false) ||
+                  (startDateRes.length === 0 || endDateRes.length === 0
+                    ? true
+                    : false)
+                }
+                onClick={() => setShowReserveForCoworker(true)}
+                type="primary"
+                style={{
+                  borderRadius: "7px",
+                  background: "#5cb1b8",
+                  border: "transparent",
+                  width: 130,
+                }}
+                size="large"
+              >
+                <p
+                  style={{
+                    fontSize: "0.8vw",
+                    justifyContent: "center",
+                    marginBottom: 0,
+                  }}
+                >
+                  Reserve
+                </p>
+              </Button>
+            </div>
+            <div
+              className="buttonReview"
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                width: "25%",
+              }}
+            >
               <Button
                 block
                 disabled={selectedCardId.length === 0 ? true : false}
@@ -204,6 +339,8 @@ const Home = () => {
                   borderRadius: "7px",
                   background: "#5cb1b8",
                   border: "transparent",
+                  marginRight: 5,
+                  width: 130,
                 }}
                 onClick={() => showReviewsForSelectedCard()}
               >
@@ -215,6 +352,36 @@ const Home = () => {
                   }}
                 >
                   Show reviews
+                </p>
+              </Button>
+              <Button
+                block
+                disabled={
+                  (selectedCardId.length === 0 || !isAvailable
+                    ? true
+                    : false) ||
+                  (startDateRes.length === 0 || endDateRes.length === 0
+                    ? true
+                    : false)
+                }
+                onClick={() => makeReservation()}
+                type="primary"
+                style={{
+                  borderRadius: "7px",
+                  background: "#5cb1b8",
+                  border: "transparent",
+                  width: 130,
+                }}
+                size="large"
+              >
+                <p
+                  style={{
+                    fontSize: "0.8vw",
+                    justifyContent: "center",
+                    marginBottom: 0,
+                  }}
+                >
+                  Reserve
                 </p>
               </Button>
               <Modal
@@ -232,39 +399,18 @@ const Home = () => {
                   </ul>
                 </InfiniteScroll>
               </Modal>
-            </Col>
-            <Col className="buttonReserve" span={2}>
-              <Button
-                block
-                disabled={
-                  (selectedCardId.length === 0 || !isAvailable
-                    ? true
-                    : false) ||
-                  (startDateRes.length === 0 || endDateRes.length === 0
-                    ? true
-                    : false)
-                }
-                onClick={() => makeReservation()}
-                type="primary"
-                style={{
-                  borderRadius: "7px",
-                  background: "#5cb1b8",
-                  border: "transparent",
-                }}
-                size="large"
+              <Modal
+                title="Reserve desk for coworker"
+                visible={showReserveForCoworker}
+                onCancel={() => setShowReserveForCoworker(false)}
+                onOk={() => reserveForCoworker(selectedCoworker)}
               >
-                <p
-                  style={{
-                    fontSize: "0.8vw",
-                    justifyContent: "center",
-                    marginBottom: 0,
-                  }}
-                >
-                  Reserve
-                </p>
-              </Button>
-            </Col>
+                Are you sure you want to reserve this desk for{" "}
+                {selectedCoworker}?
+              </Modal>
+            </div>
           </Row>
+
           <Row className="footerSection" align="center">
             <Col align="center" span={24}>
               <p className="footerText">
