@@ -3,6 +3,7 @@
   width: 100%;
   float: right;
   justify-content: space-between;
+  align-items: center;
   background-color: transparent;
 }
 

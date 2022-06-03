@@ -148,10 +148,7 @@ const Dashboard = () => {
   const fetchReviews = () => {
     api
       .get("employee/reviews/all", {
-        headers: {
-          "Access-Control-Allow-Origin":
-            "https://inofficeapinet.azurewebsites.net",
-        },
+        "Access-Control-Allow-Origin": "*",
       })
       .then(({ data }, id) => {
         const better = data.listOfReviews.map((item, id) => {

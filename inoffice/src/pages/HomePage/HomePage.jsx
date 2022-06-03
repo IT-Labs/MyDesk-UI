@@ -15,6 +15,9 @@ import "../HomePage/homepage.css";
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
 import jwtDecode from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { setEmployees } from "../../redux/Employees/employees";
+import { fetchEmployees } from "../../utils/fetchEmployees";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -29,9 +32,11 @@ const Home = () => {
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
-  const [employees, setEmployees] = useState([]);
+
   const [selectedCoworker, setSelectedCoworker] = useState("");
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
+  const dispatch = useDispatch();
+  const { employees } = useSelector((state) => state.employees);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -83,30 +88,13 @@ const Home = () => {
   });
 
   const getUsers = async () => {
-    await api
-      .get("employee/all")
-      .then(({ data }) => {
-        const { preferred_username } = jwtDecode(
-          sessionStorage.getItem("msal.idtoken")
-        );
-        const filteredData = data.filter(
-          ({ email }) => email !== preferred_username
-        );
-        setEmployees(filteredData);
-      })
-      .catch((err) => {
-        notification.info({
-          message: `Notification`,
-          description:
-            "We could not get employees, you cannot reserve for other people.",
-          duration: 2,
-          placement: "top",
-        });
-      });
+    fetchEmployees(api, dispatch, notification);
   };
 
   useEffect(() => {
-    getUsers();
+    if (employees.length === 0) {
+      getUsers();
+    }
   }, []);
 
   const sendReservation = (data) => {
