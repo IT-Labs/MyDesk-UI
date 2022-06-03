@@ -29,7 +29,7 @@ const OfficeImage = (props) => {
     <div>
       {loading && <div></div>}
       {!loading && (
-        <Image src={data}>
+        <Image src={data} style={{ height: 400 }}>
           <Spin />
         </Image>
       )}

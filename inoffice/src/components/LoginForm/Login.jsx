@@ -44,6 +44,14 @@ const Login = () => {
     return;
   };
 
+  useEffect(() => {
+    console.log(`
+    {\__/}
+    (●_●)
+    ( >🌮 Want a taco?
+    `);
+  }, []);
+
   const roleRouting = (token) => {
     const decodedToken = jwt(token);
 

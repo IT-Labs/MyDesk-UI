@@ -24,7 +24,7 @@ const Home = () => {
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [reload, setReload] = useState(false);
-  const [selectValue, setSelectValue] = useState(1);
+  const [selectValue, setSelectValue] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
@@ -153,13 +153,13 @@ const Home = () => {
                   defaultValue={selectValue}
                   onChange={changeVal}
                 >
-                  <Select.Option value={1} key={1}>
+                  <Select.Option value={null} key={1}>
                     All
                   </Select.Option>
-                  <Select.Option value={2} key={2}>
+                  <Select.Option value={true} key={2}>
                     Available
                   </Select.Option>
-                  <Select.Option value={3} key={3}>
+                  <Select.Option value={false} key={3}>
                     Reserved
                   </Select.Option>
                 </Select>
@@ -223,6 +223,7 @@ const Home = () => {
                 visible={isModalVisible}
                 onOk={closeModalFunction}
                 onCancel={closeModalFunction}
+                cancelButtonProps={{ style: { display: "none" } }}
               >
                 <InfiniteScroll className="reviewModal" dataLength={3}>
                   <ul>

@@ -215,9 +215,11 @@ const Dashboard = () => {
   return (
     <Layout>
       <UserHead />
-      <Layout className="panelBg" style={{ width: "100%" }}>
+      <Layout className="panelBg">
         <Sidebar selected="1" />
-        <Content>
+        <Content
+          style={{ width: "100%", overflowY: "hidden", overflowX: "hidden" }}
+        >
           <div style={{ position: "relative", left: 20 }}>
             <h2
               style={{
@@ -332,11 +334,26 @@ const Dashboard = () => {
                 <h3 style={{ position: "relative", left: 20, top: 5 }}>
                   User reviews
                 </h3>
-                <Table
-                  columns={colums}
-                  dataSource={reviews}
-                  pagination={{ pageSize: 4, position: ["topCenter"] }}
-                />
+                {reviews.length > 0 ? (
+                  <Table
+                    columns={colums}
+                    dataSource={reviews}
+                    pagination={{ pageSize: 4, position: ["topCenter"] }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <h1>¯\_(ツ)_/¯</h1>
+                    <h3>No reviews for this office</h3>
+                  </div>
+                )}
               </div>
               <Modal
                 title="Review for desk"

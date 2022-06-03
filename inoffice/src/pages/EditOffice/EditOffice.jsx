@@ -30,6 +30,7 @@ class EditOffice extends Component {
     this.state = {
       officeName: this.props.params.name,
       officeId: this.props.params.id,
+      desks: [],
     };
   }
 
@@ -37,14 +38,11 @@ class EditOffice extends Component {
     api
       .get("admin/office-desks/" + this.state.officeId)
       .then((res) => {
+        console.log(res.data.deskList);
         this.setState({
-          desks: res.data,
-          checked: res.data
-            .filter((x) => x.categories === "silent")
-            .map((x) => x.id),
-          initialdesks: res.data
-            .filter((x) => x.categories === "silent")
-            .map((x) => x.id),
+          desks: [...this.state.desks, res.data.deskList],
+          checked: res.data.map((x) => x.id),
+          initialdesks: res.data.map((x) => x.id),
         });
       })
       .catch((error) => {
@@ -157,9 +155,9 @@ class EditOffice extends Component {
   };
 
   handleSubmit = (e) => {
+    console.log(e);
     const data = {
       numberOfDesks: e.numberOfDesks,
-      numberOfConferenceRooms: e.numberOfConferenceRooms,
     };
 
     api

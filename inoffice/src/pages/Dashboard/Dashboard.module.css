@@ -1,14 +1,14 @@
 .dashboardCard {
   border: 1px solid #5cb1b8;
   width: 150px;
-  height: 120px;
+  height: 100px;
   border-radius: 7px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 10px;
   background-color: white;
-  margin: 25px;
+  margin: 15px;
   margin-left: 44px;
 }
 

@@ -18,7 +18,7 @@ const CardsSection = (props) => {
   const end = useSelector((state) => state.date.end);
 
   function selectCard(e) {
-    let isAvailable;
+    let isAvailable = true;
     const res = e.reservations;
     if (res.length > 0) {
       res.forEach((item) => {
@@ -28,7 +28,7 @@ const CardsSection = (props) => {
         }
       });
     } else isAvailable = true;
-    console.log(isAvailable);
+    console.log(res);
     const availability = isAvailable ? true : false;
     props.selectedCard(e, availability);
     setselectedCardInSection(e);
@@ -118,8 +118,11 @@ const CardsSection = (props) => {
           isAvailable = false;
         }
       });
+      Object.assign(res, { isAvailable });
+      console.log(res);
       return isAvailable ? true : false;
     } else {
+      Object.assign(res, isAvailable);
       return true;
     }
     // return "#f37076" : "#69e28d",
@@ -133,12 +136,20 @@ const CardsSection = (props) => {
           dataLength={dataConfRooms.length + dataDesks.length}
           scrollableTarget="scrollableDiv"
           display="flex"
-          style={{ height: 500, maxHeight: 500 }}
+          style={{ height: 400, maxHeight: 400 }}
         >
           <Layout style={{ background: "transparent" }}>
             <List
               grid={{ gutter: 0, column: 5 }}
-              dataSource={dataDesks.concat(dataConfRooms)}
+              dataSource={dataDesks.filter((item) => {
+                if (props.available === null) {
+                  return item;
+                } else if (props.available === true) {
+                  return checkAvailable(item.reservations);
+                } else if (props.available === false) {
+                  return !checkAvailable(item.reservations);
+                }
+              })}
               renderItem={(item) => (
                 <List.Item
                   style={{
