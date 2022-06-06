@@ -49,33 +49,10 @@ const UserHead = (props) => {
           display: "flex",
           alignItems: "center",
           width: "80%",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           position: "relative",
         }}
       >
-        {!props?.isHome ? (
-          <Select
-            defaultValue={"Search for user"}
-            showSearch
-            style={{ width: 220 }}
-            onSelect={findEmployee}
-          >
-            {employees &&
-              employees.map((item) => (
-                <Select.Option
-                  key={item.id}
-                  value={`${item.firstName} ${item.lastName}`}
-                >
-                  <h4
-                    style={{ fontSize: 14 }}
-                  >{`${item.firstName} ${item.lastName}`}</h4>
-                  <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
-                </Select.Option>
-              ))}
-          </Select>
-        ) : (
-          <div></div>
-        )}
         <div>
           <img src={avatar} alt="avatar" style={{ width: 90, height: 50 }} />
           <NavLink className={"link"} to="/employee/reservations">
@@ -92,17 +69,6 @@ const UserHead = (props) => {
           >
             Log out
           </NavLink>
-          <Modal
-            title="Employee details"
-            visible={visible}
-            onOk={() => setVisible(false)}
-          >
-            <h3>
-              Name: {employee.firstName} {employee.lastName}
-            </h3>
-            <h3>Job title: {employee.jobTitle}</h3>
-            <h3>E-Mail: {employee.email}</h3>
-          </Modal>
         </div>
       </div>
     </Header>

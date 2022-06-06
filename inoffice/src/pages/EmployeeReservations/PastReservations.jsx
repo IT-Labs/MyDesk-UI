@@ -16,7 +16,7 @@ const PastReservations = ({ officeName }) => {
   const { TextArea } = Input;
   const { officeSelect } = useSelector((state) => state.officeSelect);
 
-  const [loadingData, setLoading] = useState(false);
+  const [loadingData, setLoading] = useState(true);
   const [pastreservations, setPastReservations] = useState([]);
   const [refreshstate, setRefreshState] = useState();
   const [visible, setVisible] = useState(false);
@@ -169,7 +169,7 @@ const PastReservations = ({ officeName }) => {
 
   return (
     <div>
-      {pastreservations.length > 0 ? (
+      {!loadingData ? (
         <Table
           columns={columns}
           dataSource={pastreservations.filter((item) =>

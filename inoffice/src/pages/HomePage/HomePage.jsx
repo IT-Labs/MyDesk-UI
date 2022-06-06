@@ -18,6 +18,7 @@ import jwtDecode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { setEmployees } from "../../redux/Employees/employees";
 import { fetchEmployees } from "../../utils/fetchEmployees";
+import UserSearch from "../../components/UserSearch/UserSearch";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -92,9 +93,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (employees.length === 0) {
-      getUsers();
-    }
+    getUsers();
   }, []);
 
   const sendReservation = (data) => {
@@ -115,6 +114,7 @@ const Home = () => {
         console.error("error");
       });
   };
+  console.log(employees);
 
   const clearDate = () => {
     setDates([]);
@@ -141,7 +141,7 @@ const Home = () => {
 
   const reserveForCoworker = async (person) => {
     const foundEmployee = employees.find(
-      (item) => `${item.firstName} ${item.lastName}` === person
+      (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === person
     );
 
     const data = {
@@ -153,6 +153,7 @@ const Home = () => {
     const config = {
       Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
+    console.log(data);
     api
       .post("employee/reserve/coworker", data, config)
       .then((response) => {
@@ -166,8 +167,29 @@ const Home = () => {
       })
       .catch((error) => {
         console.error("error");
+        setDates([]);
+        setSelectedCard([]);
+        setStartDate([]);
+        setEndDate([]);
+        setShowReserveForCoworker(false);
+        notification.open({
+          message: `Notification`,
+          description: "Error while making this reservation",
+          duration: 2,
+          placement: "top",
+        });
       });
   };
+
+  const checkTypeOfReservation = () => {
+    if (selectedCoworker.length > 0) {
+      setShowReserveForCoworker(true);
+    } else {
+      makeReservation();
+    }
+  };
+
+  console.log(officeid);
 
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
@@ -190,6 +212,12 @@ const Home = () => {
                 dates={dates}
                 clearDate={clearDate}
               />
+              <div>
+                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                  Search by name
+                </p>
+                <UserSearch />
+              </div>
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                   Filter by availability
@@ -216,7 +244,7 @@ const Home = () => {
           <Row align="center">
             <Col
               className="officeImgCol cardColColor"
-              span={11}
+              span={10}
               xl={11}
               lg={11}
               md={11}
@@ -244,18 +272,18 @@ const Home = () => {
             className="buttonsSection"
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "flex-end",
               alignItems: "center",
               width: "100%",
             }}
           >
             <div
+              className="buttonReview"
               style={{
-                marginLeft: 50,
                 display: "flex",
                 justifyContent: "space-evenly",
-                width: "48%",
                 alignItems: "center",
+                width: "50%",
               }}
             >
               <Select
@@ -265,6 +293,9 @@ const Home = () => {
                 showSearch
                 onChange={(val) => setSelectedCoworker(val)}
               >
+                <Select.Option value={""} key={0}>
+                  None
+                </Select.Option>
                 {employees &&
                   employees.map((item) => (
                     <Select.Option
@@ -278,46 +309,6 @@ const Home = () => {
                     </Select.Option>
                   ))}
               </Select>
-              <Button
-                block
-                disabled={
-                  (selectedCardId.length === 0 || !isAvailable
-                    ? true
-                    : false) ||
-                  (startDateRes.length === 0 || endDateRes.length === 0
-                    ? true
-                    : false)
-                }
-                onClick={() => setShowReserveForCoworker(true)}
-                type="primary"
-                style={{
-                  borderRadius: "7px",
-                  background: "#5cb1b8",
-                  border: "transparent",
-                  width: 130,
-                }}
-                size="large"
-              >
-                <p
-                  style={{
-                    fontSize: "0.8vw",
-                    justifyContent: "center",
-                    marginBottom: 0,
-                  }}
-                >
-                  Reserve
-                </p>
-              </Button>
-            </div>
-            <div
-              className="buttonReview"
-              style={{
-                display: "flex",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                width: "25%",
-              }}
-            >
               <Button
                 block
                 disabled={selectedCardId.length === 0 ? true : false}
@@ -352,11 +343,12 @@ const Home = () => {
                     ? true
                     : false)
                 }
-                onClick={() => makeReservation()}
+                onClick={() => checkTypeOfReservation()}
                 type="primary"
                 style={{
                   borderRadius: "7px",
-                  background: "#5cb1b8",
+                  background:
+                    selectedCoworker.length > 0 ? "orange" : "#5cb1b8",
                   border: "transparent",
                   width: 130,
                 }}

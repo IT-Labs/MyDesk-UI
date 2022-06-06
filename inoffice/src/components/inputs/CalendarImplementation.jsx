@@ -47,6 +47,7 @@ const CalendarImplementation = (props) => {
           onChange={changedates}
           value={[props.dates[0], props.dates[1]]}
           onClick={props.clearDate}
+          style={{ width: 200 }}
         />
       </Space>
     </div>

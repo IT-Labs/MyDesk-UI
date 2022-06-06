@@ -15,6 +15,7 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import Loading from "../../components/Loading/Loading";
+import UserSearch from "../../components/UserSearch/UserSearch";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -62,7 +63,7 @@ const Dashboard = () => {
             return val;
           })
         );
-        const desk = [].concat.apply([], deskRes);
+        const desk = deskRes.flat(deskRes.length);
         const deskInfo = desk.map((item, id) => {
           return { ...item, key: id };
         });
@@ -92,6 +93,7 @@ const Dashboard = () => {
     if (!office) {
       filterData(initialDesk);
       setReviews(initialReviews);
+
       return;
     }
     console.log(office);
@@ -146,26 +148,35 @@ const Dashboard = () => {
   };
 
   const fetchReviews = () => {
-    api.get("employee/reviews/all").then(({ data }, id) => {
-      const better = data.listOfReviews.map((item, id) => {
-        return {
-          ...item,
-          reviewOutput: item.reviewOutput ? (
-            item.reviewOutput === "Positive" ? (
-              <SmileOutlined className={styles.emoji} />
+    api
+      .get("employee/reviews/all", {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+      })
+      .then(({ data }, id) => {
+        const better = data.listOfReviews.map((item, id) => {
+          return {
+            ...item,
+            reviewOutput: item.reviewOutput ? (
+              item.reviewOutput === "Positive" ? (
+                <SmileOutlined className={styles.emoji} />
+              ) : (
+                <FrownOutlined className={styles.emoji} />
+              )
             ) : (
-              <FrownOutlined className={styles.emoji} />
-            )
-          ) : (
-            <MehOutlined className={styles.emoji} />
-          ),
-          review: item.review.length > 0 ? item.review : "This review is blank",
-          key: id,
-        };
+              <MehOutlined className={styles.emoji} />
+            ),
+            review:
+              item.review.length > 0 ? item.review : "This review is blank",
+            key: id,
+          };
+        });
+        setInitialReviews(better);
+        setReviews(better);
       });
-      setInitialReviews(better);
-      setReviews(better);
-    });
   };
 
   useEffect(() => {
@@ -217,165 +228,174 @@ const Dashboard = () => {
       <Layout className="panelBg">
         <Sidebar selected="1" />
         <Content
-          style={{ width: "100%", overflowY: "hidden", overflowX: "hidden" }}
+          style={{
+            width: "100%",
+            overflowY: "hidden",
+            overflowX: "hidden",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          <div style={{ position: "relative", left: 20 }}>
-            <h2
-              style={{
-                color: "white",
-              }}
-            >
-              Dashboard
-            </h2>
-            <Select
-              defaultValue="Select Office"
-              onChange={selectFilter}
-              style={{ width: 200 }}
-              showSearch
-            >
-              <Select.Option key={0} value={null}>
-                All offices
-              </Select.Option>
-              {offices &&
-                offices.map((item) => (
-                  <Select.Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-            </Select>
-          </div>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            <div className={styles.dashboardCard}>
-              <p>AVAILABLE</p>
-              <div className={styles.tile}>
-                <h2>{availableDesks}</h2>
-                <CheckCircleFilled
-                  className={`${styles.tabIcon} ${styles.checkmark}`}
-                />
-              </div>
+          <div style={{ width: "95%" }}>
+            <div style={{ position: "relative", left: 15 }}>
+              <h2
+                style={{
+                  color: "white",
+                }}
+              >
+                Dashboard
+              </h2>
+              <Select
+                defaultValue="Select Office"
+                onChange={selectFilter}
+                style={{ width: 200 }}
+                showSearch
+              >
+                <Select.Option key={0} value={null}>
+                  All offices
+                </Select.Option>
+                {offices &&
+                  offices.map((item) => (
+                    <Select.Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+              </Select>
+              <UserSearch />
             </div>
-            <div className={styles.dashboardCard}>
-              <p>RESERVED</p>
-              <div className={styles.tile}>
-                <h2>{reservedDesks}</h2>
-                <CloseCircleFilled
-                  className={`${styles.tabIcon} ${styles.xmark}`}
-                />
-              </div>
-            </div>
-            <div className={styles.dashboardCard}>
-              <p>TOTAL</p>
-              <div className={styles.tile}>
-                <h2>{allDesks}</h2>
-                <InfoCircleFilled
-                  className={`${styles.tabIcon} ${styles.imark}`}
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              width: "100%",
-            }}
-          >
             <div
               style={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "space-around",
+                justifyContent: "flex-start",
+              }}
+            >
+              <div className={styles.dashboardCard}>
+                <p>AVAILABLE</p>
+                <div className={styles.tile}>
+                  <h2>{availableDesks}</h2>
+                  <CheckCircleFilled
+                    className={`${styles.tabIcon} ${styles.checkmark}`}
+                  />
+                </div>
+              </div>
+              <div className={styles.dashboardCard}>
+                <p>RESERVED</p>
+                <div className={styles.tile}>
+                  <h2>{reservedDesks}</h2>
+                  <CloseCircleFilled
+                    className={`${styles.tabIcon} ${styles.xmark}`}
+                  />
+                </div>
+              </div>
+              <div className={styles.dashboardCard}>
+                <p>TOTAL</p>
+                <div className={styles.tile}>
+                  <h2>{allDesks}</h2>
+                  <InfoCircleFilled
+                    className={`${styles.tabIcon} ${styles.imark}`}
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                width: "100%",
               }}
             >
               <div
                 style={{
-                  background: "#fff",
-                  width: 400,
-                  height: 431,
-                  borderRadius: 7,
+                  width: "100%",
                   display: "flex",
-                  padding: 20,
-                  boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
-                  flexDirection: "column",
+                  justifyContent: "space-around",
                 }}
-              >
-                <h3>Desks available/reserved</h3>
-                {deskData.length > 0 ? (
-                  <Pie {...config} />
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 357,
-                    }}
-                  >
-                    <Loading />
-                  </div>
-                )}
-              </div>
-              <div
-                style={{
-                  background: "#fff",
-                  width: 800,
-                  borderRadius: 7,
-                  display: "flex",
-                  padding: 10,
-                  boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
-                  flexDirection: "column",
-                }}
-              >
-                <h3 style={{ position: "relative", left: 20, top: 5 }}>
-                  User reviews
-                </h3>
-                {reviews.length > 0 ? (
-                  <Table
-                    columns={colums}
-                    dataSource={reviews}
-                    pagination={{ pageSize: 4, position: ["topCenter"] }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <h1>¯\_(ツ)_/¯</h1>
-                    <h3>No reviews for this office</h3>
-                  </div>
-                )}
-              </div>
-              <Modal
-                title="Review for desk"
-                centered
-                maskClosable={false}
-                visible={activeModal}
-                onOk={() => {
-                  setWrittenReview("");
-                  setActiveModal(false);
-                }}
-                width={800}
-                cancelButtonProps={{ style: { display: "none" } }}
               >
                 <div
                   style={{
-                    maxHeight: 100,
-                    overflow: "scroll",
-                    overflowX: "hidden",
+                    background: "#fff",
+                    width: 400,
+                    height: 431,
+                    borderRadius: 7,
+                    display: "flex",
+                    padding: 20,
+                    boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
+                    flexDirection: "column",
                   }}
                 >
-                  <p>{writtenReview}</p>
+                  <h3>Desks available/reserved</h3>
+                  {deskData.length > 0 ? (
+                    <Pie {...config} />
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: 357,
+                      }}
+                    >
+                      <Loading />
+                    </div>
+                  )}
                 </div>
-              </Modal>
+                <div
+                  style={{
+                    background: "#fff",
+                    width: 800,
+                    borderRadius: 7,
+                    display: "flex",
+                    padding: 10,
+                    boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
+                    flexDirection: "column",
+                  }}
+                >
+                  <h3 style={{ position: "relative", left: 20, top: 5 }}>
+                    User reviews
+                  </h3>
+                  {reviews.length > 0 ? (
+                    <Table
+                      columns={colums}
+                      dataSource={reviews}
+                      pagination={{ pageSize: 4, position: ["topCenter"] }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <h1>¯\_(ツ)_/¯</h1>
+                      <h3>No reviews for this office</h3>
+                    </div>
+                  )}
+                </div>
+                <Modal
+                  title="Review for desk"
+                  centered
+                  maskClosable={false}
+                  visible={activeModal}
+                  onOk={() => {
+                    setWrittenReview("");
+                    setActiveModal(false);
+                  }}
+                  width={800}
+                  cancelButtonProps={{ style: { display: "none" } }}
+                >
+                  <div
+                    style={{
+                      maxHeight: 100,
+                      overflow: "scroll",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    <p>{writtenReview}</p>
+                  </div>
+                </Modal>
+              </div>
             </div>
           </div>
         </Content>

@@ -1,6 +1,7 @@
 #scrollableDiv {
   overflow-y: hidden;
   height: 90%;
+  border: none !important;
 }
 
 .cardBody {

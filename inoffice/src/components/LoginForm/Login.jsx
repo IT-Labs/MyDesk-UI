@@ -12,6 +12,7 @@ import logo from "../../assets/Microsoft logo.png";
 
 const Login = () => {
   let navigate = useNavigate();
+  const [postedOnce, setPostedOnce] = useState(false);
   const [info, setInfo] = useState();
   const [url, setUrl] = useState(
     window.location.hostname === "localhost"
@@ -19,7 +20,7 @@ const Login = () => {
       : "https://salmon-grass-030b2a503.1.azurestaticapps.net/"
   );
 
-  const loginHandler = (err, data) => {
+  const loginHandler = async (err, data) => {
     const userInfo = {
       Email: data.mail,
       Firstname: data.givenName,
@@ -30,17 +31,21 @@ const Login = () => {
     sendData(userInfo);
   };
 
-  const sendData = (userInfo) => {
+  const sendData = async (userInfo) => {
     const token = sessionStorage.getItem("msal.idtoken");
 
-    api
-      .post("/authentication", userInfo)
-      .then((res) => {
-        roleRouting(token);
-      })
-      .catch((err) => {
-        console.error("error");
-      });
+    if (!postedOnce) {
+      setPostedOnce(true);
+      await api
+        .post("/authentication", userInfo)
+        .then((res) => {
+          roleRouting(token);
+        })
+        .catch((err) => {
+          console.error("error");
+        });
+    }
+
     return;
   };
 
@@ -52,7 +57,7 @@ const Login = () => {
     `);
   }, []);
 
-  const roleRouting = (token) => {
+  const roleRouting = async (token) => {
     const decodedToken = jwt(token);
 
     if (decodedToken.roles.join("") === "ADMIN") {
@@ -77,8 +82,8 @@ const Login = () => {
           tenantUrl={
             "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
           }
-          redirectUri={url}
-          forceRedirectStrategy={true}
+          // redirectUri={url}
+          // forceRedirectStrategy={true}
           // useLocalStorageCache={true}
           withUserData={true}
           className={styles.loginBtn}

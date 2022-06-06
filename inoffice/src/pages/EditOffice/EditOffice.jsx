@@ -22,6 +22,7 @@ import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
 import { withRouter } from "../../helper/withRouterHelper";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Loading from "../../components/Loading/Loading";
 
 const EditOffice = (props) => {
   const [officeName, setOfficeName] = useState(props.params.name);
@@ -31,6 +32,7 @@ const EditOffice = (props) => {
   const [initialDesks, setInitialDesks] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [conferenceRooms, setConference] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getDesks = () => {
     api
@@ -38,13 +40,21 @@ const EditOffice = (props) => {
       .then((res) => {
         console.log(res.data.deskList);
         setDesks(res.data.deskList);
-        const check = res.data.map((x) => x.id);
+        const check = res.data.deskList.map((x) => x.id);
         setChecked(check);
-        const init = res.data.map((x) => x.id);
+        const init = res.data.deskList.map((x) => x.id);
         setInitialDesks(init);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false);
+        notification.open({
+          message: `Notification`,
+          description: "There was an error while loading",
+          duration: 2,
+          placement: "top",
+        });
       });
   };
 
@@ -208,19 +218,7 @@ const EditOffice = (props) => {
 
                 <Row align="top">
                   <Col span={10}>
-                    <div>
-                      {imageUrl ? (
-                        <Image
-                          src={imageUrl}
-                          className="officeImagePlan"
-                        ></Image>
-                      ) : (
-                        <Image
-                          className="officeImagePlan"
-                          src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
-                        ></Image>
-                      )}
-                    </div>
+                    <div></div>
                   </Col>
                 </Row>
               </div>
@@ -233,15 +231,14 @@ const EditOffice = (props) => {
               </Col>
             </Row>
             <Row align="top">
-              <Col span={1}></Col>
               <Col
                 // span={5}
-                className="officeName"
                 style={{
                   display: "flex",
                   justifyContent: "flex-start",
-                  marginLeft: 15,
-                  width: "80%",
+                  width: "100%",
+                  position: "relative",
+                  left: 65,
                 }}
               >
                 <Form.Item name="numberOfDesks">
@@ -272,71 +269,122 @@ const EditOffice = (props) => {
               </Col>
             </Row>
           </Form>
-          <Row>
-            <Col
-              id="scrollableDiv"
+          <Row
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "90%",
+            }}
+          >
+            <div
               style={{
-                height: 400,
-                overflow: "auto",
-                padding: "0 16px",
-                border: "1px solid rgba(140, 140, 140, 0.35)",
+                display: "flex",
+                justifyContent: "space-between",
+                width: "90%",
               }}
-              offset={1}
-              span={10}
             >
-              <InfiniteScroll dataLength={30} scrollableTarget="scrollableDiv">
-                <List
-                  header={
-                    <div className="divSpan">
-                      <span className="firstSpan">All desks</span>
-                      <span className="secondSpan">Unavaiable Desk</span>
-                      <span> Delete</span>
-                    </div>
-                  }
-                  className="list"
-                  bordered
-                  dataSource={desks}
-                  renderItem={(item) => (
-                    <List.Item>
-                      {console.log(item)}
-                      <Col span={4}>{item.indexForOffice}</Col>
-                      <Col span={3}>
-                        <Checkbox
-                          style={{
-                            background: "white",
-                            color: "black",
-                            paddingLeft: "3%",
-                          }}
-                          value={item.id}
-                          defaultChecked={checkCategory(item)}
-                          onChange={check}
-                        ></Checkbox>
-                      </Col>
+              <div
+                id="scrollableDiv"
+                style={{
+                  height: 400,
+                  overflow: "auto",
+                  padding: "0 16px",
+                  background: "white",
+                  width: "40%",
+                }}
+                offset={1}
+              >
+                {isLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "100%",
+                      height: 400,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Loading />
+                  </div>
+                ) : (
+                  <InfiniteScroll
+                    dataLength={30}
+                    scrollableTarget="scrollableDiv"
+                    style={{
+                      border: "1px solid transparent",
+                      minWidth: "100%",
+                    }}
+                  >
+                    <List
+                      header={
+                        <div className="divSpan">
+                          <span className="firstSpan">All desks</span>
+                          <span className="secondSpan">Unavaiable Desk</span>
+                          <span> Delete</span>
+                        </div>
+                      }
+                      bordered
+                      style={{ width: "100%", border: "none" }}
+                      dataSource={desks}
+                      renderItem={(item) => (
+                        <List.Item>
+                          {console.log(item)}
+                          <Col span={4}>{item.indexForOffice}</Col>
+                          <Col span={3}>
+                            <Checkbox
+                              style={{
+                                background: "white",
+                                color: "black",
+                                paddingLeft: "3%",
+                              }}
+                              value={item.id}
+                              defaultChecked={checkCategory(item)}
+                              onChange={check}
+                            ></Checkbox>
+                          </Col>
 
-                      <Col span={2}>
-                        <Popconfirm
-                          title="Are you sure to delete this desk?"
-                          onConfirm={() => deleteNotification([item.id, "D"])}
-                          okText="Yes"
-                          cancelText="No"
-                          shape="round"
-                          placement="topRight"
-                          icon={
-                            <QuestionCircleOutlined style={{ color: "red" }} />
-                          }
-                        >
-                          <DeleteFilled
-                            className="deleteiconDesks"
-                            key={item.id}
-                            value={item.id}
-                          />
-                        </Popconfirm>
-                      </Col>
-                    </List.Item>
-                  )}
-                />
-              </InfiniteScroll>
-            </Col>
+                          <Col span={2}>
+                            <Popconfirm
+                              title="Are you sure to delete this desk?"
+                              onConfirm={() =>
+                                deleteNotification([item.id, "D"])
+                              }
+                              okText="Yes"
+                              cancelText="No"
+                              shape="round"
+                              placement="topRight"
+                              icon={
+                                <QuestionCircleOutlined
+                                  style={{ color: "red" }}
+                                />
+                              }
+                            >
+                              <DeleteFilled
+                                className="deleteiconDesks"
+                                key={item.id}
+                                value={item.id}
+                              />
+                            </Popconfirm>
+                          </Col>
+                        </List.Item>
+                      )}
+                    />
+                  </InfiniteScroll>
+                )}
+              </div>
+
+              <div style={{ width: 400 }}>
+                {imageUrl ? (
+                  <Image src={imageUrl} className="officeImagePlan"></Image>
+                ) : (
+                  <Image
+                    className="officeImagePlan"
+                    src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
+                  ></Image>
+                )}
+              </div>
+            </div>
           </Row>
         </Content>
       </Layout>

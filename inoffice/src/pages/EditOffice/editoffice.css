@@ -1,8 +1,8 @@
 .officeImagePlan {
   display: flex;
   justify-content: center;
-  width: 500px;
-  height: 300px;
+  width: 500px !important;
+  height: 400px !important;
 }
 
 .labels {
@@ -68,4 +68,9 @@
 
 .ant-col {
   border: 0 !important;
+}
+
+.officeName {
+  position: relative;
+  left: 9px;
 }

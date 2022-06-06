@@ -67,6 +67,7 @@ const FutureReservations = ({ officeName }) => {
         .get("employee/future-reservation")
         .then((response) => {
           sortByOldest(response.data);
+          setLoading(false);
         })
         .catch((error) => {
           console.error(error);
@@ -76,9 +77,8 @@ const FutureReservations = ({ officeName }) => {
             placement: "top",
             duration: 4,
           });
+          setLoading(false);
         });
-
-      setLoading(false);
     };
     fetchData();
   }, []);
@@ -151,7 +151,7 @@ const FutureReservations = ({ officeName }) => {
 
   return (
     <div>
-      {futurereservations.length > 0 ? (
+      {!loadingData ? (
         <Table
           columns={columns}
           dataSource={futurereservations.filter(({ officeName }) =>
