@@ -5,11 +5,11 @@ const Trigger = ({ triggerText, buttonRef, showModal }) => {
   return (
     <Button
       onClick={() => (window.location = "/admin/addoffice")}
-      className="uploadOfficePlan"
+      className="uploadOfficePlan btn"
+      style={{ width: 250 }}
       ref={buttonRef}
       onClick={showModal}
       type="primary"
-      shape="round"
     >
       {triggerText}
     </Button>

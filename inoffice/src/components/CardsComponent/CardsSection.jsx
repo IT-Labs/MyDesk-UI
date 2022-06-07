@@ -5,6 +5,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import Loading from "../Loading/Loading";
+
+let controller = new AbortController();
 
 const CardsSection = (props) => {
   const [loadingData, setLoading] = useState(true);
@@ -16,6 +19,7 @@ const CardsSection = (props) => {
   const { Meta } = Card;
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
+  const [initLoad, setInitLoad] = useState(true);
 
   function selectCard(e) {
     let isAvailable = true;
@@ -53,36 +57,43 @@ const CardsSection = (props) => {
     } else setDataConfRooms(rooms);
   };
 
+  const fetchData = async () => {
+    setLoading(true);
+
+    await api
+      .get("employee/office-desks/" + props.officeid, {
+        signal: controller.signal,
+      })
+      .then((response) => {
+        setDesks(response.data);
+        setInitnialDesks(response.data);
+        setInitLoad(true);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // await api
+    //   .get("employee/office-conferencerooms/" + props.officeid)
+    //   .then((response) => {
+    //     setConference(response.data);
+    //     setInitialConf(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("error message");
+    //   });
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await api
-        .get("employee/office-desks/" + props.officeid)
-        .then((response) => {
-          setDesks(response.data);
-          setInitnialDesks(response.data);
-        })
-        .catch((error) => {
-          console.error("error message");
-        });
-      // await api
-      //   .get("employee/office-conferencerooms/" + props.officeid)
-      //   .then((response) => {
-      //     setConference(response.data);
-      //     setInitialConf(response.data);
-      //   })
-      //   .catch((error) => {
-      //     console.error("error message");
-      //   });
-      setLoading(false);
-    };
     fetchData();
+    return () => {
+      controller.abort();
+      controller = new AbortController();
+    };
   }, [props.officeid, props.refresh]);
 
   useEffect(() => {
     setDesks(initialDesks);
-
-    setConference(initialConf);
   }, [props.available]);
 
   const findAvailable = (item) => {
@@ -109,7 +120,7 @@ const CardsSection = (props) => {
 
   const checkAvailable = (res) => {
     let isAvailable = true;
-    if (res.length > 0) {
+    if (res.length > 0 && start && end) {
       res.forEach((item) => {
         const availability = findAvailable(item);
         if (!availability) {
@@ -117,19 +128,33 @@ const CardsSection = (props) => {
         }
       });
 
-      return isAvailable ? true : false;
+      return isAvailable;
     } else {
       return true;
     }
     // return "#f37076" : "#69e28d",
   };
 
+  console.log(dataDesks);
+
   return (
     <>
-      {loadingData && <div>Loading</div>}
+      {loadingData && (
+        <div
+          style={{
+            height: 400,
+            maxHeight: 400,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loading />
+        </div>
+      )}
       {!loadingData && (
         <InfiniteScroll
-          dataLength={dataConfRooms.length + dataDesks.length}
+          dataLength={dataDesks.length}
           scrollableTarget="scrollableDiv"
           display="flex"
           style={{ height: 400, maxHeight: 400 }}
@@ -146,58 +171,64 @@ const CardsSection = (props) => {
                   return !checkAvailable(item.reservations);
                 }
               })}
-              renderItem={(item) => (
-                <List.Item
-                  style={{
-                    border:
-                      item === selectedCardInSection ? "solid 2px" : "none",
-                  }}
-                >
-                  <Card
-                    onClick={() => selectCard(item)}
-                    bodyStyle={{
-                      // backgroundColor: checkAvailable(item.reservation),
-                      background: checkAvailable(item.reservations)
-                        ? "#69e28d"
-                        : "#f37076",
+              renderItem={(item) => {
+                const available = checkAvailable(item.reservations);
+                return (
+                  <List.Item
+                    style={{
+                      border:
+                        item === selectedCardInSection ? "solid 2px" : "none",
                     }}
-                    hoverable={true}
-                    bordered={true}
                   >
-                    <Meta
-                      title={
-                        <p style={{ fontSize: "0.8vw" }}>
-                          Desk {item.indexForOffice}
-                        </p>
-                      }
-                      description={
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "start",
-                          }}
-                          className="cardContentInformation"
-                        >
-                          {item.capacity >= 0 ? (
-                            <p style={{ color: "#000000	", fontSize: "0.6vw" }}>
-                              Capacity: {item.capacity}
-                            </p>
-                          ) : (
-                            <p
-                              style={{
-                                color: "#000000	",
-                                fontSize: "0.6vw",
-                              }}
-                            >
-                              Category: {item.categories}
-                            </p>
-                          )}
-                        </div>
-                      }
-                    />
-                  </Card>
-                </List.Item>
-              )}
+                    <Card
+                      onClick={() => selectCard(item)}
+                      bodyStyle={{
+                        // backgroundColor: checkAvailable(item.reservation),
+                        background: available ? "#69e28d" : "#f37076",
+                        height: 114,
+                      }}
+                      hoverable={true}
+                      bordered={true}
+                    >
+                      <Meta
+                        title={
+                          <p style={{ fontSize: "0.8vw" }}>
+                            Desk {item.indexForOffice}
+                          </p>
+                        }
+                        description={
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "start",
+                            }}
+                            className="cardContentInformation"
+                          >
+                            {item.capacity >= 0 ? (
+                              <p
+                                style={{ color: "#000000	", fontSize: "0.6vw" }}
+                              >
+                                Capacity: {item.capacity}
+                              </p>
+                            ) : (
+                              <p
+                                style={{
+                                  color: "#000000	",
+                                  fontSize: "10px",
+                                }}
+                              >
+                                {item.reservations.length > 0 &&
+                                  !available &&
+                                  `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
+                              </p>
+                            )}
+                          </div>
+                        }
+                      />
+                    </Card>
+                  </List.Item>
+                );
+              }}
             />
           </Layout>
         </InfiniteScroll>

@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEmployees } from "../../redux/Employees/employees";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import UserSearch from "../../components/UserSearch/UserSearch";
+import axios from "axios";
+import { setEnd, setStart } from "../../redux/Date/Date";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -50,7 +52,7 @@ const Home = () => {
     setDates(range);
   }
 
-  function changeofficebranch(value) {
+  async function changeofficebranch(value) {
     setofficeid(value);
   }
 
@@ -114,9 +116,10 @@ const Home = () => {
         console.error("error");
       });
   };
-  console.log(employees);
 
   const clearDate = () => {
+    dispatch(setStart(null));
+    dispatch(setEnd(null));
     setDates([]);
   };
 
@@ -188,8 +191,6 @@ const Home = () => {
       makeReservation();
     }
   };
-
-  console.log(officeid);
 
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
