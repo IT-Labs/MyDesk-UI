@@ -55,9 +55,11 @@ const PastReservations = ({ officeName }) => {
         .get("employee/past-reservations")
         .then((response) => {
           sortByNewest(response.data);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error message");
+          setLoading(false);
         });
     };
     fetchData();

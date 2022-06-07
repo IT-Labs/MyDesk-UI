@@ -18,6 +18,7 @@ const OfficeImage = (props) => {
           "employee/office/image/" + props.officeid
         );
         setData(response);
+        console.log(response);
       }
       setLoading(false);
     };
@@ -27,11 +28,22 @@ const OfficeImage = (props) => {
 
   return (
     <div>
-      {loading && <div></div>}
-      {!loading && (
-        <Image src={data} style={{ height: 400 }}>
+      {data ? (
+        <Image src={data} alt="office image" style={{ height: 400 }}>
           <Spin />
         </Image>
+      ) : (
+        <div
+          style={{
+            height: 400,
+            background: "white",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <h2>No image available</h2>
+        </div>
       )}
     </div>
   );

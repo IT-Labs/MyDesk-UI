@@ -21,6 +21,7 @@ import { fetchEmployees } from "../../utils/fetchEmployees";
 import UserSearch from "../../components/UserSearch/UserSearch";
 import axios from "axios";
 import { setEnd, setStart } from "../../redux/Date/Date";
+import { ClearOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -282,89 +283,97 @@ const Home = () => {
               className="buttonReview"
               style={{
                 display: "flex",
-                justifyContent: "space-evenly",
+                justifyContent: "space-around",
                 alignItems: "center",
                 width: "50%",
               }}
             >
-              <Select
-                defaultValue={"Reserve for coworker"}
-                placement={"topRight"}
-                style={{ width: 250 }}
-                showSearch
-                onChange={(val) => setSelectedCoworker(val)}
-              >
-                <Select.Option value={""} key={0}>
-                  None
-                </Select.Option>
-                {employees &&
-                  employees.map((item) => (
-                    <Select.Option
-                      key={item.id}
-                      value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
-                    >
-                      <h4
-                        style={{ fontSize: 14 }}
-                      >{`${item.firstName} ${item.lastName}`}</h4>
-                      <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
-                    </Select.Option>
-                  ))}
-              </Select>
-              <Button
-                block
-                disabled={selectedCardId.length === 0 ? true : false}
-                type="primary"
-                size="large"
-                style={{
-                  borderRadius: "7px",
-                  background: "#5cb1b8",
-                  border: "transparent",
-                  marginRight: 5,
-                  width: 130,
-                }}
-                onClick={() => showReviewsForSelectedCard()}
-              >
-                <p
-                  style={{
-                    fontSize: "0.8vw",
-                    justifyContent: "center",
-                    marginBottom: 0,
-                  }}
+              <div>
+                <Select
+                  placeholder="Reserve for coworker"
+                  value={
+                    selectedCoworker.length > 0
+                      ? selectedCoworker
+                      : "Reserve for coworker"
+                  }
+                  placement={"topRight"}
+                  style={{ width: 250 }}
+                  showSearch
+                  onChange={(val) => setSelectedCoworker(val)}
                 >
-                  Show reviews
-                </p>
-              </Button>
-              <Button
-                block
-                disabled={
-                  (selectedCardId.length === 0 || !isAvailable
-                    ? true
-                    : false) ||
-                  (startDateRes.length === 0 || endDateRes.length === 0
-                    ? true
-                    : false)
-                }
-                onClick={() => checkTypeOfReservation()}
-                type="primary"
-                style={{
-                  borderRadius: "7px",
-                  background:
-                    selectedCoworker.length > 0 ? "orange" : "#5cb1b8",
-                  border: "transparent",
-                  width: 130,
-                }}
-                size="large"
-              >
-                <p
+                  {employees &&
+                    employees.map((item) => (
+                      <Select.Option
+                        key={item.id}
+                        value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
+                      >
+                        <h4
+                          style={{ fontSize: 14 }}
+                        >{`${item.firstName} ${item.lastName}`}</h4>
+                        <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
+                      </Select.Option>
+                    ))}
+                </Select>
+                <CloseCircleOutlined onClick={() => setSelectedCoworker("")} />
+              </div>
+              <div>
+                <Button
+                  block
+                  disabled={
+                    (selectedCardId.length === 0 || !isAvailable
+                      ? true
+                      : false) ||
+                    (startDateRes.length === 0 || endDateRes.length === 0
+                      ? true
+                      : false)
+                  }
+                  onClick={() => checkTypeOfReservation()}
+                  type="primary"
                   style={{
-                    fontSize: "0.8vw",
-                    justifyContent: "center",
-                    marginBottom: 0,
+                    borderRadius: "7px",
+                    background:
+                      selectedCoworker.length > 0 ? "orange" : "#5cb1b8",
+                    border: "transparent",
+                    width: 130,
                   }}
+                  size="large"
                 >
-                  Reserve
-                </p>
-              </Button>
+                  <p
+                    style={{
+                      fontSize: "0.8vw",
+                      justifyContent: "center",
+                      marginBottom: 0,
+                    }}
+                  >
+                    Reserve
+                  </p>
+                </Button>
+                <Button
+                  block
+                  disabled={selectedCardId.length === 0 ? true : false}
+                  type="primary"
+                  size="large"
+                  style={{
+                    borderRadius: "7px",
+                    background: "#5cb1b8",
+                    border: "transparent",
+                    marginLeft: 5,
+                    width: 130,
+                  }}
+                  onClick={() => showReviewsForSelectedCard()}
+                >
+                  <p
+                    style={{
+                      fontSize: "0.8vw",
+                      justifyContent: "center",
+                      marginBottom: 0,
+                    }}
+                  >
+                    Show reviews
+                  </p>
+                </Button>
+              </div>
+
               <Modal
                 maskClosable={false}
                 title="Reviews for selected entity"

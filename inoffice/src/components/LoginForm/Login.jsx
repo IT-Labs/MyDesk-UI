@@ -82,8 +82,8 @@ const Login = () => {
           tenantUrl={
             "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
           }
-          // redirectUri={url}
-          // forceRedirectStrategy={true}
+          redirectUri={url}
+          forceRedirectStrategy={true}
           // useLocalStorageCache={true}
           withUserData={true}
           className={styles.loginBtn}
