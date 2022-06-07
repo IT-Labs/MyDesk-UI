@@ -17,6 +17,7 @@ import {
   Space,
   Image,
   Popconfirm,
+  Table,
 } from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
@@ -33,6 +34,7 @@ const OfficeDetails = ({ props }) => {
   const [initialDesks, setInitialDesks] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [conferenceRooms, setConference] = useState([]);
+  console.log(props);
   const [isLoading, setIsLoading] = useState(true);
 
   const getDesks = () => {
@@ -165,6 +167,67 @@ const OfficeDetails = ({ props }) => {
         console.error("Error message");
       });
   };
+
+  const columns = [
+    {
+      title: "All desks",
+      dataIndex: "indexForOffice",
+      key: 1,
+      align: "center",
+      width: "25%",
+    },
+    {
+      title: "Unavailable desks",
+      dataIndex: "unavailable",
+      key: 2,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            style={{
+              background: "white",
+              color: "black",
+              paddingLeft: "3%",
+            }}
+            value={item.id}
+            defaultChecked={checkCategory(item)}
+            onChange={check}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "50%",
+    },
+    {
+      title: "Delete",
+      dataIndex: "delete",
+      align: "center",
+      borderRight: "none",
+      width: "25%",
+      render: (text, item, id) => {
+        return (
+          <Popconfirm
+            title="Are you sure to delete this desk?"
+            onConfirm={() => deleteNotification([item.id, "D"])}
+            okText="Yes"
+            cancelText="No"
+            shape="round"
+            style={{ padding: 0 }}
+            placement="topRight"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <DeleteFilled
+              className="deleteiconDesks"
+              key={item.id}
+              value={item.id}
+              style={{ padding: 0 }}
+            />
+          </Popconfirm>
+        );
+      },
+    },
+  ];
+
   return (
     <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <div style={{ width: "90%" }}>
@@ -178,7 +241,7 @@ const OfficeDetails = ({ props }) => {
               Edit office
             </h2>
             <div className="officeTitels">
-              Name: <span className="labels">{officeName.split(" ")[0]}</span>
+              Name: <span className="labels">{officeName}</span>
             </div>
           </div>
           <div>
@@ -256,56 +319,13 @@ const OfficeDetails = ({ props }) => {
                     minWidth: "100%",
                   }}
                 >
-                  <List
-                    header={
-                      <div className="divSpan">
-                        <span className="firstSpan">All desks</span>
-                        <span className="secondSpan">Unavailable Desk</span>
-                        <span> Delete</span>
-                      </div>
-                    }
+                  <Table
                     bordered
                     style={{ width: "100%", border: "none" }}
+                    className="newTable"
                     dataSource={desks}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <Col>{item.indexForOffice}</Col>
-                        <Col>
-                          <Checkbox
-                            style={{
-                              background: "white",
-                              color: "black",
-                              paddingLeft: "3%",
-                            }}
-                            value={item.id}
-                            defaultChecked={checkCategory(item)}
-                            onChange={check}
-                          ></Checkbox>
-                        </Col>
-
-                        <Col span={2}>
-                          <Popconfirm
-                            title="Are you sure to delete this desk?"
-                            onConfirm={() => deleteNotification([item.id, "D"])}
-                            okText="Yes"
-                            cancelText="No"
-                            shape="round"
-                            placement="topRight"
-                            icon={
-                              <QuestionCircleOutlined
-                                style={{ color: "red" }}
-                              />
-                            }
-                          >
-                            <DeleteFilled
-                              className="deleteiconDesks"
-                              key={item.id}
-                              value={item.id}
-                            />
-                          </Popconfirm>
-                        </Col>
-                      </List.Item>
-                    )}
+                    columns={columns}
+                    pagination={false}
                   />
                 </InfiniteScroll>
               )}

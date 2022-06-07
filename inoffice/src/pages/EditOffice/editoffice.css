@@ -74,3 +74,35 @@
   position: relative;
   left: 9px;
 }
+
+.newTable .ant-table-tbody > tr > td {
+  border: none !important;
+}
+
+.newTable .ant-table- {
+  border: none !important;
+}
+
+.newTable
+  .ant-table.ant-table-bordered
+  > .ant-table-container
+  > .ant-table-content
+  > table,
+.ant-table.ant-table-bordered
+  > .ant-table-container
+  > .ant-table-header
+  > table {
+  border: none;
+}
+
+.newTable .ant-table-container {
+  border: none !important;
+}
+
+.newTable .ant-table-thead > tr > th {
+  background-color: transparent !important;
+}
+
+.newTable .ant-table-thead > tr > th:nth-child(3) {
+  border-right: none !important;
+}

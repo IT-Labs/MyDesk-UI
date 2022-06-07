@@ -118,7 +118,6 @@ p.lorem-text {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
   transform: translateZ(0);
   background-color: rgba(0, 0, 0, 0.8);
 }
@@ -361,4 +360,18 @@ html {
   color: white;
   border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
+}
+
+.ant-layout-sider-light .ant-layout-sider-trigger {
+  background-color: transparent !important;
+}
+
+.uploadOfficePlanButton button {
+  background-color: white;
+  color: #5cb1b8;
+  border: 1px solid #5cb1b8;
+  transition: all 0.2s ease-in-out;
+  border-radius: 7px;
+  width: 120px;
+  font-weight: 500;
 }

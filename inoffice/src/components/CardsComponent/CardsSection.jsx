@@ -178,6 +178,7 @@ const CardsSection = (props) => {
                     style={{
                       border:
                         item === selectedCardInSection ? "solid 2px" : "none",
+                      transition: "all 0.3s ease-in-out",
                     }}
                   >
                     <Card
@@ -185,7 +186,7 @@ const CardsSection = (props) => {
                       bodyStyle={{
                         // backgroundColor: checkAvailable(item.reservation),
                         background: available ? "#69e28d" : "#f37076",
-                        height: 114,
+                        height: "10rem",
                       }}
                       hoverable={true}
                       bordered={true}
@@ -211,16 +212,33 @@ const CardsSection = (props) => {
                                 Capacity: {item.capacity}
                               </p>
                             ) : (
-                              <p
-                                style={{
-                                  color: "#000000	",
-                                  fontSize: "10px",
-                                }}
-                              >
-                                {item.reservations.length > 0 &&
-                                  !available &&
-                                  `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
-                              </p>
+                              <div>
+                                <p
+                                  style={{
+                                    color: "#000000	",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {item.reservations.length > 0 &&
+                                    !available &&
+                                    `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
+                                </p>
+                                <p
+                                  style={{
+                                    color: "#000000	",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  {item.reservations.length > 0 &&
+                                    !available &&
+                                    `${moment(
+                                      item.reservations[0].startDate
+                                    ).format("DD-MM-YY")}
+                                  / ${moment(
+                                    item.reservations[0].endDate
+                                  ).format("DD-MM-YY")}`}
+                                </p>
+                              </div>
                             )}
                           </div>
                         }
