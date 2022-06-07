@@ -24,6 +24,7 @@ const ReservationList = () => {
   const [filterInput, setFilterInput] = useState("");
   const [initRes, setInitRes] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [toBeCancelled, setToBeCancelled] = useState(null);
   const sortResStruct = (res) => {
     const results = res
@@ -95,10 +96,12 @@ const ReservationList = () => {
       .get("employee/reservations/all")
       .then(({ data }) => {
         sortResStruct(data.reservations);
+        setLoading(false);
         console.log(data);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
     api
       .get("admin/offices")
@@ -208,7 +211,6 @@ const ReservationList = () => {
           duration: 4,
         });
         const filteredRes = initRes.filter((item) => item.key !== id);
-
         setInitRes(filteredRes);
         sortFuture(filteredRes);
       })
@@ -219,8 +221,6 @@ const ReservationList = () => {
 
   useEffect(() => {
     const keyDownHandler = (event) => {
-      console.log("User pressed: ", event.key);
-
       if (event.key === "Escape") {
         event.preventDefault();
 
@@ -288,7 +288,7 @@ const ReservationList = () => {
                   </Tooltip>
                 </div>
               </div>
-              {reservations.length > 0 ? (
+              {!loading ? (
                 <Table
                   columns={tabKey === "past" ? pastColumns : futureColumns}
                   dataSource={reservations.filter(

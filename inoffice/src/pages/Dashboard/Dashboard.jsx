@@ -301,6 +301,7 @@ const Dashboard = () => {
             <div
               style={{
                 width: "100%",
+                marginTop: "1%",
               }}
             >
               <div
@@ -313,8 +314,8 @@ const Dashboard = () => {
                 <div
                   style={{
                     background: "#fff",
-                    width: 400,
-                    height: 431,
+                    width: "25rem",
+                    height: "26.938rem",
                     borderRadius: 7,
                     display: "flex",
                     padding: 20,

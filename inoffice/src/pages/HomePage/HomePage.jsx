@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from "react";
 import UserHead from "../../components/Head/UserHead";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Row, Col, notification, Modal, Select } from "antd";
+import { Button, Row, Col, notification, Modal, Select, Checkbox } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/CalendarImplementation";
 import OfficeImage from "../../components/inputs/OfficeImage";
@@ -39,6 +39,7 @@ const Home = () => {
 
   const [selectedCoworker, setSelectedCoworker] = useState("");
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
+  const [forCoworker, setForCoworker] = useState(false);
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
 
@@ -147,6 +148,7 @@ const Home = () => {
     const foundEmployee = employees.find(
       (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === person
     );
+    console.log(foundEmployee);
 
     const data = {
       startDate: startDateRes,
@@ -170,7 +172,7 @@ const Home = () => {
         setShowReserveForCoworker(false);
       })
       .catch((error) => {
-        console.error("error");
+        console.error(error);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
@@ -186,7 +188,16 @@ const Home = () => {
   };
 
   const checkTypeOfReservation = () => {
-    if (selectedCoworker.length > 0) {
+    if (selectedCoworker.length === 0 && forCoworker) {
+      notification.open({
+        message: "Error",
+        description: "Please select your coworker if you have the box checked",
+        duration: 3,
+        placement: "top",
+      });
+      return;
+    }
+    if (forCoworker) {
       setShowReserveForCoworker(true);
     } else {
       makeReservation();
@@ -289,18 +300,19 @@ const Home = () => {
               }}
             >
               <div>
+                <Checkbox
+                  style={{ width: 30, height: 30 }}
+                  onClick={() => setForCoworker(!forCoworker)}
+                />
                 <Select
-                  placeholder="Reserve for coworker"
-                  value={
-                    selectedCoworker.length > 0
-                      ? selectedCoworker
-                      : "Reserve for coworker"
-                  }
+                  defaultValue={"Reserve for coworker"}
                   placement={"topRight"}
                   style={{ width: 250 }}
                   showSearch
                   onChange={(val) => setSelectedCoworker(val)}
+                  disabled={!forCoworker}
                 >
+                  <Select.Option value="">None</Select.Option>
                   {employees &&
                     employees.map((item) => (
                       <Select.Option
@@ -314,7 +326,6 @@ const Home = () => {
                       </Select.Option>
                     ))}
                 </Select>
-                <CloseCircleOutlined onClick={() => setSelectedCoworker("")} />
               </div>
               <div>
                 <Button
@@ -325,14 +336,23 @@ const Home = () => {
                       : false) ||
                     (startDateRes.length === 0 || endDateRes.length === 0
                       ? true
+                      : false) ||
+                    (((selectedCardId.length === 0 || !isAvailable
+                      ? true
+                      : false) ||
+                      (startDateRes.length === 0 || endDateRes.length === 0
+                        ? true
+                        : false)) &&
+                    forCoworker &&
+                    selectedCoworker.length === 0
+                      ? true
                       : false)
                   }
                   onClick={() => checkTypeOfReservation()}
                   type="primary"
                   style={{
                     borderRadius: "7px",
-                    background:
-                      selectedCoworker.length > 0 ? "orange" : "#5cb1b8",
+                    background: forCoworker ? "orange" : "#5cb1b8",
                     border: "transparent",
                     width: 130,
                   }}
