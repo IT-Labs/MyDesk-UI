@@ -97,17 +97,18 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = moment(item.startdate)._i;
-    const endSelected = moment(item?.endDate)._i;
+    const startSelected = moment(item.startDate)._i;
+    const endSelected = moment(item.endDate)._i;
     const momentStart = moment(start);
     const momentEnd = moment(end);
-    //   (momentStart.isAfter(startSelected) &&
-    //   momentStart.isBefore(endSelected)) ||
-    // (momentStart.isBefore(startSelected) &&
-    //   momentEnd.isAfter(endSelected)) ||
-    // (momentStart.isBefore(startSelected) &&
-    //   momentEnd.isBefore(endSelected)) ||
-    // (momentStart.isBefore(endSelected) && momentEnd.isAfter(endSelected))
+    console.log(startSelected);
+    if (
+      momentStart.format("DD/MM/YYYY") ===
+        moment(startSelected).format("DD/MM/YYYY") &&
+      momentEnd.format("DD/MM/YYYY") ===
+        moment(endSelected).format("DD/MM/YYYY")
+    )
+      return false;
     if (
       (momentStart.isBefore(startSelected) &&
         momentEnd.isBefore(startSelected)) ||
@@ -120,7 +121,9 @@ const CardsSection = (props) => {
 
   const checkAvailable = (res) => {
     let isAvailable = true;
+
     if (res.length > 0 && start && end) {
+      console.log(res);
       res.forEach((item) => {
         const availability = findAvailable(item);
         if (!availability) {
@@ -134,8 +137,6 @@ const CardsSection = (props) => {
     }
     // return "#f37076" : "#69e28d",
   };
-
-  console.log(dataDesks);
 
   return (
     <>
@@ -233,10 +234,10 @@ const CardsSection = (props) => {
                                     !available &&
                                     `${moment(
                                       item.reservations[0].startDate
-                                    ).format("DD-MM-YY")}
+                                    ).format("DD-MM")}
                                   / ${moment(
                                     item.reservations[0].endDate
-                                  ).format("DD-MM-YY")}`}
+                                  ).format("DD-MM")}`}
                                 </p>
                               </div>
                             )}
