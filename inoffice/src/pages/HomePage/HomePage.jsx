@@ -36,6 +36,7 @@ const Home = () => {
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [employeeSearch, setEmployeeSearch] = useState("");
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
@@ -232,7 +233,10 @@ const Home = () => {
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                   Search by name
                 </p>
-                <UserSearch />
+                <Input
+                  style={{ width: 250 }}
+                  onChange={(e) => setEmployeeSearch(e.target.value)}
+                />
               </div>
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
@@ -280,6 +284,7 @@ const Home = () => {
                 selectedCard={selectedCard}
                 officeid={officeid}
                 available={selectValue}
+                employeeSearch={employeeSearch}
               />
             </Col>
           </Row>

@@ -159,12 +159,21 @@ const CardsSection = (props) => {
             <List
               grid={{ gutter: 0, column: 5 }}
               dataSource={dataDesks.filter((item) => {
-                if (props.available === null) {
-                  return item;
-                } else if (props.available === true) {
-                  return checkAvailable(item.reservations);
-                } else if (props.available === false) {
-                  return !checkAvailable(item.reservations);
+                if (
+                  `${item?.reservations[0]?.employee?.firstName} ${item?.reservations[0]?.employee?.lastName}`
+                    .toLowerCase()
+                    .includes(props.employeeSearch.toLowerCase()) &&
+                  !checkAvailable(item.reservations)
+                ) {
+                  return true;
+                } else if (props.employeeSearch.length === 0) {
+                  if (props.available === null) {
+                    return item;
+                  } else if (props.available === true) {
+                    return checkAvailable(item.reservations);
+                  } else if (props.available === false) {
+                    return !checkAvailable(item.reservations);
+                  }
                 }
               })}
               renderItem={(item) => {
