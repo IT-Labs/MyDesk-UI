@@ -248,7 +248,7 @@ const Dashboard = () => {
               <Select
                 defaultValue="Select Office"
                 onChange={selectFilter}
-                style={{ width: 200 }}
+                style={{ width: 200, marginRight: 10 }}
                 showSearch
               >
                 <Select.Option key={0} value={null}>

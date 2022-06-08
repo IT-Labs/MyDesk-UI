@@ -8,9 +8,9 @@ export const fetchEmployees = async (api, dispatch, notification) => {
       const { preferred_username } = jwtDecode(
         sessionStorage.getItem("msal.idtoken")
       );
-      const filteredData = data.filter(
-        ({ email }) => email !== preferred_username
-      );
+      const filteredData = data
+        .filter(({ email }) => email !== preferred_username)
+        .sort((a, b) => a.firstName.localeCompare(b.firstName));
       dispatch(setEmployees(filteredData));
     })
     .catch((err) => {

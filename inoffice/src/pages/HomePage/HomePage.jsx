@@ -37,6 +37,7 @@ const Home = () => {
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
   const [employeeSearch, setEmployeeSearch] = useState("");
+  const [defValue, setDefValue] = useState("Reserve for Coworker");
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
@@ -56,7 +57,9 @@ const Home = () => {
   }
 
   async function changeofficebranch(value) {
+    setDefValue("Reserve for Coworker");
     setofficeid(value);
+    setForCoworker(false);
   }
 
   function selectedCard(value, availability) {
@@ -137,8 +140,6 @@ const Home = () => {
     sendReservation(data);
   };
 
-  const [checked, setChecked] = useState(false);
-
   useEffect(() => {}, [selectValue]);
 
   const changeVal = (e) => {
@@ -204,7 +205,8 @@ const Home = () => {
     const foundEmployee = employees.find(
       (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === val
     );
-    console.log(foundEmployee);
+    const name = val.split(" ");
+    setDefValue(`${name[0]} ${name[1]}`);
     setSelectedCoworker(foundEmployee);
   };
 
@@ -304,16 +306,17 @@ const Home = () => {
                 display: "flex",
                 justifyContent: "space-around",
                 alignItems: "center",
-                width: "50%",
+                width: "53%",
               }}
             >
               <div>
                 <Checkbox
                   style={{ width: 30, height: 30 }}
                   onClick={() => setForCoworker(!forCoworker)}
+                  checked={forCoworker}
                 />
                 <Select
-                  defaultValue={"Reserve for coworker"}
+                  value={defValue}
                   placement={"topRight"}
                   style={{ width: 250 }}
                   showSearch
