@@ -6,7 +6,7 @@ import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import Loading from "../Loading/Loading";
-
+import { extendMoment } from "moment-range";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
@@ -97,33 +97,38 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = moment(item.startDate)._i;
-    const endSelected = moment(item.endDate)._i;
-    const momentStart = moment(start);
-    const momentEnd = moment(end);
-    console.log(startSelected);
-    if (
-      momentStart.format("DD/MM/YYYY") ===
-        moment(startSelected).format("DD/MM/YYYY") &&
-      momentEnd.format("DD/MM/YYYY") ===
-        moment(endSelected).format("DD/MM/YYYY")
-    )
-      return false;
-    if (
-      (momentStart.isBefore(startSelected) &&
-        momentEnd.isBefore(startSelected)) ||
-      (momentStart.isAfter(endSelected) && momentEnd.isAfter(endSelected)) ||
-      (startSelected === null && endSelected === null)
-    )
-      return true;
-    else return false;
+    const startSelected = moment(item.startDate).format("DD/MM/YYYY");
+    const endSelected = moment(item.endDate).format("DD/MM/YYYY");
+    const momentStart = moment(start).format("DD/MM/YYYY");
+    const momentEnd = moment(end).format("DD/MM/YYYY");
+    const momentRange = extendMoment(moment);
+    const range1 = momentRange.range(startSelected, endSelected);
+    const range2 = momentRange.range(momentStart, momentEnd);
+    const flag = range1.overlaps(range2, { adjacent: true });
+
+    return !flag;
+
+    // if (
+    //   momentStart.format("DD/MM/YYYY") ===
+    //     moment(startSelected).format("DD/MM/YYYY") &&
+    //   momentEnd.format("DD/MM/YYYY") ===
+    //     moment(endSelected).format("DD/MM/YYYY")
+    // )
+    //   return false;
+    // if (
+    //   (momentStart.isBefore(startSelected) &&
+    //     momentEnd.isBefore(startSelected)) ||
+    //   (momentStart.isAfter(endSelected) && momentEnd.isAfter(endSelected)) ||
+    //   (startSelected === null && endSelected === null)
+    // )
+    //   return true;
+    // else return false;
   };
 
   const checkAvailable = (res) => {
     let isAvailable = true;
 
     if (res.length > 0 && start && end) {
-      console.log(res);
       res.forEach((item) => {
         const availability = findAvailable(item);
         if (!availability) {

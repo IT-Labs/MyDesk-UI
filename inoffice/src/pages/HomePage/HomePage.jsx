@@ -37,7 +37,7 @@ const Home = () => {
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
 
-  const [selectedCoworker, setSelectedCoworker] = useState("");
+  const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
   const [forCoworker, setForCoworker] = useState(false);
   const dispatch = useDispatch();
@@ -145,15 +145,10 @@ const Home = () => {
   };
 
   const reserveForCoworker = async (person) => {
-    const foundEmployee = employees.find(
-      (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === person
-    );
-    console.log(foundEmployee);
-
     const data = {
       startDate: startDateRes,
       endDate: endDateRes,
-      coworkerMail: foundEmployee.email,
+      coworkerMail: selectedCoworker.email,
       deskId: selectedCardId.id,
     };
     const config = {
@@ -188,7 +183,7 @@ const Home = () => {
   };
 
   const checkTypeOfReservation = () => {
-    if (selectedCoworker.length === 0 && forCoworker) {
+    if (Object.keys(selectedCoworker) === 0 && forCoworker) {
       notification.open({
         message: "Error",
         description: "Please select your coworker if you have the box checked",
@@ -202,6 +197,14 @@ const Home = () => {
     } else {
       makeReservation();
     }
+  };
+
+  const setCoworker = (val) => {
+    const foundEmployee = employees.find(
+      (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === val
+    );
+    console.log(foundEmployee);
+    setSelectedCoworker(foundEmployee);
   };
 
   return (
@@ -309,7 +312,7 @@ const Home = () => {
                   placement={"topRight"}
                   style={{ width: 250 }}
                   showSearch
-                  onChange={(val) => setSelectedCoworker(val)}
+                  onChange={setCoworker}
                   disabled={!forCoworker}
                 >
                   <Select.Option value="">None</Select.Option>
@@ -344,7 +347,7 @@ const Home = () => {
                         ? true
                         : false)) &&
                     forCoworker &&
-                    selectedCoworker.length === 0
+                    Object.keys(selectedCoworker).length === 0
                       ? true
                       : false)
                   }
@@ -416,7 +419,7 @@ const Home = () => {
                 onOk={() => reserveForCoworker(selectedCoworker)}
               >
                 Are you sure you want to reserve this desk for{" "}
-                {selectedCoworker}?
+                {selectedCoworker.firstName} {selectedCoworker.lastName}?
               </Modal>
             </div>
           </Row>
