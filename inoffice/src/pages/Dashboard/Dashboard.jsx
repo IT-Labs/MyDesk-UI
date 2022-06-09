@@ -182,7 +182,7 @@ const Dashboard = () => {
       content: "{value}",
       style: {
         textAlign: "center",
-        fontSize: 14,
+        fontSize: 20,
       },
     },
     interactions: [
