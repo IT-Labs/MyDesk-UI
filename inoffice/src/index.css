@@ -379,7 +379,7 @@ html {
   border-radius: 20px !important;
 }
 
-.ant-select-arrow {
+.userSearchSelect .ant-select-arrow {
   right: 0 !important;
   left: 11px;
 }
