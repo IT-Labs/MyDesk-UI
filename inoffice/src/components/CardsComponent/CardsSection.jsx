@@ -47,6 +47,8 @@ const CardsSection = (props) => {
     } else setDataDesks(desks);
   };
 
+  console.log(dataDesks);
+
   const setConference = (rooms) => {
     if (props.available === 2) {
       const filtered = rooms.filter((item) => !item.reservationId);
@@ -97,10 +99,10 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = moment(item.startDate).format("DD/MM/YYYY");
-    const endSelected = moment(item.endDate).format("DD/MM/YYYY");
-    const momentStart = moment(start).format("DD/MM/YYYY");
-    const momentEnd = moment(end).format("DD/MM/YYYY");
+    const startSelected = item.startDate;
+    const endSelected = item.endDate;
+    const momentStart = moment(start).toISOString();
+    const momentEnd = moment(end).toISOString();
     const momentRange = extendMoment(moment);
     const range1 = momentRange.range(startSelected, endSelected);
     const range2 = momentRange.range(momentStart, momentEnd);
@@ -190,7 +192,11 @@ const CardsSection = (props) => {
                       onClick={() => selectCard(item)}
                       bodyStyle={{
                         // backgroundColor: checkAvailable(item.reservation),
-                        background: available ? "#69e28d" : "#f37076",
+                        background: item.categories?.unavailable
+                          ? "#c1c1c1"
+                          : available
+                          ? "#69e28d"
+                          : "#f37076",
                         height: "10rem",
                       }}
                       hoverable={true}
@@ -227,6 +233,8 @@ const CardsSection = (props) => {
                                   {item.reservations.length > 0 &&
                                     !available &&
                                     `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
+                                  {item.categories?.unavailable &&
+                                    "Unavailable"}
                                 </p>
                                 <p
                                   style={{

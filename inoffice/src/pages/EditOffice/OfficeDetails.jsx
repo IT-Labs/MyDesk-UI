@@ -34,7 +34,6 @@ const OfficeDetails = ({ props }) => {
   const [initialDesks, setInitialDesks] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
   const [conferenceRooms, setConference] = useState([]);
-  console.log(props);
   const [isLoading, setIsLoading] = useState(true);
 
   const getDesks = () => {
@@ -42,7 +41,7 @@ const OfficeDetails = ({ props }) => {
       .get("admin/office-desks/" + officeId)
       .then((res) => {
         setDesks(res.data.deskList);
-        console.log(res.data);
+
         const check = res.data.deskList.map((x) => x.id);
         setUnchecked(check);
         const init = res.data.deskList.map((x) => x.id);
@@ -77,48 +76,113 @@ const OfficeDetails = ({ props }) => {
     getImage();
   }, []);
 
-  const checkCategory = (e) => {
-    if (e.categories === "silent") {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const save = () => {
+    let flag = false;
+    const properlySortedData = desks.map((item) => {
+      const desk = {
+        deskId: item.id,
+        unavailable: item.categories?.unavailable ? true : false,
+        singleMonitor: item.categories?.singleMonitor ? true : false,
+        dualMonitor: item.categories?.dualMonitor ? true : false,
+        nearWindow: item.categories?.nearWindow ? true : false,
+      };
+      if (desk.singleMonitor && desk.dualMonitor) {
+        flag = true;
+      }
+      return desk;
+    });
+
     const data = {
-      checkedDesks: checked,
-      uncheckedDesks: unchecked,
+      listOfDesksToUpdate: [...properlySortedData],
     };
 
     console.log(data);
+    if (flag) {
+      notification.open({
+        message: "Notification",
+        placement: "top",
+        description:
+          "You cannot have both a single monitor and dual monitor desk.",
+        duration: 3,
+      });
+      return;
+    }
 
     api
       .put("admin/office-entities", data)
       .then((res) => {
         getDesks();
         openNotification("top");
+        notification.open({
+          message: "Notification",
+          placement: "top",
+          description: "Entities updated",
+          duration: 3,
+        });
       })
-      .catch((error) =>
+      .catch((error) => {
+        console.log(error.response);
         notification.open({
           message: "Notification",
           placement: "top",
           description: "It seems there was an error while saving",
-        })
-      );
+          duration: 3,
+        });
+      });
   };
 
-  const check = (checkedValues) => {
-    const newChecked = [...checked, checkedValues.target.value];
-    setChecked(newChecked);
-    const newUnchecked = unchecked.filter((item) => {
-      let flag = false;
-      newChecked.forEach((id) => {
-        if (id === item) flag = true;
-      });
-      return flag ? false : true;
+  const check = (id, category) => {
+    const newItem = desks.map((item) => {
+      if (item.id === id) {
+        if (category === "unavailable") {
+          return {
+            ...item,
+            categories: {
+              ...item.categories,
+              unavailable: !item.categories?.unavailable ? true : false,
+            },
+          };
+        } else if (category === "singleMonitor") {
+          return {
+            ...item,
+            categories: {
+              ...item.categories,
+              singleMonitor: !item.categories?.singleMonitor ? true : false,
+            },
+          };
+        } else if (category === "dualMonitor") {
+          return {
+            ...item,
+            categories: {
+              ...item.categories,
+              dualMonitor: !item.categories?.dualMonitor ? true : false,
+            },
+          };
+        } else if (category === "nearWindow") {
+          return {
+            ...item,
+            categories: {
+              ...item.categories,
+              nearWindow: !item.categories?.nearWindow ? true : false,
+            },
+          };
+        }
+      }
+      return item;
     });
-    setUnchecked(newUnchecked);
+
+    setDesks(newItem);
+
+    // const newChecked = [...checked, checkedValues.target.value];
+    // setChecked(newChecked);
+    // const newUnchecked = unchecked.filter((item) => {
+    //   let flag = false;
+    //   newChecked.forEach((id) => {
+    //     if (id === item) flag = true;
+    //   });
+    //   return flag ? false : true;
+    // });
+    // setUnchecked(newUnchecked);
   };
 
   const openNotification = (placement) => {
@@ -131,7 +195,6 @@ const OfficeDetails = ({ props }) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(e);
     const data = {
       numberOfDesks: e.numberOfDesks,
     };
@@ -174,7 +237,7 @@ const OfficeDetails = ({ props }) => {
       dataIndex: "indexForOffice",
       key: 1,
       align: "center",
-      width: "25%",
+      width: "16.6666666667%",
     },
     {
       title: "Unavailable desks",
@@ -189,21 +252,83 @@ const OfficeDetails = ({ props }) => {
               color: "black",
               paddingLeft: "3%",
             }}
-            value={item.id}
-            defaultChecked={checkCategory(item)}
-            onChange={check}
+            checked={item.categories?.unavailable}
+            onChange={() => check(item.id, "unavailable")}
           ></Checkbox>
         );
       },
       align: "center",
-      width: "50%",
+      width: "16.6666666667%",
+    },
+    {
+      title: "Single monitor",
+      dataIndex: "singleMonitor",
+      key: 3,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            style={{
+              background: "white",
+              color: "black",
+              paddingLeft: "3%",
+            }}
+            checked={item.categories?.singleMonitor}
+            onChange={() => check(item.id, "singleMonitor")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "16.6666666667%",
+    },
+    {
+      title: "Dual monitor",
+      dataIndex: "dualMonitor",
+      key: 4,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            style={{
+              background: "white",
+              color: "black",
+              paddingLeft: "3%",
+            }}
+            checked={item.categories?.dualMonitor}
+            onChange={() => check(item.id, "dualMonitor")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "16.6666666667%",
+    },
+    {
+      title: "Near window",
+      dataIndex: "nearWindow",
+      key: 5,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            style={{
+              background: "white",
+              color: "black",
+              paddingLeft: "3%",
+            }}
+            checked={item.categories?.nearWindow}
+            onChange={() => check(item.id, "nearWindow")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "16.6666666667%",
     },
     {
       title: "Delete",
       dataIndex: "delete",
       align: "center",
+      key: 6,
       borderRight: "none",
-      width: "25%",
       render: (text, item, id) => {
         return (
           <Popconfirm
@@ -225,6 +350,7 @@ const OfficeDetails = ({ props }) => {
           </Popconfirm>
         );
       },
+      width: "16.6666666667%",
     },
   ];
 
@@ -285,7 +411,7 @@ const OfficeDetails = ({ props }) => {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ width: "40%" }}>
+          <div style={{ width: "55%" }}>
             <div
               id="scrollableDiv"
               style={{
@@ -304,7 +430,6 @@ const OfficeDetails = ({ props }) => {
                     justifyContent: "center",
                     alignItems: "center",
                     width: "100%",
-                    height: 400,
                     overflow: "hidden",
                   }}
                 >

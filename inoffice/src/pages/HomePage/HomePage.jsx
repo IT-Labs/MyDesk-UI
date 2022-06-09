@@ -109,7 +109,7 @@ const Home = () => {
       Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
     api
-      .post("employee/reserve", data, config)
+      .post("employee/reserve/coworker", data, config)
       .then((response) => {
         refresh();
         setDates([]);
@@ -119,7 +119,7 @@ const Home = () => {
         openNotification("top");
       })
       .catch((error) => {
-        console.error("error");
+        console.log(error.response.data.errors);
       });
   };
 
@@ -130,11 +130,13 @@ const Home = () => {
   };
 
   const makeReservation = () => {
+    const user = jwtDecode(sessionStorage.getItem("msal.idtoken"));
+
     const data = {
-      desk: { ...selectedCardId, categories: "Desk" },
+      deskId: selectedCardId.id,
       startDate: startDateRes,
       endDate: endDateRes,
-      officeName: selectValue,
+      coworkerMail: user.preferred_username,
     };
 
     sendReservation(data);
@@ -363,7 +365,8 @@ const Home = () => {
                     forCoworker &&
                     Object.keys(selectedCoworker).length === 0
                       ? true
-                      : false)
+                      : false) ||
+                    selectedCardId.categories?.unavailable
                   }
                   onClick={() => checkTypeOfReservation()}
                   type="primary"

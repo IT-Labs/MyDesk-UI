@@ -292,7 +292,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <UserHead />
+      <UserHead isDashboard={true} />
       <Layout className="panelBg">
         <Sidebar selected="1" />
         <Content
@@ -305,10 +305,14 @@ const Dashboard = () => {
           }}
         >
           <div style={{ width: "95%", display: "grid" }}>
-            <div style={{ position: "relative", left: 15 }}>
+            <div
+              style={{ position: "relative", left: 15, margin: 0, padding: 0 }}
+            >
               <h2
                 style={{
                   color: "white",
+                  margin: 0,
+                  padding: 0,
                 }}
               >
                 Dashboard
@@ -319,7 +323,7 @@ const Dashboard = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                width: "50rem",
+                width: "35rem",
               }}
             >
               <Select
@@ -338,7 +342,6 @@ const Dashboard = () => {
                     </Select.Option>
                   ))}
               </Select>
-              <UserSearch />
               <div style={{ width: 220 }}>
                 <CalendarImplementation
                   dateFunction={setDate}

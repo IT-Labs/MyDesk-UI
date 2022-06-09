@@ -10,6 +10,7 @@ import { notification, Modal, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
+import UserSearch from "../UserSearch/UserSearch";
 
 const UserHead = (props) => {
   const dispatch = useDispatch();
@@ -48,27 +49,43 @@ const UserHead = (props) => {
         style={{
           display: "flex",
           alignItems: "center",
-          width: "80%",
+          width: "90%",
           justifyContent: "flex-end",
           position: "relative",
         }}
       >
-        <div>
-          <img src={avatar} alt="avatar" style={{ width: 90, height: 50 }} />
-          <NavLink className={"link"} to="/employee/reservations">
-            {config.decoded.name}
-          </NavLink>
-          <NavLink
-            className={"link"}
-            to="/"
-            onClick={() => {
-              sessionStorage.clear();
-              localStorage.clear();
-              window.location = "/";
-            }}
-          >
-            Log out
-          </NavLink>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignContent: "center",
+            width: "100%",
+          }}
+        >
+          {props?.isDashboard ? (
+            <div>
+              <UserSearch />
+            </div>
+          ) : (
+            <div />
+          )}
+          <div>
+            <img src={avatar} alt="avatar" style={{ width: 90, height: 50 }} />
+            <NavLink className={"link"} to="/employee/reservations">
+              {config.decoded.name}
+            </NavLink>
+            <NavLink
+              className={"link"}
+              to="/"
+              onClick={() => {
+                sessionStorage.clear();
+                localStorage.clear();
+                window.location = "/";
+              }}
+            >
+              Log out
+            </NavLink>
+          </div>
         </div>
       </div>
     </Header>

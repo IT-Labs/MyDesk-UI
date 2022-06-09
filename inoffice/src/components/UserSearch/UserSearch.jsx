@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { SearchOutlined } from "@ant-design/icons";
 
 const UserSearch = () => {
   const dispatch = useDispatch();
@@ -135,7 +136,9 @@ const UserSearch = () => {
         value={employeeName}
         onChange={(e) => setEmployeeName(e)}
         style={{ width: 220 }}
+        className="userSearchSelect"
         onSelect={findEmployee}
+        suffixIcon={employeeName.length > 0 ? <></> : <SearchOutlined />}
       >
         {employees &&
           employees.map((item) => (

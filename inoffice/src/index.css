@@ -374,3 +374,21 @@ html {
   width: 120px;
   font-weight: 500;
 }
+
+.userSearchSelect .ant-select-selector {
+  border-radius: 20px !important;
+}
+
+.ant-select-arrow {
+  right: 0 !important;
+  left: 11px;
+}
+
+.userSearchSelect
+  .ant-select-single.ant-select-show-arrow
+  .ant-select-selection-item,
+.userSearchSelect
+  .ant-select-single.ant-select-show-arrow
+  .ant-select-selection-placeholder {
+  margin-left: 20px !important;
+}

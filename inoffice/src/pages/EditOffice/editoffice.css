@@ -102,7 +102,3 @@
 .newTable .ant-table-thead > tr > th {
   background-color: transparent !important;
 }
-
-.newTable .ant-table-thead > tr > th:nth-child(3) {
-  border-right: none !important;
-}
