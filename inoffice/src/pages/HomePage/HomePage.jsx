@@ -222,15 +222,20 @@ const Home = () => {
               />
             </Col>
             <Col className="calendarSection" span={11} xl={11} lg={11} md={11}>
-              <CalendarImplementation
-                dateFunction={setDate}
-                onSelectCard={selectedCard}
-                officeid={officeid}
-                startDate={startDateRes}
-                endDate={endDateRes}
-                dates={dates}
-                clearDate={clearDate}
-              />
+              <div style={{ width: 200 }}>
+                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                  Select date
+                </p>
+                <CalendarImplementation
+                  dateFunction={setDate}
+                  onSelectCard={selectedCard}
+                  officeid={officeid}
+                  startDate={startDateRes}
+                  endDate={endDateRes}
+                  dates={dates}
+                  clearDate={clearDate}
+                />
+              </div>
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                   Search by name
@@ -329,9 +334,10 @@ const Home = () => {
                       <Select.Option
                         key={item.id}
                         value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
+                        style={{ height: 50 }}
                       >
                         <h4
-                          style={{ fontSize: 14 }}
+                          style={{ fontSize: 14, padding: 0, margin: 0 }}
                         >{`${item.firstName} ${item.lastName}`}</h4>
                         <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
                       </Select.Option>

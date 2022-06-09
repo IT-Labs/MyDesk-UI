@@ -37,9 +37,13 @@ const CalendarImplementation = (props) => {
     }
   }
 
+  useEffect(() => {
+    dispatch(setStart(null));
+    dispatch(setEnd(null));
+  }, []);
+
   return (
     <div>
-      <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>Select date</p>
       <Space direction="vertical" size={12}>
         <RangePicker
           disabledDate={disabledDate}
@@ -47,7 +51,7 @@ const CalendarImplementation = (props) => {
           onChange={changedates}
           value={[props.dates[0], props.dates[1]]}
           onClick={props.clearDate}
-          style={{ width: 200 }}
+          style={{ width: "100%" }}
         />
       </Space>
     </div>

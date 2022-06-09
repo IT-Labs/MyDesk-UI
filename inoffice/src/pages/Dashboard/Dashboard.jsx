@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
@@ -16,6 +16,11 @@ import {
 } from "@ant-design/icons";
 import Loading from "../../components/Loading/Loading";
 import UserSearch from "../../components/UserSearch/UserSearch";
+import CalendarImplementation from "../../components/inputs/CalendarImplementation";
+import { useDispatch, useSelector } from "react-redux";
+import { setEnd, setStart } from "../../redux/Date/Date";
+import Moment from "moment";
+import { extendMoment } from "moment-range";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -29,15 +34,59 @@ const Dashboard = () => {
   const [reviews, setReviews] = useState([]);
   const [offices, setOffices] = useState([]);
   const [initialReviews, setInitialReviews] = useState([]);
+  const start = useSelector((state) => state.date.start);
+  const end = useSelector((state) => state.date.end);
+  const count = useRef(0);
+
+  const moment = extendMoment(Moment);
+  const dispatch = useDispatch();
+
+  const dateFormat = "DD/MM/YYYY";
+  const [officeid, setofficeid] = useState();
+
+  const [startDateRes, setStartDate] = useState(Moment());
+  const [endDateRes, setEndDate] = useState(Moment());
+  const [dates, setDates] = useState([]);
+
+  const findAvailable = (item) => {
+    const startSelected = item.startDate;
+    const endSelected = item.endDate;
+    const momentStart = start;
+    const momentEnd = end;
+    const momentRange = extendMoment(moment);
+    const range1 = momentRange.range(startSelected, endSelected);
+    const range2 = momentRange.range(momentStart, momentEnd);
+    const flag = range2.overlaps(range1, { adjacent: true });
+    console.log(flag);
+    return flag;
+  };
+
+  const checkAvailable = (res) => {
+    if (res.length > 0) {
+      res.forEach((item) => {
+        const flag = findAvailable(item);
+        if (flag) count.current = count.current + 1;
+      });
+    }
+    // return "#f37076" : "#69e28d",
+  };
+
   const filterData = (deskInfo) => {
+    count.current = 0;
     setDesks(deskInfo);
-    console.log(deskInfo);
-    const unavailableDesk = deskInfo.filter(
-      (item) => item.reservations?.length > 0
-    );
-    const availableDesk = deskInfo.length - unavailableDesk.length;
-    setAvailableDesks(availableDesk);
-    setReservedDesks(unavailableDesk.length);
+    let unavailableDesk;
+
+    deskInfo.forEach((item) => {
+      checkAvailable(item.reservations);
+    });
+
+    let unavailableData;
+
+    if (count.current > 0) unavailableData = count.current;
+    else unavailableData = unavailableDesk?.length;
+    console.log(unavailableData);
+    const availableDesk = parseInt(deskInfo.length) - unavailableData;
+
     setAllDesks(deskInfo.length);
     setDeskData([
       {
@@ -46,17 +95,20 @@ const Dashboard = () => {
       },
       {
         type: "Unavailable",
-        value: unavailableDesk.length,
+        value: unavailableData,
       },
     ]);
+    setAvailableDesks(availableDesk);
+    setReservedDesks(unavailableData);
   };
 
   const fetchOfficeData = async () => {
     await api
       .get("admin/offices")
       .then(async ({ data }) => {
-        setOffices(data);
-        console.log(data);
+        const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
+        setOffices(sortedOffices);
+
         const deskRes = await Promise.all(
           data.map((item) => {
             const val = fetchDeskData(item.id).then((res) => res);
@@ -67,6 +119,7 @@ const Dashboard = () => {
         const deskInfo = desk.map((item, id) => {
           return { ...item, key: id };
         });
+
         setInitialDesk(deskInfo);
         filterData(deskInfo);
       })
@@ -93,10 +146,9 @@ const Dashboard = () => {
     if (!office) {
       filterData(initialDesk);
       setReviews(initialReviews);
-
       return;
     }
-    console.log(office);
+
     const deskInfo = initialDesk.filter((item) => item.officeId === office);
     filterData(deskInfo);
     const foundOffice = offices.find((item) => item.id === office);
@@ -106,6 +158,16 @@ const Dashboard = () => {
     );
     setReviews(reviewFilter);
   };
+
+  const clearDate = () => {
+    dispatch(setStart(null));
+    dispatch(setEnd(null));
+    setDates([]);
+  };
+
+  useEffect(() => {
+    filterData(desks);
+  }, [start]);
 
   const config = {
     appendPadding: 10,
@@ -184,6 +246,12 @@ const Dashboard = () => {
     fetchReviews();
   }, []);
 
+  function setDate(startDate, endDate, range) {
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setDates(range);
+  }
+
   const colums = [
     {
       title: "Review",
@@ -236,7 +304,7 @@ const Dashboard = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ width: "95%" }}>
+          <div style={{ width: "95%", display: "grid" }}>
             <div style={{ position: "relative", left: 15 }}>
               <h2
                 style={{
@@ -245,10 +313,19 @@ const Dashboard = () => {
               >
                 Dashboard
               </h2>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "50rem",
+              }}
+            >
               <Select
                 defaultValue="Select Office"
                 onChange={selectFilter}
-                style={{ width: 200, marginRight: 10 }}
+                style={{ width: 257 }}
                 showSearch
               >
                 <Select.Option key={0} value={null}>
@@ -262,6 +339,17 @@ const Dashboard = () => {
                   ))}
               </Select>
               <UserSearch />
+              <div style={{ width: 220 }}>
+                <CalendarImplementation
+                  dateFunction={setDate}
+                  officeid={officeid}
+                  startDate={startDateRes}
+                  endDate={endDateRes}
+                  dates={dates}
+                  clearDate={clearDate}
+                  dashboard={true}
+                />
+              </div>
             </div>
             <div
               style={{
@@ -273,7 +361,7 @@ const Dashboard = () => {
               <div className={styles.dashboardCard}>
                 <p>AVAILABLE</p>
                 <div className={styles.tile}>
-                  <h2>{availableDesks}</h2>
+                  <h2>{isNaN(availableDesks) ? 0 : availableDesks}</h2>
                   <CheckCircleFilled
                     className={`${styles.tabIcon} ${styles.checkmark}`}
                   />
@@ -282,7 +370,7 @@ const Dashboard = () => {
               <div className={styles.dashboardCard}>
                 <p>RESERVED</p>
                 <div className={styles.tile}>
-                  <h2>{reservedDesks}</h2>
+                  <h2>{reservedDesks ? reservedDesks : 0}</h2>
                   <CloseCircleFilled
                     className={`${styles.tabIcon} ${styles.xmark}`}
                   />

@@ -50,6 +50,7 @@ const Officebranchselection = (props) => {
             onChange={handleChange}
             placeholder="Select office-branch"
             defaultValue={data[0].name}
+            style={{ width: 257 }}
           >
             {data.map((item) => (
               <Option key={item.id} value={item.id}>
