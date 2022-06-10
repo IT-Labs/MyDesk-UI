@@ -230,11 +230,12 @@ const CardsSection = (props) => {
                                     fontSize: "12px",
                                   }}
                                 >
-                                  {item.reservations.length > 0 &&
-                                    !available &&
-                                    `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
-                                  {item.categories?.unavailable &&
-                                    "Unavailable"}
+                                  {item.categories?.unavailable
+                                    ? "Unavailable"
+                                    : item.reservations.length > 0 &&
+                                      !available &&
+                                      `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
+                                  {}
                                 </p>
                                 <p
                                   style={{
@@ -242,7 +243,8 @@ const CardsSection = (props) => {
                                     fontSize: "12px",
                                   }}
                                 >
-                                  {item.reservations.length > 0 &&
+                                  {!item.categories?.unavailable &&
+                                    item.reservations.length > 0 &&
                                     !available &&
                                     `${moment(
                                       item.reservations[0].startDate

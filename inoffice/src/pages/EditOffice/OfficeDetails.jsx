@@ -83,7 +83,7 @@ const OfficeDetails = ({ props }) => {
         deskId: item.id,
         unavailable: item.categories?.unavailable ? true : false,
         singleMonitor: item.categories?.singleMonitor ? true : false,
-        dualMonitor: item.categories?.dualMonitor ? true : false,
+        dualMonitor: item.categories?.doubleMonitor ? true : false,
         nearWindow: item.categories?.nearWindow ? true : false,
       };
       if (desk.singleMonitor && desk.dualMonitor) {
@@ -93,10 +93,9 @@ const OfficeDetails = ({ props }) => {
     });
 
     const data = {
-      listOfDesksToUpdate: [...properlySortedData],
+      ListOfDesksToUpdate: [...properlySortedData],
     };
 
-    console.log(data);
     if (flag) {
       notification.open({
         message: "Notification",
@@ -107,18 +106,22 @@ const OfficeDetails = ({ props }) => {
       });
       return;
     }
-
+    const config = {
+      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+      "Content-Type": "application/json",
+    };
+    console.log(data);
     api
-      .put("admin/office-entities", data)
+      .put(
+        "admin/office-entities",
+        {
+          listOfDesksToUpdate: [...properlySortedData],
+        },
+        config
+      )
       .then((res) => {
         getDesks();
         openNotification("top");
-        notification.open({
-          message: "Notification",
-          placement: "top",
-          description: "Entities updated",
-          duration: 3,
-        });
       })
       .catch((error) => {
         console.log(error.response);
@@ -130,6 +133,8 @@ const OfficeDetails = ({ props }) => {
         });
       });
   };
+
+  console.log(desks);
 
   const check = (id, category) => {
     const newItem = desks.map((item) => {
@@ -155,7 +160,7 @@ const OfficeDetails = ({ props }) => {
             ...item,
             categories: {
               ...item.categories,
-              dualMonitor: !item.categories?.dualMonitor ? true : false,
+              doubleMonitor: !item.categories?.doubleMonitor ? true : false,
             },
           };
         } else if (category === "nearWindow") {
@@ -294,7 +299,7 @@ const OfficeDetails = ({ props }) => {
               color: "black",
               paddingLeft: "3%",
             }}
-            checked={item.categories?.dualMonitor}
+            checked={item.categories?.doubleMonitor}
             onChange={() => check(item.id, "dualMonitor")}
           ></Checkbox>
         );

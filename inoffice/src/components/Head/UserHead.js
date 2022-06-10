@@ -49,7 +49,7 @@ const UserHead = (props) => {
         style={{
           display: "flex",
           alignItems: "center",
-          width: "90%",
+          width: "88%",
           justifyContent: "flex-end",
           position: "relative",
         }}
@@ -60,6 +60,7 @@ const UserHead = (props) => {
             justifyContent: "space-between",
             alignContent: "center",
             width: "100%",
+            overflowX: "hidden",
           }}
         >
           {props?.isDashboard ? (
