@@ -462,12 +462,12 @@ const OfficeDetails = ({ props }) => {
             </div>
             <Button
               type="primary"
-              className="uploadOfficePlan btn"
+              className="uploadOfficePlan greenBtn"
               onClick={save}
               block
               style={{ width: 150, marginLeft: 5 }}
             >
-              Update entities
+              Save
             </Button>
           </div>
           <div style={{ background: "white", height: 400 }}>

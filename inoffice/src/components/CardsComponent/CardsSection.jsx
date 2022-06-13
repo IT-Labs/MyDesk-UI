@@ -99,16 +99,16 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = item.startDate;
-    const endSelected = item.endDate;
-    const momentStart = moment(start).toISOString();
-    const momentEnd = moment(end).toISOString();
-    const momentRange = extendMoment(moment);
-    const range1 = momentRange.range(startSelected, endSelected);
-    const range2 = momentRange.range(momentStart, momentEnd);
-    const flag = range2.overlaps(range1, { adjacent: true });
-
-    return !flag;
+    const startSelected = Date.parse(item.startDate);
+    const endSelected = Date.parse(item.endDate);
+    const momentStart = Date.parse(start);
+    const momentEnd = Date.parse(end);
+    // const momentRange = extendMoment(moment);
+    // const range1 = momentRange.range(startSelected, endSelected);
+    // const range2 = momentRange.range(momentStart, momentEnd);
+    // const flag = range2.overlaps(range1, { adjacent: true });
+    if (endSelected < momentStart || startSelected > momentEnd) return true;
+    else return false;
   };
 
   const checkAvailable = (res) => {

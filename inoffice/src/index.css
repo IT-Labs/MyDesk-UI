@@ -392,3 +392,15 @@ html {
   .ant-select-selection-placeholder {
   margin-left: 20px !important;
 }
+.greenBtn {
+  /* margin-right: 10px; */
+  background: #2dce98;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0px 3px 6px #2c28281c;
+}
+
+.greenBtn:hover {
+  background: #56d9ad;
+}
