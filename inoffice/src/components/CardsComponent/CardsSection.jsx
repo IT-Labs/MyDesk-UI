@@ -91,27 +91,40 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = ({ startDate, endDate }) => {
-    const momentStart = moment.utc(start);
-    const momentEnd = moment.utc(end);
-
+    const start1 = start.split("T");
+    const end1 = end.split("T");
+    const start2 = `${start1[0]}T00:00:00`;
+    const end2 = `${end1[0]}T00:00:00`;
+    console.log(start1);
     const flag = areIntervalsOverlapping(
-      { start: new Date(momentStart), end: new Date(momentEnd) },
-      { start: new Date(startDate), end: new Date(endDate) }
+      { start: new Date(startDate), end: new Date(endDate) },
+      { start: new Date(start2), end: new Date(end2) },
+      { inclusive: true }
+    );
+    console.log(
+      { start: new Date(startDate), end: new Date(endDate) },
+      { start: new Date(start2), end: new Date(end2) }
     );
 
     return !flag;
   };
 
   const getSpecificUser = ({ startDate, endDate }) => {
-    const momentStart = moment(start).toISOString();
-    const momentEnd = moment(end).toISOString();
-
-    const flag = areIntervalsOverlapping(
-      { start: new Date(momentStart), end: new Date(momentEnd) },
-      { start: new Date(startDate), end: new Date(endDate) }
-    );
-    if (flag) {
-      return { startDate: startDate, endDate: endDate };
+    if (start && end) {
+      const start1 = start?.split("T");
+      const end1 = end?.split("T");
+      const start2 = `${start1[0]}T00:00:00`;
+      const end2 = `${end1[0]}T00:00:00`;
+      console.log(start1);
+      const flag = areIntervalsOverlapping(
+        { start: new Date(startDate), end: new Date(endDate) },
+        { start: new Date(start2), end: new Date(end2) },
+        { inclusive: true }
+      );
+      if (flag) {
+        return { startDate: startDate, endDate: endDate };
+      }
+      return {};
     }
     return {};
   };
