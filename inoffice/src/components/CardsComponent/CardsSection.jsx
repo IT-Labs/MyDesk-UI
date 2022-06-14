@@ -247,12 +247,17 @@ const CardsSection = (props) => {
                               overlayStyle={{ width: 120 }}
                               title={`${
                                 item.categories?.doubleMonitor
-                                  ? "Dual monitor\n"
+                                  ? "Dual monitors\n"
                                   : ""
                               }
                               ${
                                 item.categories?.singleMonitor
                                   ? "Single monitor\n"
+                                  : ""
+                              } ${
+                                !item.categories?.singleMonitor &&
+                                !item.categories?.doubleMonitor
+                                  ? "No monitors\n"
                                   : ""
                               }${
                                 item.categories?.nearWindow
