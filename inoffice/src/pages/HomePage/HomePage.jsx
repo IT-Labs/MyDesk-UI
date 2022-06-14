@@ -119,7 +119,17 @@ const Home = () => {
         openNotification("top");
       })
       .catch((error) => {
-        console.log(error.response.data.errors);
+        setDates([]);
+        setSelectedCard([]);
+        setStartDate([]);
+        setEndDate([]);
+        setShowReserveForCoworker(false);
+        notification.open({
+          message: `Error`,
+          description: `${error.response.data}`,
+          duration: 2,
+          placement: "top",
+        });
       });
   };
 
@@ -171,7 +181,7 @@ const Home = () => {
         setShowReserveForCoworker(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error.response.data);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
@@ -204,6 +214,11 @@ const Home = () => {
   };
 
   const setCoworker = (val) => {
+    if (val.length === 0) {
+      setDefValue("");
+      setSelectedCoworker({});
+      return;
+    }
     const foundEmployee = employees.find(
       (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === val
     );
@@ -366,7 +381,8 @@ const Home = () => {
                     Object.keys(selectedCoworker).length === 0
                       ? true
                       : false) ||
-                    selectedCardId.categories?.unavailable
+                    selectedCardId.categories?.unavailable ||
+                    defValue.length === 0
                   }
                   onClick={() => checkTypeOfReservation()}
                   type="primary"

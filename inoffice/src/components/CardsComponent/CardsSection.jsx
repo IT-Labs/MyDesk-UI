@@ -8,6 +8,8 @@ import moment from "moment";
 import Loading from "../Loading/Loading";
 import { extendMoment } from "moment-range";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import jwtDecode from "jwt-decode";
+import { areIntervalsOverlapping } from "date-fns";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
@@ -18,10 +20,10 @@ const CardsSection = (props) => {
   const [initialDesks, setInitnialDesks] = useState([]);
   const [initialConf, setInitialConf] = useState([]);
   const { Meta } = Card;
+
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
   const [initLoad, setInitLoad] = useState(true);
-
   function selectCard(e) {
     let isAvailable = true;
     const res = e.reservations;
@@ -33,6 +35,7 @@ const CardsSection = (props) => {
         }
       });
     } else isAvailable = true;
+
     const availability = isAvailable ? true : false;
     props.selectedCard(e, availability);
     setselectedCardInSection(e);
@@ -46,18 +49,6 @@ const CardsSection = (props) => {
       const filtered = desks.filter((item) => item.reservationId);
       setDataDesks(filtered);
     } else setDataDesks(desks);
-  };
-
-  console.log(dataDesks);
-
-  const setConference = (rooms) => {
-    if (props.available === 2) {
-      const filtered = rooms.filter((item) => !item.reservationId);
-      setDataConfRooms(filtered);
-    } else if (props.available === 3) {
-      const filtered = rooms.filter((item) => item.reservationId);
-      setDataConfRooms(filtered);
-    } else setDataConfRooms(rooms);
   };
 
   const fetchData = async () => {
@@ -99,30 +90,28 @@ const CardsSection = (props) => {
     setDesks(initialDesks);
   }, [props.available]);
 
-  const findAvailable = (item) => {
-    const startSelected = item.startDate;
-    const endSelected = item.endDate;
-    const momentStart = start;
-    const momentEnd = end;
-    const momentRange = extendMoment(moment);
-    const range1 = momentRange.range(startSelected, endSelected);
-    const range2 = momentRange.range(momentStart, momentEnd);
-    const flag = range2.overlaps(range1, { adjacent: true });
+  const findAvailable = ({ startDate, endDate }) => {
+    const momentStart = moment.utc(start);
+    const momentEnd = moment.utc(end);
+
+    const flag = areIntervalsOverlapping(
+      { start: new Date(momentStart), end: new Date(momentEnd) },
+      { start: new Date(startDate), end: new Date(endDate) }
+    );
 
     return !flag;
   };
 
-  const getSpecificUser = (item) => {
-    const startSelected = item.startDate;
-    const endSelected = item.endDate;
+  const getSpecificUser = ({ startDate, endDate }) => {
     const momentStart = moment(start).toISOString();
     const momentEnd = moment(end).toISOString();
-    const momentRange = extendMoment(moment);
-    const range1 = momentRange.range(startSelected, endSelected);
-    const range2 = momentRange.range(momentStart, momentEnd);
-    const flag = range2.overlaps(range1, { adjacent: true });
+
+    const flag = areIntervalsOverlapping(
+      { start: new Date(momentStart), end: new Date(momentEnd) },
+      { start: new Date(startDate), end: new Date(endDate) }
+    );
     if (flag) {
-      return { startDate: item.startDate, endDate: item.endDate };
+      return { startDate: startDate, endDate: endDate };
     }
     return {};
   };
@@ -206,7 +195,7 @@ const CardsSection = (props) => {
                   }
                   return false;
                 });
-                console.log(item);
+                console.log(specificUser);
                 return (
                   <List.Item
                     style={{
@@ -297,7 +286,7 @@ const CardsSection = (props) => {
                                     ? "Unavailable"
                                     : item.reservations.length > 0 &&
                                       !available &&
-                                      `${specificUser.employee.firstName} ${specificUser.employee.lastName}`}
+                                      `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
                                   {}
                                 </p>
                                 <p
@@ -309,10 +298,10 @@ const CardsSection = (props) => {
                                   {!item.categories?.unavailable &&
                                     item.reservations.length > 0 &&
                                     !available &&
-                                    `${moment(specificUser.startDate).format(
+                                    `${moment(specificUser?.startDate).format(
                                       "DD-MM"
                                     )}
-                                  / ${moment(specificUser.endDate).format(
+                                  / ${moment(specificUser?.endDate).format(
                                     "DD-MM"
                                   )}`}
                                 </p>
