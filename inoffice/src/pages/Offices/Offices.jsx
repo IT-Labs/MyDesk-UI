@@ -28,8 +28,9 @@ const Offices = () => {
   useEffect(() => {
     api
       .get("admin/offices")
-      .then((res) => {
-        setData(res.data);
+      .then(({ data }) => {
+        const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
+        setData(sortedOffices);
       })
       .catch((error) => {
         console.log(error);

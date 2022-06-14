@@ -1,12 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { List, Card, Layout, Button } from "antd";
+import { List, Card, Layout, Button, Tooltip } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import Loading from "../Loading/Loading";
 import { extendMoment } from "moment-range";
+import { InfoCircleOutlined } from "@ant-design/icons";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
@@ -99,16 +100,31 @@ const CardsSection = (props) => {
   }, [props.available]);
 
   const findAvailable = (item) => {
-    const startSelected = Date.parse(item.startDate);
-    const endSelected = Date.parse(item.endDate);
-    const momentStart = Date.parse(start);
-    const momentEnd = Date.parse(end);
-    // const momentRange = extendMoment(moment);
-    // const range1 = momentRange.range(startSelected, endSelected);
-    // const range2 = momentRange.range(momentStart, momentEnd);
-    // const flag = range2.overlaps(range1, { adjacent: true });
-    if (endSelected < momentStart || startSelected > momentEnd) return true;
-    else return false;
+    const startSelected = item.startDate;
+    const endSelected = item.endDate;
+    const momentStart = start;
+    const momentEnd = end;
+    const momentRange = extendMoment(moment);
+    const range1 = momentRange.range(startSelected, endSelected);
+    const range2 = momentRange.range(momentStart, momentEnd);
+    const flag = range2.overlaps(range1, { adjacent: true });
+
+    return !flag;
+  };
+
+  const getSpecificUser = (item) => {
+    const startSelected = item.startDate;
+    const endSelected = item.endDate;
+    const momentStart = moment(start).toISOString();
+    const momentEnd = moment(end).toISOString();
+    const momentRange = extendMoment(moment);
+    const range1 = momentRange.range(startSelected, endSelected);
+    const range2 = momentRange.range(momentStart, momentEnd);
+    const flag = range2.overlaps(range1, { adjacent: true });
+    if (flag) {
+      return { startDate: item.startDate, endDate: item.endDate };
+    }
+    return {};
   };
 
   const checkAvailable = (res) => {
@@ -180,6 +196,17 @@ const CardsSection = (props) => {
               })}
               renderItem={(item) => {
                 const available = checkAvailable(item.reservations);
+                const specificUser = item.reservations.find((info) => {
+                  const newGuy = getSpecificUser(info);
+                  if (
+                    info.startDate === newGuy.startDate &&
+                    info.endDate === newGuy.endDate
+                  ) {
+                    return true;
+                  }
+                  return false;
+                });
+                console.log(item);
                 return (
                   <List.Item
                     style={{
@@ -204,9 +231,40 @@ const CardsSection = (props) => {
                     >
                       <Meta
                         title={
-                          <p style={{ fontSize: "0.8vw" }}>
-                            Desk {item.indexForOffice}
-                          </p>
+                          <div
+                            style={{
+                              display: "flex",
+                              width: "100%",
+                              justifyContent: "space-between",
+                              // alignItems: "center",
+                            }}
+                          >
+                            <p style={{ fontSize: "0.8vw" }}>
+                              Desk {item.indexForOffice}
+                            </p>
+                            <Tooltip
+                              autoAdjustOverflow={true}
+                              overlayStyle={{ width: 120 }}
+                              title={`${
+                                item.categories?.doubleMonitor
+                                  ? "Dual monitor\n"
+                                  : ""
+                              }
+                              ${
+                                item.categories?.singleMonitor
+                                  ? "Single monitor\n"
+                                  : ""
+                              }${
+                                item.categories?.nearWindow
+                                  ? "Near window\n"
+                                  : ""
+                              }`}
+                            >
+                              <InfoCircleOutlined
+                                style={{ position: "relative", top: 4 }}
+                              />
+                            </Tooltip>
+                          </div>
                         }
                         description={
                           <div
@@ -234,7 +292,7 @@ const CardsSection = (props) => {
                                     ? "Unavailable"
                                     : item.reservations.length > 0 &&
                                       !available &&
-                                      `${item.reservations[0].employee.firstName} ${item.reservations[0].employee.lastName}`}
+                                      `${specificUser.employee.firstName} ${specificUser.employee.lastName}`}
                                   {}
                                 </p>
                                 <p
@@ -246,12 +304,12 @@ const CardsSection = (props) => {
                                   {!item.categories?.unavailable &&
                                     item.reservations.length > 0 &&
                                     !available &&
-                                    `${moment(
-                                      item.reservations[0].startDate
-                                    ).format("DD-MM")}
-                                  / ${moment(
-                                    item.reservations[0].endDate
-                                  ).format("DD-MM")}`}
+                                    `${moment(specificUser.startDate).format(
+                                      "DD-MM"
+                                    )}
+                                  / ${moment(specificUser.endDate).format(
+                                    "DD-MM"
+                                  )}`}
                                 </p>
                               </div>
                             )}

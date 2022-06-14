@@ -310,7 +310,6 @@ const Dashboard = () => {
             >
               <h2
                 style={{
-                  color: "white",
                   margin: 0,
                   padding: 0,
                 }}
@@ -323,7 +322,9 @@ const Dashboard = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                width: "35rem",
+                width: "35.4rem",
+                position: "relative",
+                left: "15px",
               }}
             >
               <Select
@@ -405,7 +406,7 @@ const Dashboard = () => {
                 <div
                   style={{
                     background: "#fff",
-                    width: "25rem",
+                    width: "40%",
                     height: "26.938rem",
                     borderRadius: 7,
                     display: "flex",
@@ -433,7 +434,7 @@ const Dashboard = () => {
                 <div
                   style={{
                     background: "#fff",
-                    width: 800,
+                    width: "55%",
                     borderRadius: 7,
                     display: "flex",
                     padding: 10,
