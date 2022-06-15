@@ -308,13 +308,20 @@ const Home = () => {
                 </div>
               </div>
             </Col>
-            <Col className="calendarSection" span={11} xl={11} lg={11} md={11}>
+            <Col
+              className="calendarSection"
+              span={11}
+              xl={11}
+              lg={11}
+              md={11}
+              style={{ marginBottom: 25 }}
+            >
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                   Search by name
                 </p>
                 <Input
-                  style={{ width: 250 }}
+                  style={{ width: "12.5rem" }}
                   onChange={(e) => setEmployeeSearch(e.target.value)}
                 />
               </div>
@@ -324,7 +331,7 @@ const Home = () => {
                 </p>
                 <Select
                   showSearch
-                  style={{ width: 200 }}
+                  style={{ width: "12.5rem" }}
                   defaultValue={selectValue}
                   onChange={changeVal}
                 >
@@ -384,7 +391,7 @@ const Home = () => {
                   visible={dropdownVisible}
                   onClick={() => setDropDownVisible(!dropdownVisible)}
                 >
-                  <Button style={{ width: 200 }}>
+                  <Button style={{ width: "12.5rem" }}>
                     <Space>
                       Select categories
                       <DownOutlined />
