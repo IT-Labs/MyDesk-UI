@@ -1,7 +1,18 @@
 import React, { Component, useEffect } from "react";
 import UserHead from "../../components/Head/UserHead";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Row, Col, notification, Modal, Select, Checkbox } from "antd";
+import {
+  Button,
+  Row,
+  Col,
+  notification,
+  Modal,
+  Select,
+  Checkbox,
+  Menu,
+  Dropdown,
+  Space,
+} from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/CalendarImplementation";
 import OfficeImage from "../../components/inputs/OfficeImage";
@@ -21,7 +32,13 @@ import { fetchEmployees } from "../../utils/fetchEmployees";
 import UserSearch from "../../components/UserSearch/UserSearch";
 import axios from "axios";
 import { setEnd, setStart } from "../../redux/Date/Date";
-import { ClearOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  CloseCircleOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
+
+const OPTIONS = ["Single monitor", "Dual Monitor", "Near Window"];
 
 const Home = () => {
   const dateFormat = "DD/MM/YYYY";
@@ -38,6 +55,11 @@ const Home = () => {
   const [isAvailable, setIsAvailable] = useState(true);
   const [employeeSearch, setEmployeeSearch] = useState("");
   const [defValue, setDefValue] = useState("Reserve for Coworker");
+  const [selectedCategories, setSelectedCategories] = useState({});
+  const [singleMonitor, setSingleMonitor] = useState(false);
+  const [dualMonitor, setDualMonitor] = useState(false);
+  const [nearWindow, setNearWindow] = useState(false);
+  const [dropdownVisible, setDropDownVisible] = useState(false);
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
@@ -55,6 +77,31 @@ const Home = () => {
     setEndDate(endDate);
     setDates(range);
   }
+
+  const clickSingleMonitor = () => {
+    setSingleMonitor(!singleMonitor);
+    setSelectedCategories({
+      ...selectedCategories,
+      singleMonitor: !singleMonitor,
+    });
+    setSingleMonitor(!singleMonitor);
+  };
+
+  const clickDualMonitor = () => {
+    setDualMonitor(!dualMonitor);
+    setSelectedCategories({
+      ...selectedCategories,
+      doubleMonitor: !dualMonitor,
+    });
+  };
+
+  const clickNearWindow = () => {
+    setNearWindow(!nearWindow);
+    setSelectedCategories({
+      ...selectedCategories,
+      nearWindow: !nearWindow,
+    });
+  };
 
   async function changeofficebranch(value) {
     setDefValue("Reserve for Coworker");
@@ -155,6 +202,7 @@ const Home = () => {
   useEffect(() => {}, [selectValue]);
 
   const changeVal = (e) => {
+    console.log(e);
     setSelectValue(e);
   };
 
@@ -168,7 +216,6 @@ const Home = () => {
     const config = {
       Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
     };
-    console.log(data);
     api
       .post("employee/reserve/coworker", data, config)
       .then((response) => {
@@ -233,26 +280,35 @@ const Home = () => {
       <Layout>
         <Content>
           <Row className="firstSection">
-            <Col className="officeDropdown" span={11} xl={11} lg={11} md={11}>
-              <OfficeBranchSelection
-                onOfficebranchChange={changeofficebranch}
-              />
+            <Col className="officeDropdown" span={12} xl={11} lg={12} md={12}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+
+                  width: "100%",
+                }}
+              >
+                <OfficeBranchSelection
+                  onOfficebranchChange={changeofficebranch}
+                />
+                <div style={{ width: 300 }}>
+                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                    Select date
+                  </p>
+                  <CalendarImplementation
+                    dateFunction={setDate}
+                    onSelectCard={selectedCard}
+                    officeid={officeid}
+                    startDate={startDateRes}
+                    endDate={endDateRes}
+                    dates={dates}
+                    clearDate={clearDate}
+                  />
+                </div>
+              </div>
             </Col>
             <Col className="calendarSection" span={11} xl={11} lg={11} md={11}>
-              <div style={{ width: 200 }}>
-                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                  Select date
-                </p>
-                <CalendarImplementation
-                  dateFunction={setDate}
-                  onSelectCard={selectedCard}
-                  officeid={officeid}
-                  startDate={startDateRes}
-                  endDate={endDateRes}
-                  dates={dates}
-                  clearDate={clearDate}
-                />
-              </div>
               <div>
                 <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                   Search by name
@@ -283,6 +339,59 @@ const Home = () => {
                   </Select.Option>
                 </Select>
               </div>
+              <div>
+                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                  Filter by category
+                </p>
+                <Dropdown
+                  overlay={
+                    <Menu
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Menu.Item>
+                        <Checkbox
+                          checked={singleMonitor}
+                          onClick={clickSingleMonitor}
+                          disabled={dualMonitor}
+                        >
+                          Single monitor
+                        </Checkbox>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Checkbox
+                          checked={dualMonitor}
+                          onClick={clickDualMonitor}
+                          disabled={singleMonitor}
+                        >
+                          Dual monitor
+                        </Checkbox>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <Checkbox
+                          checked={nearWindow}
+                          onClick={clickNearWindow}
+                        >
+                          Near window
+                        </Checkbox>
+                      </Menu.Item>
+                    </Menu>
+                  }
+                  // trigger={["click"]}
+                  visible={dropdownVisible}
+                  onClick={() => setDropDownVisible(!dropdownVisible)}
+                >
+                  <Button style={{ width: 200 }}>
+                    <Space>
+                      Select categories
+                      <DownOutlined />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </div>
             </Col>
           </Row>
           <Row align="center">
@@ -309,6 +418,7 @@ const Home = () => {
                 officeid={officeid}
                 available={selectValue}
                 employeeSearch={employeeSearch}
+                categories={selectedCategories}
               />
             </Col>
           </Row>
@@ -469,4 +579,5 @@ const Home = () => {
     </Layout>
   );
 };
+
 export default Home;

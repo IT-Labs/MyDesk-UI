@@ -43,9 +43,7 @@ const Officebranchselection = (props) => {
       )}
       {!loading && (
         <Form.Item>
-          <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-            Office - branch
-          </p>
+          <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>Select office</p>
           <Select
             onChange={handleChange}
             placeholder="Select office-branch"

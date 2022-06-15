@@ -101,7 +101,7 @@ const OfficeDetails = ({ props }) => {
         message: "Notification",
         placement: "top",
         description:
-          "You cannot have both a single monitor and dual monitor desk.",
+          "You cannot have both a single monitor and a dual monitor desk.",
         duration: 3,
       });
       return;
@@ -364,13 +364,7 @@ const OfficeDetails = ({ props }) => {
       <div style={{ width: "90%" }}>
         <div style={{ marginBottom: 20 }}>
           <div>
-            <h2
-              style={{
-                color: "white",
-              }}
-            >
-              Edit office
-            </h2>
+            <h2>Edit office</h2>
             <div className="officeTitels">
               Name: <span className="labels">{officeName}</span>
             </div>

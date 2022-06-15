@@ -95,15 +95,11 @@ const CardsSection = (props) => {
     const end1 = end.split("T");
     const start2 = `${start1[0]}T00:00:00`;
     const end2 = `${end1[0]}T00:00:00`;
-    console.log(start1);
+
     const flag = areIntervalsOverlapping(
       { start: new Date(startDate), end: new Date(endDate) },
       { start: new Date(start2), end: new Date(end2) },
       { inclusive: true }
-    );
-    console.log(
-      { start: new Date(startDate), end: new Date(endDate) },
-      { start: new Date(start2), end: new Date(end2) }
     );
 
     return !flag;
@@ -115,7 +111,7 @@ const CardsSection = (props) => {
       const end1 = end?.split("T");
       const start2 = `${start1[0]}T00:00:00`;
       const end2 = `${end1[0]}T00:00:00`;
-      console.log(start1);
+
       const flag = areIntervalsOverlapping(
         { start: new Date(startDate), end: new Date(endDate) },
         { start: new Date(start2), end: new Date(end2) },
@@ -133,19 +129,15 @@ const CardsSection = (props) => {
     let isAvailable = true;
 
     if (res.length > 0 && start && end) {
-      const sortedRes = res.sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-      });
-      sortedRes.forEach((item) => {
-        const availability = findAvailable(item);
-        if (!availability) {
-          isAvailable = false;
-        }
-      });
-
+      try {
+        res.forEach((item) => {
+          const availability = findAvailable(item);
+          if (!availability) {
+            isAvailable = false;
+            throw "";
+          }
+        });
+      } catch (msg) {}
       return isAvailable;
     } else {
       return true;
@@ -178,24 +170,59 @@ const CardsSection = (props) => {
           <Layout style={{ background: "transparent" }}>
             <List
               grid={{ gutter: 0, column: 5 }}
-              dataSource={dataDesks.filter((item) => {
-                if (
-                  `${item?.reservations[0]?.employee?.firstName} ${item?.reservations[0]?.employee?.lastName}`
-                    .toLowerCase()
-                    .includes(props.employeeSearch.toLowerCase()) &&
-                  !checkAvailable(item.reservations)
-                ) {
-                  return true;
-                } else if (props.employeeSearch.length === 0) {
-                  if (props.available === null) {
-                    return item;
-                  } else if (props.available === true) {
-                    return checkAvailable(item.reservations);
-                  } else if (props.available === false) {
-                    return !checkAvailable(item.reservations);
+              dataSource={dataDesks
+                .filter((item) => {
+                  const specificUser = item.reservations.find((info) => {
+                    const newGuy = getSpecificUser(info);
+                    if (
+                      info.startDate === newGuy.startDate &&
+                      info.endDate === newGuy.endDate
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  });
+                  if (
+                    `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
+                      .toLowerCase()
+                      .includes(props.employeeSearch.toLowerCase()) &&
+                    !checkAvailable(item.reservations)
+                  ) {
+                    return true;
+                  } else if (props.employeeSearch.length === 0) {
+                    console.log(item);
+                    if (props.available === null) {
+                      return true;
+                    }
+                    if (props.available && checkAvailable(item.reservations)) {
+                      return item;
+                    }
+                    if (props.available === false) {
+                      return !checkAvailable(item.reservations);
+                    }
                   }
-                }
-              })}
+                })
+                .filter(({ categories }) => {
+                  if (
+                    !props.categories.nearWindow &&
+                    !props.categories.doubleMonitor &&
+                    !props.categories.singleMonitor
+                  )
+                    return true;
+                  if (categories.nearWindow && props.categories.nearWindow) {
+                    return true;
+                  }
+                  if (
+                    categories.doubleMonitor &&
+                    props.categories.doubleMonitor
+                  )
+                    return true;
+                  if (
+                    categories.singleMonitor &&
+                    props.categories.singleMonitor
+                  )
+                    return true;
+                })}
               renderItem={(item) => {
                 const available = checkAvailable(item.reservations);
                 const specificUser = item.reservations.find((info) => {
@@ -208,7 +235,7 @@ const CardsSection = (props) => {
                   }
                   return false;
                 });
-                console.log(specificUser);
+
                 return (
                   <List.Item
                     style={{
