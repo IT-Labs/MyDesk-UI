@@ -351,7 +351,7 @@ const Title = ({ reservations, columns }) => {
         alignItems: "center",
       }}
     >
-      <p>Reservation list</p>
+      <p style={{ fontSize: "1.125rem" }}>Reservation list</p>
       <Button
         className={styles.cancelBtn}
         style={{ width: 120, height: 40 }}

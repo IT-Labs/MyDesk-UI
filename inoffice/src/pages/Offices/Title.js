@@ -10,7 +10,7 @@ const Title = ({ addOfficeText, onSubmit }) => {
         alignItems: "center",
       }}
     >
-      <p>Offices</p>
+      <p style={{ fontSize: "1.125rem" }}>Offices</p>
       <AddOfficeContainer
         id="addOffice"
         addOfficeText={addOfficeText}

@@ -263,7 +263,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "16.6666666667%",
+      width: "10%",
     },
     {
       title: "Single monitor",
@@ -355,7 +355,7 @@ const OfficeDetails = ({ props }) => {
           </Popconfirm>
         );
       },
-      width: "16.6666666667%",
+      width: "10%",
     },
   ];
 
@@ -364,7 +364,7 @@ const OfficeDetails = ({ props }) => {
       <div style={{ width: "90%" }}>
         <div style={{ marginBottom: 20 }}>
           <div>
-            <h2>Edit office</h2>
+            <h2 style={{ fontSize: "1.125rem" }}>Edit office</h2>
             <div className="officeTitels">
               Name: <span className="labels">{officeName}</span>
             </div>
@@ -411,17 +411,7 @@ const OfficeDetails = ({ props }) => {
           }}
         >
           <div style={{ width: "55%" }}>
-            <div
-              id="scrollableDiv"
-              style={{
-                height: 400,
-                overflow: "auto",
-                padding: "0 16px",
-                background: "white",
-                width: "100%",
-                marginBottom: 20,
-              }}
-            >
+            <div id="scrollableDiv">
               {isLoading ? (
                 <div
                   style={{
@@ -435,23 +425,15 @@ const OfficeDetails = ({ props }) => {
                   <Loading />
                 </div>
               ) : (
-                <InfiniteScroll
-                  dataLength={30}
-                  scrollableTarget="scrollableDiv"
-                  style={{
-                    border: "1px solid transparent",
-                    minWidth: "100%",
-                  }}
-                >
-                  <Table
-                    bordered
-                    style={{ width: "100%", border: "none" }}
-                    className="newTable"
-                    dataSource={desks}
-                    columns={columns}
-                    pagination={false}
-                  />
-                </InfiniteScroll>
+                <Table
+                  bordered
+                  style={{ width: "100%", border: "none" }}
+                  className="newTable"
+                  dataSource={desks}
+                  columns={columns}
+                  pagination={false}
+                  scroll={{ y: 322 }}
+                />
               )}
             </div>
             <Button
@@ -459,7 +441,7 @@ const OfficeDetails = ({ props }) => {
               className="uploadOfficePlan greenBtn"
               onClick={save}
               block
-              style={{ width: 150, marginLeft: 5 }}
+              style={{ width: 150, marginLeft: 5, marginTop: 10 }}
             >
               Save
             </Button>

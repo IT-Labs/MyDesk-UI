@@ -94,7 +94,7 @@ const Dashboard = () => {
         value: availableDesk,
       },
       {
-        type: "Unavailable",
+        type: "Reserved",
         value: unavailableData,
       },
     ]);
@@ -201,7 +201,7 @@ const Dashboard = () => {
           overflow: "hidden",
           textOverflow: "ellipsis",
         },
-        content: "Available Desks",
+        content: `${allDesks ? allDesks : "Loading..."}`,
       },
     },
     theme: {
@@ -312,6 +312,7 @@ const Dashboard = () => {
                 style={{
                   margin: 0,
                   padding: 0,
+                  fontSize: "1.125rem",
                 }}
               >
                 Dashboard

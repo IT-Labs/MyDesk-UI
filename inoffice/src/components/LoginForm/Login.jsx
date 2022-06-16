@@ -74,7 +74,7 @@ const Login = () => {
       <div className={styles.login}>
         <div className={styles.title}>
           <div className={styles.logo}></div>
-          <p>Welcome back! Please login to continue</p>
+          <p>Welcome back! Please log in to continue</p>
         </div>
         <MicrosoftLogin
           clientId={"431c5d21-13d1-43af-a3bc-65484a0bca29"}

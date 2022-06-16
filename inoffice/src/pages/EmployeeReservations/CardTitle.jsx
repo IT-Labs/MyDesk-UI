@@ -16,7 +16,7 @@ export const CardTitle = ({ data }) => {
         alignItems: "center",
       }}
     >
-      <p>My reservations</p>
+      <p style={{ fontSize: "1.125rem" }}>My reservations</p>
       <Tooltip title="Select which office you want to filter by">
         <Select
           showSearch

@@ -285,14 +285,15 @@ const Home = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-
                   width: "100%",
                 }}
               >
                 <OfficeBranchSelection
                   onOfficebranchChange={changeofficebranch}
                 />
-                <div style={{ width: 300 }}>
+                <div
+                  style={{ width: "18.75rem", position: "relative", left: 20 }}
+                >
                   <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                     Select date
                   </p>
