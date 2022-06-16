@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import api from "../../helper/api";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, notification } from "antd";
 import { withRouter } from "../../helper/withRouterHelper";
 
 class AddOffice extends Component {
@@ -16,8 +16,26 @@ class AddOffice extends Component {
   }
 
   handleSubmit = (e) => {
+    if (
+      e.officeName.length >= 25 ||
+      e.officeName.length === 0 ||
+      e.officeLocation.length >= 25 ||
+      e.officeLocation.length === 0
+    ) {
+      notification.open({
+        message: `Notification`,
+        description:
+          "The office name and office location should be more between 0 and 25 characters each.",
+        duration: 3,
+        placement: "top",
+      });
+      return;
+    }
     const data = {
-      officeName: e.officeName + " " + e.officeLocation,
+      officeName:
+        e.officeName.replace(/\s+/, "-") +
+        " " +
+        e.officeLocation.replace(/\s+/, "-"),
       officePlan: e.officePlan,
     };
 
@@ -49,14 +67,7 @@ class AddOffice extends Component {
 
           <Form.Item
             name="officeName"
-            rules={[
-              { required: false, message: "Please enter office name" },
-              {
-                required: true,
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
-                message: "You exceeded the maximum number of characters",
-              },
-            ]}
+            rules={[{ required: false, message: "Please enter office name" }]}
           >
             <Input placeholder="Office name" />
           </Form.Item>
@@ -65,11 +76,6 @@ class AddOffice extends Component {
             name="officeLocation"
             rules={[
               { required: false, message: "Please enter office location" },
-              {
-                required: true,
-                pattern: new RegExp("^[A-Za-z][A-Za-z0-9_./&-]{0,25}$"),
-                message: "You exceeded the maximum number of characters",
-              },
             ]}
           >
             <Input placeholder="Office location" />
@@ -78,7 +84,7 @@ class AddOffice extends Component {
           <Form.Item>
             <Button
               htmlType="submit"
-              className="formButton"
+              className="greenBtn"
               type="primary"
               shape="round"
             >
@@ -86,7 +92,8 @@ class AddOffice extends Component {
             </Button>
             <Button
               type="primary"
-              className="formButton"
+              className="greenBtn"
+              style={{ marginLeft: 5 }}
               shape="round"
               onClick={() =>
                 (window.location =

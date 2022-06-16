@@ -4,8 +4,11 @@ import { Form, Input, Button, notification } from "antd";
 
 const AddOfficeForm = () => {
   const handleSubmit = (e) => {
+    const name = e.name.replace(/\s+/, "-");
+    const location = e.location.replace(/\s+/, "-");
+    console.log(name, location);
     const data = {
-      officeName: e.name + " " + e.location,
+      officeName: name + " " + location,
     };
 
     try {
@@ -40,7 +43,7 @@ const AddOfficeForm = () => {
           rules={[
             {
               required: true,
-              message: "Please input office name!",
+              message: "Please input office name without any whitespace!",
             },
           ]}
         >

@@ -375,6 +375,11 @@ html {
   font-weight: 500;
 }
 
+.userSearchSelect {
+  position: relative;
+  left: 1rem;
+}
+
 .userSearchSelect .ant-select-selector {
   border-radius: 20px !important;
 }
@@ -394,7 +399,7 @@ html {
 }
 .greenBtn {
   /* margin-right: 10px; */
-  background: #2dce98;
+  background: #5cb1b8;
   color: white;
   border: 0;
   border-radius: 5px;
@@ -402,5 +407,5 @@ html {
 }
 
 .greenBtn:hover {
-  background: #56d9ad;
+  background: #6dcfd8;
 }

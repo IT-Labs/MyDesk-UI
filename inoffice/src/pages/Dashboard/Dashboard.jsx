@@ -329,9 +329,9 @@ const Dashboard = () => {
               }}
             >
               <Select
-                defaultValue="Select Office"
+                defaultValue="All offices"
                 onChange={selectFilter}
-                style={{ width: 257 }}
+                style={{ width: "12.5rem" }}
                 showSearch
               >
                 <Select.Option key={0} value={null}>
@@ -344,7 +344,7 @@ const Dashboard = () => {
                     </Select.Option>
                   ))}
               </Select>
-              <div style={{ width: 220 }}>
+              <div style={{ width: "12.5rem" }}>
                 <CalendarImplementation
                   dateFunction={setDate}
                   officeid={officeid}

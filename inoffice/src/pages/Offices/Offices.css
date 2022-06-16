@@ -8,7 +8,7 @@ h1 {
   float: right;
   margin-right: 10px;
 
-  background: #2dce98;
+  background: #5cb1b8;
   color: white;
   border: 0;
   border-radius: 5px;
@@ -16,7 +16,7 @@ h1 {
 }
 
 .editButton:hover {
-  background: #56d9ad;
+  background: #6dcfd8;
 }
 
 .deleteButton {
