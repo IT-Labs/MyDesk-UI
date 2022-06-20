@@ -20,6 +20,8 @@ const CardsSection = (props) => {
   const [initialDesks, setInitnialDesks] = useState([]);
   const [initialConf, setInitialConf] = useState([]);
   const { Meta } = Card;
+  const [media, setMedia] = useState(window.matchMedia("(max-width: 820px)"));
+  console.log(media);
 
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
@@ -165,11 +167,15 @@ const CardsSection = (props) => {
           dataLength={dataDesks.length}
           scrollableTarget="scrollableDiv"
           display="flex"
-          style={{ height: 400, maxHeight: 400 }}
+          style={{
+            height: 400,
+            maxHeight: 400,
+          }}
+          className="infiniteScrollHome"
         >
           <Layout style={{ background: "transparent" }}>
             <List
-              grid={{ gutter: 0, column: 5 }}
+              grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
               dataSource={dataDesks
                 .filter((item) => {
                   const specificUser = item.reservations.find((info) => {
@@ -190,7 +196,6 @@ const CardsSection = (props) => {
                   ) {
                     return true;
                   } else if (props.employeeSearch.length === 0) {
-                    console.log(item);
                     if (props.available === null) {
                       return true;
                     }
@@ -268,7 +273,7 @@ const CardsSection = (props) => {
                               // alignItems: "center",
                             }}
                           >
-                            <p style={{ fontSize: "0.8vw" }}>
+                            <p style={{ fontSize: "1rem" }}>
                               Desk {item.indexForOffice}
                             </p>
                             <Tooltip

@@ -59,20 +59,13 @@ const AddOfficeForm = () => {
         <Form.Item>
           <Button
             htmlType="submit"
-            className="formButton"
+            className="formButton greenBtn"
             type="primary"
-            style={{ background: "#5cb1b8", borderRadius: 7, border: "none" }}
           >
             Save
           </Button>
           <Button
-            type="primary"
-            style={{
-              background: "rgb(255,70,70)",
-              borderRadius: 7,
-              border: "none",
-            }}
-            className="formButton"
+            className="formButton redButton"
             onClick={() => (window.location = "/admin/offices")}
           >
             Cancel

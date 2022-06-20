@@ -2,7 +2,11 @@ import React from "react";
 import "./Sidebar.css";
 import { Menu } from "antd";
 import { Component } from "react/cjs/react.production.min";
-import { TeamOutlined } from "@ant-design/icons";
+import {
+  LeftCircleOutlined,
+  RightCircleOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
@@ -12,11 +16,19 @@ class SiderDemo extends Component {
   state = {
     collapsed: false,
     width: "100%",
+    media: window.matchMedia("(max-width: 820px)"),
   };
 
   config = {
     token: sessionStorage.getItem("msal.idtoken"),
   };
+
+  componentDidMount() {
+    if (this.state.media) {
+      this.setState({ width: "75%" });
+      this.setState({ collapsed: true });
+    }
+  }
 
   onCollapse = (collapsed) => {
     this.setState({ collapsed });
@@ -41,8 +53,15 @@ class SiderDemo extends Component {
           }}
           theme="light"
           collapsible
-          collapsed={collapsed}
+          collapsed={this.state.media ? true : collapsed}
           onCollapse={this.onCollapse}
+          trigger={
+            this.state.media ? null : this.state.collapsed ? (
+              <RightCircleOutlined />
+            ) : (
+              <LeftCircleOutlined />
+            )
+          }
         >
           <Menu
             selectedKeys={[this.props.selected]}
@@ -84,7 +103,7 @@ class SiderDemo extends Component {
     return (
       <Sider
         collapsible
-        collapsed={collapsed}
+        collapsed={this.state.media ? false : collapsed}
         onCollapse={this.onCollapse}
         style={{
           overflow: "auto",

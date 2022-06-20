@@ -1,14 +1,11 @@
 .officeImgCol {
-  margin-left: 3%;
-
-  margin-right: 1%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  width: 400px !important;
-  height: 400px !important;
+  justify-content: center !important;
+  width: 39rem !important;
+  height: 25rem !important;
 }
 
 .cardsCol {
@@ -61,4 +58,53 @@
 .reviewModal {
   max-height: 200px !important;
   min-height: 200px !important;
+}
+
+.buttonsSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.rightInputRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  margin-bottom: 3rem;
+}
+
+.leftInputRow {
+  display: flex;
+  width: 90%;
+  justify-content: space-evenly;
+  margin-bottom: 1.4rem;
+}
+@media screen and (max-width: 820px) {
+  .leftSideHome {
+    display: block;
+    position: relative;
+    left: 20%;
+  }
+  .rightSideHome {
+    display: block;
+  }
+  .homeContent {
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+  .buttonsSection {
+    justify-content: center;
+  }
+  .rightInputRow,
+  .leftInputRow {
+    display: block;
+  }
+  .cardColColor {
+    width: 50rem !important;
+  }
+  .officeImgCol {
+    width: 400px;
+  }
 }

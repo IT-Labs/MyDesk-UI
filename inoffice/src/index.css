@@ -404,8 +404,26 @@ html {
   border: 0;
   border-radius: 5px;
   box-shadow: 0px 3px 6px #2c28281c;
+  transition: all 0.2s ease-in-out;
 }
 
 .greenBtn:hover {
   background: #6dcfd8;
+}
+
+.redButton {
+  color: white;
+  background-color: #d11a2a;
+  border-radius: 5px;
+  border: none;
+}
+
+.redButton:hover {
+  background-color: #e74552;
+  color: white;
+  border: none;
+}
+
+p {
+  font-size: 1.25rem;
 }

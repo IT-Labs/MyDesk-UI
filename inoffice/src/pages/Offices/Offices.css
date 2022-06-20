@@ -26,6 +26,15 @@ h1 {
   background-color: #d11a2a;
 }
 
+.redButton {
+  color: white;
+  background-color: #d11a2a;
+}
+
+.redButton:hover {
+  background-color: #e74552;
+}
+
 .addOfficeSectionButton {
   margin-left: 3%;
 }

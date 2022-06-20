@@ -277,23 +277,15 @@ const Home = () => {
   return (
     <Layout style={{ overflow: "auto", height: "100vh" }}>
       <UserHead isHome={true} />
-      <Layout>
-        <Content>
-          <Row className="firstSection">
-            <Col className="officeDropdown" span={12} xl={11} lg={12} md={12}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
+      <Layout className="homeContent">
+        <Content style={{ marginTop: "1rem" }}>
+          <Row align="center" className="leftSideHome">
+            <Col span={10} xl={11} lg={11} md={11}>
+              <div className="leftInputRow">
                 <OfficeBranchSelection
                   onOfficebranchChange={changeofficebranch}
                 />
-                <div
-                  style={{ width: "18.75rem", position: "relative", left: 20 }}
-                >
+                <div style={{ width: "18.75rem" }}>
                   <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
                     Select date
                   </p>
@@ -308,138 +300,113 @@ const Home = () => {
                   />
                 </div>
               </div>
+              <Col
+                className="officeImgCol cardColColor"
+                style={{ width: "100%" }}
+              >
+                <OfficeImage officeid={officeid} />
+              </Col>
             </Col>
-            <Col
-              className="calendarSection"
-              span={11}
-              xl={11}
-              lg={11}
-              md={11}
-              style={{ marginBottom: 25 }}
-            >
-              <div>
-                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                  Search by name
-                </p>
-                <Input
-                  style={{ width: "12.5rem" }}
-                  onChange={(e) => setEmployeeSearch(e.target.value)}
+            <Col span={11} xl={11} lg={11} md={11} className="rightSideHome">
+              <div className="rightInputRow">
+                <div>
+                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                    Search by name
+                  </p>
+                  <Input
+                    style={{ width: "12.5rem" }}
+                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                    Filter by availability
+                  </p>
+                  <Select
+                    showSearch
+                    style={{ width: "12.5rem" }}
+                    defaultValue={selectValue}
+                    onChange={changeVal}
+                  >
+                    <Select.Option value={null} key={1}>
+                      All
+                    </Select.Option>
+                    <Select.Option value={true} key={2}>
+                      Available
+                    </Select.Option>
+                    <Select.Option value={false} key={3}>
+                      Reserved
+                    </Select.Option>
+                  </Select>
+                </div>
+                <div>
+                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
+                    Filter by category
+                  </p>
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Menu.Item>
+                          <Checkbox
+                            checked={singleMonitor}
+                            onClick={clickSingleMonitor}
+                            disabled={dualMonitor}
+                          >
+                            Single monitor
+                          </Checkbox>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <Checkbox
+                            checked={dualMonitor}
+                            onClick={clickDualMonitor}
+                            disabled={singleMonitor}
+                          >
+                            Dual monitor
+                          </Checkbox>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <Checkbox
+                            checked={nearWindow}
+                            onClick={clickNearWindow}
+                          >
+                            Near window
+                          </Checkbox>
+                        </Menu.Item>
+                      </Menu>
+                    }
+                    // trigger={["click"]}
+                    visible={dropdownVisible}
+                    onClick={() => setDropDownVisible(!dropdownVisible)}
+                  >
+                    <Button style={{ width: "12.5rem" }}>
+                      <Space>
+                        Select categories
+                        <DownOutlined />
+                      </Space>
+                    </Button>
+                  </Dropdown>
+                </div>
+              </div>
+              <Col className="cardsCol cardColColor scrollableDiv">
+                <CardsSection
+                  refresh={refreshCards}
+                  selectedCard={selectedCard}
+                  officeid={officeid}
+                  available={selectValue}
+                  employeeSearch={employeeSearch}
+                  categories={selectedCategories}
                 />
-              </div>
-              <div>
-                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                  Filter by availability
-                </p>
-                <Select
-                  showSearch
-                  style={{ width: "12.5rem" }}
-                  defaultValue={selectValue}
-                  onChange={changeVal}
-                >
-                  <Select.Option value={null} key={1}>
-                    All
-                  </Select.Option>
-                  <Select.Option value={true} key={2}>
-                    Available
-                  </Select.Option>
-                  <Select.Option value={false} key={3}>
-                    Reserved
-                  </Select.Option>
-                </Select>
-              </div>
-              <div>
-                <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                  Filter by category
-                </p>
-                <Dropdown
-                  overlay={
-                    <Menu
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <Menu.Item>
-                        <Checkbox
-                          checked={singleMonitor}
-                          onClick={clickSingleMonitor}
-                          disabled={dualMonitor}
-                        >
-                          Single monitor
-                        </Checkbox>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <Checkbox
-                          checked={dualMonitor}
-                          onClick={clickDualMonitor}
-                          disabled={singleMonitor}
-                        >
-                          Dual monitor
-                        </Checkbox>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <Checkbox
-                          checked={nearWindow}
-                          onClick={clickNearWindow}
-                        >
-                          Near window
-                        </Checkbox>
-                      </Menu.Item>
-                    </Menu>
-                  }
-                  // trigger={["click"]}
-                  visible={dropdownVisible}
-                  onClick={() => setDropDownVisible(!dropdownVisible)}
-                >
-                  <Button style={{ width: "12.5rem" }}>
-                    <Space>
-                      Select categories
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-              </div>
-            </Col>
-          </Row>
-          <Row align="center">
-            <Col
-              className="officeImgCol cardColColor"
-              span={10}
-              xl={11}
-              lg={11}
-              md={11}
-            >
-              <OfficeImage officeid={officeid} />
-            </Col>
-
-            <Col
-              className="cardsCol cardColColor"
-              span={11}
-              xl={11}
-              lg={11}
-              md={11}
-            >
-              <CardsSection
-                refresh={refreshCards}
-                selectedCard={selectedCard}
-                officeid={officeid}
-                available={selectValue}
-                employeeSearch={employeeSearch}
-                categories={selectedCategories}
-              />
+              </Col>
             </Col>
           </Row>
 
-          <Row
-            className="buttonsSection"
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
+          <Row className="buttonsSection">
             <div
               className="buttonReview"
               style={{

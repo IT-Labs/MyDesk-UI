@@ -436,15 +436,20 @@ const OfficeDetails = ({ props }) => {
                 />
               )}
             </div>
-            <Button
-              type="primary"
+            <button
               className="uploadOfficePlan greenBtn"
               onClick={save}
-              block
-              style={{ width: 150, marginLeft: 5, marginTop: 10 }}
+              // block
+              style={{
+                width: 150,
+                marginLeft: 5,
+                marginTop: 10,
+                height: 30,
+                cursor: "pointer",
+              }}
             >
               Save
-            </Button>
+            </button>
           </div>
           <div style={{ background: "white", height: 400 }}>
             {imageUrl ? (

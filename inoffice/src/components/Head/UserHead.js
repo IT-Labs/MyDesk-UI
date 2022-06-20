@@ -16,7 +16,7 @@ const UserHead = (props) => {
   const dispatch = useDispatch();
   const [employee, setEmployee] = useState({});
   const [visible, setVisible] = useState(false);
-
+  const [media, setMedia] = useState(window.matchMedia("(max-width: 820px)"));
   const getUsers = async () => {
     fetchEmployees(api, dispatch, notification);
   };
@@ -71,9 +71,15 @@ const UserHead = (props) => {
             <div />
           )}
           <div>
-            <img src={avatar} alt="avatar" style={{ width: 90, height: 50 }} />
+            {!media.matches && (
+              <img
+                src={avatar}
+                alt="avatar"
+                style={{ width: 90, height: 50 }}
+              />
+            )}
             <NavLink className={"link"} to="/employee/reservations">
-              {config.decoded.name}
+              {media.matches ? "Dashboard" : config.decoded.name}
             </NavLink>
             <NavLink
               className={"link"}
@@ -84,7 +90,7 @@ const UserHead = (props) => {
                 window.location = "/";
               }}
             >
-              Log out
+              Logout
             </NavLink>
           </div>
         </div>

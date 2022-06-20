@@ -8,6 +8,7 @@ import { Spin } from "antd";
 const OfficeImage = (props) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
+  const { matches } = window.matchMedia("(max-width: 820px)");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,19 +28,24 @@ const OfficeImage = (props) => {
   }, [props.officeid]);
 
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
       {data ? (
-        <Image src={data} alt="office image" style={{ height: 400 }}>
+        <Image
+          src={data}
+          alt="office image"
+          style={{ height: "25rem", width: matches ? 350 : "100%" }}
+        >
           <Spin />
         </Image>
       ) : (
         <div
           style={{
-            height: 400,
+            height: "25rem",
             background: "white",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            width: "100%",
           }}
         >
           <h2>No image available</h2>

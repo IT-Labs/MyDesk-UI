@@ -91,10 +91,8 @@ class AddOffice extends Component {
               Save
             </Button>
             <Button
-              type="primary"
-              className="greenBtn"
+              className="redButton"
               style={{ marginLeft: 5 }}
-              shape="round"
               onClick={() =>
                 (window.location =
                   "/admin/edit/" +
