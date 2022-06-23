@@ -1,0 +1,32 @@
+.loading {
+  height: 400px;
+  max-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scrollableDiv {
+  height: 400px;
+  max-height: 400px;
+}
+
+.meta {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.infoCircle {
+  position: relative;
+  top: 4px;
+}
+
+.cardContentInformation {
+  width: max-content;
+}
+
+.basicText {
+  color: #000000;
+  font-size: 0.75rem;
+}

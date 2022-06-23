@@ -115,8 +115,8 @@ const UserSearch = () => {
   }, []);
 
   const config = {
-    token: sessionStorage.getItem("msal.idtoken"),
-    decoded: jwtDecode(sessionStorage.getItem("msal.idtoken")),
+    token: localStorage.getItem("msal.idtoken"),
+    decoded: jwtDecode(localStorage.getItem("msal.idtoken")),
   };
   const { employees } = useSelector((state) => state.employees);
 
@@ -140,7 +140,7 @@ const UserSearch = () => {
         onSelect={findEmployee}
         suffixIcon={employeeName.length > 0 ? <></> : <SearchOutlined />}
       >
-        {employees &&
+        {employees ? (
           employees.map((item) => (
             <Select.Option
               key={item.id}
@@ -151,7 +151,10 @@ const UserSearch = () => {
               >{`${item.firstName} ${item.lastName}`}</h4>
               <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
             </Select.Option>
-          ))}
+          ))
+        ) : (
+          <p>No employees atm</p>
+        )}
       </Select>
       <Modal
         title="Employee details"
@@ -167,23 +170,18 @@ const UserSearch = () => {
         </h3>
         <h3>Job title: {employee.jobTitle}</h3>
         <h3>E-Mail: {employee.email}</h3>
-        <InfiniteScroll
-          dataLength={reservations.length}
-          scrollableTarget="scrollableDiv"
-          display="flex"
+
+        <Table
+          columns={futureColumns}
+          pagination={false}
+          className="newTable"
+          dataSource={reservations.filter(
+            (item) =>
+              item.employee === `${employee.firstName} ${employee.lastName}`
+          )}
           style={{ height: 300, maxHeight: 300 }}
-        >
-          <Table
-            columns={futureColumns}
-            pagination={false}
-            className="newTable"
-            dataSource={reservations.filter(
-              (item) =>
-                item.employee === `${employee.firstName} ${employee.lastName}`
-            )}
-            style={{ height: 300, maxHeight: 300 }}
-          />
-        </InfiniteScroll>
+          scroll={{ y: 300 }}
+        />
       </Modal>
     </>
   );

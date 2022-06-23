@@ -27,11 +27,11 @@ const PrivateRoute = React.lazy(() => import("./helper/PrivateRoute"));
 const App = () => {
   //Routes
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("msal.idtoken");
+  const token = localStorage.getItem("msal.idtoken");
 
   React.useEffect(() => {
     if (!token) {
-      // sessionStorage.clear();
+      // localStorage.clear();
       navigate("/");
     }
   }, [token, navigate]);

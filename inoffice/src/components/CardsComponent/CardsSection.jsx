@@ -6,9 +6,8 @@ import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import Loading from "../Loading/Loading";
-import { extendMoment } from "moment-range";
+import styles from "./CardsSection.module.css";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import jwtDecode from "jwt-decode";
 import { areIntervalsOverlapping } from "date-fns";
 let controller = new AbortController();
 
@@ -21,7 +20,6 @@ const CardsSection = (props) => {
   const [initialConf, setInitialConf] = useState([]);
   const { Meta } = Card;
   const [media, setMedia] = useState(window.matchMedia("(max-width: 820px)"));
-  console.log(media);
 
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
@@ -69,15 +67,6 @@ const CardsSection = (props) => {
       .catch((error) => {
         console.error(error);
       });
-    // await api
-    //   .get("employee/office-conferencerooms/" + props.officeid)
-    //   .then((response) => {
-    //     setConference(response.data);
-    //     setInitialConf(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("error message");
-    //   });
   };
 
   useEffect(() => {
@@ -150,15 +139,7 @@ const CardsSection = (props) => {
   return (
     <>
       {loadingData && (
-        <div
-          style={{
-            height: 400,
-            maxHeight: 400,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className={styles.loading}>
           <Loading />
         </div>
       )}
@@ -167,11 +148,7 @@ const CardsSection = (props) => {
           dataLength={dataDesks.length}
           scrollableTarget="scrollableDiv"
           display="flex"
-          style={{
-            height: 400,
-            maxHeight: 400,
-          }}
-          className="infiniteScrollHome"
+          className={styles.scrollableDiv}
         >
           <Layout style={{ background: "transparent" }}>
             <List
@@ -265,14 +242,7 @@ const CardsSection = (props) => {
                     >
                       <Meta
                         title={
-                          <div
-                            style={{
-                              display: "flex",
-                              width: "100%",
-                              justifyContent: "space-between",
-                              // alignItems: "center",
-                            }}
-                          >
+                          <div className={styles.meta}>
                             <p style={{ fontSize: "1rem" }}>
                               Desk {item.indexForOffice}
                             </p>
@@ -300,7 +270,7 @@ const CardsSection = (props) => {
                               }`}
                             >
                               <InfoCircleOutlined
-                                style={{ position: "relative", top: 4 }}
+                                className={styles.infoCircle}
                               />
                             </Tooltip>
                           </div>
@@ -311,47 +281,34 @@ const CardsSection = (props) => {
                               display: "flex",
                               justifyContent: "start",
                             }}
-                            className="cardContentInformation"
+                            className={styles.cardContentInformation}
                           >
-                            {item.capacity >= 0 ? (
-                              <p
-                                style={{ color: "#000000	", fontSize: "0.6vw" }}
-                              >
-                                Capacity: {item.capacity}
-                              </p>
-                            ) : (
-                              <div>
-                                <p
-                                  style={{
-                                    color: "#000000	",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  {item.categories?.unavailable
-                                    ? "Unavailable"
-                                    : item.reservations.length > 0 &&
-                                      !available &&
-                                      `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
-                                  {}
-                                </p>
-                                <p
-                                  style={{
-                                    color: "#000000	",
-                                    fontSize: "12px",
-                                  }}
-                                >
-                                  {!item.categories?.unavailable &&
-                                    item.reservations.length > 0 &&
+                            <div>
+                              <p className={styles.basicText}>
+                                {item.categories?.unavailable
+                                  ? "Unavailable"
+                                  : item.reservations.length > 0 &&
                                     !available &&
-                                    `${moment(specificUser?.startDate).format(
-                                      "DD-MM"
-                                    )}
+                                    `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
+                                {}
+                              </p>
+                              <p
+                                style={{
+                                  color: "#000000	",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {!item.categories?.unavailable &&
+                                  item.reservations.length > 0 &&
+                                  !available &&
+                                  `${moment(specificUser?.startDate).format(
+                                    "DD-MM"
+                                  )}
                                   / ${moment(specificUser?.endDate).format(
                                     "DD-MM"
                                   )}`}
-                                </p>
-                              </div>
-                            )}
+                              </p>
+                            </div>
                           </div>
                         }
                       />

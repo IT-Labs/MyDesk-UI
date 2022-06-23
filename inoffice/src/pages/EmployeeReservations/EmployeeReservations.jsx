@@ -27,7 +27,7 @@ const contentStyle = {
 const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
 
-  const token = jwt(sessionStorage.getItem("msal.idtoken"));
+  const token = jwt(localStorage.getItem("msal.idtoken"));
 
   const [data, setData] = useState([]);
 

@@ -28,8 +28,8 @@ const UserHead = (props) => {
   }, []);
 
   const config = {
-    token: sessionStorage.getItem("msal.idtoken"),
-    decoded: jwt(sessionStorage.getItem("msal.idtoken")),
+    token: localStorage.getItem("msal.idtoken"),
+    decoded: jwt(localStorage.getItem("msal.idtoken")),
   };
   const { employees } = useSelector((state) => state.employees);
 
@@ -85,7 +85,7 @@ const UserHead = (props) => {
               className={"link"}
               to="/"
               onClick={() => {
-                sessionStorage.clear();
+                localStorage.clear();
                 localStorage.clear();
                 window.location = "/";
               }}

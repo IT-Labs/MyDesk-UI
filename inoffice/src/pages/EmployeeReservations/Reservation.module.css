@@ -17,3 +17,15 @@
   border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
 }
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 480px) {
+  .title {
+    display: block;
+  }
+}

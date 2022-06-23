@@ -80,3 +80,47 @@
   transition: all 0.2s ease-in-out;
   text-align: center !important;
 }
+
+.pieCard {
+  background: #fff;
+  width: 40%;
+  height: 26.938rem;
+  border-radius: 7px;
+  display: flex;
+  padding: 20px;
+  box-shadow: 0px 3px 17px rgba(18, 18, 18, 0.2);
+  flex-direction: column;
+}
+
+.dataRow {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 35.4rem;
+  position: relative;
+  left: 15px;
+}
+
+.infoCards {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media screen and (max-width: 480px) {
+  .dataRow {
+    flex-direction: column;
+  }
+  .inputs {
+    display: block;
+  }
+  .infoCards {
+    display: block;
+  }
+}

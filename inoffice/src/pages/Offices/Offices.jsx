@@ -87,10 +87,11 @@ const Offices = () => {
                   borderRadius: 7,
                 }}
               >
-                <div>
+                <div style={{ overflowX: "scroll" }}>
                   <Input style={{ width: 200 }} onChange={handleChange} />
                   <List
                     bordered
+                    style={{ minWidth: 400 }}
                     pagination={{ pageSize: 5, position: "top" }}
                     dataSource={data.filter(({ name }) =>
                       name.toLowerCase().includes(inputFilter.toLowerCase())

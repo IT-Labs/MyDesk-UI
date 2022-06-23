@@ -18,6 +18,9 @@ import { Excel } from "antd-table-saveas-excel";
 import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import Loading from "../../components/Loading/Loading";
+import Title from "./Title";
+import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
+import { getAllPastReservations } from "../../utils/getAllPastReservations";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -58,35 +61,13 @@ const ReservationList = () => {
   const [offices, setOffices] = useState([]);
 
   const sortFuture = (res) => {
-    const future = res
-      .filter(
-        (item) =>
-          moment(item.startDate).isAfter(moment()) &&
-          moment(item.endDate).isAfter(moment())
-      )
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-      });
-
+    const future = getAllFutureReservations(res);
+    console.log(future);
     setReservations(future);
   };
 
   const sortPast = (res) => {
-    const past = res
-      .filter(
-        (item) =>
-          moment(item.startDate).isBefore(moment()) &&
-          moment(item.endDate).isBefore(moment())
-      )
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
-      });
+    const past = getAllPastReservations(res);
 
     setReservations(past);
   };
@@ -284,12 +265,14 @@ const ReservationList = () => {
                       className={styles.searchInput}
                       onPress
                       placeholder="Search by name"
+                      style={{ width: 200 }}
                     />
                   </Tooltip>
                 </div>
               </div>
               {!loading ? (
                 <Table
+                  scroll={{ x: 400 }}
                   columns={tabKey === "past" ? pastColumns : futureColumns}
                   dataSource={reservations.filter(
                     ({ office, employee }) =>
@@ -329,37 +312,6 @@ const ReservationList = () => {
         </Content>
       </Layout>
     </Layout>
-  );
-};
-
-const Title = ({ reservations, columns }) => {
-  const handleClick = () => {
-    const excel = new Excel();
-    excel
-      .addSheet("test")
-      .addColumns(columns)
-      .addDataSource(reservations, {
-        str2Percent: true,
-      })
-      .saveAs("Excel.xlsx");
-  };
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <p style={{ fontSize: "1.125rem" }}>Reservation list</p>
-      <Button
-        className={styles.cancelBtn}
-        style={{ width: 120, height: 40 }}
-        onClick={handleClick}
-      >
-        Export Data
-      </Button>
-    </div>
   );
 };
 

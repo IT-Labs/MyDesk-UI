@@ -1,6 +1,7 @@
 import { Select, Tooltip } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { setOfficeSelect } from "../../redux/MyReservationsSelect/MyReservationsSelect";
+import styles from "./Reservation.module.css";
 
 export const CardTitle = ({ data }) => {
   const dispatch = useDispatch();
@@ -9,13 +10,7 @@ export const CardTitle = ({ data }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <div className={styles.title}>
       <p style={{ fontSize: "1.125rem" }}>My reservations</p>
       <Tooltip title="Select which office you want to filter by">
         <Select

@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEnd, setStart } from "../../redux/Date/Date";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
+import jwtDecode from "jwt-decode";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -213,7 +214,7 @@ const Dashboard = () => {
     api
       .get("employee/reviews/all", {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+          Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Credentials": true,
         },
@@ -290,6 +291,8 @@ const Dashboard = () => {
     },
   ];
 
+  console.log(jwtDecode(localStorage.getItem("msal.idtoken")));
+
   return (
     <Layout>
       <UserHead isDashboard={true} />
@@ -298,8 +301,6 @@ const Dashboard = () => {
         <Content
           style={{
             width: "100%",
-            overflowY: "hidden",
-            overflowX: "hidden",
             display: "flex",
             justifyContent: "center",
           }}
@@ -318,16 +319,7 @@ const Dashboard = () => {
                 Dashboard
               </h2>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "35.4rem",
-                position: "relative",
-                left: "15px",
-              }}
-            >
+            <div className={styles.inputs}>
               <Select
                 defaultValue="All offices"
                 onChange={selectFilter}
@@ -356,13 +348,7 @@ const Dashboard = () => {
                 />
               </div>
             </div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-start",
-              }}
-            >
+            <div className={styles.infoCards}>
               <div className={styles.dashboardCard}>
                 <p>AVAILABLE</p>
                 <div className={styles.tile}>
@@ -397,25 +383,8 @@ const Dashboard = () => {
                 marginTop: "1%",
               }}
             >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
-                }}
-              >
-                <div
-                  style={{
-                    background: "#fff",
-                    width: "40%",
-                    height: "26.938rem",
-                    borderRadius: 7,
-                    display: "flex",
-                    padding: 20,
-                    boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
-                    flexDirection: "column",
-                  }}
-                >
+              <div className={styles.dataRow}>
+                <div className={styles.pieCard}>
                   <h3>Desks available/reserved</h3>
                   {deskData.length > 0 ? (
                     <Pie {...config} />

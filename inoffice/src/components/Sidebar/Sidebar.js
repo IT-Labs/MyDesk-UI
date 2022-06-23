@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { Menu } from "antd";
+import { Menu, Tooltip } from "antd";
 import { Component } from "react/cjs/react.production.min";
 import {
   LeftCircleOutlined,
@@ -12,131 +12,128 @@ import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
 import { Link, NavLink } from "react-router-dom";
 
-class SiderDemo extends Component {
-  state = {
-    collapsed: false,
-    width: "100%",
-    media: window.matchMedia("(max-width: 820px)"),
-  };
+const Sidebar = (props) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const [width, setWidth] = useState("100%");
+  const [media, setMedia] = useState(window.matchMedia("(max-width: 820px)"));
+  const config = { token: localStorage.getItem("msal.idtoken") };
 
-  config = {
-    token: sessionStorage.getItem("msal.idtoken"),
-  };
-
-  componentDidMount() {
-    if (this.state.media) {
-      this.setState({ width: "75%" });
-      this.setState({ collapsed: true });
+  useEffect(() => {
+    if (media.matches) {
+      setWidth("75%");
+      setCollapsed(true);
     }
-  }
+  }, []);
 
-  onCollapse = (collapsed) => {
-    this.setState({ collapsed });
+  const onCollapse = (collapsed) => {
+    setCollapsed(collapsed);
     if (collapsed) {
-      this.setState({ width: "75%" });
+      setWidth("75%");
     } else {
-      this.setState({ width: "100%" });
+      setWidth("100%");
     }
   };
-
-  render() {
-    const { collapsed } = this.state;
-    if (jwt(this.config.token).roles[0] === "ADMIN") {
-      return (
-        <Sider
-          style={{
-            overflow: "none",
-            height: "100.7vh",
-            position: "relative",
-            top: "-70px",
-            left: 0,
-          }}
-          theme="light"
-          collapsible
-          collapsed={this.state.media ? true : collapsed}
-          onCollapse={this.onCollapse}
-          trigger={
-            this.state.media ? null : this.state.collapsed ? (
-              <RightCircleOutlined />
-            ) : (
-              <LeftCircleOutlined />
-            )
-          }
-        >
-          <Menu
-            selectedKeys={[this.props.selected]}
-            mode="inline"
-            className="sideMenu"
-          >
-            <Menu.Item
-              key="0"
-              className="sideBarLogo"
-              style={{ width: this.state.width }}
-            >
-              <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
-            </Menu.Item>
-            <Menu.Item key="1" icon={<FeatherIcon icon="home" />}>
-              <Link to={"/admin/dashboard"}>
-                {!this.state.collapsed && <>Dashboard</>}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2" icon={<FeatherIcon icon="code" />}>
-              <Link to={"/admin/offices"}>
-                {!this.state.collapsed && <>Offices</>}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="4" icon={<FeatherIcon icon="coffee" />}>
-              <Link to={"/admin/reservations"}>
-                {!this.state.collapsed && <>Reservation list</>}
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="5" icon={<FeatherIcon icon="coffee" />}>
-              <Link to={"/employee/reservations"}>
-                {!this.state.collapsed && <>My reservations</>}
-              </Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-      );
-    }
-
+  if (jwt(config.token).roles[0] === "ADMIN") {
     return (
       <Sider
-        collapsible
-        collapsed={this.state.media ? false : collapsed}
-        onCollapse={this.onCollapse}
         style={{
-          overflow: "auto",
-          height: "100vh",
+          overflow: "none",
+          height: "100.7vh",
           position: "relative",
           top: "-70px",
-
           left: 0,
         }}
         theme="light"
+        collapsible
+        collapsed={media.matches ? true : collapsed}
+        onCollapse={onCollapse}
+        trigger={
+          media.matches ? null : collapsed ? (
+            <RightCircleOutlined />
+          ) : (
+            <LeftCircleOutlined />
+          )
+        }
       >
         <Menu
-          theme="light"
-          selectedKeys={[this.props.selected]}
+          selectedKeys={[props.selected]}
           mode="inline"
           className="sideMenu"
         >
-          <Menu.Item
-            key="0"
-            className="sideBarLogo"
-            style={{ width: this.state.width }}
-          >
-            <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+          <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
+            <Tooltip title="Home">
+              <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+            </Tooltip>
           </Menu.Item>
-          <Menu.Item key="1" icon={<TeamOutlined />}>
-            <Link to={"/employee/reservations"}>
-              {!this.state.collapsed && <>My reservations</>}
-            </Link>
+          <Menu.Item key="1" icon={<FeatherIcon icon="home" />}>
+            <Tooltip title="Dashboard">
+              <Link to={"/admin/dashboard"}>
+                {!collapsed && <>Dashboard</>}
+              </Link>
+            </Tooltip>
+          </Menu.Item>
+          <Menu.Item key="2" icon={<FeatherIcon icon="code" />}>
+            <Tooltip title="Offices">
+              <Link to={"/admin/offices"}>{!collapsed && <>Offices</>}</Link>
+            </Tooltip>
+          </Menu.Item>
+          <Menu.Item key="4" icon={<FeatherIcon icon="coffee" />}>
+            <Tooltip title="Reservation list">
+              <Link to={"/admin/reservations"}>
+                {!collapsed && <>Reservation list</>}
+              </Link>
+            </Tooltip>
+          </Menu.Item>
+          <Menu.Item key="5" icon={<FeatherIcon icon="coffee" />}>
+            <Tooltip title="My reservations">
+              <Link to={"/employee/reservations"}>
+                {!collapsed && <>My reservations</>}
+              </Link>
+            </Tooltip>
           </Menu.Item>
         </Menu>
       </Sider>
     );
   }
-}
 
-export default SiderDemo;
+  return (
+    <Sider
+      collapsible
+      collapsed={media.matches ? true : collapsed}
+      onCollapse={onCollapse}
+      trigger={
+        media.matches ? null : collapsed ? (
+          <RightCircleOutlined />
+        ) : (
+          <LeftCircleOutlined />
+        )
+      }
+      style={{
+        overflow: "auto",
+        height: "100vh",
+        position: "relative",
+        top: "-70px",
+
+        left: 0,
+      }}
+      theme="light"
+    >
+      <Menu
+        theme="light"
+        selectedKeys={[props.selected]}
+        mode="inline"
+        className="sideMenu"
+      >
+        <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
+          <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+        </Menu.Item>
+        <Menu.Item key="1" icon={<TeamOutlined />}>
+          <Link to={"/employee/reservations"}>
+            {!collapsed && <>My reservations</>}
+          </Link>
+        </Menu.Item>
+      </Menu>
+    </Sider>
+  );
+};
+export default Sidebar;

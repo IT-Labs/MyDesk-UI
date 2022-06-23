@@ -153,7 +153,7 @@ const Home = () => {
 
   const sendReservation = (data) => {
     const config = {
-      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
     };
     api
       .post("employee/reserve/coworker", data, config)
@@ -187,7 +187,7 @@ const Home = () => {
   };
 
   const makeReservation = () => {
-    const user = jwtDecode(sessionStorage.getItem("msal.idtoken"));
+    const user = jwtDecode(localStorage.getItem("msal.idtoken"));
 
     const data = {
       deskId: selectedCardId.id,
@@ -214,7 +214,7 @@ const Home = () => {
       deskId: selectedCardId.id,
     };
     const config = {
-      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
     };
     api
       .post("employee/reserve/coworker", data, config)

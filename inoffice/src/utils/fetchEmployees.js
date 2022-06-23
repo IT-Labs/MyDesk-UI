@@ -6,7 +6,7 @@ export const fetchEmployees = async (api, dispatch, notification) => {
     .get("employee/all")
     .then(({ data }) => {
       const { preferred_username } = jwtDecode(
-        sessionStorage.getItem("msal.idtoken")
+        localStorage.getItem("msal.idtoken")
       );
       const filteredData = data
         .filter(({ email }) => email !== preferred_username)

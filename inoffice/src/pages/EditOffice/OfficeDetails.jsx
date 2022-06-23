@@ -107,7 +107,7 @@ const OfficeDetails = ({ props }) => {
       return;
     }
     const config = {
-      Authorization: `Bearer ${sessionStorage.getItem("msal.idtoken")}`,
+      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
       "Content-Type": "application/json",
     };
     console.log(data);

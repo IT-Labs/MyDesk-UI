@@ -158,6 +158,7 @@ const FutureReservations = ({ officeName }) => {
             officeName.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["topCenter"] }}
+          scroll={{ x: 400 }}
         />
       ) : (
         <div
