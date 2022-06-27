@@ -5,7 +5,6 @@ import {
   Button,
   Row,
   Col,
-  notification,
   Modal,
   Select,
   Checkbox,
@@ -17,8 +16,7 @@ import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection
 import CalendarImplementation from "../../components/inputs/CalendarImplementation";
 import OfficeImage from "../../components/inputs/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
-import Availability from "../../components/inputs/Availability";
-import moment from "moment";
+
 import { useState } from "react";
 import api from "../../helper/api";
 import "../EditOffice/editoffice.css";
@@ -27,28 +25,23 @@ import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
 import jwtDecode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
-import { setEmployees } from "../../redux/Employees/employees";
-import { fetchEmployees } from "../../utils/fetchEmployees";
-import UserSearch from "../../components/UserSearch/UserSearch";
-import axios from "axios";
-import { setEnd, setStart } from "../../redux/Date/Date";
-import {
-  ClearOutlined,
-  CloseCircleOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
 
-const OPTIONS = ["Single monitor", "Dual Monitor", "Near Window"];
+import { fetchEmployees } from "../../utils/fetchEmployees";
+
+import { setEnd, setStart } from "../../redux/Date/Date";
+import { DownOutlined } from "@ant-design/icons";
+import {
+  openError,
+  openNotification,
+} from "../../components/notification/Notification";
 
 const Home = () => {
-  const dateFormat = "DD/MM/YYYY";
   const [officeid, setofficeid] = useState();
   const [selectedCardId, setSelectedCard] = useState([]);
   const [startDateRes, setStartDate] = useState([]);
   const [endDateRes, setEndDate] = useState([]);
   const [refreshCards, setRefreshCards] = useState();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [reload, setReload] = useState(false);
   const [selectValue, setSelectValue] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [dates, setDates] = useState([]);
@@ -130,25 +123,13 @@ const Home = () => {
       });
   };
 
-  const openNotification = (placement) => {
-    notification.info({
-      message: `Notification`,
-      description: "You have successfully made a reservation",
-      duration: 2,
-      placement,
-    });
-  };
-
-  useEffect(() => {
-    setReload(true);
-  });
-
   const getUsers = async () => {
-    fetchEmployees(api, dispatch, notification);
+    fetchEmployees(api, dispatch);
   };
 
   useEffect(() => {
     getUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const sendReservation = (data) => {
@@ -163,7 +144,7 @@ const Home = () => {
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
-        openNotification("top");
+        openNotification("You have successfully reserved a desk.");
       })
       .catch((error) => {
         setDates([]);
@@ -171,12 +152,7 @@ const Home = () => {
         setStartDate([]);
         setEndDate([]);
         setShowReserveForCoworker(false);
-        notification.open({
-          message: `Error`,
-          description: `${error.response.data}`,
-          duration: 2,
-          placement: "top",
-        });
+        openError(error.response.data);
       });
   };
 
@@ -224,7 +200,7 @@ const Home = () => {
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
-        openNotification("top");
+        openNotification("You have successfully reserved for your coworker");
         setShowReserveForCoworker(false);
       })
       .catch((error) => {
@@ -234,23 +210,13 @@ const Home = () => {
         setStartDate([]);
         setEndDate([]);
         setShowReserveForCoworker(false);
-        notification.open({
-          message: `Notification`,
-          description: "Error while making this reservation",
-          duration: 2,
-          placement: "top",
-        });
+        openError("Error while reserving desk");
       });
   };
 
   const checkTypeOfReservation = () => {
     if (Object.keys(selectedCoworker) === 0 && forCoworker) {
-      notification.open({
-        message: "Error",
-        description: "Please select your coworker if you have the box checked",
-        duration: 3,
-        placement: "top",
-      });
+      openError("Please select your coworker if you have the box checked");
       return;
     }
     if (forCoworker) {
@@ -278,7 +244,11 @@ const Home = () => {
     <Layout style={{ overflow: "auto", height: "100vh" }}>
       <UserHead isHome={true} />
       <Layout className="homeContent">
-        <Content style={{ marginTop: "1rem" }}>
+        <Content
+          style={{
+            marginTop: "1rem",
+          }}
+        >
           <Row align="center" className="leftSideHome">
             <Col span={10} xl={11} lg={11} md={11}>
               <div className="leftInputRow">
@@ -302,7 +272,11 @@ const Home = () => {
               </div>
               <Col
                 className="officeImgCol cardColColor"
-                style={{ width: "100%" }}
+                // style={{
+                //   width: "100%",
+                //   display: "flex",
+                //   justifyContent: "center",
+                // }}
               >
                 <OfficeImage officeid={officeid} />
               </Col>
@@ -418,7 +392,6 @@ const Home = () => {
             >
               <div>
                 <Checkbox
-                  style={{ width: 30, height: 30 }}
                   onClick={() => setForCoworker(!forCoworker)}
                   checked={forCoworker}
                 />
@@ -479,15 +452,7 @@ const Home = () => {
                   }}
                   size="large"
                 >
-                  <p
-                    style={{
-                      fontSize: "0.8vw",
-                      justifyContent: "center",
-                      marginBottom: 0,
-                    }}
-                  >
-                    Reserve
-                  </p>
+                  Reserve
                 </Button>
                 <Button
                   block
@@ -503,15 +468,7 @@ const Home = () => {
                   }}
                   onClick={() => showReviewsForSelectedCard()}
                 >
-                  <p
-                    style={{
-                      fontSize: "0.8vw",
-                      justifyContent: "center",
-                      marginBottom: 0,
-                    }}
-                  >
-                    Show reviews
-                  </p>
+                  Show reviews
                 </Button>
               </div>
 

@@ -1,5 +1,5 @@
 import "antd/dist/antd.css";
-import "../../index.css";
+import "../../index.scss";
 import React from "react";
 import MicrosoftLogin from "react-microsoft-login";
 import { useEffect } from "react";
@@ -21,6 +21,9 @@ const Login = () => {
   );
 
   const loginHandler = async (err, data) => {
+    if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
+      localStorage.removeItem("msal.idtoken");
+    }
     const userInfo = {
       Email: data.mail,
       Firstname: data.givenName,
@@ -29,6 +32,7 @@ const Login = () => {
     };
     setInfo(userInfo);
     sendData(userInfo);
+    return;
   };
 
   const sendData = async (userInfo) => {
@@ -59,8 +63,13 @@ const Login = () => {
     }
   };
 
-  //https://salmon-grass-030b2a503.1.azurestaticapps.net/
-  //http://localhost:3000
+  useEffect(() => {
+    // // // const token = jwt(localStorage.getItem("msal.idtoken"));
+    // if (Date.now() >= token.exp * 1000) {
+    //   localStorage.removeItem("msal.idtoken");
+    // }
+  }, []);
+
   return (
     <div className={styles.bg}>
       <div className={styles.login}>

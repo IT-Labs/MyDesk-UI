@@ -113,6 +113,12 @@
   justify-content: flex-start;
 }
 
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (max-width: 480px) {
   .dataRow {
     flex-direction: column;

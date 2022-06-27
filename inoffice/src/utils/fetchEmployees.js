@@ -1,7 +1,8 @@
 import jwtDecode from "jwt-decode";
+import { openError } from "../components/notification/Notification";
 import { setEmployees } from "../redux/Employees/employees";
 
-export const fetchEmployees = async (api, dispatch, notification) => {
+export const fetchEmployees = async (api, dispatch) => {
   await api
     .get("employee/all")
     .then(({ data }) => {
@@ -14,12 +15,8 @@ export const fetchEmployees = async (api, dispatch, notification) => {
       dispatch(setEmployees(filteredData));
     })
     .catch((err) => {
-      notification.info({
-        message: `Notification`,
-        description:
-          "We could not get employees, you cannot reserve for other people.",
-        duration: 2,
-        placement: "top",
-      });
+      openError(
+        "We could not get employees, you cannot reserve for other people."
+      );
     });
 };

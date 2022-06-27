@@ -2,25 +2,17 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import {
-  Button,
-  Card,
-  Input,
-  Modal,
-  notification,
-  Select,
-  Table,
-  Tooltip,
-} from "antd";
+import { Button, Card, Input, Modal, Select, Tooltip } from "antd";
 import api from "../../helper/api";
-import styles from "./ReservationList.module.css";
-import { Excel } from "antd-table-saveas-excel";
+import styles from "./ReservationList.module.scss";
 import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import Loading from "../../components/Loading/Loading";
 import Title from "./Title";
 import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
 import { getAllPastReservations } from "../../utils/getAllPastReservations";
+import TableComponent from "../../components/Table/TableComponent";
+import { openNotification } from "../../components/notification/Notification";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -185,12 +177,7 @@ const ReservationList = () => {
     await api
       .delete("employee/reserve/" + id)
       .then((response) => {
-        notification.open({
-          message: "Notification",
-          description: "You have successfully canceled a reservation",
-          placement: "top",
-          duration: 4,
-        });
+        openNotification("You have successfully canceled a reservation");
         const filteredRes = initRes.filter((item) => item.key !== id);
         setInitRes(filteredRes);
         sortFuture(filteredRes);
@@ -271,16 +258,15 @@ const ReservationList = () => {
                 </div>
               </div>
               {!loading ? (
-                <Table
-                  scroll={{ x: 400 }}
+                <TableComponent
                   columns={tabKey === "past" ? pastColumns : futureColumns}
-                  dataSource={reservations.filter(
+                  data={reservations.filter(
                     ({ office, employee }) =>
                       office.includes(filterVal) &&
                       employee.toLowerCase().includes(filterInput.toLowerCase())
                   )}
                   pagination={{ pageSize: 5, position: ["topCenter"] }}
-                ></Table>
+                />
               ) : (
                 <div
                   style={{

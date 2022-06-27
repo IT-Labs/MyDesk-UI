@@ -5,35 +5,22 @@ import UserHeade from "../../components/Head/UserHead";
 import "../EditOffice/editoffice.css";
 import { DeleteFilled } from "@ant-design/icons";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import {
-  Checkbox,
-  Form,
-  Input,
-  Button,
-  List,
-  Row,
-  Col,
-  notification,
-  Space,
-  Image,
-  Popconfirm,
-  Table,
-} from "antd";
+import { Checkbox, Form, Input, Button, Image, Popconfirm, Table } from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan";
-import { withRouter } from "../../helper/withRouterHelper";
-import InfiniteScroll from "react-infinite-scroll-component";
 import Loading from "../../components/Loading/Loading";
+import {
+  openError,
+  openNotification,
+} from "../../components/notification/Notification";
 
 const OfficeDetails = ({ props }) => {
   const [officeName, setOfficeName] = useState(props.params.name);
   const [officeId, setOfficeId] = useState(props.params.id);
   const [desks, setDesks] = useState([]);
-  const [checked, setChecked] = useState([]);
   const [unchecked, setUnchecked] = useState([]);
   const [initialDesks, setInitialDesks] = useState([]);
   const [imageUrl, setImageUrl] = useState("");
-  const [conferenceRooms, setConference] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getDesks = () => {
@@ -51,12 +38,7 @@ const OfficeDetails = ({ props }) => {
       .catch((error) => {
         console.log(error);
         setIsLoading(false);
-        notification.open({
-          message: `Notification`,
-          description: "There was an error while loading",
-          duration: 2,
-          placement: "top",
-        });
+        openNotification("There was an error while loading");
       });
   };
 
@@ -97,13 +79,9 @@ const OfficeDetails = ({ props }) => {
     };
 
     if (flag) {
-      notification.open({
-        message: "Notification",
-        placement: "top",
-        description:
-          "You cannot have both a single monitor and a dual monitor desk.",
-        duration: 3,
-      });
+      openError(
+        "You cannot have both a single monitor and a dual monitor desk."
+      );
       return;
     }
     const config = {
@@ -121,16 +99,11 @@ const OfficeDetails = ({ props }) => {
       )
       .then((res) => {
         getDesks();
-        openNotification("top");
+        openNotification("You succesfully updated the entities");
       })
       .catch((error) => {
         console.log(error.response);
-        notification.open({
-          message: "Notification",
-          placement: "top",
-          description: "It seems there was an error while saving",
-          duration: 3,
-        });
+        openError("It seems there was an error while saving");
       });
   };
 
@@ -190,15 +163,6 @@ const OfficeDetails = ({ props }) => {
     // setUnchecked(newUnchecked);
   };
 
-  const openNotification = (placement) => {
-    notification.info({
-      message: `Notification`,
-      description: " You succesfully updated the entities",
-      duration: 1,
-      placement,
-    });
-  };
-
   const handleSubmit = (e) => {
     const data = {
       numberOfDesks: e.numberOfDesks,
@@ -224,15 +188,10 @@ const OfficeDetails = ({ props }) => {
       .delete("admin/entity/", { data: data })
       .then((response) => {
         getDesks();
-        notification.open({
-          message: "Notification",
-          description: "You successfully deleted the entity",
-          placement: "top",
-          duration: 2,
-        });
+        openNotification("You successfully deleted the entity");
       })
       .catch((error) => {
-        console.error("Error message");
+        openError("Error while adding entry");
       });
   };
 

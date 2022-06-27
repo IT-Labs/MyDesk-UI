@@ -1,7 +1,7 @@
 import React from "react";
 import { Excel } from "antd-table-saveas-excel";
 import { Button } from "antd";
-import styles from "./ReservationList.module.css";
+import styles from "./ReservationList.module.scss";
 
 const Title = ({ reservations, columns }) => {
   const handleClick = () => {

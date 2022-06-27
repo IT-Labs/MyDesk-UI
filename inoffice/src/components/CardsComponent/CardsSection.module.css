@@ -24,9 +24,16 @@
 
 .cardContentInformation {
   width: max-content;
+  display: flex;
+  justify-content: start;
 }
 
 .basicText {
   color: #000000;
-  font-size: 0.75rem;
+  font-size: 12px;
+}
+
+.dateText {
+  color: #000000;
+  font-size: 12px;
 }

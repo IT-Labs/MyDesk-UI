@@ -16,15 +16,6 @@ const Offices = () => {
   const [inputFilter, setInputFilter] = useState("");
   const [data, setData] = useState([]);
 
-  const openNotification = (placement) => {
-    notification.info({
-      message: `Notification`,
-      description: " You succesfully deleted the office",
-      duration: 2,
-      placement,
-    });
-  };
-
   useEffect(() => {
     api
       .get("admin/offices")

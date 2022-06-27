@@ -276,13 +276,7 @@ const CardsSection = (props) => {
                           </div>
                         }
                         description={
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "start",
-                            }}
-                            className={styles.cardContentInformation}
-                          >
+                          <div className={styles.cardContentInformation}>
                             <div>
                               <p className={styles.basicText}>
                                 {item.categories?.unavailable
@@ -292,12 +286,7 @@ const CardsSection = (props) => {
                                     `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
                                 {}
                               </p>
-                              <p
-                                style={{
-                                  color: "#000000	",
-                                  fontSize: "12px",
-                                }}
-                              >
+                              <p className={styles.basicText}>
                                 {!item.categories?.unavailable &&
                                   item.reservations.length > 0 &&
                                   !available &&

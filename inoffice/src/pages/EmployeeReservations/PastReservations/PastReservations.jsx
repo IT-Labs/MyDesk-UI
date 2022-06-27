@@ -1,18 +1,20 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { Input, Modal, Button, notification, Table } from "antd";
+import { Input, Modal, Button, Table } from "antd";
 
-import api from "../../helper/api";
+import api from "../../../helper/api";
 import { useState, useEffect } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
 
-import Loading from "../../components/Loading/Loading";
-import styles from "./Reservation.module.css";
+import Loading from "../../../components/Loading/Loading";
+import styles from "../Reservation.module.css";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import {
+  openError,
+  openNotification,
+} from "../../../components/notification/Notification";
 
 const PastReservations = ({ officeName }) => {
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const { TextArea } = Input;
   const { officeSelect } = useSelector((state) => state.officeSelect);
 
@@ -95,12 +97,7 @@ const PastReservations = ({ officeName }) => {
     setBtnDisabled(true);
 
     if (data.review.length < 6 || data.review.length > 200) {
-      notification.open({
-        message: "Notification",
-        description: "Please write a review with more than 6 and less than 200",
-        placement: "top",
-        duration: 4,
-      });
+      openError("Please write a review with more than 6 and less than 200");
       setLoading(false);
       setBtnDisabled(false);
       return;
@@ -113,20 +110,10 @@ const PastReservations = ({ officeName }) => {
         setBtnDisabled(false);
         setRefreshState({});
         setLoading(false);
-        notification.open({
-          message: "Notification",
-          description: "Review written",
-          placement: "top",
-          duration: 4,
-        });
+        openNotification("Review written successfully");
       })
       .catch((error) => {
-        notification.open({
-          message: "Notification",
-          description: "Review could not be written",
-          placement: "top",
-          duration: 4,
-        });
+        openError("Review could not be written");
         setLoading(false);
         setVisible(false);
       });

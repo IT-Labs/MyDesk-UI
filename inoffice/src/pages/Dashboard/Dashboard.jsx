@@ -305,7 +305,9 @@ const Dashboard = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ width: "95%", display: "grid" }}>
+          <div
+            style={{ width: "95%", display: "flex", flexDirection: "column" }}
+          >
             <div
               style={{ position: "relative", left: 15, margin: 0, padding: 0 }}
             >

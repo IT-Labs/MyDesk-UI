@@ -7,6 +7,7 @@ import jwtDecode from "jwt-decode";
 import moment from "moment";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SearchOutlined } from "@ant-design/icons";
+import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
 
 const UserSearch = () => {
   const dispatch = useDispatch();
@@ -20,19 +21,7 @@ const UserSearch = () => {
   };
 
   const sortFuture = (res) => {
-    const future = res
-      .filter(
-        (item) =>
-          moment(item.startDate).isAfter(moment()) &&
-          moment(item.endDate).isAfter(moment())
-      )
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-      });
-    console.log(future);
+    const future = getAllFutureReservations(res);
     setReservations(future);
   };
 

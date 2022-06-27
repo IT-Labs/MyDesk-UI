@@ -1,36 +1,24 @@
 import React from "react";
 import "antd/dist/antd.css";
-import {
-  Row,
-  Col,
-  Space,
-  notification,
-  Select,
-  Spin,
-  List,
-  Layout,
-  Button,
-  Table,
-  Modal,
-} from "antd";
+import { notification, Button, Table, Modal } from "antd";
 
-import Loading from "../../components/Loading/Loading";
+import Loading from "../../../components/Loading/Loading";
 import { useState, useEffect } from "react";
-import api from "../../helper/api";
-import { LoadingOutlined } from "@ant-design/icons";
+import api from "../../../helper/api";
 
 import { useSelector } from "react-redux";
 import moment from "moment";
-import styles from "./Reservation.module.css";
+import styles from "../Reservation.module.css";
+import {
+  openError,
+  openNotification,
+} from "../../../components/notification/Notification";
 
 const FutureReservations = ({ officeName }) => {
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  const [filter, setFilter] = useState("Sort By oldest");
   const { officeSelect } = useSelector((state) => state.officeSelect);
 
   const [loadingData, setLoading] = useState(true);
   const [futurereservations, setFutureReservations] = useState([]);
-  const [refreshstate, setRefreshState] = useState();
 
   const [visible, setVisible] = useState(false);
   const [toBeCancelled, setToBeCancelled] = useState(null);
@@ -71,12 +59,7 @@ const FutureReservations = ({ officeName }) => {
         })
         .catch((error) => {
           console.error(error);
-          notification.open({
-            message: "Error",
-            description: "There appears to be problem at our end",
-            placement: "top",
-            duration: 4,
-          });
+          openError("There appears to be problem at our end");
           setLoading(false);
         });
     };
@@ -87,12 +70,7 @@ const FutureReservations = ({ officeName }) => {
     await api
       .delete("employee/reserve/" + id)
       .then((response) => {
-        notification.open({
-          message: "Notification",
-          description: "You have successfully cancelled a reservation",
-          placement: "top",
-          duration: 4,
-        });
+        openNotification("You have successfully cancelled a reservation");
         setToBeCancelled();
         setVisible(false);
         const filteredReservations = futurereservations.filter(
@@ -101,12 +79,7 @@ const FutureReservations = ({ officeName }) => {
         setFutureReservations(filteredReservations);
       })
       .catch((error) => {
-        notification.open({
-          message: "Error",
-          description: "Something went wrong",
-          placement: "top",
-          duration: 4,
-        });
+        openError("Something went wrong");
       });
   };
 

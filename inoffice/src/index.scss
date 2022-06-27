@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import "./sass/abstracts/variables";
+
 * {
   font-family: "Roboto", sans-serif;
 }
@@ -210,9 +212,13 @@ h1 {
 .deleteButton {
   color: white;
   float: right;
-  background-color: #d11a2a;
+  background-color: $red;
   border-radius: 17px;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: $redHover;
+  }
 }
 
 .uploadOfficePlan {
@@ -234,6 +240,15 @@ h1 {
   width: 100%;
   background-repeat: no-repeat;
   background-position: 0 -20rem;
+  -webkit-background-attachment: fixed;
+  -moz-background-attachment: fixed;
+  -o-background-attachment: fixed;
+  -ms-backgroudn-attachment: fixed;
+  background-attachment: fixed;
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
 }
 
@@ -241,23 +256,19 @@ h1 {
   padding: 0;
 }
 
-.thisisaplaceholderplzdontt {
-  color: #2c28283c;
-}
-
 td {
   width: 25%;
 }
 
 .ant-menu-item-selected {
-  color: #5cb1b8 !important;
+  color: $teal !important;
 }
 
 .ant-menu-inline .ant-menu-item::after {
-  border-right-color: #5cb1b8;
+  border-right-color: $teal;
 }
 .ant-menu-item-selected .ant-menu-title-content a {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-menu > .ant-menu-item:hover,
@@ -268,11 +279,11 @@ td {
 .ant-menu > .ant-menu-submenu-open,
 .ant-menu > .ant-menu-item-selected,
 .ant-menu > .ant-menu-submenu-selected {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-menu-item-active a:hover {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-modal-close-x {
@@ -280,25 +291,25 @@ td {
 }
 
 .ant-pagination-item {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-pagination-item:hover,
 .ant-pagination-item a:hover {
-  color: #5cb1b8;
-  border-color: #5cb1b8;
+  color: $teal;
+  border-color: $teal;
 }
 
 .ant-pagination-prev:hover .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link {
-  color: #5cb1b8;
-  border-color: #5cb1b8;
+  color: $teal;
+  border-color: $teal;
 }
 
 .ant-pagination-item-active,
 .ant-pagination-item-active a {
-  color: #5cb1b8;
-  border-color: #5cb1b8;
+  color: $teal;
+  border-color: $teal;
 }
 
 .ant-layout {
@@ -317,16 +328,16 @@ td {
 .ant-tabs-tab-btn:hover,
 .ant-tabs-tab:hover,
 .ant-tabs-tab-btn:active {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #5cb1b8;
+  color: $teal;
 }
 
 .ant-tabs-ink-bar {
   height: 5px;
-  background: #5cb1b8 !important;
+  background: $teal !important;
 }
 
 .ant-btn-primary[disabled],
@@ -338,7 +349,7 @@ td {
 }
 
 html {
-  --antd-wave-shadow-color: #5cb1b8 !important;
+  --antd-wave-shadow-color: $teal !important;
 }
 
 .btn,
@@ -346,19 +357,18 @@ html {
 .btn:focus,
 .btn .antd-btn .antd-btn-default {
   background-color: white;
-  color: #5cb1b8;
-  border: 1px solid #5cb1b8;
-  transition: all 0.2s ease-in-out;
+  color: $teal;
+  border: 1px solid $teal;
   border-radius: 7px;
   width: 120px;
   font-weight: 500;
-}
 
-.btn:hover {
-  background-color: rgb(45, 206, 152);
-  color: white;
-  border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: rgb(45, 206, 152);
+    color: white;
+    border: 1px solid transparent;
+  }
 }
 
 .ant-layout-sider-light .ant-layout-sider-trigger {
@@ -367,8 +377,8 @@ html {
 
 .uploadOfficePlanButton button {
   background-color: white;
-  color: #5cb1b8;
-  border: 1px solid #5cb1b8;
+  color: $teal;
+  border: 1px solid $teal;
   transition: all 0.2s ease-in-out;
   border-radius: 7px;
   width: 120px;
@@ -399,29 +409,28 @@ html {
 }
 .greenBtn {
   /* margin-right: 10px; */
-  background: #5cb1b8;
+  background: $teal;
   color: white;
   border: 0;
   border-radius: 5px;
   box-shadow: 0px 3px 6px #2c28281c;
   transition: all 0.2s ease-in-out;
-}
-
-.greenBtn:hover {
-  background: #6dcfd8;
+  &:hover {
+    background: $tealHover;
+  }
 }
 
 .redButton {
   color: white;
-  background-color: #d11a2a;
+  background-color: $red;
   border-radius: 5px;
   border: none;
-}
-
-.redButton:hover {
-  background-color: #e74552;
-  color: white;
-  border: none;
+  &:hover {
+    background-color: $redHover;
+    color: white;
+    border: none;
+  }
+  transition: all 0.3s ease-in-out;
 }
 
 p {

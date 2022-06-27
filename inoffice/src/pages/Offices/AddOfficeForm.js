@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import api from "../../helper/api";
 import { Form, Input, Button, notification } from "antd";
+import { openError } from "../../components/notification/Notification";
 
 const AddOfficeForm = () => {
   const handleSubmit = (e) => {
@@ -19,12 +20,7 @@ const AddOfficeForm = () => {
         window.location = "/admin/offices";
       });
     } catch (err) {
-      notification.open({
-        message: "Error",
-        description: err,
-        placement: "top",
-        duration: 3,
-      });
+      openError(err);
     }
   };
 

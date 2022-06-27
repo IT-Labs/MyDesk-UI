@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import api from "../../helper/api";
-import { Form, Input, Button, notification } from "antd";
+import { Form, Input, Button } from "antd";
 import { withRouter } from "../../helper/withRouterHelper";
+import {
+  openError,
+  openNotification,
+} from "../../components/notification/Notification";
 
 class AddOffice extends Component {
   constructor(props) {
@@ -22,13 +26,9 @@ class AddOffice extends Component {
       e.officeLocation.length >= 25 ||
       e.officeLocation.length === 0
     ) {
-      notification.open({
-        message: `Notification`,
-        description:
-          "The office name and office location should be more between 0 and 25 characters each.",
-        duration: 3,
-        placement: "top",
-      });
+      openError(
+        "The office name and office location should be more between 0 and 25 characters each."
+      );
       return;
     }
     const data = {
