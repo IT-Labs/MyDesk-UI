@@ -1,7 +1,7 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Select, Form } from "antd";
-import api from "../../helper/api";
+import api from "../../../helper/api";
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 
@@ -30,9 +30,9 @@ const Officebranchselection = (props) => {
     fetchData();
   }, []);
 
-  function handleChange(value) {
+  const handleChange = (value) => {
     props.onOfficebranchChange(value);
-  }
+  };
 
   return (
     <div>
@@ -43,7 +43,7 @@ const Officebranchselection = (props) => {
       )}
       {!loading && (
         <Form.Item>
-          <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>Select office</p>
+          <p className={props.styles}>Select office</p>
           <Select
             onChange={handleChange}
             placeholder="Select office-branch"

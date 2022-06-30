@@ -6,7 +6,7 @@ import api from "../../../helper/api";
 import { useState, useEffect } from "react";
 
 import Loading from "../../../components/Loading/Loading";
-import styles from "../Reservation.module.css";
+import styles from "../Reservation.module.scss";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import {
@@ -168,14 +168,7 @@ const PastReservations = ({ officeName }) => {
           scroll={{ x: 400 }}
         />
       ) : (
-        <div
-          style={{
-            height: 380,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className={styles.loading}>
           <Loading />
         </div>
       )}
@@ -191,17 +184,7 @@ const PastReservations = ({ officeName }) => {
         // style={{ height: 120 }}
       >
         {loadingData ? (
-          <div
-            style={{
-              width: "100%",
-              height: 160,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              overflowY: "hidden",
-              flexDirection: "column",
-            }}
-          >
+          <div className={styles.writtingReview}>
             <Loading />
             <p>
               Please wait for a moment. Your review is currently being
@@ -227,13 +210,7 @@ const PastReservations = ({ officeName }) => {
         width={800}
         cancelButtonProps={{ style: { display: "none" } }}
       >
-        <div
-          style={{
-            maxHeight: 100,
-            overflow: "scroll",
-            overflowX: "hidden",
-          }}
-        >
+        <div className={styles.review}>
           <p>{writtenReview}</p>
         </div>
       </Modal>

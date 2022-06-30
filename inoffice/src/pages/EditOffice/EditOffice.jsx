@@ -2,7 +2,6 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import "../EditOffice/editoffice.css";
 
 import { withRouter } from "../../helper/withRouterHelper";
 

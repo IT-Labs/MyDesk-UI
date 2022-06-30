@@ -41,10 +41,9 @@
   font-weight: bold;
 }
 
-.cancelBtn {
-  &:hover {
-    background-color: $teal;
-  }
+.cancelBtn:hover {
+  background-color: $teal !important;
+  color: white !important;
 }
 
 .title {

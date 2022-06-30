@@ -4,7 +4,7 @@ import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
 import { Pie } from "@ant-design/charts";
 import api from "../../helper/api";
-import styles from "./Dashboard.module.css";
+import styles from "./Dashboard.module.scss";
 import { Button, Modal, Select, Table } from "antd";
 import {
   CheckCircleFilled,
@@ -15,13 +15,14 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import Loading from "../../components/Loading/Loading";
-import UserSearch from "../../components/UserSearch/UserSearch";
-import CalendarImplementation from "../../components/inputs/CalendarImplementation";
+
+import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
 import { useDispatch, useSelector } from "react-redux";
 import { setEnd, setStart } from "../../redux/Date/Date";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 import jwtDecode from "jwt-decode";
+import UserSearch from "../../components/UserSearch/UserSearch";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
@@ -41,9 +42,6 @@ const Dashboard = () => {
 
   const moment = extendMoment(Moment);
   const dispatch = useDispatch();
-
-  const dateFormat = "DD/MM/YYYY";
-  const [officeid, setofficeid] = useState();
 
   const [startDateRes, setStartDate] = useState(Moment());
   const [endDateRes, setEndDate] = useState(Moment());
@@ -168,6 +166,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     filterData(desks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start]);
 
   const config = {
@@ -245,13 +244,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchOfficeData();
     fetchReviews();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function setDate(startDate, endDate, range) {
+  const setDate = (startDate, endDate, range) => {
     setStartDate(startDate);
     setEndDate(endDate);
     setDates(range);
-  }
+  };
 
   const colums = [
     {
@@ -295,19 +295,12 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <UserHead isDashboard={true} />
+      <UserHead />
       <Layout className="panelBg">
         <Sidebar selected="1" />
-        <Content
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{ width: "95%", display: "flex", flexDirection: "column" }}
-          >
+        <Content className={styles.content}>
+          <div className={styles.container}>
+            <UserSearch />
             <div
               style={{ position: "relative", left: 15, margin: 0, padding: 0 }}
             >
@@ -325,7 +318,7 @@ const Dashboard = () => {
               <Select
                 defaultValue="All offices"
                 onChange={selectFilter}
-                style={{ width: "12.5rem" }}
+                className={styles.select}
                 showSearch
               >
                 <Select.Option key={0} value={null}>
@@ -338,10 +331,9 @@ const Dashboard = () => {
                     </Select.Option>
                   ))}
               </Select>
-              <div style={{ width: "12.5rem" }}>
+              <div className={styles.select}>
                 <CalendarImplementation
                   dateFunction={setDate}
-                  officeid={officeid}
                   startDate={startDateRes}
                   endDate={endDateRes}
                   dates={dates}
@@ -380,10 +372,10 @@ const Dashboard = () => {
               </div>
             </div>
             <div
-              style={{
-                width: "100%",
-                marginTop: "1%",
-              }}
+            // style={{
+            //   width: "100%",
+            //   marginTop: "1%",
+            // }}
             >
               <div className={styles.dataRow}>
                 <div className={styles.pieCard}>
@@ -391,32 +383,13 @@ const Dashboard = () => {
                   {deskData.length > 0 ? (
                     <Pie {...config} />
                   ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: 357,
-                      }}
-                    >
+                    <div className={styles.loading}>
                       <Loading />
                     </div>
                   )}
                 </div>
-                <div
-                  style={{
-                    background: "#fff",
-                    width: "55%",
-                    borderRadius: 7,
-                    display: "flex",
-                    padding: 10,
-                    boxShadow: "0px 3px 17px rgba(18, 18, 18, 0.2)",
-                    flexDirection: "column",
-                  }}
-                >
-                  <h3 style={{ position: "relative", left: 20, top: 5 }}>
-                    User reviews
-                  </h3>
+                <div className={styles.tableCard}>
+                  <h3>User reviews</h3>
                   {reviews.length > 0 ? (
                     <Table
                       columns={colums}
@@ -424,15 +397,7 @@ const Dashboard = () => {
                       pagination={{ pageSize: 4, position: ["topCenter"] }}
                     />
                   ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                        flexDirection: "column",
-                      }}
-                    >
+                    <div className={styles.noReviews}>
                       <h1>¯\_(ツ)_/¯</h1>
                       <h3>No reviews for this office</h3>
                     </div>
@@ -450,13 +415,7 @@ const Dashboard = () => {
                   width={800}
                   cancelButtonProps={{ style: { display: "none" } }}
                 >
-                  <div
-                    style={{
-                      maxHeight: 100,
-                      overflow: "scroll",
-                      overflowX: "hidden",
-                    }}
-                  >
+                  <div className={styles.modal}>
                     <p>{writtenReview}</p>
                   </div>
                 </Modal>

@@ -1,8 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 @import "./sass/abstracts/variables";
 
+//You may see some unusual way of handling scss, like for instance if we have a hover component its not declared in its parent element
+//thats because of antd's unusual way of handling hovers, so its styled like a regular css component
+
 * {
   font-family: "Roboto", sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -189,7 +193,6 @@ p.lorem-text {
   margin-right: 17px;
 }
 #addOffice {
-  float: right;
   margin-top: 1%;
   margin-right: 1%;
   display: inline-block;
@@ -364,11 +367,12 @@ html {
   font-weight: 500;
 
   transition: all 0.2s ease-in-out;
-  &:hover {
-    background-color: rgb(45, 206, 152);
-    color: white;
-    border: 1px solid transparent;
-  }
+}
+
+.btn:hover {
+  background-color: rgb(45, 206, 152);
+  color: white;
+  border: 1px solid transparent;
 }
 
 .ant-layout-sider-light .ant-layout-sider-trigger {
@@ -387,7 +391,8 @@ html {
 
 .userSearchSelect {
   position: relative;
-  left: 1rem;
+  margin-bottom: 2rem;
+  left: 0.7rem;
 }
 
 .userSearchSelect .ant-select-selector {
@@ -425,12 +430,14 @@ html {
   background-color: $red;
   border-radius: 5px;
   border: none;
-  &:hover {
-    background-color: $redHover;
-    color: white;
-    border: none;
-  }
+
   transition: all 0.3s ease-in-out;
+}
+
+.redButton:hover {
+  background-color: $redHover;
+  color: white;
+  border: none;
 }
 
 p {
@@ -439,4 +446,41 @@ p {
 
 .ant-layout-sider-trigger {
   position: relative;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+[data-theme="light"] .site-layout .site-layout-background {
+  background: #141414;
+}
+
+.ant-menu > .ant-menu-submenu-selected {
+  color: red;
+  border-bottom: 2px solid red;
+}
+
+.iconLogo {
+  font-size: 100%;
+  margin-top: 20px;
+  margin-right: 7px;
+}
+
+.sideBarLogo {
+  background: url("./assets/Group\ 190.svg") no-repeat;
+  width: 20px;
+  top: 5px;
+  left: 10px;
+  min-height: 70px;
+  /* scale: calc(); */
+}
+
+.sideMenu {
+  overflow-x: hidden;
 }

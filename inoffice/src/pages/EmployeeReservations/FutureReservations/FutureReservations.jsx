@@ -1,14 +1,15 @@
 import React from "react";
 import "antd/dist/antd.css";
-import { notification, Button, Table, Modal } from "antd";
+import { Button, Table, Modal } from "antd";
 
 import Loading from "../../../components/Loading/Loading";
 import { useState, useEffect } from "react";
 import api from "../../../helper/api";
+import styles from "../Reservation.module.scss";
 
 import { useSelector } from "react-redux";
 import moment from "moment";
-import styles from "../Reservation.module.css";
+
 import {
   openError,
   openNotification,
@@ -22,9 +23,6 @@ const FutureReservations = ({ officeName }) => {
 
   const [visible, setVisible] = useState(false);
   const [toBeCancelled, setToBeCancelled] = useState(null);
-  const visibility = (item) => {
-    setVisible(true);
-  };
 
   const sortByOldest = (reservations) => {
     const sorted = reservations
@@ -113,7 +111,7 @@ const FutureReservations = ({ officeName }) => {
               setVisible(true);
               setToBeCancelled(data.id);
             }}
-            className={styles.btn}
+            className="btn"
           >
             Cancel
           </Button>
@@ -134,14 +132,7 @@ const FutureReservations = ({ officeName }) => {
           scroll={{ x: 400 }}
         />
       ) : (
-        <div
-          style={{
-            height: 380,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div className={styles.loading}>
           <Loading />
         </div>
       )}

@@ -1,7 +1,7 @@
 import { Select, Tooltip } from "antd";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setOfficeSelect } from "../../redux/MyReservationsSelect/MyReservationsSelect";
-import styles from "./Reservation.module.css";
+import styles from "./Reservation.module.scss";
 
 export const CardTitle = ({ data }) => {
   const dispatch = useDispatch();

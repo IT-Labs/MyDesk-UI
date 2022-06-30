@@ -1,28 +1,14 @@
-import React, { Component } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
-import { Card, Select } from "antd";
+import { Card } from "antd";
 import FutureReservations from "./FutureReservations/FutureReservations";
 import PastReservations from "./PastReservations/PastReservations";
 import { useState, useEffect } from "react";
 import jwt from "jwt-decode";
 import { CardTitle } from "./CardTitle";
 import api from "../../helper/api";
-
-const cardStyles = {
-  width: "80%",
-  height: "100%",
-  backgroundColor: "white",
-  boxShadow: "0px 2px 6px #2C28281C",
-  borderRadius: "7px",
-};
-
-const contentStyle = {
-  display: "flex",
-  justifyContent: "center",
-  height: "100%",
-};
+import styles from "./Reservation.module.scss";
 
 const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
@@ -71,9 +57,9 @@ const EmployeeReservationList = () => {
         <Layout>
           <Sidebar selected="1" />
 
-          <Content style={contentStyle}>
+          <Content className={styles.contentStyle}>
             <Card
-              style={cardStyles}
+              className={styles.cardStyle}
               title={<CardTitle data={data} />}
               tabList={tabList}
               activeTabKey={activeTabKey1}
@@ -93,9 +79,9 @@ const EmployeeReservationList = () => {
         <UserHead />
         <Layout>
           <Sidebar selected="5" />
-          <Content style={contentStyle}>
+          <Content className={styles.contentStyle}>
             <Card
-              style={cardStyles}
+              className={styles.cardStyle}
               title={<CardTitle data={data} />}
               tabList={tabList}
               activeTabKey={activeTabKey1}

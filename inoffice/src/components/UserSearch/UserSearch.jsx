@@ -1,11 +1,11 @@
-import { List, Modal, notification, Select, Table } from "antd";
+import { Modal, notification, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
 import { useDispatch, useSelector } from "react-redux";
-import jwtDecode from "jwt-decode";
+
 import moment from "moment";
-import InfiniteScroll from "react-infinite-scroll-component";
+
 import { SearchOutlined } from "@ant-design/icons";
 import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
 
@@ -94,6 +94,7 @@ const UserSearch = () => {
         let sorted = data.sort((a, b) => {
           return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
         });
+        return sorted;
       })
       .catch((err) => console.log(err));
   };
@@ -103,10 +104,6 @@ const UserSearch = () => {
     getAllRes();
   }, []);
 
-  const config = {
-    token: localStorage.getItem("msal.idtoken"),
-    decoded: jwtDecode(localStorage.getItem("msal.idtoken")),
-  };
   const { employees } = useSelector((state) => state.employees);
 
   const findEmployee = (e) => {

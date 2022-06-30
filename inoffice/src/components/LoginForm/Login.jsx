@@ -6,19 +6,18 @@ import { useEffect } from "react";
 import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
-import styles from "./Login.module.css";
+import styles from "./Login.module.scss";
 import { useState } from "react";
 import logo from "../../assets/Microsoft logo.png";
 
 const Login = () => {
   let navigate = useNavigate();
   const [postedOnce, setPostedOnce] = useState(false);
-  const [info, setInfo] = useState();
-  const [url, setUrl] = useState(
+
+  const url =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://salmon-grass-030b2a503.1.azurestaticapps.net/"
-  );
+      : "https://salmon-grass-030b2a503.1.azurestaticapps.net/";
 
   const loginHandler = async (err, data) => {
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
@@ -30,7 +29,6 @@ const Login = () => {
       Surname: data.surname,
       JobTitle: data.jobTitle,
     };
-    setInfo(userInfo);
     sendData(userInfo);
     return;
   };
@@ -54,21 +52,8 @@ const Login = () => {
   };
 
   const roleRouting = async (token) => {
-    const decodedToken = jwt(token);
-
-    if (decodedToken.roles.join("") === "ADMIN") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/employee/home");
-    }
+    navigate("/employee/home");
   };
-
-  useEffect(() => {
-    // // // const token = jwt(localStorage.getItem("msal.idtoken"));
-    // if (Date.now() >= token.exp * 1000) {
-    //   localStorage.removeItem("msal.idtoken");
-    // }
-  }, []);
 
   return (
     <div className={styles.bg}>
@@ -87,7 +72,6 @@ const Login = () => {
           }
           redirectUri={url}
           forceRedirectStrategy={true}
-          // useLocalStorageCache={true}
           withUserData={true}
           useLocalStorageCache={true}
           className={styles.loginBtn}

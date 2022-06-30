@@ -1,0 +1,53 @@
+.header {
+  display: flex;
+  width: 100%;
+  float: right;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent !important;
+}
+
+.sideBarLogo {
+  width: 200px !important;
+  position: relative;
+  top: 5px;
+  left: -10px;
+}
+
+.link {
+  margin-right: 10px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500px;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    cursor: pointer;
+    color: rgb(252, 252, 252);
+    text-shadow: 0 0 3px white;
+  }
+}
+
+.accountFunc {
+  font-size: larger;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  width: 88%;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.content {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.avatar {
+  width: 90px;
+  height: 50px;
+}

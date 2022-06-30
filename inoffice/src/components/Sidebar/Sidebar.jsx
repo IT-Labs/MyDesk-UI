@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Sidebar.css";
 import { Menu, Tooltip } from "antd";
-import { Component } from "react/cjs/react.production.min";
 import {
   LeftCircleOutlined,
   RightCircleOutlined,
@@ -15,7 +13,7 @@ import { Link, NavLink } from "react-router-dom";
 const Sidebar = (props) => {
   const [collapsed, setCollapsed] = useState(false);
   const [width, setWidth] = useState("100%");
-  const [media, setMedia] = useState(window.matchMedia("(max-width: 820px)"));
+  const media = window.matchMedia("(max-width: 820px)");
   const config = { token: localStorage.getItem("msal.idtoken") };
 
   useEffect(() => {

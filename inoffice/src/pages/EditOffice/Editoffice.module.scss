@@ -10,7 +10,7 @@
   font-size: 1em;
 }
 
-.officeTitels {
+.officeTitles {
   font-size: 1.35em;
 }
 
@@ -64,6 +64,8 @@
 .uploadOfficePlanButton {
   display: flex;
   justify-content: center;
+  width: 150px !important;
+  margin-left: 5px;
 }
 
 .ant-col {
@@ -73,4 +75,67 @@
 .officeName {
   position: relative;
   left: 9px;
+}
+
+.checkbox {
+  background-color: white;
+  color: black;
+  padding-left: 3%;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.containerSize {
+  width: 90%;
+}
+
+.firstRow {
+  margin-bottom: 20px;
+}
+
+.h2 {
+  font-size: 1.125rem;
+}
+
+.form {
+  display: flex;
+  width: 600px;
+  justify-content: flex-start;
+}
+
+.input {
+  width: 250px;
+  border-radius: 7px;
+}
+
+.secondRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.secondRowSize {
+  width: 55%;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  height: 400px;
+  background-color: white;
+}
+
+.btn {
+  width: 150px !important;
+}
+
+.imgContainer {
+  background-color: white;
+  height: 400px;
 }

@@ -1,13 +1,11 @@
-import React, { Component, useEffect, useState } from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Layout, { Content } from "antd/lib/layout/layout";
-import UserHeade from "../../components/Head/UserHead";
-import "../EditOffice/editoffice.css";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+import styles from "../EditOffice/Editoffice.module.scss";
 import { DeleteFilled } from "@ant-design/icons";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Checkbox, Form, Input, Button, Image, Popconfirm, Table } from "antd";
 import api from "../../helper/api";
-import UploadOfficePlan from "./UploadOfficePlan";
+import UploadOfficePlan from "./UploadOfficePlan/UploadOfficePlan";
 import Loading from "../../components/Loading/Loading";
 import {
   openError,
@@ -15,11 +13,10 @@ import {
 } from "../../components/notification/Notification";
 
 const OfficeDetails = ({ props }) => {
-  const [officeName, setOfficeName] = useState(props.params.name);
-  const [officeId, setOfficeId] = useState(props.params.id);
+  const [officeName] = useState(props.params.name);
+  const [officeId] = useState(props.params.id);
   const [desks, setDesks] = useState([]);
-  const [unchecked, setUnchecked] = useState([]);
-  const [initialDesks, setInitialDesks] = useState([]);
+
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,11 +25,6 @@ const OfficeDetails = ({ props }) => {
       .get("admin/office-desks/" + officeId)
       .then((res) => {
         setDesks(res.data.deskList);
-
-        const check = res.data.deskList.map((x) => x.id);
-        setUnchecked(check);
-        const init = res.data.deskList.map((x) => x.id);
-        setInitialDesks(init);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -59,31 +51,21 @@ const OfficeDetails = ({ props }) => {
   }, []);
 
   const save = () => {
-    let flag = false;
+    setIsLoading(true);
     const properlySortedData = desks.map((item) => {
-      const desk = {
+      return {
         deskId: item.id,
         unavailable: item.categories?.unavailable ? true : false,
         singleMonitor: item.categories?.singleMonitor ? true : false,
         dualMonitor: item.categories?.doubleMonitor ? true : false,
         nearWindow: item.categories?.nearWindow ? true : false,
       };
-      if (desk.singleMonitor && desk.dualMonitor) {
-        flag = true;
-      }
-      return desk;
     });
 
     const data = {
       ListOfDesksToUpdate: [...properlySortedData],
     };
 
-    if (flag) {
-      openError(
-        "You cannot have both a single monitor and a dual monitor desk."
-      );
-      return;
-    }
     const config = {
       Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
       "Content-Type": "application/json",
@@ -100,9 +82,11 @@ const OfficeDetails = ({ props }) => {
       .then((res) => {
         getDesks();
         openNotification("You succesfully updated the entities");
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log(error.response);
+        setIsLoading(false);
         openError("It seems there was an error while saving");
       });
   };
@@ -211,11 +195,7 @@ const OfficeDetails = ({ props }) => {
       render: (text, item, index) => {
         return (
           <Checkbox
-            style={{
-              background: "white",
-              color: "black",
-              paddingLeft: "3%",
-            }}
+            className={styles.checkbox}
             checked={item.categories?.unavailable}
             onChange={() => check(item.id, "unavailable")}
           ></Checkbox>
@@ -232,12 +212,9 @@ const OfficeDetails = ({ props }) => {
       render: (text, item, index) => {
         return (
           <Checkbox
-            style={{
-              background: "white",
-              color: "black",
-              paddingLeft: "3%",
-            }}
+            className={styles.checkbox}
             checked={item.categories?.singleMonitor}
+            disabled={item.categories?.doubleMonitor}
             onChange={() => check(item.id, "singleMonitor")}
           ></Checkbox>
         );
@@ -253,12 +230,9 @@ const OfficeDetails = ({ props }) => {
       render: (text, item, index) => {
         return (
           <Checkbox
-            style={{
-              background: "white",
-              color: "black",
-              paddingLeft: "3%",
-            }}
+            className={styles.checkbox}
             checked={item.categories?.doubleMonitor}
+            disabled={item.categories?.singleMonitor}
             onChange={() => check(item.id, "dualMonitor")}
           ></Checkbox>
         );
@@ -274,11 +248,7 @@ const OfficeDetails = ({ props }) => {
       render: (text, item, index) => {
         return (
           <Checkbox
-            style={{
-              background: "white",
-              color: "black",
-              paddingLeft: "3%",
-            }}
+            className={styles.checkbox}
             checked={item.categories?.nearWindow}
             onChange={() => check(item.id, "nearWindow")}
           ></Checkbox>
@@ -306,7 +276,7 @@ const OfficeDetails = ({ props }) => {
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
             <DeleteFilled
-              className="deleteiconDesks"
+              className={styles.deleteIconDesks}
               key={item.id}
               value={item.id}
               style={{ padding: 0 }}
@@ -319,75 +289,52 @@ const OfficeDetails = ({ props }) => {
   ];
 
   return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      <div style={{ width: "90%" }}>
-        <div style={{ marginBottom: 20 }}>
+    <div className={styles.container}>
+      <div className={styles.containerSize}>
+        <div className={styles.firstRow}>
           <div>
-            <h2 style={{ fontSize: "1.125rem" }}>Edit office</h2>
-            <div className="officeTitels">
-              Name: <span className="labels">{officeName}</span>
+            <h2 className={styles.h2}>Edit office</h2>
+            <div className={styles.officeTitles}>
+              Name: <span className={styles.labels}>{officeName}</span>
             </div>
           </div>
           <div>
             <UploadOfficePlan
-              className="uploadOfficePlanButton"
+              className={styles.uploadOfficePlanButton}
               triggerText="Update office plan/information"
               imageUrl={imageUrl}
             />
           </div>
         </div>
         <div>
-          <Form
-            style={{
-              display: "flex",
-              width: 600,
-              justifyContent: "flex-start",
-            }}
-            onFinish={handleSubmit}
-          >
+          <Form className={styles.form} onFinish={handleSubmit}>
             <Form.Item name="numberOfDesks">
               <Input
-                style={{ width: 250 }}
+                className={styles.input}
                 placeholder="Enter number of desks"
                 type="number"
               />
             </Form.Item>
             <Button
-              type="primary"
               htmlType="submit"
-              className="uploadOfficePlan btn"
+              className={`${styles.uploadOfficePlan} btn ${styles.btn}`}
               block
-              style={{ width: 150, marginLeft: 5 }}
             >
               Add new entities
             </Button>
           </Form>
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ width: "55%" }}>
+        <div className={styles.secondRow}>
+          <div className={styles.secondRowSize}>
             <div id="scrollableDiv">
               {isLoading ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    overflow: "hidden",
-                  }}
-                >
+                <div className={styles.loading}>
                   <Loading />
                 </div>
               ) : (
                 <Table
                   bordered
-                  style={{ width: "100%", border: "none" }}
-                  className="newTable"
+                  className={styles.newTable}
                   dataSource={desks}
                   columns={columns}
                   pagination={false}
@@ -396,7 +343,7 @@ const OfficeDetails = ({ props }) => {
               )}
             </div>
             <button
-              className="uploadOfficePlan greenBtn"
+              className={`${styles.uploadOfficePlan} greenBtn`}
               onClick={save}
               // block
               style={{
@@ -410,14 +357,14 @@ const OfficeDetails = ({ props }) => {
               Save
             </button>
           </div>
-          <div style={{ background: "white", height: 400 }}>
+          <div className={styles.imgContainer}>
             {imageUrl ? (
-              <Image src={imageUrl} className="officeImagePlan"></Image>
+              <Image src={imageUrl} className={styles.officeImagePlan}></Image>
             ) : (
               <Image
-                className="officeImagePlan"
+                className={styles.officeImagePlan}
                 src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
-              ></Image>
+              />
             )}
           </div>
         </div>

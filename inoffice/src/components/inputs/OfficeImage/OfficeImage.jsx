@@ -1,6 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
-import api from "../../helper/api";
+import api from "../../../helper/api";
 import { useEffect, useState } from "react";
 import { Image } from "antd";
 import { Spin } from "antd";

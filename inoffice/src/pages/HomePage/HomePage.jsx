@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import UserHead from "../../components/Head/UserHead";
 import Layout, { Content } from "antd/lib/layout/layout";
 import {
@@ -12,14 +12,15 @@ import {
   Dropdown,
   Space,
 } from "antd";
-import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection";
-import CalendarImplementation from "../../components/inputs/CalendarImplementation";
-import OfficeImage from "../../components/inputs/OfficeImage";
+import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
+import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
+import OfficeImage from "../../components/inputs/OfficeImage/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
+import styles from "./Homepage.module.scss";
 
 import { useState } from "react";
 import api from "../../helper/api";
-import "../EditOffice/editoffice.css";
+
 import "../HomePage/homepage.css";
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -241,24 +242,19 @@ const Home = () => {
   };
 
   return (
-    <Layout style={{ overflow: "auto", height: "100vh" }}>
+    <Layout className={styles.layout}>
       <UserHead isHome={true} />
-      <Layout className="homeContent">
-        <Content
-          style={{
-            marginTop: "1rem",
-          }}
-        >
-          <Row align="center" className="leftSideHome">
+      <Layout className={styles.homeContent}>
+        <Content className={styles.content}>
+          <Row align="center" className={styles.leftSideHome}>
             <Col span={10} xl={11} lg={11} md={11}>
-              <div className="leftInputRow">
+              <div className={styles.leftInputRow}>
                 <OfficeBranchSelection
                   onOfficebranchChange={changeofficebranch}
+                  styles={styles.pStyles}
                 />
-                <div style={{ width: "18.75rem" }}>
-                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                    Select date
-                  </p>
+                <div className={styles.leftInputs}>
+                  <p className={styles.pStyles}>Select date</p>
                   <CalendarImplementation
                     dateFunction={setDate}
                     onSelectCard={selectedCard}
@@ -271,7 +267,7 @@ const Home = () => {
                 </div>
               </div>
               <Col
-                className="officeImgCol cardColColor"
+                className={`${styles.officeImgCol} ${styles.cardColColor}`}
                 // style={{
                 //   width: "100%",
                 //   display: "flex",
@@ -281,24 +277,26 @@ const Home = () => {
                 <OfficeImage officeid={officeid} />
               </Col>
             </Col>
-            <Col span={11} xl={11} lg={11} md={11} className="rightSideHome">
-              <div className="rightInputRow">
+            <Col
+              span={11}
+              xl={11}
+              lg={11}
+              md={11}
+              className={styles.rightSideHome}
+            >
+              <div className={styles.rightInputRow}>
                 <div>
-                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                    Search by name
-                  </p>
+                  <p className={styles.pStyles}>Search by name</p>
                   <Input
-                    style={{ width: "12.5rem" }}
+                    className={styles.inputSize}
                     onChange={(e) => setEmployeeSearch(e.target.value)}
                   />
                 </div>
                 <div>
-                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                    Filter by availability
-                  </p>
+                  <p className={styles.pStyles}>Filter by availability</p>
                   <Select
                     showSearch
-                    style={{ width: "12.5rem" }}
+                    className={styles.inputSize}
                     defaultValue={selectValue}
                     onChange={changeVal}
                   >
@@ -314,18 +312,10 @@ const Home = () => {
                   </Select>
                 </div>
                 <div>
-                  <p style={{ fontSize: "1.2em", fontWeight: "bold" }}>
-                    Filter by category
-                  </p>
+                  <p className={styles.pStyles}>Filter by category</p>
                   <Dropdown
                     overlay={
-                      <Menu
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                        }}
-                      >
+                      <Menu className={styles.menu}>
                         <Menu.Item>
                           <Checkbox
                             checked={singleMonitor}
@@ -358,7 +348,7 @@ const Home = () => {
                     visible={dropdownVisible}
                     onClick={() => setDropDownVisible(!dropdownVisible)}
                   >
-                    <Button style={{ width: "12.5rem" }}>
+                    <Button className={styles.inputSize}>
                       <Space>
                         Select categories
                         <DownOutlined />
@@ -367,7 +357,9 @@ const Home = () => {
                   </Dropdown>
                 </div>
               </div>
-              <Col className="cardsCol cardColColor scrollableDiv">
+              <Col
+                className={`${styles.cardsCol} ${styles.cardColColor} ${styles.scrollableDiv}`}
+              >
                 <CardsSection
                   refresh={refreshCards}
                   selectedCard={selectedCard}
@@ -380,16 +372,8 @@ const Home = () => {
             </Col>
           </Row>
 
-          <Row className="buttonsSection">
-            <div
-              className="buttonReview"
-              style={{
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-                width: "53%",
-              }}
-            >
+          <Row className={styles.buttonsSection}>
+            <div className={styles.buttonReview}>
               <div>
                 <Checkbox
                   onClick={() => setForCoworker(!forCoworker)}
@@ -398,7 +382,7 @@ const Home = () => {
                 <Select
                   value={defValue}
                   placement={"topRight"}
-                  style={{ width: 250 }}
+                  className={styles.inputSize}
                   showSearch
                   onChange={setCoworker}
                   disabled={!forCoworker}
@@ -419,7 +403,7 @@ const Home = () => {
                     ))}
                 </Select>
               </div>
-              <div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Button
                   block
                   disabled={
@@ -444,12 +428,9 @@ const Home = () => {
                   }
                   onClick={() => checkTypeOfReservation()}
                   type="primary"
-                  style={{
-                    borderRadius: "7px",
-                    background: forCoworker ? "orange" : "#5cb1b8",
-                    border: "transparent",
-                    width: 130,
-                  }}
+                  className={`${styles.buttons} ${
+                    forCoworker ? styles.orangeBtn : styles.tealBtn
+                  }`}
                   size="large"
                 >
                   Reserve
@@ -459,13 +440,7 @@ const Home = () => {
                   disabled={selectedCardId.length === 0 ? true : false}
                   type="primary"
                   size="large"
-                  style={{
-                    borderRadius: "7px",
-                    background: "#5cb1b8",
-                    border: "transparent",
-                    marginLeft: 5,
-                    width: 130,
-                  }}
+                  className={`${styles.buttons} ${styles.tealBtn}`}
                   onClick={() => showReviewsForSelectedCard()}
                 >
                   Show reviews
@@ -480,7 +455,7 @@ const Home = () => {
                 onCancel={closeModalFunction}
                 cancelButtonProps={{ style: { display: "none" } }}
               >
-                <InfiniteScroll className="reviewModal" dataLength={3}>
+                <InfiniteScroll className={styles.reviewModal} dataLength={3}>
                   <ul>
                     {reviews &&
                       reviews.map((item, id) => <li key={id}>{item}</li>)}
@@ -499,9 +474,9 @@ const Home = () => {
             </div>
           </Row>
 
-          <Row className="footerSection" align="center">
+          <Row className={styles.footerSection} align="center">
             <Col align="center" span={24}>
-              <p className="footerText">
+              <p className={styles.footerText}>
                 inOffice ©2022 Created by inOfficeTeam
               </p>
             </Col>

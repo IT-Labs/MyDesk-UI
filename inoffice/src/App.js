@@ -1,43 +1,36 @@
-import * as React from "react";
-
 import EditOffice from "./pages/EditOffice/EditOffice";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./components/LoginForm/Login";
 import Loading from "./components/Loading/Loading";
-import jwtDecode from "jwt-decode";
+import { useEffect, lazy, Suspense } from "react";
 
-const Dashboard = React.lazy(() => import("./pages/Dashboard/Dashboard"));
+const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 
-const Home = React.lazy(() => import("./pages/HomePage/HomePage"));
-const Offices = React.lazy(() => import("./pages/Offices/Offices"));
-const NoPermissions = React.lazy(() =>
-  import("./pages/NoPermissions/NoPermissions")
-);
-const Configuration = React.lazy(() =>
-  import("./pages/Configuration/Configuration")
-);
-const ReservationList = React.lazy(() =>
+const Home = lazy(() => import("./pages/HomePage/HomePage"));
+const Offices = lazy(() => import("./pages/Offices/Offices"));
+const NoPermissions = lazy(() => import("./pages/NoPermissions/NoPermissions"));
+
+const ReservationList = lazy(() =>
   import("./pages/ReservationList/ReservationList")
 );
-const EmployeeReservationList = React.lazy(() =>
+const EmployeeReservationList = lazy(() =>
   import("./pages/EmployeeReservations/EmployeeReservations")
 );
-const PrivateRoute = React.lazy(() => import("./helper/PrivateRoute"));
+const PrivateRoute = lazy(() => import("./helper/PrivateRoute"));
 
 const App = () => {
   //Routes
   const navigate = useNavigate();
   const token = localStorage.getItem("msal.idtoken");
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!token) {
-      // localStorage.clear();
       navigate("/");
     }
   }, [token, navigate]);
 
   return (
-    <React.Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading />}>
       <div className="container">
         <Routes>
           <Route
@@ -45,7 +38,6 @@ const App = () => {
             element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
           />
           <Route path="/" element={<Login />} />
-          {/* <Route path="/register" element={<Register />} /> */}
           <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
           <Route
             path="/admin/dashboard"
@@ -57,12 +49,7 @@ const App = () => {
             path="/admin/offices"
             element={<PrivateRoute component={Offices} compRoles={["ADMIN"]} />}
           />
-          <Route
-            path="/admin/configuration"
-            element={
-              <PrivateRoute component={Configuration} compRoles={["ADMIN"]} />
-            }
-          />
+
           <Route
             path="/admin/reservations"
             element={
@@ -70,15 +57,6 @@ const App = () => {
             }
           />
 
-          {/* <Route
-        path="/employeee/informations"
-        element={
-          <PrivateRoute
-            component={PersonalInformations}
-            compRoles={["EMPLOYEE"]}
-          />
-        }
-      /> */}
           <Route
             path="/employee/reservations"
             element={
@@ -89,15 +67,9 @@ const App = () => {
             }
           />
           <Route path="/denied" element={<NoPermissions />} />
-          {/* <Route
-        path="/myaccount"
-        element={
-          <PrivateRoute component={MyAccount} roles={["ADMIN", "EMPLOYEE"]} />
-        }
-      /> */}
         </Routes>
       </div>
-    </React.Suspense>
+    </Suspense>
   );
 };
 

@@ -1,0 +1,162 @@
+@import "../../sass/abstracts/variables";
+
+.layout {
+  overflow: auto;
+  height: 100vh;
+}
+
+.content {
+  margin-top: 1rem;
+}
+
+.leftInputs {
+  width: 18.75rem;
+}
+
+.pStyles {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.inputSize {
+  width: 12.5rem;
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.officeImgCol {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center !important;
+}
+
+.cardsCol {
+  margin-right: 3%;
+  margin-left: 1%;
+  height: 500px;
+}
+
+.cardColColor {
+  background-color: white;
+  height: 400px !important;
+}
+
+.buttonReserve {
+  margin-left: 1%;
+}
+
+.buttons {
+  border-radius: 7px;
+  border: transparent;
+  width: 130px;
+  margin-left: 5px;
+}
+
+.tealBtn {
+  background-color: $teal;
+  color: white;
+}
+
+.orangeBtn {
+  background-color: orange;
+  color: white;
+}
+
+.buttonReview {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 53%;
+}
+
+.footerText {
+  font-size: 1.5em;
+}
+
+.footerSection {
+  margin-top: 4%;
+}
+
+.buttonsSection {
+  margin-top: 1%;
+}
+
+.officeDropdown {
+  margin-left: 3%;
+}
+
+.calendarSection {
+  margin-left: 2%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calendarSection label {
+  font-size: 15px;
+  color: black;
+}
+
+.firstSection {
+  margin-top: 2%;
+}
+
+.reviewModal {
+  max-height: 200px !important;
+  min-height: 200px !important;
+}
+
+.buttonsSection {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.rightInputRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  margin-bottom: 3rem;
+}
+
+.leftInputRow {
+  display: flex;
+  width: 90%;
+  justify-content: space-evenly;
+  margin-bottom: 1.4rem;
+}
+
+@media screen and (max-width: 820px) {
+  .leftSideHome {
+    display: block;
+    position: relative;
+    left: 20%;
+  }
+  .rightSideHome {
+    display: block;
+  }
+  .homeContent {
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+  .buttonsSection {
+    justify-content: center;
+  }
+  .rightInputRow,
+  .leftInputRow {
+    display: block;
+  }
+  .cardColColor {
+    width: 50rem !important;
+  }
+  .officeImgCol {
+    width: 400px;
+  }
+}
