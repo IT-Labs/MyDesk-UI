@@ -120,6 +120,20 @@ const CardsSection = (props) => {
               grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
               dataSource={dataDesks
                 .filter((item) => {
+                  if (props.employeeSearch.length === 0) {
+                    if (props.available === null) {
+                      return true;
+                    } else if (
+                      item.available &&
+                      props.available &&
+                      !item.categories?.unavailable
+                    ) {
+                      return true;
+                    } else if (!item.available && !props.available) {
+                      return true;
+                    }
+                    return false;
+                  }
                   const specificUser = item.reservations.find((info) => {
                     const newGuy = getSpecificUser(info);
                     if (
@@ -137,19 +151,6 @@ const CardsSection = (props) => {
                     !checkAvailable(item.reservations, start, end)
                   ) {
                     return true;
-                  } else if (props.employeeSearch.length === 0) {
-                    if (props.available === null) {
-                      return true;
-                    }
-                    if (
-                      props.available &&
-                      checkAvailable(item.reservations, start, end)
-                    ) {
-                      return item;
-                    }
-                    if (props.available === false) {
-                      return !checkAvailable(item.reservations, start, end);
-                    }
                   }
                 })
                 .filter(({ categories }) => {
@@ -175,6 +176,7 @@ const CardsSection = (props) => {
                 })}
               renderItem={(item) => {
                 const available = checkAvailable(item.reservations, start, end);
+                Object.assign(item, { available: available });
                 const specificUser = item.reservations.find((info) => {
                   const newGuy = getSpecificUser(info);
                   if (

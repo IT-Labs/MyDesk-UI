@@ -21,7 +21,6 @@ import styles from "./Homepage.module.scss";
 import { useState } from "react";
 import api from "../../helper/api";
 
-import "../HomePage/homepage.css";
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
 import jwtDecode from "jwt-decode";
@@ -427,7 +426,6 @@ const Home = () => {
                     defValue.length === 0
                   }
                   onClick={() => checkTypeOfReservation()}
-                  type="primary"
                   className={`${styles.buttons} ${
                     forCoworker ? styles.orangeBtn : styles.tealBtn
                   }`}
@@ -438,7 +436,6 @@ const Home = () => {
                 <Button
                   block
                   disabled={selectedCardId.length === 0 ? true : false}
-                  type="primary"
                   size="large"
                   className={`${styles.buttons} ${styles.tealBtn}`}
                   onClick={() => showReviewsForSelectedCard()}

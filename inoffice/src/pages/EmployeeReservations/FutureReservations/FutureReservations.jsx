@@ -7,44 +7,27 @@ import { useState, useEffect } from "react";
 import api from "../../../helper/api";
 import styles from "../Reservation.module.scss";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 
 import {
   openError,
   openNotification,
 } from "../../../components/notification/Notification";
+import { setFutureReservation } from "../../../redux/MyReservations/FutureReservations";
+import { sortByOldest } from "../../../utils/sortByOldest";
 
-const FutureReservations = ({ officeName }) => {
+const FutureReservations = () => {
   const { officeSelect } = useSelector((state) => state.officeSelect);
 
   const [loadingData, setLoading] = useState(true);
-  const [futurereservations, setFutureReservations] = useState([]);
+  const { futureReservations } = useSelector(
+    (state) => state.futureReservations
+  );
 
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [toBeCancelled, setToBeCancelled] = useState(null);
-
-  const sortByOldest = (reservations) => {
-    const sorted = reservations
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-      })
-      .map((item, id) => {
-        return {
-          ...item,
-          key: id,
-          date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
-            item.endDate
-          ).format("DD/MM/YYYY")}`,
-          entity: `Desk [${item.deskIndex}]`,
-        };
-      });
-
-    setFutureReservations(sorted);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,8 +35,9 @@ const FutureReservations = ({ officeName }) => {
       await api
         .get("employee/future-reservation")
         .then((response) => {
-          sortByOldest(response.data);
+          const sorted = sortByOldest(response.data);
           setLoading(false);
+          dispatch(setFutureReservation(sorted));
         })
         .catch((error) => {
           console.error(error);
@@ -71,10 +55,10 @@ const FutureReservations = ({ officeName }) => {
         openNotification("You have successfully cancelled a reservation");
         setToBeCancelled();
         setVisible(false);
-        const filteredReservations = futurereservations.filter(
+        const filteredReservations = futureReservations.filter(
           (item) => item.id !== id
         );
-        setFutureReservations(filteredReservations);
+        dispatch(setFutureReservation(filteredReservations));
       })
       .catch((error) => {
         openError("Something went wrong");
@@ -125,7 +109,7 @@ const FutureReservations = ({ officeName }) => {
       {!loadingData ? (
         <Table
           columns={columns}
-          dataSource={futurereservations.filter(({ officeName }) =>
+          dataSource={futureReservations.filter(({ officeName }) =>
             officeName.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["topCenter"] }}

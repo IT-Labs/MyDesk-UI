@@ -8,18 +8,24 @@ import { useState, useEffect } from "react";
 import Loading from "../../../components/Loading/Loading";
 import styles from "../Reservation.module.scss";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   openError,
   openNotification,
 } from "../../../components/notification/Notification";
+import { setPastReservations } from "../../../redux/MyReservations/PastReservations";
+import { sortByNewest } from "../../../utils/sortByNewest";
+
+let controller = new AbortController();
 
 const PastReservations = ({ officeName }) => {
   const { TextArea } = Input;
   const { officeSelect } = useSelector((state) => state.officeSelect);
+  const { pastReservations } = useSelector((state) => state.pastReservations);
+  const dispatch = useDispatch();
 
   const [loadingData, setLoading] = useState(true);
-  const [pastreservations, setPastReservations] = useState([]);
+
   const [refreshstate, setRefreshState] = useState();
   const [visible, setVisible] = useState(false);
   const [review, setReview] = useState("");
@@ -29,35 +35,14 @@ const PastReservations = ({ officeName }) => {
 
   const [btnDisabled, setBtnDisabled] = useState(false);
 
-  const sortByNewest = (reservations) => {
-    const sorted = reservations
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
-
-        return date1 > date2 ? -1 : date1 < date2 ? 1 : 0;
-      })
-      .map((item) => {
-        return {
-          ...item,
-          key: item.deskId,
-          date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
-            item.endDate
-          ).format("DD/MM/YYYY")}`,
-          entity: `Desk [${item.deskIndex}]`,
-        };
-      });
-
-    setPastReservations(sorted);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       await api
         .get("employee/past-reservations")
         .then((response) => {
-          sortByNewest(response.data);
+          const sorted = sortByNewest(response.data);
           setLoading(false);
+          dispatch(setPastReservations(sorted));
         })
         .catch((error) => {
           console.error("Error message");
@@ -104,7 +89,7 @@ const PastReservations = ({ officeName }) => {
     }
 
     await api
-      .post("employee/review", data)
+      .post("employee/review", data, { signal: controller.signal })
       .then((response) => {
         setVisible(false);
         setBtnDisabled(false);
@@ -116,6 +101,7 @@ const PastReservations = ({ officeName }) => {
         openError("Review could not be written");
         setLoading(false);
         setVisible(false);
+        setBtnDisabled(false);
       });
   };
 
@@ -161,7 +147,7 @@ const PastReservations = ({ officeName }) => {
       {!loadingData ? (
         <Table
           columns={columns}
-          dataSource={pastreservations.filter((item) =>
+          dataSource={pastReservations.filter((item) =>
             item.officeName.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["topCenter"] }}
@@ -179,7 +165,11 @@ const PastReservations = ({ officeName }) => {
         visible={visible}
         onOk={() => writeReview()}
         okButtonProps={{ disabled: btnDisabled }}
-        onCancel={() => setVisible(false)}
+        onCancel={() => {
+          setVisible(false);
+          controller.abort();
+          controller = new AbortController();
+        }}
         width={800}
         // style={{ height: 120 }}
       >

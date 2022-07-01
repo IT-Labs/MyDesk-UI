@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
@@ -10,7 +10,6 @@ import { notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
-import UserSearch from "../UserSearch/UserSearch";
 
 const UserHead = (props) => {
   const dispatch = useDispatch();

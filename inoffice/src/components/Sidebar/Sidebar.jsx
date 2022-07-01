@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Menu, Tooltip } from "antd";
 import {
   LeftCircleOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   RightCircleOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
@@ -46,10 +48,18 @@ const Sidebar = (props) => {
         collapsed={media.matches ? true : collapsed}
         onCollapse={onCollapse}
         trigger={
-          media.matches ? null : collapsed ? (
-            <RightCircleOutlined />
+          media.matches ? null : !collapsed ? (
+            <MenuFoldOutlined
+              onClick={() => {
+                setCollapsed(true);
+              }}
+            />
           ) : (
-            <LeftCircleOutlined />
+            <MenuUnfoldOutlined
+              onClick={() => {
+                setCollapsed(false);
+              }}
+            />
           )
         }
       >
@@ -59,9 +69,11 @@ const Sidebar = (props) => {
           className="sideMenu"
         >
           <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
-            <Tooltip title="Home">
-              <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
-            </Tooltip>
+            <div>
+              <Tooltip title="Home" placement="bottom">
+                <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+              </Tooltip>
+            </div>
           </Menu.Item>
           <Menu.Item key="1" icon={<FeatherIcon icon="home" />}>
             <Tooltip title="Dashboard">

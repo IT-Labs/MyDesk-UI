@@ -24,6 +24,7 @@ export const checkAvailable = (res, start, end) => {
         const availability = findAvailable(item, start, end);
         if (!availability) {
           isAvailable = false;
+
           throw "";
         }
       });

@@ -52,9 +52,22 @@
 
 .buttons {
   border-radius: 7px;
-  border: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.014);
   width: 130px;
   margin-left: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.buttons.tealBtn:hover:enabled {
+  background-color: $tealHover;
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.014);
+}
+
+.buttons.orangeBtn:hover:enabled {
+  background: $orangeHover;
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.014);
 }
 
 .tealBtn {
@@ -63,7 +76,7 @@
 }
 
 .orangeBtn {
-  background-color: orange;
+  background-color: $orange;
   color: white;
 }
 
