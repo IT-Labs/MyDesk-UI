@@ -42,18 +42,14 @@ const Login = () => {
       await api
         .post("/authentication", userInfo)
         .then((res) => {
-          roleRouting(token);
+          navigate("/employee/home");
         })
         .catch((err) => {
-          console.error("error");
+          alert("Error while loging in");
         });
     }
 
     return;
-  };
-
-  const roleRouting = async (token) => {
-    navigate("/employee/home");
   };
 
   return (

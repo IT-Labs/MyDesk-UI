@@ -4,6 +4,7 @@ import MyReservationsSelect from "./MyReservations/MyReservationsSelect";
 import employees from "./Employees/employees";
 import pastReservations from "./MyReservations/PastReservations";
 import futureReservations from "./MyReservations/FutureReservations";
+import dashboard from "./Dashboard/Dashboard";
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     employees,
     pastReservations,
     futureReservations,
+    dashboard,
   },
 });
