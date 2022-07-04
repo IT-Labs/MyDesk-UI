@@ -23,11 +23,11 @@ import Moment from "moment";
 import { extendMoment } from "moment-range";
 import jwtDecode from "jwt-decode";
 import UserSearch from "../../components/UserSearch/UserSearch";
+import { setInitialDesks } from "../../redux/Dashboard/Dashboard";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
   const [deskData, setDeskData] = useState([]);
-  const [initialDesk, setInitialDesk] = useState([]);
   const [availableDesks, setAvailableDesks] = useState(0);
   const [reservedDesks, setReservedDesks] = useState(0);
   const [allDesks, setAllDesks] = useState(0);
@@ -39,6 +39,8 @@ const Dashboard = () => {
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
   const count = useRef(0);
+
+  const initialDesk = useSelector((state) => state.dashboard.initialDesk);
 
   const moment = extendMoment(Moment);
   const dispatch = useDispatch();
@@ -56,7 +58,6 @@ const Dashboard = () => {
     const range1 = momentRange.range(startSelected, endSelected);
     const range2 = momentRange.range(momentStart, momentEnd);
     const flag = range2.overlaps(range1, { adjacent: true });
-    console.log(flag);
     return flag;
   };
 
@@ -107,20 +108,23 @@ const Dashboard = () => {
       .then(async ({ data }) => {
         const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
         setOffices(sortedOffices);
+        if (initialDesk.length === 0 || !initialDesk) {
+          const deskRes = await Promise.all(
+            data.map((item) => {
+              const val = fetchDeskData(item.id).then((res) => res);
+              return val;
+            })
+          );
+          const desk = deskRes.flat(deskRes.length);
+          const deskInfo = desk.map((item, id) => {
+            return { ...item, key: id };
+          });
 
-        const deskRes = await Promise.all(
-          data.map((item) => {
-            const val = fetchDeskData(item.id).then((res) => res);
-            return val;
-          })
-        );
-        const desk = deskRes.flat(deskRes.length);
-        const deskInfo = desk.map((item, id) => {
-          return { ...item, key: id };
-        });
-
-        setInitialDesk(deskInfo);
-        filterData(deskInfo);
+          dispatch(setInitialDesks(deskInfo));
+          filterData(deskInfo);
+        } else {
+          filterData(initialDesk);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -300,7 +304,9 @@ const Dashboard = () => {
         <Sidebar selected="1" />
         <Content className={styles.content}>
           <div className={styles.container}>
-            <UserSearch />
+            <div style={{ width: "20%" }}>
+              <UserSearch />
+            </div>
             <div
               style={{ position: "relative", left: 15, margin: 0, padding: 0 }}
             >

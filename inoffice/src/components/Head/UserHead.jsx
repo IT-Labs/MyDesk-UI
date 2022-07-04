@@ -5,7 +5,7 @@ import { Header } from "antd/lib/layout/layout";
 import jwt from "jwt-decode";
 
 import HeaderImg from "./HeaderImg";
-import avatar from "../../assets/avatar.png";
+import placeholderAvatar from "../../assets/avatar.png";
 import { notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
@@ -18,11 +18,13 @@ const UserHead = (props) => {
     fetchEmployees(api, dispatch, notification);
   };
   const navigate = useNavigate();
+  const [avatar, setAvatar] = useState(placeholderAvatar);
 
   useEffect(() => {
     if (employees.length === 0) {
       getUsers();
     }
+    getProfile();
   }, []);
 
   const config = {
@@ -30,6 +32,26 @@ const UserHead = (props) => {
     decoded: jwt(localStorage.getItem("msal.idtoken")),
   };
   const { employees } = useSelector((state) => state.employees);
+
+  const ls = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    ls.push(localStorage.key(i));
+  }
+  const auth = ls.find((item) => item.includes("authority"));
+  const { accessToken } = JSON.parse(localStorage.getItem(auth));
+
+  const getProfile = async () => {
+    fetch("https://graph.microsoft.com/v1.0/me/photos/64x64/$value", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((res) => res.blob())
+      .then((imgBlob) => {
+        const imageObjURL = URL.createObjectURL(imgBlob);
+        setAvatar(imageObjURL);
+      });
+  };
 
   return (
     <Header className={styles.header}>
