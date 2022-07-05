@@ -1,38 +1,32 @@
-import { Component } from "react/cjs/react.production.min";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import api from "../../helper/api";
-import Layout, { Content, Footer } from "antd/lib/layout/layout";
+import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
 import { Button, Typography, List, Card, Input } from "antd";
-import AddOfficeContainer from "./AddOfficeContainer";
-import { Popconfirm, Row, Col, notification } from "antd";
+
+import { Popconfirm, Row, Col } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 import "../Offices/Offices.css";
 import Title from "./Title";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOffices } from "../../redux/Offices/offices";
 
 const Offices = () => {
   const [inputFilter, setInputFilter] = useState("");
-  const [data, setData] = useState([]);
+
+  const data = useSelector((state) => state.offices.offices);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    api
-      .get("admin/offices")
-      .then(({ data }) => {
-        const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
-        setData(sortedOffices);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    dispatch(fetchOffices());
+  }, [dispatch]);
 
   const deleteFunc = (value) => {
     api.delete("admin/office/" + value).then(() => {
-      api.get("admin/offices").then((res) => {
-        setData(res.data);
-      });
+      dispatch(fetchOffices());
     });
   };
 

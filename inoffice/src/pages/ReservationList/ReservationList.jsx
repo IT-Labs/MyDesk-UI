@@ -21,6 +21,7 @@ const ReservationList = () => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toBeCancelled, setToBeCancelled] = useState(null);
+
   const sortResStruct = (res) => {
     const results = res
       .map((item) => {

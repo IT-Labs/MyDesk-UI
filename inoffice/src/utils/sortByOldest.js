@@ -1,7 +1,9 @@
 import moment from "moment";
+import { v4 as uuid } from "uuid";
 
 export const sortByOldest = (reservations) => {
-  return reservations
+  const res = [...reservations];
+  return res
     .sort((a, b) => {
       const date1 = new Date(a.startDate).getTime();
       const date2 = new Date(b.startDate).getTime();
@@ -11,7 +13,7 @@ export const sortByOldest = (reservations) => {
     .map((item, id) => {
       return {
         ...item,
-        key: id,
+        key: uuid(),
         date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
           item.endDate
         ).format("DD/MM/YYYY")}`,

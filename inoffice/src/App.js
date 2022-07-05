@@ -25,7 +25,6 @@ const App = () => {
   const token = localStorage.getItem("msal.idtoken");
 
   useEffect(() => {
-    console.log(jwtDecode(token));
     if (!token) {
       navigate("/");
     }

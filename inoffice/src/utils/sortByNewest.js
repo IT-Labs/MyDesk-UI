@@ -1,5 +1,5 @@
 import moment from "moment";
-
+import { v4 as uuid } from "uuid";
 export const sortByNewest = (reservations) => {
   return reservations
     .sort((a, b) => {
@@ -11,7 +11,7 @@ export const sortByNewest = (reservations) => {
     .map((item) => {
       return {
         ...item,
-        key: item.deskId,
+        key: uuid(),
         date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
           item.endDate
         ).format("DD/MM/YYYY")}`,

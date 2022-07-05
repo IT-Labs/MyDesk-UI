@@ -1,5 +1,5 @@
 import React from "react";
-import AddOfficeContainer from "./AddOfficeContainer";
+import AddOfficeContainer from "./AddOfficeContainer/AddOfficeContainer";
 
 const Title = ({ addOfficeText, onSubmit }) => {
   return (

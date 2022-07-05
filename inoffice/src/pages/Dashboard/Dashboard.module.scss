@@ -13,6 +13,17 @@
   margin: 15px;
   margin-right: 44px;
 }
+.title {
+  position: relative;
+  left: 15px;
+  margin: 0;
+  padding: 0;
+  h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.125rem;
+  }
+}
 
 .container {
   width: 95%;
@@ -146,6 +157,7 @@
   width: 55%;
   display: flex;
   padding: 10px;
+  border-radius: 7px;
   box-shadow: $boxShadow;
   flex-direction: column;
   h3 {

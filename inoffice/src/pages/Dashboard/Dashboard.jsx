@@ -304,21 +304,11 @@ const Dashboard = () => {
         <Sidebar selected="1" />
         <Content className={styles.content}>
           <div className={styles.container}>
-            <div style={{ width: "20%" }}>
+            <div>
               <UserSearch />
             </div>
-            <div
-              style={{ position: "relative", left: 15, margin: 0, padding: 0 }}
-            >
-              <h2
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: "1.125rem",
-                }}
-              >
-                Dashboard
-              </h2>
+            <div className={styles.title}>
+              <h2>Dashboard</h2>
             </div>
             <div className={styles.inputs}>
               <Select

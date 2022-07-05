@@ -21,6 +21,7 @@ const OfficeDetails = ({ props }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getDesks = () => {
+    setIsLoading(true);
     api
       .get("admin/office-desks/" + officeId)
       .then((res) => {
@@ -155,7 +156,7 @@ const OfficeDetails = ({ props }) => {
     api
       .post("admin/office-entities/" + officeId, data)
       .then((res) => {
-        window.location.reload();
+        getDesks();
       })
       .catch((err) => {
         console.log(err);

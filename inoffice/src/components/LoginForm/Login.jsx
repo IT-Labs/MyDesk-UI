@@ -15,10 +15,7 @@ const Login = () => {
   let navigate = useNavigate();
   const [postedOnce, setPostedOnce] = useState(false);
 
-  const url =
-    window.location.hostname === "localhost"
-      ? "http://localhost:3000"
-      : "https://salmon-grass-030b2a503.1.azurestaticapps.net/";
+  const url = process.env.REACT_APP_URL;
 
   const loginHandler = async (err, data) => {
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {

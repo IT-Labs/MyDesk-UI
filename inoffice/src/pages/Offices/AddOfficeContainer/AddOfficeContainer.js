@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Modal } from "./Modal";
-import AddOfficeButton from "./AddOfficeButton";
+import { Modal } from "../Modal";
+import AddOfficeButton from "../AddOfficeButton/AddOfficeButton";
 export class AddOfficeContainer extends Component {
   state = { isShown: false };
   showModal = () => {

@@ -1,7 +1,5 @@
 import React from "react";
-import { Button, Typography, List } from "antd";
-
-const showModalFunc = () => {};
+import { Button } from "antd";
 
 const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
   return (
