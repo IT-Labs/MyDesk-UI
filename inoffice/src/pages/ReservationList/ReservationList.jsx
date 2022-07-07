@@ -337,7 +337,7 @@ const ReservationList = () => {
               {reservations.length > 0 ? (
                 <Table
                   columns={tabKey === "past" ? pastColumns : futureColumns}
-                  data={reservations.filter(
+                  dataSource={reservations.filter(
                     ({ office, employee }) =>
                       office.includes(filterVal) &&
                       employee.toLowerCase().includes(filterInput.toLowerCase())

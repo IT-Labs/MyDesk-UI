@@ -6,7 +6,7 @@ import jwt from "jwt-decode";
 
 import HeaderImg from "./HeaderImg";
 
-import { notification } from "antd";
+import { notification, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
@@ -74,18 +74,20 @@ const UserHead = (props) => {
             <NavLink className={styles.link} to="/employee/reservations">
               {media.matches ? "Dashboard" : config.decoded.name}
             </NavLink>
-            <LogoutOutlined
-              //css in jsx used here because of the API
-              style={{ color: "white" }}
-              className={`${styles.link} ${styles.logoutBtn}`}
-              to="/"
-              onClick={() => {
-                localStorage.removeItem("msal.idtoken");
-                navigate("/");
-              }}
-            >
-              Logout
-            </LogoutOutlined>
+            <Tooltip title="Log out">
+              <LogoutOutlined
+                //css in jsx used here because of the API
+                style={{ color: "white" }}
+                className={`${styles.link} ${styles.logoutBtn}`}
+                to="/"
+                onClick={() => {
+                  localStorage.removeItem("msal.idtoken");
+                  navigate("/");
+                }}
+              >
+                Logout
+              </LogoutOutlined>
+            </Tooltip>
           </div>
         </div>
       </div>
