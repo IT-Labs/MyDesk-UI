@@ -10,6 +10,7 @@ import { notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const UserHead = (props) => {
   const dispatch = useDispatch();
@@ -73,8 +74,10 @@ const UserHead = (props) => {
             <NavLink className={styles.link} to="/employee/reservations">
               {media.matches ? "Dashboard" : config.decoded.name}
             </NavLink>
-            <NavLink
-              className={styles.link}
+            <LogoutOutlined
+              //css in jsx used here because of the API
+              style={{ color: "white" }}
+              className={`${styles.link} ${styles.logoutBtn}`}
               to="/"
               onClick={() => {
                 localStorage.removeItem("msal.idtoken");
@@ -82,7 +85,7 @@ const UserHead = (props) => {
               }}
             >
               Logout
-            </NavLink>
+            </LogoutOutlined>
           </div>
         </div>
       </div>

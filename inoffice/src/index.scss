@@ -294,24 +294,29 @@ td {
 
 .ant-pagination-item {
   color: $teal;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
 }
 
 .ant-pagination-item:hover,
 .ant-pagination-item a:hover {
-  color: $teal;
-  border-color: $teal;
+  color: white;
+  background-color: $teal;
+  border-radius: 50%;
+  border-color: transparent;
 }
 
 .ant-pagination-prev:hover .ant-pagination-item-link,
 .ant-pagination-next:hover .ant-pagination-item-link {
-  color: $teal;
-  border-color: $teal;
+  color: teal;
 }
 
 .ant-pagination-item-active,
 .ant-pagination-item-active a {
-  color: $teal;
-  border-color: $teal;
+  color: white;
+  background-color: $teal;
+  border-radius: 50%;
+  border-color: transparent;
 }
 
 .ant-layout {
@@ -482,4 +487,20 @@ p {
 
 .sideMenu {
   overflow-x: hidden;
+}
+
+.ant-pagination-item-link {
+  border-radius: 50% !important;
+}
+
+.ant-pagination-item-link:hover {
+  border-color: $teal !important;
+}
+
+.ant-table-tbody tr:nth-child(odd) {
+  background-color: #f7fafc;
+}
+
+.anticon-logout {
+  height: 15px !important;
 }

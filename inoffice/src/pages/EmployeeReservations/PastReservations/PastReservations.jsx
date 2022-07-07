@@ -150,7 +150,7 @@ const PastReservations = ({ officeName }) => {
           dataSource={pastReservations.filter((item) =>
             item.officeName.includes(officeSelect)
           )}
-          pagination={{ pageSize: 4, position: ["topCenter"] }}
+          pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}
         />
       ) : (

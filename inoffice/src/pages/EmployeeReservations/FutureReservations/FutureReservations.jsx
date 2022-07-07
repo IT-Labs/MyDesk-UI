@@ -112,7 +112,7 @@ const FutureReservations = () => {
           dataSource={futureReservations.filter(({ officeName }) =>
             officeName.includes(officeSelect)
           )}
-          pagination={{ pageSize: 4, position: ["topCenter"] }}
+          pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}
         />
       ) : (

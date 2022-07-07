@@ -59,3 +59,13 @@
   display: flex;
   flex-direction: row-reverse;
 }
+
+.logoutBtn {
+  position: relative;
+  top: 23px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    filter: drop-shadow(0 0 3px white) !important;
+  }
+}
