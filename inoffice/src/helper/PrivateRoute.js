@@ -1,7 +1,14 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getAvatar } from "../redux/Avatar/Avatar";
 
-const PrivateRoute = ({ component: RouteComponent, compRoles = [] }) => {
+const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAvatar());
+  }, []);
   const token = localStorage.getItem("msal.idtoken");
   const navigate = useNavigate();
   if (!token) {

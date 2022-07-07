@@ -69,6 +69,7 @@ const Login = () => {
           withUserData={true}
           useLocalStorageCache={true}
           className={styles.loginBtn}
+          graphScopes={["user.read", "user.readbasic.all"]}
         >
           <Button className={styles.btn}>
             <img

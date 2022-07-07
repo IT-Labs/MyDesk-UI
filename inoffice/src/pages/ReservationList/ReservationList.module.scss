@@ -52,6 +52,12 @@
   align-items: center;
 }
 
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
 @media screen and (max-width: 480px) {
   .title {
     display: block;

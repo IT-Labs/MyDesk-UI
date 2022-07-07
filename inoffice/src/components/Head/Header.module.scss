@@ -54,3 +54,8 @@
   border-radius: 50%;
   margin-right: 5px;
 }
+
+.items {
+  display: flex;
+  flex-direction: row-reverse;
+}

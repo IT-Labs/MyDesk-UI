@@ -10,7 +10,6 @@ import { notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
-import { getAvatar } from "../../redux/Avatar/Avatar";
 
 const UserHead = (props) => {
   const dispatch = useDispatch();
@@ -21,10 +20,6 @@ const UserHead = (props) => {
   const avatar = useSelector((state) => state.avatar.avatar);
   const navigate = useNavigate();
   // const [avatar, setAvatar] = useState(placeholderAvatar);
-
-  useEffect(() => {
-    dispatch(getAvatar());
-  }, [dispatch]);
 
   useEffect(() => {
     if (employees.length === 0) {
@@ -71,7 +66,7 @@ const UserHead = (props) => {
       <div>{props?.isHome && <HeaderImg />}</div>
       <div className={styles.container}>
         <div className={styles.content}>
-          <div>
+          <div className={styles.items}>
             {!media.matches && (
               <img src={avatar} alt="avatar" className={styles.avatar} />
             )}

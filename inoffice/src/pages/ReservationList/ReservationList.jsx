@@ -14,48 +14,81 @@ import { getAllPastReservations } from "../../utils/getAllPastReservations";
 import TableComponent from "../../components/Table/TableComponent";
 import { openNotification } from "../../components/notification/Notification";
 
+import placeholderAvatar from "../../assets/avatar.png";
+
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [initRes, setInitRes] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
+
   const [toBeCancelled, setToBeCancelled] = useState(null);
 
-  const sortResStruct = (res) => {
-    const results = res
-      .map((item) => {
-        const start = new Date(item.startDate);
-        const end = new Date(item.endDate);
-        return {
-          ...item,
-          employee: `${item.employee.firstName} ${item.employee.lastName}`,
-          office: item.officeName ? item.officeName : "Undefined office",
-          entity: item.indexForOffice
-            ? `Desk [${item.indexForOffice}]`
-            : "Undefined Desk",
-          key: item.id,
-          startDate: Date.parse(item.startDate),
-          endDate: Date.parse(item.endDate),
-          date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
-            "DD/MM/YYYY"
-          )}`,
-        };
-      })
-      .sort((a, b) => {
-        const date1 = new Date(a.startDate).getTime();
-        const date2 = new Date(b.startDate).getTime();
+  const getImage = async (mail) => {
+    const tmp = await fetch(
+      `https://graph.microsoft.com/v1.0/users/${mail}/photo/$value`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        responseType: "blob",
+      }
+    );
+    const response = await tmp.blob();
+    console.log(response);
+    if (response) {
+      return URL.createObjectURL(response);
+    } else {
+      return null;
+    }
+  };
 
-        return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-      });
-    setInitRes([...results]);
+  const newInfo = async (item, image) => {
+    const start = new Date(item.startDate);
+    const end = new Date(item.endDate);
+
+    return {
+      ...item,
+      avatar: image,
+      employee: `${item.employee.firstName} ${item.employee.lastName}`,
+      office: item.officeName ? item.officeName : "Undefined office",
+      entity: item.indexForOffice
+        ? `Desk [${item.indexForOffice}]`
+        : "Undefined Desk",
+      key: item.id,
+      startDate: Date.parse(start),
+      endDate: Date.parse(end),
+      date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
+        "DD/MM/YYYY"
+      )}`,
+      email: item.employee.email,
+      ...item.employee,
+    };
+  };
+
+  const sortResStruct = async (res) => {
+    const results = await Promise.all(
+      res.map(async (item, id) => {
+        const image = await getImage(item.employee.email);
+        // console.log(image);
+        const info = await newInfo(item, image).then((res) => {
+          return res;
+        });
+
+        return info;
+      })
+    );
+
+    setInitRes(results);
     sortFuture(results);
+
+    return;
   };
   const [offices, setOffices] = useState([]);
 
   const sortFuture = (res) => {
     const future = getAllFutureReservations(res);
-    console.log(future);
+
     setReservations(future);
   };
 
@@ -70,22 +103,17 @@ const ReservationList = () => {
       .get("employee/reservations/all")
       .then(({ data }) => {
         sortResStruct(data.reservations);
-        setLoading(false);
-        console.log(data);
       })
       .catch((err) => {
-        console.log(err);
-        setLoading(false);
+        // console.log(err);
       });
-    api
-      .get("admin/offices")
-      .then(({ data }) => {
-        let sorted = data.sort((a, b) => {
-          return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
-        });
-        setOffices(sorted);
-      })
-      .catch((err) => console.log(err));
+    api.get("admin/offices").then(({ data }) => {
+      let sorted = data.sort((a, b) => {
+        return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
+      });
+      setOffices(sorted);
+    });
+    // .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -97,6 +125,30 @@ const ReservationList = () => {
       title: "Employee",
       dataIndex: "employee",
       key: 1,
+      width: "30%",
+      render: (text, record, index) => {
+        return (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={record.avatar}
+              alt=""
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = placeholderAvatar;
+              }}
+              className={styles.avatar}
+            />
+            <span>{record.employee}</span>
+          </div>
+        );
+      },
     },
     { title: "Office", dataIndex: "office", key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
@@ -140,6 +192,30 @@ const ReservationList = () => {
       title: "Employee",
       dataIndex: "employee",
       key: 1,
+      width: "30%",
+      render: (text, record, index) => {
+        return (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={record.avatar ? record.avatar : placeholderAvatar}
+              alt=""
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = placeholderAvatar;
+              }}
+              className={styles.avatar}
+            />
+            <span>{record.employee}</span>
+          </div>
+        );
+      },
     },
     { title: "Office", dataIndex: "office", key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
@@ -258,7 +334,7 @@ const ReservationList = () => {
                   </Tooltip>
                 </div>
               </div>
-              {!loading ? (
+              {reservations.length > 0 ? (
                 <TableComponent
                   columns={tabKey === "past" ? pastColumns : futureColumns}
                   data={reservations.filter(
@@ -266,7 +342,7 @@ const ReservationList = () => {
                       office.includes(filterVal) &&
                       employee.toLowerCase().includes(filterInput.toLowerCase())
                   )}
-                  pagination={{ pageSize: 5, position: ["topCenter"] }}
+                  pagination={{ pageSize: 4, position: ["topCenter"] }}
                 />
               ) : (
                 <div
@@ -277,7 +353,16 @@ const ReservationList = () => {
                     height: 444,
                   }}
                 >
-                  <Loading />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      height: 200,
+                    }}
+                  >
+                    <Loading />
+                    <p>Loading, please wait</p>
+                  </div>
                 </div>
               )}
               <Modal

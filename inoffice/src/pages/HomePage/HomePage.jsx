@@ -35,6 +35,7 @@ import {
   openNotification,
 } from "../../components/notification/Notification";
 
+import { getAvatar } from "../../redux/Avatar/Avatar";
 const Home = () => {
   const [officeid, setofficeid] = useState();
   const [selectedCardId, setSelectedCard] = useState([]);
@@ -239,6 +240,10 @@ const Home = () => {
     setDefValue(`${name[0]} ${name[1]}`);
     setSelectedCoworker(foundEmployee);
   };
+
+  useEffect(() => {
+    dispatch(getAvatar());
+  }, []);
 
   return (
     <Layout className={styles.layout}>
