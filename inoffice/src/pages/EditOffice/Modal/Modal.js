@@ -6,7 +6,7 @@ export const Modals = ({ hideModal, imageUrl, visible }) => {
   return (
     <Modal
       maskClosable={false}
-      title="Are you sure you want to cancel your reservation?"
+      title="Edit office"
       centered
       visible={visible}
       footer={null}

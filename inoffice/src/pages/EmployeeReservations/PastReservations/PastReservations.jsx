@@ -95,7 +95,7 @@ const PastReservations = ({ officeName }) => {
         setBtnDisabled(false);
         setRefreshState({});
         setLoading(false);
-        openNotification("Review written successfully");
+        openNotification("Thank you. Your review has been successfully saved.");
       })
       .catch((error) => {
         openError("Review could not be written");
@@ -165,30 +165,22 @@ const PastReservations = ({ officeName }) => {
         visible={visible}
         onOk={() => writeReview()}
         okButtonProps={{ disabled: btnDisabled }}
+        confirmLoading={loadingData}
         onCancel={() => {
           setVisible(false);
           controller.abort();
           controller = new AbortController();
+          openError("Cancelled review request");
         }}
         width={800}
         // style={{ height: 120 }}
       >
-        {loadingData ? (
-          <div className={styles.writtingReview}>
-            <Loading />
-            <p>
-              Please wait for a moment. Your review is currently being
-              processed.
-            </p>
-          </div>
-        ) : (
-          <TextArea
-            rows={4}
-            onChange={(e) => setReview(e.target.value)}
-            allowClear={true}
-            maxLength={200}
-          />
-        )}
+        <TextArea
+          rows={4}
+          onChange={(e) => setReview(e.target.value)}
+          allowClear={true}
+          maxLength={200}
+        />
       </Modal>
 
       <Modal

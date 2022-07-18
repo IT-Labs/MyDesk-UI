@@ -3,6 +3,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./components/LoginForm/Login";
 import Loading from "./components/Loading/Loading";
 import { useEffect, lazy, Suspense } from "react";
+import jwtDecode from "jwt-decode";
+import "./antd.less";
 
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 
@@ -24,7 +26,10 @@ const App = () => {
   const token = localStorage.getItem("msal.idtoken");
 
   useEffect(() => {
-    if (!token) {
+    try {
+      let user = jwtDecode(localStorage.getItem("msal.idtoken"));
+    } catch (err) {
+      localStorage.removeItem("msal.idtoken");
       navigate("/");
     }
   }, [token, navigate]);

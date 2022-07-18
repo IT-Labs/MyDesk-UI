@@ -1,0 +1,32 @@
+<!-- Button.stories.mdx -->
+
+import { Meta,Canvas, Story } from "@storybook/addon-docs";
+
+
+<Meta title="Cards Section"/>
+
+# Cards Section
+
+<Canvas name="Cards Section">
+  <Story name="Cards Section">
+    <p>
+    In the card section, we fetch data based on the office and render as many
+    desks as we need. Here it renders based on multiple filters. 
+    <ul>
+      <li><span style={{color: "green"}}>Green</span>: Available</li>
+      <li><span style={{color: "red"}}>Red</span>: Reserved</li>
+      <li><span style={{color: "gray"}}>Gray</span>: Unavailable</li>
+    </ul>
+    It displays the number of the desk and a small icon that when you hover over it, it shows the information what properties the desk has containing the following
+    <ul>
+      <li>Near Window</li>
+      <li>Single Monitor</li>    
+      <li>Dual Monitor</li>
+    </ul>
+    <br />
+    The filters work after you select a start and end date. If the selected dates overlap the cards will change to a red color and will show the start and end date of the reservation and the person who it's reserved for.
+    <br />
+    When the user changes an office while the data is being fetched, it will abort the process saving precious resources.
+  </p>
+  </Story>
+</Canvas>

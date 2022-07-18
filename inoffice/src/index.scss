@@ -445,7 +445,7 @@ html {
 }
 
 p {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 
 .ant-layout-sider-trigger {
@@ -497,7 +497,7 @@ p {
   border-color: $teal !important;
 }
 
-.ant-table-tbody tr:nth-child(odd) {
+.ant-table-tbody tr:nth-child(even) {
   background-color: #f7fafc;
 }
 

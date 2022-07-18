@@ -10,6 +10,7 @@ import styles from "./Login.module.scss";
 import { useState } from "react";
 import logo from "../../assets/Microsoft logo.png";
 import { Button } from "antd";
+import { openError } from "../notification/Notification";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -17,7 +18,8 @@ const Login = () => {
 
   const url = process.env.REACT_APP_URL;
 
-  const loginHandler = async (err, data) => {
+  const loginHandler = async (err, data, msal) => {
+    localStorage.setItem("accessToken", data.accessToken);
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
       localStorage.removeItem("msal.idtoken");
     }
@@ -42,7 +44,7 @@ const Login = () => {
           navigate("/employee/home");
         })
         .catch((err) => {
-          alert("Error while loging in");
+          openError("Error while loging in");
         });
     }
 
@@ -70,6 +72,7 @@ const Login = () => {
           useLocalStorageCache={true}
           className={styles.loginBtn}
           graphScopes={["user.read", "user.readbasic.all"]}
+          prompt={"select_account"}
         >
           <Button className={styles.btn}>
             <img

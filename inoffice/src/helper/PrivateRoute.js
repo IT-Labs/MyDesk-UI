@@ -3,7 +3,12 @@ import jwt from "jwt-decode";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAvatar } from "../redux/Avatar/Avatar";
+import { openNotification } from "../components/notification/Notification";
 
+/**
+ * If the user is authenticated, then return the component, otherwise return the Navigate component.
+ * @returns The component that is being returned is the component that is being passed in as a prop.
+ */
 const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,7 +41,7 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
     compRoles[0] !== jwt(token).roles[0] ||
     compRoles[0] !== jwt(token).roles[1]
   ) {
-    alert("Your session has expired");
+    openNotification("You are not signed in.");
     return <Navigate to="/" />;
   }
   return <Navigate to="/" />;

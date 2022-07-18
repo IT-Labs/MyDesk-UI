@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setEnd, setStart } from "../../redux/Date/Date";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
-import jwtDecode from "jwt-decode";
+
 import UserSearch from "../../components/UserSearch/UserSearch";
 import { setInitialDesks } from "../../redux/Dashboard/Dashboard";
 
@@ -49,6 +49,11 @@ const Dashboard = () => {
   const [endDateRes, setEndDate] = useState(Moment());
   const [dates, setDates] = useState([]);
 
+  /**
+   * If the start and end dates of the item are within the start and end dates of the range, return
+   * true.
+   * @returns A boolean value.
+   */
   const findAvailable = (item) => {
     const startSelected = item.startDate;
     const endSelected = item.endDate;
@@ -61,6 +66,10 @@ const Dashboard = () => {
     return flag;
   };
 
+  /**
+   * If the length of the array is greater than 0, then for each item in the array, if the item is
+   * available, then increment the count by 1.
+   */
   const checkAvailable = (res) => {
     if (res.length > 0) {
       res.forEach((item) => {
@@ -71,6 +80,9 @@ const Dashboard = () => {
     // return "#f37076" : "#69e28d",
   };
 
+  /**
+   * It takes an array of objects, and returns an array of objects.
+   */
   const filterData = (deskInfo) => {
     count.current = 0;
     setDesks(deskInfo);
@@ -80,10 +92,8 @@ const Dashboard = () => {
       checkAvailable(item.reservations);
     });
 
-    let unavailableData;
+    const unavailableData = count.current;
 
-    if (count.current > 0) unavailableData = count.current;
-    else unavailableData = unavailableDesk?.length;
     console.log(unavailableData);
     const availableDesk = parseInt(deskInfo.length) - unavailableData;
 
@@ -102,6 +112,9 @@ const Dashboard = () => {
     setReservedDesks(unavailableData);
   };
 
+  /**
+   * It fetches data from an API, sorts it, and then sets it to a state.
+   */
   const fetchOfficeData = async () => {
     await api
       .get("admin/offices")
@@ -131,6 +144,11 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * FetchDeskData is an async function that takes an officeId as an argument, and returns a promise
+   * that resolves to an array of objects, each of which has an officeId property.
+   * @returns An array of objects.
+   */
   const fetchDeskData = async (officeId) => {
     return api
       .get("employee/office-desks/" + officeId)
@@ -145,6 +163,14 @@ const Dashboard = () => {
       });
   };
 
+  /**
+   * If the office is not selected, then filter the data to the initial desk and set the reviews to the
+   * initial reviews.
+   *
+   * If the office is selected, then filter the data to the desk info and set the reviews to the review
+   * filter.
+   * @returns the filtered data.
+   */
   const selectFilter = (office) => {
     if (!office) {
       filterData(initialDesk);
@@ -173,6 +199,7 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start]);
 
+  /* Creating a pie chart. */
   const config = {
     appendPadding: 10,
     data: deskData,
@@ -213,6 +240,9 @@ const Dashboard = () => {
     },
   };
 
+  console.log(reviews);
+
+  /* Fetching reviews from an API and then mapping over the data to create a new array of objects. */
   const fetchReviews = () => {
     api
       .get("employee/reviews/all", {
@@ -257,6 +287,7 @@ const Dashboard = () => {
     setDates(range);
   };
 
+  /* Creating a table with 4 columns. */
   const colums = [
     {
       title: "Review",
@@ -294,8 +325,6 @@ const Dashboard = () => {
       },
     },
   ];
-
-  console.log(jwtDecode(localStorage.getItem("msal.idtoken")));
 
   return (
     <Layout>

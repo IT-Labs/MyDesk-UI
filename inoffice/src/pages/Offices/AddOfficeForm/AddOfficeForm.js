@@ -2,8 +2,10 @@ import React from "react";
 import api from "../../../helper/api";
 import { Form, Input, Button } from "antd";
 import { openError } from "../../../components/notification/Notification";
+import { useSelector } from "react-redux";
 
 const AddOfficeForm = () => {
+  const offices = useSelector((state) => state.offices.offices);
   const handleSubmit = (e) => {
     const name = e.name.replace(/\s+/, "-");
     const location = e.location.replace(/\s+/, "-");
@@ -11,8 +13,14 @@ const AddOfficeForm = () => {
     const data = {
       officeName: name + " " + location,
     };
+    const office = offices.find(
+      (item) => item.name.toLowerCase() === data.officeName.toLowerCase()
+    );
 
     try {
+      if (office) {
+        throw "That office already exists";
+      }
       if (e.name.length > 25 || e.location.length > 25)
         // eslint-disable-next-line no-throw-literal
         throw "You have exceeded the allowed 25 characters at one of the fields ";

@@ -14,6 +14,14 @@ const AddOffice = (props) => {
 
   const navigate = useNavigate();
 
+  /**
+   * It takes the officeName and officeLocation from the form and replaces the spaces with dashes. Then
+   * it adds the officeName and officeLocation together with a space in between. Then it adds the
+   * officePlan to the data object. Then it makes a put request to the api with the data object. Then it
+   * navigates to the page with the officeName and officeLocation.
+   * @param e - the form data
+   * @returns The data object is being returned.
+   */
   const handleSubmit = (e) => {
     if (
       e.officeName.length >= 25 ||
@@ -35,7 +43,7 @@ const AddOffice = (props) => {
     };
 
     api.put("admin/office/" + officeId, data).then((res) => {
-      navigate(`/admin/edit/${data.officeName}/${props.params.id}`);
+      window.location.reload();
     });
   };
   return (

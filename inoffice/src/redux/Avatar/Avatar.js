@@ -11,7 +11,9 @@ export const getAvatar = createAsyncThunk("avatar/getAvatar", async () => {
     .then((imgBlob) => {
       const imageObjURL = URL.createObjectURL(imgBlob);
       image = imageObjURL;
+      localStorage.setItem("avatar", imageObjURL);
     });
+
   return image;
 });
 

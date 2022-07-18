@@ -1,0 +1,24 @@
+<!-- Button.stories.mdx -->
+
+import { Meta, Story } from "@storybook/addon-docs";
+
+import App from "./App";
+
+<Meta title="App" component={App} />
+
+# App
+
+<Story name="App">
+  <p>
+    In the App file we define all the routes of the project. Here we include
+    lazy loading to reduce load times and increase performance without loading
+    unused components.
+  </p>
+  <p>
+    We are using React-Router v6 for routing,Ant Design for UI components,Moment
+    JS and Date Functions for date manipulation, UUID for unique id's when
+    rendering, React-Microsoft-Login for Single Sign On, and axios for most of
+    our API requests. We are also using antd-table-saveas-excel for exporting
+    the reservation list data as an excel file.
+  </p>
+</Story>

@@ -119,11 +119,10 @@ const Sidebar = (props) => {
         )
       }
       style={{
-        overflow: "auto",
-        height: "100vh",
+        overflow: "hidden",
+        height: "100.7vh",
         position: "relative",
         top: "-70px",
-
         left: 0,
       }}
       theme="light"

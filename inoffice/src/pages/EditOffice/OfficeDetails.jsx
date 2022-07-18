@@ -152,7 +152,12 @@ const OfficeDetails = ({ props }) => {
     const data = {
       numberOfDesks: e.numberOfDesks,
     };
-
+    const allDesks = parseInt(e.numberOfDesks) + parseInt(desks.length);
+    console.log(allDesks);
+    if (allDesks > 500) {
+      openError("You cannot have more than 500 desks active");
+      return;
+    }
     api
       .post("admin/office-entities/" + officeId, data)
       .then((res) => {

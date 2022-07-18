@@ -1,0 +1,30 @@
+import { Meta, Canvas, Story } from "@storybook/addon-docs";
+import logo from "../../assets/Microsoft logo.png";
+import avatar from "../../assets/avatar.png";
+import { LogoutOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+
+<Meta title="Login" />
+
+# Login
+
+<Canvas name="Login">
+  <Story name="Login">
+    <p>
+      In the login form we use the react-microsoft-login library. This library
+      is used to simplify the entire process for SSO and makes the application
+      more secure. We define our client id and tenant id from the Azure portal,
+      what graph permissions that we want, in this case user.readbasic.all and
+      user.read, a redirect url so it knows where to go when you enter all
+      microsoft information needed, and a callback function to get all other
+      information including the access token which we use for the graph api.
+    </p>
+    <Button style={{ height: 60}}>
+      <img
+        style={{ width: "150px", height: "50px" }}
+        src={logo}
+        alt="Sign on with microsoft"
+      />
+    </Button>
+  </Story>
+</Canvas>

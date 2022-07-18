@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
 import jwt from "jwt-decode";
+import placeholderAvatar from "../../assets/avatar.png";
 
 import HeaderImg from "./HeaderImg";
 
@@ -35,31 +36,6 @@ const UserHead = (props) => {
   };
   const { employees } = useSelector((state) => state.employees);
 
-  useEffect(() => {
-    const ls = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      ls.push(localStorage.getItem(localStorage.key(i)));
-    }
-
-    const auth = ls.find((item) => item.includes("accessToken"));
-
-    const { accessToken } = JSON.parse(auth);
-    localStorage.setItem("accessToken", accessToken);
-  }, []);
-
-  // const getProfile = async () => {
-  //   fetch("https://graph.microsoft.com/v1.0/me/photos/64x64/$value", {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //   })
-  //     .then((res) => res.blob())
-  //     .then((imgBlob) => {
-  //       const imageObjURL = URL.createObjectURL(imgBlob);
-  //       setAvatar(imageObjURL);
-  //     });
-  // };
-
   return (
     <Header className={styles.header}>
       {/* Hello x user here without the my account tab, same as the admin page*/}
@@ -69,7 +45,15 @@ const UserHead = (props) => {
         <div className={styles.content}>
           <div className={styles.items}>
             {!media.matches && (
-              <img src={avatar} alt="avatar" className={styles.avatar} />
+              <img
+                src={localStorage.getItem("avatar")}
+                alt="avatar"
+                className={styles.avatar}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null;
+                  currentTarget.src = placeholderAvatar;
+                }}
+              />
             )}
             <NavLink className={styles.link} to="/employee/reservations">
               {media.matches ? "Dashboard" : config.decoded.name}

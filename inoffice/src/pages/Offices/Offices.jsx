@@ -77,7 +77,7 @@ const Offices = () => {
                   <List
                     bordered
                     style={{ minWidth: 400 }}
-                    pagination={{ pageSize: 5, position: "top" }}
+                    pagination={{ pageSize: 5, position: "bottom" }}
                     dataSource={data.filter(({ name }) =>
                       name.toLowerCase().includes(inputFilter.toLowerCase())
                     )}

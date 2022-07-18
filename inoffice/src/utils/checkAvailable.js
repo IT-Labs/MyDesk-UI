@@ -7,8 +7,8 @@ export const findAvailable = ({ startDate, endDate }, start, end) => {
   const end2 = `${end1[0]}T00:00:00`;
 
   const flag = areIntervalsOverlapping(
-    { start: new Date(startDate), end: new Date(endDate) },
     { start: new Date(start2), end: new Date(end2) },
+    { start: new Date(startDate), end: new Date(endDate) },
     { inclusive: true }
   );
 
@@ -24,7 +24,6 @@ export const checkAvailable = (res, start, end) => {
         const availability = findAvailable(item, start, end);
         if (!availability) {
           isAvailable = false;
-
           throw "";
         }
       });
