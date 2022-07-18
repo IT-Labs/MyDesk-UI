@@ -2,7 +2,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import api from "../../helper/api";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Typography, List, Card, Input } from "antd";
+import { Button, Typography, List, Card, Input, notification } from "antd";
 
 import { Popconfirm, Row, Col } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -27,6 +27,7 @@ const Offices = () => {
   const deleteFunc = (value) => {
     api.delete("admin/office/" + value).then(() => {
       dispatch(fetchOffices());
+      notification.open("Successfully deleted office");
     });
   };
 
