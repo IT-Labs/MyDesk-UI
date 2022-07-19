@@ -35,11 +35,28 @@ export const MyReservations = () => {
   return (
     <>
       <span>
-        The future reservations tab is where the user can check all the
-        reservations that have been reserved, whether they or someone else has
-        reserved the desk for them. If the user has changed their mind, they can
-        cancel the desk at any time
+        This is a tab that contains the reservations. This is the same logic for
+        both the My reservations and future reservations, but the only
+        difference is that reservation list uses the graph api to get the
+        profile picture of the users in your organization and reservation list
+        checks every reservation not just the current user's.
       </span>
+      <br />
+      {activeTabKey1 === "tab1" ? (
+        <span>
+          The future reservations tab is where the user can check all the
+          reservations that have been reserved, whether they or someone else has
+          reserved the desk for them. If the user has changed their mind, they
+          can cancel the desk at any time.
+        </span>
+      ) : (
+        <span>
+          The past reservation tab is where the user can see any reservations
+          that have expired, here you can also read a review or write a review
+          based on your preferences. The reviews written will be analyzed by our
+          AI and spit out a positive, negative or neutral reaction.
+        </span>
+      )}
       <Content className={styles.contentStyle}>
         <Card
           className={styles.cardStyle}

@@ -15,9 +15,10 @@ const UserSearch = () => {
   const [visible, setVisible] = useState(false);
   const [reservations, setReservations] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
+  const { decodedUser } = useSelector((state) => state.user);
 
   const getUsers = async () => {
-    fetchEmployees(api, dispatch, notification);
+    fetchEmployees(api, dispatch, notification, decodedUser);
   };
 
   const sortFuture = (res) => {

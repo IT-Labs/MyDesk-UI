@@ -8,6 +8,7 @@ import dashboard from "./Dashboard/Dashboard";
 import offices from "./Offices/offices";
 import avatar from "./Avatar/Avatar";
 import card from "./Cards/Card";
+import user from "./User/user";
 export default configureStore({
   reducer: {
     officeSelect: MyReservationsSelect,
@@ -19,5 +20,6 @@ export default configureStore({
     offices,
     avatar,
     card,
+    user,
   },
 });

@@ -1,16 +1,12 @@
-import jwtDecode from "jwt-decode";
 import { openError } from "../components/notification/Notification";
 import { setEmployees } from "../redux/Employees/employees";
 
-export const fetchEmployees = async (api, dispatch) => {
+export const fetchEmployees = async (api, dispatch, user) => {
   await api
     .get("employee/all")
     .then(({ data }) => {
-      const { preferred_username } = jwtDecode(
-        localStorage.getItem("msal.idtoken")
-      );
       const filteredData = data
-        .filter(({ email }) => email !== preferred_username)
+        .filter(({ email }) => email !== user.preferred_username)
         .sort((a, b) => a.firstName.localeCompare(b.firstName));
       dispatch(setEmployees(filteredData));
     })

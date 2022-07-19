@@ -5,6 +5,9 @@ import Loading from "./components/Loading/Loading";
 import { useEffect, lazy, Suspense } from "react";
 import jwtDecode from "jwt-decode";
 import "./antd.less";
+import { openError } from "./components/notification/Notification";
+import { useDispatch } from "react-redux";
+import { setDecodedUser } from "./redux/User/user";
 
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 
@@ -24,15 +27,19 @@ const App = () => {
   //Routes
   const navigate = useNavigate();
   const token = localStorage.getItem("msal.idtoken");
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!localStorage.getItem("msal.idtoken")) return;
     try {
       let user = jwtDecode(localStorage.getItem("msal.idtoken"));
+      dispatch(setDecodedUser(user));
     } catch (err) {
       localStorage.removeItem("msal.idtoken");
+      openError("Your session has expired.");
       navigate("/");
     }
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   return (
     <Suspense fallback={<Loading />}>

@@ -23,7 +23,7 @@ import api from "../../helper/api";
 
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
-import jwtDecode from "jwt-decode";
+
 import { useDispatch, useSelector } from "react-redux";
 
 import { fetchEmployees } from "../../utils/fetchEmployees";
@@ -60,6 +60,7 @@ const Home = () => {
   const [forCoworker, setForCoworker] = useState(false);
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
+  const user = useSelector((state) => state.user.decodedUser);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -125,7 +126,7 @@ const Home = () => {
   };
 
   const getUsers = async () => {
-    fetchEmployees(api, dispatch);
+    fetchEmployees(api, dispatch, user);
   };
 
   useEffect(() => {
@@ -164,8 +165,6 @@ const Home = () => {
   };
 
   const makeReservation = () => {
-    const user = jwtDecode(localStorage.getItem("msal.idtoken"));
-
     const data = {
       deskId: selectedCardId.id,
       startDate: startDateRes,
@@ -353,9 +352,15 @@ const Home = () => {
                     onClick={() => setDropDownVisible(!dropdownVisible)}
                   >
                     <Button className={styles.inputSize}>
-                      <Space>
-                        Select categories
-                        <DownOutlined />
+                      <Space
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          width: "100%",
+                        }}
+                      >
+                        All categories
+                        <DownOutlined style={{ color: "rgba(0,0,0,0.25)" }} />
                       </Space>
                     </Button>
                   </Dropdown>
@@ -402,7 +407,7 @@ const Home = () => {
                         <h4
                           style={{ fontSize: 14, padding: 0, margin: 0 }}
                         >{`${item.firstName} ${item.lastName}`}</h4>
-                        <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
+                        <p style={{ fontSize: 12 }}>{item.jobTitle}</p>
                       </Select.Option>
                     ))}
                 </Select>

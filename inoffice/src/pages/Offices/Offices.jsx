@@ -17,7 +17,7 @@ const Offices = () => {
   const [inputFilter, setInputFilter] = useState("");
 
   const data = useSelector((state) => state.offices.offices);
-
+  console.log(data);
   const dispatch = useDispatch();
 
   useEffect(() => {

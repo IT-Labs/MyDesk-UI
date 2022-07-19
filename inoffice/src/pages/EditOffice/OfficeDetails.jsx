@@ -82,7 +82,7 @@ const OfficeDetails = ({ props }) => {
       )
       .then((res) => {
         getDesks();
-        openNotification("You succesfully updated the entities");
+        openNotification("You have succesfully updated the entities");
         setIsLoading(false);
       })
       .catch((error) => {
@@ -149,6 +149,10 @@ const OfficeDetails = ({ props }) => {
   };
 
   const handleSubmit = (e) => {
+    if (parseInt(e.numberOfDesks) < 1 || parseInt(e.numberOfDesks) > 500) {
+      openError("You can only add a number between 1 and 500");
+      return;
+    }
     const data = {
       numberOfDesks: e.numberOfDesks,
     };
@@ -301,7 +305,7 @@ const OfficeDetails = ({ props }) => {
           <div>
             <h2 className={styles.h2}>Edit office</h2>
             <div className={styles.officeTitles}>
-              Name: <span className={styles.labels}>{officeName}</span>
+              Name/Location: <span className={styles.labels}>{officeName}</span>
             </div>
           </div>
           <div>
@@ -319,6 +323,7 @@ const OfficeDetails = ({ props }) => {
                 className={styles.input}
                 placeholder="Enter number of desks"
                 type="number"
+                rules
               />
             </Form.Item>
             <Button

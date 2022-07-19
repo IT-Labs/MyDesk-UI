@@ -208,8 +208,22 @@ h1 {
 .editButton {
   float: right;
   margin-right: 10px;
-  background-color: #2148c0;
+  background-color: $teal;
   color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 7px;
+  &:hover {
+    background-color: $tealHover;
+  }
+  &::after {
+    background-color: $teal;
+  }
+  &:focus {
+    background-color: $teal;
+    &:hover {
+      background-color: $tealHover;
+    }
+  }
 }
 .deleteButton {
   color: white;

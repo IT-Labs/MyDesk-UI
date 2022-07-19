@@ -2,39 +2,23 @@ import React, { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
-import jwt from "jwt-decode";
+
 import placeholderAvatar from "../../assets/avatar.png";
 
 import HeaderImg from "./HeaderImg";
 
-import { notification, Tooltip } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchEmployees } from "../../utils/fetchEmployees";
-import api from "../../helper/api";
+import { Tooltip } from "antd";
+import { useSelector } from "react-redux";
+
 import { LogoutOutlined } from "@ant-design/icons";
 
 const UserHead = (props) => {
-  const dispatch = useDispatch();
   const media = window.matchMedia("(max-width: 820px)");
-  const getUsers = async () => {
-    fetchEmployees(api, dispatch, notification);
-  };
-  const avatar = useSelector((state) => state.avatar.avatar);
+  const user = useSelector((state) => state.user.decodedUser);
   const navigate = useNavigate();
   // const [avatar, setAvatar] = useState(placeholderAvatar);
 
-  useEffect(() => {
-    if (employees.length === 0) {
-      getUsers();
-    }
-    // getProfile();
-  }, []);
-
-  const config = {
-    token: localStorage.getItem("msal.idtoken"),
-    decoded: jwt(localStorage.getItem("msal.idtoken")),
-  };
-  const { employees } = useSelector((state) => state.employees);
+  console.log(user);
 
   return (
     <Header className={styles.header}>
@@ -56,7 +40,7 @@ const UserHead = (props) => {
               />
             )}
             <NavLink className={styles.link} to="/employee/reservations">
-              {media.matches ? "Dashboard" : config.decoded.name}
+              {media.matches ? "Dashboard" : user.name}
             </NavLink>
             <Tooltip title="Log out">
               <LogoutOutlined

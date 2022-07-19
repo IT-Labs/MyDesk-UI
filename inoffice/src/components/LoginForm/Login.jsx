@@ -61,11 +61,9 @@ const Login = () => {
           </p>
         </div>
         <MicrosoftLogin
-          clientId={"431c5d21-13d1-43af-a3bc-65484a0bca29"}
+          clientId={process.env.REACT_APP_CLIENT_ID}
           authCallback={loginHandler}
-          tenantUrl={
-            "https://login.microsoftonline.com/{9a433611-0c81-4f7b-abae-891364ddda17}/"
-          }
+          tenantUrl={`${process.env.REACT_APP_TENANT_URL}`}
           redirectUri={url}
           forceRedirectStrategy={true}
           withUserData={true}
