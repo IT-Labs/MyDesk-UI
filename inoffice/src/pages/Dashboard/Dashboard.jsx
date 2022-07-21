@@ -320,7 +320,7 @@ const Dashboard = () => {
             }}
             className={styles.reviewBtn}
           >
-            Check Review
+            Show Review
           </Button>
         );
       },

@@ -41,8 +41,7 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
     compRoles[0] !== jwt(token).roles[0] ||
     compRoles[0] !== jwt(token).roles[1]
   ) {
-    openNotification("You are not signed in.");
-    return <Navigate to="/" />;
+    return <Navigate to="/denied" />;
   }
   return <Navigate to="/" />;
 };

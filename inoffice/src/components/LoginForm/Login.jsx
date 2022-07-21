@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   const sendData = async (userInfo) => {
-    const token = localStorage.getItem("msal.idtoken");
+    const token = jwt(localStorage.getItem("msal.idtoken"));
 
     if (!postedOnce) {
       setPostedOnce(true);
@@ -44,7 +44,13 @@ const Login = () => {
           navigate("/employee/home");
         })
         .catch((err) => {
-          openError("Error while loging in");
+          if (token.roles.length === 0) {
+            openError(
+              "You do not posses the required roles to access this application"
+            );
+          } else {
+            openError("Error while loging in");
+          }
         });
     }
 

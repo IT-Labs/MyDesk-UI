@@ -18,7 +18,7 @@ export const findAvailable = ({ startDate, endDate }, start, end) => {
 export const checkAvailable = (res, start, end) => {
   let isAvailable = true;
 
-  if (res.length > 0 && start && end) {
+  if (start && end) {
     try {
       res.forEach((item) => {
         const availability = findAvailable(item, start, end);
