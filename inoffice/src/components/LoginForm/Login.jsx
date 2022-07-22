@@ -69,7 +69,7 @@ const Login = () => {
         <MicrosoftLogin
           clientId={process.env.REACT_APP_CLIENT_ID}
           authCallback={loginHandler}
-          tenantUrl={`${process.env.REACT_APP_TENANT_URL}`}
+          tenantUrl={`https://login.microsoftonline.com/{${process.env.REACT_APP_TENANT_ID}}`}
           redirectUri={url}
           forceRedirectStrategy={true}
           withUserData={true}

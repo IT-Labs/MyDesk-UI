@@ -53,7 +53,6 @@ const Home = () => {
   const [singleMonitor, setSingleMonitor] = useState(false);
   const [dualMonitor, setDualMonitor] = useState(false);
   const [nearWindow, setNearWindow] = useState(false);
-  const [dropdownVisible, setDropDownVisible] = useState(false);
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
@@ -266,6 +265,7 @@ const Home = () => {
                     endDate={endDateRes}
                     dates={dates}
                     clearDate={clearDate}
+                    isHome={true}
                   />
                 </div>
               </div>
@@ -347,9 +347,6 @@ const Home = () => {
                         </Menu.Item>
                       </Menu>
                     }
-                    // trigger={["click"]}
-                    visible={dropdownVisible}
-                    onClick={() => setDropDownVisible(!dropdownVisible)}
                   >
                     <Button className={styles.inputSize}>
                       <Space

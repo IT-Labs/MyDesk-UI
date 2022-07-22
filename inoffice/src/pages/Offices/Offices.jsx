@@ -74,7 +74,11 @@ const Offices = () => {
                 }}
               >
                 <div style={{ overflowX: "scroll" }}>
-                  <Input style={{ width: 200 }} onChange={handleChange} />
+                  <Input
+                    style={{ width: 200 }}
+                    onChange={handleChange}
+                    placeholder="Search Office"
+                  />
                   <List
                     bordered
                     style={{ minWidth: 400 }}

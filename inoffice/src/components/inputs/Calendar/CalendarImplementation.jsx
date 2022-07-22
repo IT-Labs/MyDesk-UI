@@ -33,11 +33,23 @@ const CalendarImplementation = (props) => {
     dispatch(setEnd(null));
   }, []);
 
-  return (
+  return props.isHome ? (
     <div>
       <Space direction="vertical" size={12}>
         <RangePicker
           disabledDate={disabledDate}
+          format={dateFormat}
+          onChange={changedates}
+          value={[props.dates[0], props.dates[1]]}
+          onClick={props.clearDate}
+          style={{ width: "100%" }}
+        />
+      </Space>
+    </div>
+  ) : (
+    <div>
+      <Space direction="vertical" size={12}>
+        <RangePicker
           format={dateFormat}
           onChange={changedates}
           value={[props.dates[0], props.dates[1]]}

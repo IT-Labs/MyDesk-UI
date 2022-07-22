@@ -1,70 +1,25 @@
-# Getting Started with Create React App
+# InOffice Front End
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Summary
 
-## Available Scripts
+InOffice is a desk reservation application designed to help users reserve any desk of their choice ahead of time so there aren't any clashes between collegues.The idea for the inOffice application has arisen in the period of pandemic crisis. This hybrid work model’s aim was to modify or re-design the office work environment to promote social distancing in compliance with COVID-19 pandemic protocols. But this type of working model will be more indispensable even if the pandemic ends. One of the main objectives is to maintain less office space that leads to company cost optimization. No more idle working desks or conference rooms.
 
-In the project directory, you can run:
+## Accessing the Front end
 
-### `npm start`
+The way to access the front is by setting up the backend with .NET, creating an Azure Enterprise application. And placing the neccessery information in a .env file.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **REACT_APP_API_URL**: The URL for the api that we need for all of our requests.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **REACT_APP_TENANT_ID and REACT_APP_CLIENT_ID**: The tentant id and are what we get from our Azure enterprise details to access the Microsoft SSO and have access to the Graph API
 
-### `npm test`
+- **REACT_APP_URL**: The most basic of all, where the application is currently being hosted. It can either be localhost:3000 per default or if you have a personal domain setup and are hosting it, although I will recommend you have a .env.production and .env.development just so there are no errors via development and production environments.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Make sure your uses have the neccessary roles so they have access to the application. You setup those roles in the Azure Portal
 
-### `npm run build`
+## Start
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To start the application, make sure you have Node.js and npm installed on your system, then type in the terminal **npm install** and then **npm start**.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Component documentation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The way we can access the component documentation is with Storybook, which isolates our components so we can test them and add comments on what that specific component does. To run, just type in **npm run storybook**
