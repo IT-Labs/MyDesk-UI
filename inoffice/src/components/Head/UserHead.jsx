@@ -40,7 +40,7 @@ const UserHead = (props) => {
               />
             )}
             <NavLink className={styles.link} to="/employee/reservations">
-              {media.matches ? "Dashboard" : user.name}
+              {media.matches ? "Dashboard" : user?.name}
             </NavLink>
             <Tooltip title="Log out">
               <LogoutOutlined
