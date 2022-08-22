@@ -148,7 +148,7 @@ const PastReservations = ({ officeName }) => {
         <Table
           columns={columns}
           dataSource={pastReservations.filter((item) =>
-            item.officeName.includes(officeSelect)
+            item.officeName?.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}

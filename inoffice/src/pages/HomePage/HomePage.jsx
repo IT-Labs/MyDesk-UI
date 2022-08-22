@@ -148,12 +148,12 @@ const Home = () => {
         openNotification("You have successfully reserved a desk.");
       })
       .catch((error) => {
+        openError(error.response.data);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
         setShowReserveForCoworker(false);
-        openError(error.response.data);
       });
   };
 

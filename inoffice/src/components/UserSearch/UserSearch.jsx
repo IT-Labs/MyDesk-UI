@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchEmployees } from "../../utils/fetchEmployees";
 import api from "../../helper/api";
 import { useDispatch, useSelector } from "react-redux";
+import styles from "./UserSearch.module.scss";
 
 import moment from "moment";
 
@@ -121,11 +122,11 @@ const UserSearch = () => {
         defaultValue={"Search for user"}
         showSearch
         value={employeeName}
-        onChange={(e) => setEmployeeName(e)}
+        onSearch={(e) => setEmployeeName(e)}
         style={{ width: 220 }}
         className="userSearchSelect"
         onSelect={findEmployee}
-        suffixIcon={employeeName.length > 0 ? <></> : <SearchOutlined />}
+        suffixIcon={<PlaceholderText name={employeeName} />}
       >
         {employees ? (
           employees.map((item) => (
@@ -167,10 +168,19 @@ const UserSearch = () => {
               item.employee === `${employee.firstName} ${employee.lastName}`
           )}
           style={{ height: 300, maxHeight: 300 }}
-          scroll={{ y: 300 }}
+          scroll={{ y: 250 }}
         />
       </Modal>
     </>
+  );
+};
+
+const PlaceholderText = ({ name }) => {
+  return name.length > 0 ? null : (
+    <div className={styles.flexDiv}>
+      <SearchOutlined />
+      <p className={styles.textStyle}>Search by user</p>
+    </div>
   );
 };
 

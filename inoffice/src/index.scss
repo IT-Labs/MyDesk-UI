@@ -369,6 +369,16 @@ td {
   border: 1px solid grey !important;
 }
 
+.ant-btn-primary {
+  background: $teal;
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background-color: $tealHover;
+  border: none;
+}
+
 html {
   --antd-wave-shadow-color: $teal !important;
 }

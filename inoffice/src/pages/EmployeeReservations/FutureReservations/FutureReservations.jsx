@@ -110,7 +110,7 @@ const FutureReservations = () => {
         <Table
           columns={columns}
           dataSource={futureReservations.filter(({ officeName }) =>
-            officeName.includes(officeSelect)
+            officeName?.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}
