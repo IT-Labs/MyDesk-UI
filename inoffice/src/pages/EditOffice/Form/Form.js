@@ -30,7 +30,7 @@ const AddOffice = (props) => {
       e.officeLocation.length === 0
     ) {
       openError(
-        "The office name and office location should be more between 0 and 25 characters each."
+        "The office name and office location should be between 0 and 25 characters each."
       );
       return;
     }
