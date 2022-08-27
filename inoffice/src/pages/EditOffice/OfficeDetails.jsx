@@ -92,8 +92,6 @@ const OfficeDetails = ({ props }) => {
       });
   };
 
-  console.log(desks);
-
   const check = (id, category) => {
     const newItem = desks.map((item) => {
       if (item.id === id) {

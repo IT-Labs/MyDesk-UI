@@ -52,8 +52,8 @@ const ReservationList = () => {
       avatar: image,
       employee: `${item.employee.firstName} ${item.employee.lastName}`,
       office: item.officeName ? item.officeName : "Undefined office",
-      entity: item.indexForOffice
-        ? `Desk [${item.indexForOffice}]`
+      entity: item.desk.indexForOffice
+        ? `Desk [${item.desk.indexForOffice}]`
         : "Undefined Desk",
       key: item.id,
       startDate: Date.parse(start),
@@ -105,7 +105,7 @@ const ReservationList = () => {
         sortResStruct(data.reservations);
       })
       .catch((err) => {
-        // console.log(err);
+        console.log(err);
       });
     api.get("admin/offices").then(({ data }) => {
       let sorted = data.sort((a, b) => {

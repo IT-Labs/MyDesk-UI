@@ -17,7 +17,7 @@ export const sortByOldest = (reservations) => {
         date: `${moment(item.startDate).format("DD/MM/YYYY")} - ${moment(
           item.endDate
         ).format("DD/MM/YYYY")}`,
-        entity: `Desk [${item.deskIndex}]`,
+        entity: `Desk [${item.desk.indexForOffice}]`,
       };
     });
 };

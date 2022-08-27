@@ -30,14 +30,15 @@ const UserSearch = () => {
   const sortResStruct = (res) => {
     const results = res
       .map((item) => {
+        debugger;
         const start = new Date(item.startDate);
         const end = new Date(item.endDate);
         return {
           ...item,
           employee: `${item.employee.firstName} ${item.employee.lastName}`,
           office: item.officeName ? item.officeName : "Undefined office",
-          entity: item.indexForOffice
-            ? `Desk [${item.indexForOffice}]`
+          entity: item.desk.indexForOffice
+            ? `Desk [${item.desk.indexForOffice}]`
             : "Undefined Desk",
           key: item.id,
           startDate: Date.parse(item.startDate),
@@ -84,6 +85,7 @@ const UserSearch = () => {
     api
       .get("employee/reservations/all")
       .then(({ data }) => {
+        debugger;
         sortResStruct(data.reservations);
         console.log(data);
       })
@@ -176,12 +178,15 @@ const UserSearch = () => {
 };
 
 const PlaceholderText = ({ name }) => {
-  return name.length > 0 ? null : (
-    <div className={styles.flexDiv}>
-      <SearchOutlined />
-      <p className={styles.textStyle}>Search by user</p>
-    </div>
-  );
+  return name.length > 0
+    ? null
+    : 9 /
+      (
+        <div className={styles.flexDiv}>
+          <SearchOutlined size="80px" />
+          <p className={styles.textStyle}>Search by user</p>
+        </div>
+      );
 };
 
 export default UserSearch;
