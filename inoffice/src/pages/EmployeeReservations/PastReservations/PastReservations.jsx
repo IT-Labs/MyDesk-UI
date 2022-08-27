@@ -63,7 +63,7 @@ const PastReservations = ({ officeName }) => {
 
   const showReview = async (item) => {
     await api
-      .get("employee/review/" + item.reviewId)
+      .get("employee/review/" + item.reviews[0].id)
       .then((response) => {
         setWrittenReview(response.data);
       })
@@ -129,7 +129,7 @@ const PastReservations = ({ officeName }) => {
       key: 4,
       align: "center",
       render: (useless1, data, useless2) => {
-        return !data.reviewId ? (
+        return !data.reviews.length ? (
           <div onClick={() => visibility(data)}>
             <Button className={styles.btn}>Write review</Button>
           </div>
