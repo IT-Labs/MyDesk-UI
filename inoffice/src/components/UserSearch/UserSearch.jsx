@@ -30,7 +30,6 @@ const UserSearch = () => {
   const sortResStruct = (res) => {
     const results = res
       .map((item) => {
-        debugger;
         const start = new Date(item.startDate);
         const end = new Date(item.endDate);
         return {
@@ -85,9 +84,7 @@ const UserSearch = () => {
     api
       .get("employee/reservations/all")
       .then(({ data }) => {
-        debugger;
         sortResStruct(data.reservations);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);

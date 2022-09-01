@@ -16,9 +16,6 @@ const UserHead = (props) => {
   const media = window.matchMedia("(max-width: 820px)");
   const user = useSelector((state) => state.user.decodedUser);
   const navigate = useNavigate();
-  // const [avatar, setAvatar] = useState(placeholderAvatar);
-
-  console.log(user);
 
   return (
     <Header className={styles.header}>
@@ -49,7 +46,7 @@ const UserHead = (props) => {
                 className={`${styles.link} ${styles.logoutBtn}`}
                 to="/"
                 onClick={() => {
-                  localStorage.removeItem("msal.idtoken");
+                  localStorage.clear();
                   navigate("/");
                 }}
               >
