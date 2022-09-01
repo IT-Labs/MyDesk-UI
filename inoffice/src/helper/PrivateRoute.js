@@ -29,7 +29,8 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
 
   if (
     compRoles[0] === jwt(token).roles[0] ||
-    compRoles[0] === jwt(token).roles[1]
+    compRoles[0] === jwt(token).roles[1] ||
+    compRoles[0] === jwt(token).roles
   ) {
     isAuthenticated = true;
   }
@@ -39,8 +40,10 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
   }
   if (
     compRoles[0] !== jwt(token).roles[0] ||
-    compRoles[0] !== jwt(token).roles[1]
+    compRoles[0] !== jwt(token).roles[1] ||
+    compRoles[0] !== jwt(token).roles
   ) {
+    localStorage.clear();
     return <Navigate to="/denied" />;
   }
   return <Navigate to="/" />;

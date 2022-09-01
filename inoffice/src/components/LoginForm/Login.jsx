@@ -9,14 +9,24 @@ import jwt from "jwt-decode";
 import styles from "./Login.module.scss";
 import { useState } from "react";
 import logo from "../../assets/Microsoft logo.png";
-import { Button } from "antd";
+import { Button, Checkbox, Form, Input, Alert } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { openError } from "../notification/Notification";
+import RegisterUser from "../RegisterUser/RegisterUser";
+import { encode as base64_encode } from "base-64";
 
 const Login = () => {
   let navigate = useNavigate();
-  const [postedOnce, setPostedOnce] = useState(false);
-
   const url = process.env.REACT_APP_URL;
+  const [postedOnce, setPostedOnce] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [registerForm, setRegisterForm] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
+
+  useEffect(() => {
+    setErrorMsg(false);
+  }, [email, password]);
 
   const loginHandler = async (err, data, msal) => {
     localStorage.setItem("accessToken", data.accessToken);
@@ -57,15 +67,100 @@ const Login = () => {
     return;
   };
 
-  return (
+  const handleSubmit = async () => {
+    let encodedPassword = base64_encode(password);
+    const body = {
+      email: email,
+      password: encodedPassword,
+    };
+
+    api
+      .post("/token", body)
+      .then((res) => {
+        let token = res.data;
+        const accessTocken = token.replace("Bearer ", "");
+        localStorage.setItem("accessToken", accessTocken);
+        localStorage.setItem("msal.idtoken", accessTocken);
+        navigate("/employee/home");
+      })
+      .catch((err) => {
+        setErrorMsg(true);
+        console.log(err);
+      });
+  };
+
+  const handleShowRegister = (showRegisterPage) => {
+    setRegisterForm(showRegisterPage);
+  };
+
+  return !registerForm ? (
     <div className={styles.bg}>
       <div className={styles.login}>
         <div className={styles.title}>
           <div className={styles.logo}></div>
-          <p style={{ fontSize: "1rem" }}>
-            Welcome back! Please log in to continue
-          </p>
+          <p>Welcome back! Please log in to continue</p>
         </div>
+        <div>
+          <Form className={styles.form} onFinish={handleSubmit}>
+            <Form.Item name="login">
+              <Input
+                className={styles.input}
+                placeholder="Email"
+                type="TextArea"
+                defaultValue=""
+                autoComplete="false"
+                required
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Input.Password
+                className={styles.input}
+                prefix={<LockOutlined />}
+                placeholder="Password"
+                defaultValue=""
+                required
+                autoComplete="false"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errorMsg ? (
+                <Alert
+                  message="The password or email that you've entered is incorrect. Please try again."
+                  type="error"
+                  className={`${styles.alert} ${styles.input}`}
+                />
+              ) : null}
+              <div className={`${styles.rememberwrap}`}>
+                <Checkbox>Remember me</Checkbox>
+                <Button
+                  className={`${styles.register}`}
+                  type="link"
+                  size="small"
+                  onClick={() => handleShowRegister(true)}
+                >
+                  Register
+                </Button>
+              </div>
+              <Button
+                htmlType="submit"
+                className={`${styles.buttons} ${styles.tealBtn}`}
+                block
+                size="large"
+              >
+                Log In
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+
+        <p
+          style={{
+            fontSize: "1rem",
+            marginTop: "-40px",
+            marginBottom: "-22px",
+          }}
+        >
+          Or Log in with your Microsoft account
+        </p>
         <MicrosoftLogin
           clientId={process.env.REACT_APP_CLIENT_ID}
           authCallback={loginHandler}
@@ -88,6 +183,8 @@ const Login = () => {
         </MicrosoftLogin>
       </div>
     </div>
+  ) : (
+    <RegisterUser handleShowRegister={handleShowRegister}></RegisterUser>
   );
 };
 export default Login;
