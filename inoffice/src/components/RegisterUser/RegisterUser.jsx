@@ -9,6 +9,10 @@ import {
   MailOutlined,
   ShoppingOutlined,
 } from "@ant-design/icons";
+import {
+  openNotification,
+  openError,
+} from "../../components/notification/Notification";
 
 const RegisterUser = (props) => {
   const showRegisterPage = props.handleShowRegister;
@@ -28,7 +32,23 @@ const RegisterUser = (props) => {
     return confirmPassword !== password ?? true;
   };
 
+  const passwordValidation = () => {
+    return (
+      ((password.length < 8 && password.length >= 20) ||
+        password.match(/[A-Z]/) ||
+        password.match(/[a-z]/) ||
+        password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) ??
+      true
+    );
+  };
+
   const handleRegister = async () => {
+    if (passwordValidation()) {
+      openError(
+        "Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number."
+      );
+      return;
+    }
     if (checkPassword()) {
       setErrorMsg(true);
       return;
@@ -46,6 +66,7 @@ const RegisterUser = (props) => {
     api
       .post("/register", body)
       .then(() => {
+        openNotification("Registration successful. Now you can log in.");
         showRegisterPage(false);
       })
       .catch((err) => {
