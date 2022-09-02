@@ -82,7 +82,7 @@ const OfficeDetails = ({ props }) => {
       )
       .then((res) => {
         getDesks();
-        openNotification("You have succesfully updated the entities");
+        openNotification("You have successfully updated the entities");
         setIsLoading(false);
       })
       .catch((error) => {

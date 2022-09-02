@@ -199,23 +199,22 @@ const Home = () => {
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
-        openNotification("You have successfully reserved for your coworker");
+        openNotification("You have successfully reserved for your co-worker");
         setShowReserveForCoworker(false);
       })
       .catch((error) => {
-        console.log(error.response.data);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
         setShowReserveForCoworker(false);
-        openError("Error while reserving desk");
+        openError(error.response.data);
       });
   };
 
   const checkTypeOfReservation = () => {
     if (Object.keys(selectedCoworker) === 0 && forCoworker) {
-      openError("Please select your coworker if you have the box checked");
+      openError("Please select your co-worker if you have the box checked");
       return;
     }
     if (forCoworker) {
@@ -467,7 +466,7 @@ const Home = () => {
                 </InfiniteScroll>
               </Modal>
               <Modal
-                title="Reserve desk for coworker"
+                title="Reserve desk for co-worker"
                 visible={showReserveForCoworker}
                 onCancel={() => setShowReserveForCoworker(false)}
                 onOk={() => reserveForCoworker(selectedCoworker)}
