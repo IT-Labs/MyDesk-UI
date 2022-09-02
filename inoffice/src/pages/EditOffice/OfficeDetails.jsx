@@ -163,6 +163,7 @@ const OfficeDetails = ({ props }) => {
     api
       .post("admin/office-entities/" + officeId, data)
       .then((res) => {
+        openNotification("You have successfully added new entities");
         getDesks();
       })
       .catch((err) => {
