@@ -11,8 +11,10 @@ import Loading from "../../components/Loading/Loading";
 import Title from "./Title";
 import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
 import { getAllPastReservations } from "../../utils/getAllPastReservations";
-
-import { openNotification } from "../../components/notification/Notification";
+import {
+  openError,
+  openNotification,
+} from "../../components/notification/Notification";
 
 import placeholderAvatar from "../../assets/avatar.png";
 
@@ -102,7 +104,7 @@ const ReservationList = () => {
     api
       .get("employee/reservations/all")
       .then(({ data }) => {
-        sortResStruct(data.reservations);
+        sortResStruct(data.values);
       })
       .catch((err) => {
         console.log(err);
@@ -261,6 +263,7 @@ const ReservationList = () => {
       })
       .catch((error) => {
         console.error(error);
+        openError("Something went wrong");
       });
   };
 

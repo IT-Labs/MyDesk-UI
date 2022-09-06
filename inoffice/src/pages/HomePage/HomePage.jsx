@@ -145,7 +145,7 @@ const Home = () => {
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
-        openNotification("You have successfully reserved for your co-worker.");
+        openNotification("You have successfully reserved a desk.");
       })
       .catch((error) => {
         openError(error.response.data);

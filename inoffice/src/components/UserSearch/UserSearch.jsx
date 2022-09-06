@@ -84,7 +84,7 @@ const UserSearch = () => {
     api
       .get("employee/reservations/all")
       .then(({ data }) => {
-        sortResStruct(data.reservations);
+        sortResStruct(data.values);
       })
       .catch((err) => {
         console.log(err);
