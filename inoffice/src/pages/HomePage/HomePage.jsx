@@ -115,9 +115,9 @@ const Home = () => {
   const showReviewsForSelectedCard = () => {
     setIsModalVisible(true);
     api
-      .get(`entity/reviews/${selectedCardId.id}`)
+      .get(`entity/reviews/${selectedCardId.indexForOffice}`)
       .then(({ data }) => {
-        setReviews(data.allReviews);
+        setReviews(data);
       })
       .catch(() => {
         setReviews(["There were no available reviews"]);
@@ -145,7 +145,7 @@ const Home = () => {
         setSelectedCard([]);
         setStartDate([]);
         setEndDate([]);
-        openNotification("You have successfully reserved a desk.");
+        openNotification("You have successfully reserved for your co-worker.");
       })
       .catch((error) => {
         openError(error.response.data);
@@ -168,7 +168,7 @@ const Home = () => {
       deskId: selectedCardId.id,
       startDate: startDateRes,
       endDate: endDateRes,
-      coworkerMail: user.preferred_username,
+      employeeEmail: user.preferred_username,
     };
 
     sendReservation(data);
@@ -185,7 +185,7 @@ const Home = () => {
     const data = {
       startDate: startDateRes,
       endDate: endDateRes,
-      coworkerMail: selectedCoworker.email,
+      employeeEmail: selectedCoworker.email,
       deskId: selectedCardId.id,
     };
     const config = {
@@ -461,7 +461,9 @@ const Home = () => {
                 <InfiniteScroll className={styles.reviewModal} dataLength={3}>
                   <ul>
                     {reviews &&
-                      reviews.map((item, id) => <li key={id}>{item}</li>)}
+                      reviews.map(({ id, reviews }) => (
+                        <li key={id}>{reviews}</li>
+                      ))}
                   </ul>
                 </InfiniteScroll>
               </Modal>

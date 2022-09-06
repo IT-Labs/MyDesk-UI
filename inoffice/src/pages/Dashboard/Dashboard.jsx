@@ -253,8 +253,8 @@ const Dashboard = () => {
           "Access-Control-Allow-Credentials": true,
         },
       })
-      .then(({ data }, id) => {
-        const better = data.listOfReviews.map((item, id) => {
+      .then(({ data }) => {
+        const better = data.map((item, id) => {
           return {
             ...item,
             reviewOutput: item.reviewOutput ? (
@@ -267,7 +267,7 @@ const Dashboard = () => {
               <MehOutlined className={styles.emoji} />
             ),
             review:
-              item.review.length > 0 ? item.review : "This review is blank",
+              item.reviews.length > 0 ? item.reviews : "This review is blank",
             key: id,
           };
         });
