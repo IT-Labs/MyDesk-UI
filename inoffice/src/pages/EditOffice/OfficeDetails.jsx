@@ -25,7 +25,7 @@ const OfficeDetails = ({ props }) => {
     api
       .get("admin/office-desks/" + officeId)
       .then((res) => {
-        setDesks(res.data.deskList);
+        setDesks(res.data);
         setIsLoading(false);
       })
       .catch((error) => {

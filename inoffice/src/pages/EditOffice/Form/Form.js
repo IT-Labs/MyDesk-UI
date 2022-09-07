@@ -35,11 +35,11 @@ const AddOffice = (props) => {
       return;
     }
     const data = {
-      officeName:
+      name:
         e.officeName.replace(/\s+/, "-") +
         " " +
         e.officeLocation.replace(/\s+/, "-"),
-      officePlan: e.officePlan,
+      officeImage: e.officePlan,
     };
 
     api.put("admin/office/" + officeId, data).then((res) => {

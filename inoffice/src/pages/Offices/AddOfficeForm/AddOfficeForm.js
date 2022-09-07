@@ -11,10 +11,10 @@ const AddOfficeForm = () => {
     const location = e.location.replace(/\s+/, "-");
     console.log(name, location);
     const data = {
-      officeName: name + " " + location,
+      name: name + " " + location,
     };
     const office = offices.find(
-      (item) => item.name.toLowerCase() === data.officeName.toLowerCase()
+      (item) => item.name.toLowerCase() === data.name.toLowerCase()
     );
 
     try {
