@@ -1,13 +1,10 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Input, Modal, Button, Table } from "antd";
-
 import api from "../../../helper/api";
 import { useState, useEffect } from "react";
-
 import Loading from "../../../components/Loading/Loading";
 import styles from "../Reservation.module.scss";
-import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openError,
@@ -65,7 +62,7 @@ const PastReservations = ({ officeName }) => {
     await api
       .get("employee/review/" + item.reviews[0].id)
       .then((response) => {
-        setWrittenReview(response.data);
+        setWrittenReview(response.data.reviews);
       })
       .catch((error) => {
         console.error("Error message");
@@ -75,13 +72,13 @@ const PastReservations = ({ officeName }) => {
 
   const writeReview = async () => {
     const data = {
-      reservationid: resid,
-      review: review,
+      reservation: { id: resid },
+      reviews: review,
     };
     setLoading(true);
     setBtnDisabled(true);
 
-    if (data.review.length < 6 || data.review.length > 200) {
+    if (data.reviews.length < 6 || data.reviews.length > 200) {
       openError("Please write a review with more than 6 and less than 200");
       setLoading(false);
       setBtnDisabled(false);
