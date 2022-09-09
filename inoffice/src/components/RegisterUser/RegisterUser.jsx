@@ -18,7 +18,7 @@ const RegisterUser = (props) => {
   const showRegisterPage = props.handleShowRegister;
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [surname, setSurname] = useState("");
+  const [lastName, setLastName] = useState("");
   const [jobTitle, setJobTitle] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,9 +35,9 @@ const RegisterUser = (props) => {
   const passwordValidation = () => {
     return (
       ((password.length < 8 && password.length >= 20) ||
-        password.match(/[A-Z]/) ||
-        password.match(/[a-z]/) ||
-        password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) ??
+        !password.match(/[A-Z]/) ||
+        !password.match(/[a-z]/) ||
+        !password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) ??
       true
     );
   };
@@ -58,10 +58,9 @@ const RegisterUser = (props) => {
     const body = {
       email: email,
       firstname: firstName,
-      surname: surname,
+      lastName: lastName,
       jobTitle: jobTitle,
       password: encodedPassword,
-      isAdmin: false,
     };
     api
       .post("/register", body)
@@ -70,6 +69,7 @@ const RegisterUser = (props) => {
         showRegisterPage(false);
       })
       .catch((err) => {
+        openError("Registration failed.");
         console.log(err);
       });
   };
@@ -109,7 +109,7 @@ const RegisterUser = (props) => {
                 required
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 defaultValue=""
-                onChange={(e) => setSurname(e.target.value)}
+                onChange={(e) => setLastName(e.target.value)}
               />
               <Input
                 className={styles.input}
