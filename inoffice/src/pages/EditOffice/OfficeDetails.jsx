@@ -71,10 +71,10 @@ const OfficeDetails = ({ props }) => {
       Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
       "Content-Type": "application/json",
     };
-    console.log(data);
+
     api
       .put(
-        "admin/office-entities",
+        "admin/office-desks",
         {
           listOfDesksToUpdate: [...properlySortedData],
         },
@@ -147,21 +147,21 @@ const OfficeDetails = ({ props }) => {
   };
 
   const handleSubmit = (e) => {
-    if (parseInt(e.numberOfDesks) < 1 || parseInt(e.numberOfDesks) > 500) {
+    const numberOfDesk = parseInt(e.numberOfDesks);
+    if (numberOfDesk < 1 || numberOfDesk > 500) {
       openError("You can only add a number between 1 and 500");
       return;
     }
     const data = {
-      numberOfDesks: e.numberOfDesks,
+      numberOfDesks: numberOfDesk,
     };
-    const allDesks = parseInt(e.numberOfDesks) + parseInt(desks.length);
-    console.log(allDesks);
+    const allDesks = numberOfDesk + parseInt(desks.length);
     if (allDesks > 500) {
       openError("You cannot have more than 500 desks active");
       return;
     }
     api
-      .post("admin/office-entities/" + officeId, data)
+      .post("admin/office-desks/" + officeId, data)
       .then((res) => {
         openNotification("You have successfully added new entities");
         getDesks();
@@ -171,20 +171,15 @@ const OfficeDetails = ({ props }) => {
       });
   };
 
-  const deleteNotification = (target) => {
-    const data = {
-      idOfEntity: target[0],
-      typeOfEntity: target[1],
-    };
-
+  const deleteNotification = (deskId) => {
     api
-      .delete("admin/entity/", { data: data })
-      .then((response) => {
+      .delete("admin/office-desks/" + deskId)
+      .then(() => {
         getDesks();
         openNotification("You successfully deleted the entity");
       })
-      .catch((error) => {
-        openError("Error while adding entry");
+      .catch(() => {
+        openError("Error while deleting desk");
       });
   };
 
@@ -276,7 +271,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Popconfirm
             title="Are you sure to delete this desk?"
-            onConfirm={() => deleteNotification([item.id, "D"])}
+            onConfirm={() => deleteNotification(item.id)}
             okText="Yes"
             cancelText="No"
             shape="round"
