@@ -2,7 +2,10 @@ import React from "react";
 import api from "../../../helper/api";
 import { Form, Input, Button } from "antd";
 import { withRouter } from "../../../helper/withRouterHelper";
-import { openError } from "../../../components/notification/Notification";
+import {
+  openError,
+  openNotification,
+} from "../../../components/notification/Notification";
 import { useNavigate } from "react-router-dom";
 
 const AddOffice = (props) => {
@@ -42,9 +45,17 @@ const AddOffice = (props) => {
       officeImage: e.officePlan,
     };
 
-    api.put("admin/office/" + officeId, data).then((res) => {
-      window.location.reload();
-    });
+    api
+      .put("admin/office/" + officeId, data)
+      .then(() => {
+        openNotification(
+          "You have successfully updated office plan/information"
+        );
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div>
