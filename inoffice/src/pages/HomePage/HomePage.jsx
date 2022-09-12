@@ -98,7 +98,7 @@ const Home = () => {
   };
 
   async function changeofficebranch(value) {
-    setDefValue("Reserve for Coworker");
+    setDefValue("Reserve for Co-worker");
     setofficeid(value);
     setForCoworker(false);
   }
