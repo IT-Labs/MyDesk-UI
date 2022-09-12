@@ -14,13 +14,12 @@ const CalendarImplementation = (props) => {
   const dateFormat = "DD/MM/YYYY";
 
   const disabledDate = (current) => {
-    return current && current < moment().endOf("day");
+    return current && current < moment().startOf("day");
   };
 
   const changedates = (range) => {
     if (range) {
       const startdate = range[0].format("DD-MM-YYYY");
-      // console.log();
       const enddate = range[1].format("DD-MM-YYYY");
       dispatch(setStart(moment(range[0]).toISOString()));
       dispatch(setEnd(moment(range[1]).toISOString()));
