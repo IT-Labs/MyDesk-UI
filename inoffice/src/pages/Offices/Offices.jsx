@@ -28,7 +28,7 @@ const Offices = () => {
   const deleteFunc = (value) => {
     api.delete("admin/office/" + value).then(() => {
       dispatch(fetchOffices());
-      openNotification("Successfully deleted office");
+      openNotification("You have successfully deleted the selected office");
     });
   };
 
