@@ -1,7 +1,10 @@
 import React from "react";
 import api from "../../../helper/api";
 import { Form, Input, Button } from "antd";
-import { openError } from "../../../components/notification/Notification";
+import {
+  openError,
+  openNotification,
+} from "../../../components/notification/Notification";
 import { useSelector } from "react-redux";
 
 const AddOfficeForm = () => {
@@ -17,19 +20,26 @@ const AddOfficeForm = () => {
       (item) => item.name.toLowerCase() === data.name.toLowerCase()
     );
 
-    try {
-      if (office) {
-        throw "That office already exists";
-      }
-      if (e.name.length > 25 || e.location.length > 25)
-        // eslint-disable-next-line no-throw-literal
-        throw "You have exceeded the allowed 25 characters at one of the fields ";
-      api.post("admin/office", data).then((res) => {
-        window.location = "/admin/offices";
-      });
-    } catch (err) {
-      openError(err);
+    if (office) {
+      openError("That office already exists");
+      return;
     }
+    if (e.name.length > 25 || e.location.length > 25) {
+      openError(
+        "You have exceeded the allowed 25 characters at one of the fields"
+      );
+      return;
+    }
+
+    api
+      .post("admin/office", data)
+      .then((res) => {
+        openNotification("You have successfully added a new office");
+        window.location = "/admin/offices";
+      })
+      .catch((err) => {
+        openError(err.response.data);
+      });
   };
 
   return (
