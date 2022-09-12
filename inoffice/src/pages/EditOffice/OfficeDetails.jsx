@@ -265,8 +265,8 @@ const OfficeDetails = ({ props }) => {
           <Popconfirm
             title="Are you sure to delete this desk?"
             onConfirm={() => deleteNotification(item.id)}
-            okText="Yes"
-            cancelText="No"
+            okText="OK"
+            cancelText="Cancel"
             shape="round"
             style={{ padding: 0 }}
             placement="topRight"
