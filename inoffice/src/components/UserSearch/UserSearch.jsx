@@ -118,7 +118,6 @@ const UserSearch = () => {
   return (
     <>
       <Select
-        defaultValue={"Search for user"}
         showSearch
         value={employeeName}
         onSearch={(e) => setEmployeeName(e)}
@@ -175,15 +174,12 @@ const UserSearch = () => {
 };
 
 const PlaceholderText = ({ name }) => {
-  return name.length > 0
-    ? null
-    : 9 /
-      (
-        <div className={styles.flexDiv}>
-          <SearchOutlined size="80px" />
-          <p className={styles.textStyle}>Search by user</p>
-        </div>
-      );
+  return !name.length > 0 ? (
+    <div className={styles.flexDiv}>
+      <SearchOutlined style={{ fontSize: "16px" }} />
+      <p className={styles.textStyle}>Search by user</p>
+    </div>
+  ) : null;
 };
 
 export default UserSearch;
