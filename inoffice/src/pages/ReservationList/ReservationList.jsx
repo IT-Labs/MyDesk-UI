@@ -21,6 +21,7 @@ import placeholderAvatar from "../../assets/avatar.png";
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [filterInput, setFilterInput] = useState("");
+  const [excelSheet, setExcelSheet] = useState("Future Reservation List");
   const [initRes, setInitRes] = useState([]);
   const [visible, setVisible] = useState(false);
 
@@ -224,7 +225,7 @@ const ReservationList = () => {
     {
       title: "Date",
       dataIndex: "date",
-      key: 3,
+      key: 4,
       sorter: {
         compare: (a, b) => {
           const date1 = new Date(a.startDate).getTime();
@@ -282,6 +283,12 @@ const ReservationList = () => {
     };
   }, []);
 
+  const columnsForExcel = pastColumns.map(({ title, dataIndex, key }) => ({
+    title,
+    dataIndex,
+    key,
+  }));
+
   return (
     <Layout>
       <UserHeade />
@@ -290,15 +297,23 @@ const ReservationList = () => {
         <Content className={styles.content}>
           <div style={{ width: "80%" }}>
             <Card
-              title={<Title reservations={initRes} columns={pastColumns} />}
+              title={
+                <Title
+                  reservations={reservations}
+                  columns={columnsForExcel}
+                  sheet={excelSheet}
+                />
+              }
               className={styles.resList}
               tabList={tabList}
               onTabChange={(key) => {
                 setTabKey(key);
                 if (key === "past") {
                   sortPast(initRes);
+                  setExcelSheet("Past Reservation List");
                 } else {
                   sortFuture(initRes);
+                  setExcelSheet("Future Reservation List");
                 }
               }}
             >

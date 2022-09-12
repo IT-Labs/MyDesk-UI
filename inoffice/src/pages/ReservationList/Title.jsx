@@ -3,11 +3,11 @@ import { Excel } from "antd-table-saveas-excel";
 import { Button } from "antd";
 import styles from "./ReservationList.module.scss";
 
-const Title = ({ reservations, columns }) => {
+const Title = ({ reservations, columns, sheet }) => {
   const handleClick = () => {
     const excel = new Excel();
     excel
-      .addSheet("test")
+      .addSheet(sheet)
       .addColumns(columns)
       .addDataSource(reservations, {
         str2Percent: true,
