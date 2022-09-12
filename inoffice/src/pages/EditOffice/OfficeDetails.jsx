@@ -55,17 +55,16 @@ const OfficeDetails = ({ props }) => {
     setIsLoading(true);
     const properlySortedData = desks.map((item) => {
       return {
-        deskId: item.id,
-        unavailable: item.categories?.unavailable ? true : false,
-        singleMonitor: item.categories?.singleMonitor ? true : false,
-        dualMonitor: item.categories?.doubleMonitor ? true : false,
-        nearWindow: item.categories?.nearWindow ? true : false,
+        id: item.id,
+        category: {
+          id: item.id,
+          unavailable: item.categories?.unavailable ? true : false,
+          singleMonitor: item.categories?.singleMonitor ? true : false,
+          dualMonitor: item.categories?.doubleMonitor ? true : false,
+          nearWindow: item.categories?.nearWindow ? true : false,
+        },
       };
     });
-
-    const data = {
-      ListOfDesksToUpdate: [...properlySortedData],
-    };
 
     const config = {
       Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
@@ -73,20 +72,14 @@ const OfficeDetails = ({ props }) => {
     };
 
     api
-      .put(
-        "admin/office-desks",
-        {
-          listOfDesksToUpdate: [...properlySortedData],
-        },
-        config
-      )
+      .put("admin/office-desks", properlySortedData, config)
       .then((res) => {
         getDesks();
         openNotification("You have successfully updated the entities");
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error.response.data);
         setIsLoading(false);
         openError("It seems there was an error while saving");
       });
