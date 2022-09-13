@@ -241,8 +241,6 @@ const Dashboard = () => {
     },
   };
 
-  console.log(reviews);
-
   /* Fetching reviews from an API and then mapping over the data to create a new array of objects. */
   const fetchReviews = () => {
     api
@@ -420,7 +418,7 @@ const Dashboard = () => {
                     <Table
                       columns={colums}
                       dataSource={reviews}
-                      pagination={{ pageSize: 4, position: ["bottomRight"] }}
+                      pagination={{ pageSize: 3, position: ["bottomRight"] }}
                     />
                   ) : (
                     <div className={styles.noReviews}>
