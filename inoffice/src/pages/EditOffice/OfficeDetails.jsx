@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styles from "../EditOffice/Editoffice.module.scss";
-import { DeleteFilled } from "@ant-design/icons";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { DeleteFilled, QuestionCircleOutlined } from "@ant-design/icons";
 import { Checkbox, Form, Input, Button, Image, Popconfirm, Table } from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan/UploadOfficePlan";
@@ -340,20 +339,28 @@ const OfficeDetails = ({ props }) => {
                 />
               )}
             </div>
-            <button
+            <Popconfirm
+              title="Do you want to save this changes?"
+              onConfirm={() => save()}
+              okText="OK"
+              cancelText="Cancel"
               className={`${styles.uploadOfficePlan} greenBtn`}
-              onClick={save}
-              // block
-              style={{
-                width: 150,
-                marginLeft: 5,
-                marginTop: 10,
-                height: 30,
-                cursor: "pointer",
-              }}
+              shape="round"
+              placement="topRight"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              Save
-            </button>
+              <button
+                style={{
+                  width: 150,
+                  marginLeft: 5,
+                  marginTop: 10,
+                  height: 30,
+                  cursor: "pointer",
+                }}
+              >
+                Save
+              </button>
+            </Popconfirm>
           </div>
           <div className={styles.imgContainer}>
             {imageUrl ? (
