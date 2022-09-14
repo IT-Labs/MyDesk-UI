@@ -168,16 +168,18 @@ const OfficeDetails = ({ props }) => {
       .delete("admin/office-desks/" + deskId)
       .then(() => {
         getDesks();
-        openNotification("You successfully deleted the entity");
+        openNotification("You have successfully deleted the entity");
       })
       .catch(() => {
-        openError("Error while deleting desk");
+        openError(
+          "An error occurred while deleting the entity, please try again"
+        );
       });
   };
 
   const columns = [
     {
-      title: "All desks",
+      title: "Desk No.",
       dataIndex: "indexForOffice",
       key: 1,
       align: "center",
