@@ -172,16 +172,16 @@ const Dashboard = () => {
    * filter.
    * @returns the filtered data.
    */
-  const selectFilter = (office) => {
-    if (!office) {
+  const selectFilter = (officeId) => {
+    if (!officeId) {
       filterData(initialDesk);
       setReviews(initialReviews);
       return;
     }
 
-    const deskInfo = initialDesk.filter((item) => item.officeId === office);
+    const deskInfo = initialDesk.filter((item) => item.officeId === officeId);
     filterData(deskInfo);
-    const foundOffice = offices.find((item) => item.id === office);
+    const foundOffice = offices.find((item) => item.id === officeId);
 
     const reviewFilter = initialReviews.filter((item) =>
       item.officeName.includes(foundOffice.name)
@@ -340,10 +340,19 @@ const Dashboard = () => {
             </div>
             <div className={styles.inputs}>
               <Select
-                defaultValue="All offices"
+                showSearch
+                placeholder="All offices"
                 onChange={selectFilter}
                 className={styles.select}
-                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  optionA.children
+                    .toLowerCase()
+                    .localeCompare(optionB.children.toLowerCase())
+                }
               >
                 <Select.Option key={0} value={null}>
                   All offices
