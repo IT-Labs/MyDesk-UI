@@ -418,7 +418,7 @@ const Dashboard = () => {
                     <Table
                       columns={colums}
                       dataSource={reviews}
-                      pagination={{ pageSize: 3, position: ["bottomRight"] }}
+                      pagination={{ pageSize: 4, position: ["bottomRight"] }}
                     />
                   ) : (
                     <div className={styles.noReviews}>
