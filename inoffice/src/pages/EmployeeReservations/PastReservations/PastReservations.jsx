@@ -95,7 +95,9 @@ const PastReservations = ({ officeName }) => {
         openNotification("Thank you. Your review has been successfully saved.");
       })
       .catch((error) => {
-        openError("Review could not be written");
+        openError(
+          "An error occurred while saving your review, please try again"
+        );
         setLoading(false);
         setVisible(false);
         setBtnDisabled(false);

@@ -159,6 +159,9 @@ const OfficeDetails = ({ props }) => {
         getDesks();
       })
       .catch((err) => {
+        openError(
+          "An error occurred while updating the entities, please try again"
+        );
         console.log(err);
       });
   };

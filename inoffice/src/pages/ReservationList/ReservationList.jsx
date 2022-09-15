@@ -153,7 +153,7 @@ const ReservationList = () => {
         );
       },
     },
-    { title: "Office", dataIndex: "office", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Date",
@@ -179,7 +179,7 @@ const ReservationList = () => {
           <Button
             className={styles.cancelBtn}
             onClick={() => {
-              setToBeCancelled(data.id);
+              setToBeCancelled(data.desk?.reservations.id);
               setVisible(true);
             }}
           >
@@ -257,14 +257,16 @@ const ReservationList = () => {
     await api
       .delete("employee/reserve/" + id)
       .then((response) => {
-        openNotification("You have successfully canceled a reservation");
+        openNotification("You have successfully canceled the reservation");
         const filteredRes = initRes.filter((item) => item.key !== id);
         setInitRes(filteredRes);
         sortFuture(filteredRes);
       })
       .catch((error) => {
         console.error(error);
-        openError("Something went wrong");
+        openError(
+          "An error occurred while canceling the reservation, please try again"
+        );
       });
   };
 

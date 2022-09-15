@@ -61,7 +61,9 @@ const FutureReservations = () => {
         dispatch(setFutureReservation(filteredReservations));
       })
       .catch((error) => {
-        openError("Something went wrong");
+        openError(
+          "An error occurred while canceling the reservation, please try again"
+        );
       });
   };
 

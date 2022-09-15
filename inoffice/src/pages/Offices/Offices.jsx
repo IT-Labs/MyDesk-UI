@@ -12,7 +12,10 @@ import Title from "./Title";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOffices } from "../../redux/Offices/offices";
-import { openNotification } from "../../components/notification/Notification";
+import {
+  openError,
+  openNotification,
+} from "../../components/notification/Notification";
 
 const Offices = () => {
   const [inputFilter, setInputFilter] = useState("");
@@ -26,10 +29,18 @@ const Offices = () => {
   }, [dispatch]);
 
   const deleteFunc = (value) => {
-    api.delete("admin/office/" + value).then(() => {
-      dispatch(fetchOffices());
-      openNotification("You have successfully deleted the selected office");
-    });
+    api
+      .delete("admin/office/" + value)
+      .then(() => {
+        dispatch(fetchOffices());
+        openNotification("You have successfully deleted the selected office");
+      })
+      .catch((error) => {
+        openError(
+          "An error occurred while deleting the office, please try again"
+        );
+        console.log(error);
+      });
   };
 
   const handleChange = (e) => {
