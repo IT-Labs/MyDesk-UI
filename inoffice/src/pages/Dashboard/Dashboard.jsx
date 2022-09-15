@@ -45,8 +45,8 @@ const Dashboard = () => {
   const moment = extendMoment(Moment);
   const dispatch = useDispatch();
 
-  const [startDateRes, setStartDate] = useState(Moment());
-  const [endDateRes, setEndDate] = useState(Moment());
+  const [startDateRes, setStartDate] = useState([]);
+  const [endDateRes, setEndDate] = useState([]);
   const [dates, setDates] = useState([]);
 
   /**
@@ -190,6 +190,7 @@ const Dashboard = () => {
   };
 
   const clearDate = () => {
+    setReviews(initialReviews);
     dispatch(setStart(null));
     dispatch(setEnd(null));
     setDates([]);
@@ -280,7 +281,29 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const filterReviewByDate = (range) => {
+    setReviews(initialReviews);
+    let arrayOfReviews = [];
+    initialReviews.forEach((review) => {
+      if (review.reservation) {
+        const isAfterStartDate = moment(review.reservation.startDate).isAfter(
+          range[0]
+        );
+        const isBeforeEndDate = moment(review.reservation.endDate).isBefore(
+          range[1]
+        );
+
+        if (isAfterStartDate && isBeforeEndDate) {
+          arrayOfReviews.push(review);
+        }
+      }
+    });
+    setReviews([]);
+    setReviews(arrayOfReviews);
+  };
+
   const setDate = (startDate, endDate, range) => {
+    filterReviewByDate(range);
     setStartDate(startDate);
     setEndDate(endDate);
     setDates(range);
