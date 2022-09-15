@@ -12,8 +12,8 @@ import {
 } from "../../components/notification/Notification";
 
 const OfficeDetails = ({ props }) => {
-  const [officeName] = useState(props.params.name);
-  const [officeId] = useState(props.params.id);
+  const officeName = props.params.name;
+  const officeId = props.params.id;
   const [desks, setDesks] = useState([]);
 
   const [imageUrl, setImageUrl] = useState("");

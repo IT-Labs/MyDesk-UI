@@ -1,20 +1,18 @@
 import React from "react";
-import api from "../../../helper/api";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import api from "../../../helper/api";
 import { withRouter } from "../../../helper/withRouterHelper";
 import {
   openError,
   openNotification,
 } from "../../../components/notification/Notification";
-import { useNavigate } from "react-router-dom";
 
 const AddOffice = (props) => {
   const imageUrl = props.imageUrl;
   const officeName = props.params.name.split(" ")[0];
   const officeLocation = props.params.name.split(" ")[1];
-
   const officeId = props.params.id;
-
   const navigate = useNavigate();
 
   /**
@@ -48,13 +46,15 @@ const AddOffice = (props) => {
     api
       .put("admin/office/" + officeId, data)
       .then(() => {
+        navigate(`/admin/edit/${data.name}/${officeId}`);
         openNotification(
           "You have successfully updated office plan/information"
         );
-        window.location.reload();
+        props.hideModal();
       })
       .catch((error) => {
         console.log(error);
+        openError("An office with that name and location already exists");
       });
   };
   return (
