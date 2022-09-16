@@ -247,7 +247,7 @@ const Home = () => {
       <UserHead isHome={true} />
       <Layout className={styles.homeContent}>
         <Content className={styles.content}>
-          <Row align="center" className={styles.leftSideHome}>
+          <Row className={`${styles.leftSideHome} ${styles.contentRow} `}>
             <Col span={10} xl={11} lg={11} md={11}>
               <div className={styles.leftInputRow}>
                 <OfficeBranchSelection
@@ -387,7 +387,7 @@ const Home = () => {
                 <Select
                   value={defValue}
                   placement={"topRight"}
-                  className={styles.inputSize}
+                  className={`${styles.inputSize} ${styles.reserveForCoworker}`}
                   showSearch
                   onChange={setCoworker}
                   disabled={!forCoworker}

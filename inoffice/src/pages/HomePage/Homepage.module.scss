@@ -10,7 +10,7 @@
 }
 
 .leftInputs {
-  width: 18.75rem;
+  width: 17.75rem;
 }
 
 .pStyles {
@@ -21,6 +21,10 @@
 .inputSize {
   width: 12.5rem;
   scroll-behavior: auto;
+}
+
+.reserveForCoworker {
+  margin-left: 5px;
 }
 
 .menu {
@@ -34,12 +38,6 @@
   width: 100%;
   align-items: center;
   justify-content: center !important;
-}
-
-.cardsCol {
-  margin-right: 3%;
-  margin-left: 1%;
-  height: 500px;
 }
 
 .cardColColor {
@@ -135,15 +133,20 @@
 .rightInputRow {
   display: flex;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: space-between;
   margin-bottom: 2.9rem;
 }
 
 .leftInputRow {
   display: flex;
-  width: 90%;
-  justify-content: space-evenly;
+  width: 100%;
+  justify-content: space-between;
   margin-bottom: 1.4rem;
+}
+
+.contentRow {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 @media screen and (max-width: 820px) {
