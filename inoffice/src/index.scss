@@ -504,13 +504,19 @@ p {
   background: url("./assets/Group\ 190.svg") no-repeat;
   width: 20px;
   top: 5px;
-  left: -10px;
+  left: 10px;
   min-height: 70px;
   /* scale: calc(); */
 }
 
 .sideMenu {
   overflow-x: hidden;
+}
+
+.ant-list-empty-text {
+  position: relative !important;
+  height: 100vh !important;
+  top: 120px !important;
 }
 
 .ant-pagination-item-link {
