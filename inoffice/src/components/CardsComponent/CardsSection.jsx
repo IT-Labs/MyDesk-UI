@@ -153,24 +153,60 @@ const CardsSection = (props) => {
                     return true;
                   }
                 })
-                .filter(({ categories }) => {
+                .filter(({ category }) => {
                   if (
                     !props.categories.nearWindow &&
                     !props.categories.doubleMonitor &&
                     !props.categories.singleMonitor
                   )
                     return true;
-                  if (categories.nearWindow && props.categories.nearWindow) {
+                  if (
+                    category &&
+                    props.categories.nearWindow &&
+                    !props.categories.doubleMonitor &&
+                    !props.categories.singleMonitor &&
+                    category.nearWindow
+                  ) {
+                    console.log("nearWindow");
                     return true;
                   }
                   if (
-                    categories.doubleMonitor &&
-                    props.categories.doubleMonitor
-                  )
+                    category &&
+                    props.categories.nearWindow &&
+                    props.categories.doubleMonitor &&
+                    !props.categories.singleMonitor &&
+                    category.nearWindow &&
+                    category.doubleMonitor
+                  ) {
+                    console.log("doubleMonitor nearWindow");
                     return true;
+                  }
                   if (
-                    categories.singleMonitor &&
-                    props.categories.singleMonitor
+                    category &&
+                    props.categories.nearWindow &&
+                    !props.categories.doubleMonitor &&
+                    props.categories.singleMonitor &&
+                    category.nearWindow &&
+                    category.singleMonitor
+                  ) {
+                    console.log("singleMonitor nearWindow");
+                    return true;
+                  }
+                  if (
+                    category &&
+                    !props.categories.nearWindow &&
+                    !props.categories.doubleMonitor &&
+                    props.categories.singleMonitor &&
+                    category.singleMonitor
+                  ) {
+                    return true;
+                  }
+                  if (
+                    category &&
+                    !props.categories.nearWindow &&
+                    props.categories.doubleMonitor &&
+                    !props.categories.singleMonitor &&
+                    category.doubleMonitor
                   )
                     return true;
                 })}
@@ -200,7 +236,7 @@ const CardsSection = (props) => {
                       onClick={() => selectCard(item)}
                       bodyStyle={{
                         // backgroundColor: checkAvailable(item.reservation),
-                        background: item.categories?.unavailable
+                        background: item.category?.unavailable
                           ? "#c1c1c1"
                           : available
                           ? "#69e28d"
@@ -220,23 +256,21 @@ const CardsSection = (props) => {
                               autoAdjustOverflow={true}
                               overlayStyle={{ width: 120 }}
                               title={`${
-                                item.categories?.doubleMonitor
+                                item.category?.doubleMonitor
                                   ? "Dual monitors\n"
                                   : ""
                               }
                               ${
-                                item.categories?.singleMonitor
+                                item.category?.singleMonitor
                                   ? "Single monitor\n"
                                   : ""
                               } ${
-                                !item.categories?.singleMonitor &&
-                                !item.categories?.doubleMonitor
+                                !item.category?.singleMonitor &&
+                                !item.category?.doubleMonitor
                                   ? "No monitors\n"
                                   : ""
                               }${
-                                item.categories?.nearWindow
-                                  ? "Near window\n"
-                                  : ""
+                                item.category?.nearWindow ? "Near window\n" : ""
                               }`}
                             >
                               <InfoCircleOutlined
@@ -249,7 +283,7 @@ const CardsSection = (props) => {
                           <div className={styles.cardContentInformation}>
                             <div>
                               <p className={styles.basicText}>
-                                {item.categories?.unavailable
+                                {item.category?.unavailable
                                   ? "Unavailable"
                                   : item.reservations.length > 0 &&
                                     !available &&
@@ -257,7 +291,7 @@ const CardsSection = (props) => {
                                 {}
                               </p>
                               <p className={styles.basicText}>
-                                {!item.categories?.unavailable &&
+                                {!item.category?.unavailable &&
                                   item.reservations.length > 0 &&
                                   !available &&
                                   `${moment(specificUser?.startDate).format(

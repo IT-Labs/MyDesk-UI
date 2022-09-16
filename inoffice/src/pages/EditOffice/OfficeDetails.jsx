@@ -57,10 +57,10 @@ const OfficeDetails = ({ props }) => {
         id: item.id,
         category: {
           id: item.id,
-          unavailable: item.categories?.unavailable ? true : false,
-          singleMonitor: item.categories?.singleMonitor ? true : false,
-          dualMonitor: item.categories?.doubleMonitor ? true : false,
-          nearWindow: item.categories?.nearWindow ? true : false,
+          unavailable: item.category?.unavailable ? true : false,
+          singleMonitor: item.category?.singleMonitor ? true : false,
+          doubleMonitor: item.category?.doubleMonitor ? true : false,
+          nearWindow: item.category?.nearWindow ? true : false,
         },
       };
     });
@@ -90,33 +90,33 @@ const OfficeDetails = ({ props }) => {
         if (category === "unavailable") {
           return {
             ...item,
-            categories: {
-              ...item.categories,
-              unavailable: !item.categories?.unavailable ? true : false,
+            category: {
+              ...item.category,
+              unavailable: !item.category?.unavailable ? true : false,
             },
           };
         } else if (category === "singleMonitor") {
           return {
             ...item,
-            categories: {
-              ...item.categories,
-              singleMonitor: !item.categories?.singleMonitor ? true : false,
+            category: {
+              ...item.category,
+              singleMonitor: !item.category?.singleMonitor ? true : false,
             },
           };
         } else if (category === "dualMonitor") {
           return {
             ...item,
-            categories: {
-              ...item.categories,
-              doubleMonitor: !item.categories?.doubleMonitor ? true : false,
+            category: {
+              ...item.category,
+              doubleMonitor: !item.category?.doubleMonitor ? true : false,
             },
           };
         } else if (category === "nearWindow") {
           return {
             ...item,
-            categories: {
-              ...item.categories,
-              nearWindow: !item.categories?.nearWindow ? true : false,
+            category: {
+              ...item.category,
+              nearWindow: !item.category?.nearWindow ? true : false,
             },
           };
         }
@@ -197,7 +197,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
-            checked={item.categories?.unavailable}
+            checked={item.category?.unavailable}
             onChange={() => check(item.id, "unavailable")}
           ></Checkbox>
         );
@@ -214,8 +214,8 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
-            checked={item.categories?.singleMonitor}
-            disabled={item.categories?.doubleMonitor}
+            checked={item.category?.singleMonitor}
+            disabled={item.category?.doubleMonitor}
             onChange={() => check(item.id, "singleMonitor")}
           ></Checkbox>
         );
@@ -232,8 +232,8 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
-            checked={item.categories?.doubleMonitor}
-            disabled={item.categories?.singleMonitor}
+            checked={item.category?.doubleMonitor}
+            disabled={item.category?.singleMonitor}
             onChange={() => check(item.id, "dualMonitor")}
           ></Checkbox>
         );
@@ -250,7 +250,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
-            checked={item.categories?.nearWindow}
+            checked={item.category?.nearWindow}
             onChange={() => check(item.id, "nearWindow")}
           ></Checkbox>
         );
