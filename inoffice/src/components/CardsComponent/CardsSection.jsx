@@ -13,11 +13,12 @@ import { checkAvailable, findAvailable } from "../../utils/checkAvailable.js";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
-  const [loadingData, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
 
   const [selectedCardInSection, setselectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
   const [initialDesks, setInitnialDesks] = useState([]);
+  const [skip, setSkip] = useState(0);
 
   const { Meta } = Card;
   const media = window.matchMedia("(max-width: 820px)");
@@ -51,26 +52,47 @@ const CardsSection = (props) => {
     } else setDataDesks(desks);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (topProp, skipProp) => {
+    setLoadingData(true);
 
     await api
-      .get("employee/office-desks/" + props.officeid, {
-        signal: controller.signal,
-      })
+      .get(
+        `employee/office-desks/${props.officeid}/?top=${topProp}&skip=${skipProp}`,
+        {
+          signal: controller.signal,
+        }
+      )
       .then((response) => {
-        setDesks(response.data);
-        setInitnialDesks(response.data);
-
-        setLoading(false);
+        setDesks([...dataDesks, ...response.data]);
+        setInitnialDesks(dataDesks);
+        setLoadingData(false);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const loadDesks = () => {
+    setLoadingData(true);
+    let top = 20;
+    let skip = 0;
+    fetchData(top, skip);
+  };
+
+  const loadMoreData = () => {
+    if (loadingData) {
+      return;
+    }
+
+    let newSkip = skip + 20;
+    setSkip(newSkip);
+
+    setLoadingData(true);
+    fetchData(20, newSkip);
+  };
+
   useEffect(() => {
-    fetchData();
+    loadDesks();
     return () => {
       controller.abort();
       controller = new AbortController();
@@ -102,117 +124,39 @@ const CardsSection = (props) => {
   };
 
   return (
-    <>
-      {loadingData && (
-        <div className={styles.loading}>
-          <Loading />
-        </div>
-      )}
-      {!loadingData && (
-        <InfiniteScroll
-          dataLength={dataDesks.length}
-          scrollableTarget="scrollableDiv"
-          display="flex"
-          className={styles.scrollableDiv}
-        >
-          <Layout style={{ background: "transparent" }}>
-            <List
-              grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
-              dataSource={dataDesks
-                .filter((item) => {
-                  if (props.employeeSearch.length === 0) {
-                    if (props.available === null) {
-                      return true;
-                    } else if (
-                      item.available &&
-                      props.available &&
-                      !item.categories?.unavailable
-                    ) {
-                      return true;
-                    } else if (!item.available && !props.available) {
-                      return true;
-                    }
-                    return false;
-                  }
-                  const specificUser = item.reservations.find((info) => {
-                    const newGuy = getSpecificUser(info);
-                    if (
-                      info.startDate === newGuy.startDate &&
-                      info.endDate === newGuy.endDate
-                    ) {
-                      return true;
-                    }
-                    return false;
-                  });
-                  if (
-                    `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
-                      .toLowerCase()
-                      .includes(props.employeeSearch.toLowerCase()) &&
-                    !checkAvailable(item.reservations, start, end)
+    <div
+      id="scrollableDiv"
+      style={{
+        height: 400,
+        width: "100%",
+        overflow: "auto",
+      }}
+    >
+      <InfiniteScroll
+        dataLength={dataDesks.length}
+        scrollableTarget="scrollableDiv"
+        next={loadMoreData}
+        hasMore={true}
+      >
+        <Layout style={{ background: "transparent" }}>
+          <List
+            grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
+            dataSource={dataDesks
+              .filter((item) => {
+                if (props.employeeSearch.length === 0) {
+                  if (props.available === null) {
+                    return true;
+                  } else if (
+                    item.available &&
+                    props.available &&
+                    !item.categories?.unavailable
                   ) {
                     return true;
-                  }
-                })
-                .filter(({ category }) => {
-                  if (
-                    !props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor
-                  )
-                    return true;
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.nearWindow
-                  ) {
-                    console.log("nearWindow");
+                  } else if (!item.available && !props.available) {
                     return true;
                   }
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.nearWindow &&
-                    category.doubleMonitor
-                  ) {
-                    console.log("doubleMonitor nearWindow");
-                    return true;
-                  }
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    props.categories.singleMonitor &&
-                    category.nearWindow &&
-                    category.singleMonitor
-                  ) {
-                    console.log("singleMonitor nearWindow");
-                    return true;
-                  }
-                  if (
-                    category &&
-                    !props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    props.categories.singleMonitor &&
-                    category.singleMonitor
-                  ) {
-                    return true;
-                  }
-                  if (
-                    category &&
-                    !props.categories.nearWindow &&
-                    props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.doubleMonitor
-                  )
-                    return true;
-                })}
-              renderItem={(item) => {
-                const available = checkAvailable(item.reservations, start, end);
-                Object.assign(item, { available: available });
+                  return false;
+                }
                 const specificUser = item.reservations.find((info) => {
                   const newGuy = getSpecificUser(info);
                   if (
@@ -223,97 +167,173 @@ const CardsSection = (props) => {
                   }
                   return false;
                 });
+                if (
+                  `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
+                    .toLowerCase()
+                    .includes(props.employeeSearch.toLowerCase()) &&
+                  !checkAvailable(item.reservations, start, end)
+                ) {
+                  return true;
+                }
+              })
+              .filter(({ category }) => {
+                if (
+                  !props.categories.nearWindow &&
+                  !props.categories.doubleMonitor &&
+                  !props.categories.singleMonitor
+                )
+                  return true;
+                if (
+                  category &&
+                  props.categories.nearWindow &&
+                  !props.categories.doubleMonitor &&
+                  !props.categories.singleMonitor &&
+                  category.nearWindow
+                ) {
+                  console.log("nearWindow");
+                  return true;
+                }
+                if (
+                  category &&
+                  props.categories.nearWindow &&
+                  props.categories.doubleMonitor &&
+                  !props.categories.singleMonitor &&
+                  category.nearWindow &&
+                  category.doubleMonitor
+                ) {
+                  console.log("doubleMonitor nearWindow");
+                  return true;
+                }
+                if (
+                  category &&
+                  props.categories.nearWindow &&
+                  !props.categories.doubleMonitor &&
+                  props.categories.singleMonitor &&
+                  category.nearWindow &&
+                  category.singleMonitor
+                ) {
+                  console.log("singleMonitor nearWindow");
+                  return true;
+                }
+                if (
+                  category &&
+                  !props.categories.nearWindow &&
+                  !props.categories.doubleMonitor &&
+                  props.categories.singleMonitor &&
+                  category.singleMonitor
+                ) {
+                  return true;
+                }
+                if (
+                  category &&
+                  !props.categories.nearWindow &&
+                  props.categories.doubleMonitor &&
+                  !props.categories.singleMonitor &&
+                  category.doubleMonitor
+                )
+                  return true;
+              })}
+            renderItem={(item) => {
+              const available = checkAvailable(item.reservations, start, end);
+              Object.assign(item, { available: available });
+              const specificUser = item.reservations.find((info) => {
+                const newGuy = getSpecificUser(info);
+                if (
+                  info.startDate === newGuy.startDate &&
+                  info.endDate === newGuy.endDate
+                ) {
+                  return true;
+                }
+                return false;
+              });
 
-                return (
-                  <List.Item
-                    style={{
-                      border:
-                        item === selectedCardInSection ? "solid 2px" : "none",
-                      transition: "all 0.3s ease-in-out",
+              return (
+                <List.Item
+                  style={{
+                    border:
+                      item === selectedCardInSection ? "solid 2px" : "none",
+                    transition: "all 0.3s ease-in-out",
+                  }}
+                >
+                  <Card
+                    onClick={() => selectCard(item)}
+                    bodyStyle={{
+                      // backgroundColor: checkAvailable(item.reservation),
+                      background: item.category?.unavailable
+                        ? "#c1c1c1"
+                        : available
+                        ? "#69e28d"
+                        : "#f37076",
+                      height: "10rem",
                     }}
+                    hoverable={true}
+                    bordered={true}
                   >
-                    <Card
-                      onClick={() => selectCard(item)}
-                      bodyStyle={{
-                        // backgroundColor: checkAvailable(item.reservation),
-                        background: item.category?.unavailable
-                          ? "#c1c1c1"
-                          : available
-                          ? "#69e28d"
-                          : "#f37076",
-                        height: "10rem",
-                      }}
-                      hoverable={true}
-                      bordered={true}
-                    >
-                      <Meta
-                        title={
-                          <div className={styles.meta}>
-                            <p style={{ fontSize: "1rem" }}>
-                              Desk {item.indexForOffice}
-                            </p>
-                            <Tooltip
-                              autoAdjustOverflow={true}
-                              overlayStyle={{ width: 120 }}
-                              title={`${
-                                item.category?.doubleMonitor
-                                  ? "Dual monitors\n"
-                                  : ""
-                              }
+                    <Meta
+                      title={
+                        <div className={styles.meta}>
+                          <p style={{ fontSize: "1rem" }}>
+                            Desk {item.indexForOffice}
+                          </p>
+                          <Tooltip
+                            autoAdjustOverflow={true}
+                            overlayStyle={{ width: 120 }}
+                            title={`${
+                              item.category?.doubleMonitor
+                                ? "Dual monitors\n"
+                                : ""
+                            }
                               ${
                                 item.category?.singleMonitor
                                   ? "Single monitor\n"
                                   : ""
                               } ${
-                                !item.category?.singleMonitor &&
-                                !item.category?.doubleMonitor
-                                  ? "No monitors\n"
-                                  : ""
-                              }${
-                                item.category?.nearWindow ? "Near window\n" : ""
-                              }`}
-                            >
-                              <InfoCircleOutlined
-                                className={styles.infoCircle}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                        description={
-                          <div className={styles.cardContentInformation}>
-                            <div>
-                              <p className={styles.basicText}>
-                                {item.category?.unavailable
-                                  ? "Unavailable"
-                                  : item.reservations.length > 0 &&
-                                    !available &&
-                                    `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
-                                {}
-                              </p>
-                              <p className={styles.basicText}>
-                                {!item.category?.unavailable &&
-                                  item.reservations.length > 0 &&
+                              !item.category?.singleMonitor &&
+                              !item.category?.doubleMonitor
+                                ? "No monitors\n"
+                                : ""
+                            }${
+                              item.category?.nearWindow ? "Near window\n" : ""
+                            }`}
+                          >
+                            <InfoCircleOutlined className={styles.infoCircle} />
+                          </Tooltip>
+                        </div>
+                      }
+                      description={
+                        <div className={styles.cardContentInformation}>
+                          <div>
+                            <p className={styles.basicText}>
+                              {item.category?.unavailable
+                                ? "Unavailable"
+                                : item.reservations.length > 0 &&
                                   !available &&
-                                  `${moment(specificUser?.startDate).format(
-                                    "DD-MM"
-                                  )}
+                                  `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
+                              {}
+                            </p>
+                            <p className={styles.basicText}>
+                              {!item.category?.unavailable &&
+                                item.reservations.length > 0 &&
+                                !available &&
+                                `${moment(specificUser?.startDate).format(
+                                  "DD-MM"
+                                )}
                                   / ${moment(specificUser?.endDate).format(
                                     "DD-MM"
                                   )}`}
-                              </p>
-                            </div>
+                            </p>
                           </div>
-                        }
-                      />
-                    </Card>
-                  </List.Item>
-                );
-              }}
-            />
-          </Layout>
-        </InfiniteScroll>
-      )}
-    </>
+                        </div>
+                      }
+                    />
+                  </Card>
+                </List.Item>
+              );
+            }}
+          />
+        </Layout>
+      </InfiniteScroll>
+    </div>
   );
 };
 export default CardsSection;
