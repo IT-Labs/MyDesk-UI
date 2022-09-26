@@ -105,6 +105,7 @@ const Login = () => {
             <Form.Item name="login">
               <Input
                 className={styles.input}
+                data-cy="login-email-input"
                 placeholder="Email"
                 type="TextArea"
                 defaultValue=""
@@ -115,6 +116,7 @@ const Login = () => {
               />
               <Input.Password
                 className={styles.input}
+                data-cy="login-password-input"
                 prefix={<LockOutlined />}
                 placeholder="Password"
                 defaultValue=""
@@ -125,6 +127,7 @@ const Login = () => {
               {errorMsg ? (
                 <Alert
                   message="The password or email that you've entered is incorrect. Please try again."
+                  data-cy="login-incorrect-credentials-message"
                   type="error"
                   className={`${styles.alert} ${styles.input}`}
                 />
@@ -142,6 +145,7 @@ const Login = () => {
               </div>
               <Button
                 htmlType="submit"
+                data-cy="login-cta-button"
                 className={`${styles.buttons} ${styles.tealBtn}`}
                 block
                 size="large"

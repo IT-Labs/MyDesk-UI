@@ -36,7 +36,7 @@ const UserHead = (props) => {
                 }}
               />
             )}
-            <NavLink className={styles.link} to="/employee/reservations">
+            <NavLink data-cy="user-header-link" className={styles.link} to="/employee/reservations">
               {media.matches ? "Dashboard" : user?.name}
             </NavLink>
             <Tooltip title="Log out">
@@ -44,6 +44,7 @@ const UserHead = (props) => {
                 //css in jsx used here because of the API
                 style={{ color: "white" }}
                 className={`${styles.link} ${styles.logoutBtn}`}
+                data-cy="logout-button"
                 to="/"
                 onClick={() => {
                   localStorage.clear();
