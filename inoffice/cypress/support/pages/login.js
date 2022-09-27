@@ -1,22 +1,25 @@
 export class LoginPage {
-
   /**
    * Locators.
    */
   emailInput() {
-    return cy.get('[data-cy=login-email-input]');
+    return cy.get("[data-cy=login-email-input]");
   }
 
   passwordInput() {
-    return cy.get('[data-cy=login-password-input]');
+    return cy.get("[data-cy=login-password-input]");
   }
 
   submitButton() {
-    return cy.get('[data-cy=login-cta-button]');
+    return cy.get("[data-cy=login-cta-button]");
+  }
+
+  registerButton() {
+    return cy.get("[data-cy=register-cta-button]");
   }
 
   incorrectCredentialsMessage() {
-    return cy.get('[data-cy=login-incorrect-credentials-message]');
+    return cy.get("[data-cy=login-incorrect-credentials-message]");
   }
 
   /**
@@ -33,9 +36,12 @@ export class LoginPage {
   }
 
   verifyIncorrectCredentialsMessageIsDisplayed() {
-    this.incorrectCredentialsMessage().
-        should('have.text', 'The password or email that you\'ve entered is incorrect. Please try again.').
-        and('be.visible');
+    this.incorrectCredentialsMessage()
+      .should(
+        "have.text",
+        "The password or email that you've entered is incorrect. Please try again."
+      )
+      .and("be.visible");
   }
 }
 

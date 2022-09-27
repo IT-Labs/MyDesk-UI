@@ -138,6 +138,7 @@ const Login = () => {
                   className={`${styles.register}`}
                   type="link"
                   size="small"
+                  data-cy="register-cta-button"
                   onClick={() => handleShowRegister(true)}
                 >
                   Register
