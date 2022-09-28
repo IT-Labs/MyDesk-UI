@@ -82,6 +82,10 @@ export class LoginPage {
   assertLoginPageLinkDoesntExist() {
     cy.get(`a[href="/"]`).should("not.exist");
   }
+
+  assertRememberMeIsUnchecked() {
+    this.rememberMeCheckBox().should("not.be.checked");
+  }
 }
 
 export const loginPage = new LoginPage();
