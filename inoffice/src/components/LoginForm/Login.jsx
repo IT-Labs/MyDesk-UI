@@ -133,7 +133,7 @@ const Login = () => {
                 />
               ) : null}
               <div className={`${styles.rememberwrap}`}>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox data-cy="remember-me">Remember me</Checkbox>
                 <Button
                   className={`${styles.register}`}
                   type="link"

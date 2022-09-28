@@ -26,6 +26,10 @@ export class LoginPage {
     return cy.get(".ant-input-password-icon");
   }
 
+  rememberMeCheckBox() {
+    return cy.get("[data-cy=remember-me]");
+  }
+
   /**
    * Methods.
    */
