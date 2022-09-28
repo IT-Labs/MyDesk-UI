@@ -1,37 +1,35 @@
-import "antd/dist/antd.css";
-import "../../index.scss";
-import React from "react";
-import MicrosoftLogin from "react-microsoft-login";
-import { useEffect } from "react";
-import api from "../../helper/api";
-import { useNavigate } from "react-router-dom";
-import jwt from "jwt-decode";
-import styles from "./Login.module.scss";
-import { useState } from "react";
-import logo from "../../assets/Microsoft logo.png";
-import { Button, Checkbox, Form, Input, Alert } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { openError } from "../notification/Notification";
-import RegisterUser from "../RegisterUser/RegisterUser";
-import { encode as base64_encode } from "base-64";
+import 'antd/dist/antd.css';
+import '../../index.scss';
+import React, { useEffect, useState } from 'react';
+import MicrosoftLogin from 'react-microsoft-login';
+import api from '../../helper/api';
+import { useNavigate } from 'react-router-dom';
+import jwt from 'jwt-decode';
+import styles from './Login.module.scss';
+import logo from '../../assets/Microsoft logo.png';
+import { Alert, Button, Checkbox, Form, Input } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { openError } from '../notification/Notification';
+import RegisterUser from '../RegisterUser/RegisterUser';
+import { encode as base64_encode } from 'base-64';
 
 const Login = () => {
   let navigate = useNavigate();
   const url = process.env.REACT_APP_URL;
-  const [postedOnce, setPostedOnce] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [registerForm, setRegisterForm] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [ postedOnce, setPostedOnce ] = useState(false);
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = useState('');
+  const [ registerForm, setRegisterForm ] = useState(false);
+  const [ errorMsg, setErrorMsg ] = useState(false);
 
   useEffect(() => {
     setErrorMsg(false);
-  }, [email, password]);
+  }, [ email, password ]);
 
   const loginHandler = async (err, data, msal) => {
-    localStorage.setItem("accessToken", data.accessToken);
-    if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
-      localStorage.removeItem("msal.idtoken");
+    localStorage.setItem('accessToken', data.accessToken);
+    if (Date.now() >= jwt(localStorage.getItem('msal.idtoken')).exp * 1000) {
+      localStorage.removeItem('msal.idtoken');
     }
     const userInfo = {
       Email: data.mail,
@@ -135,10 +133,11 @@ const Login = () => {
               <div className={`${styles.rememberwrap}`}>
                 <Checkbox>Remember me</Checkbox>
                 <Button
-                  className={`${styles.register}`}
-                  type="link"
-                  size="small"
-                  onClick={() => handleShowRegister(true)}
+                    className={ `${ styles.register }` }
+                    data-cy="register-button"
+                    type="link"
+                    size="small"
+                    onClick={ () => handleShowRegister(true) }
                 >
                   Register
                 </Button>
