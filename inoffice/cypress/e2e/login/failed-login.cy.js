@@ -1,7 +1,7 @@
 import { loginPage } from "../../support/pages/login";
 import * as userData from "../../fixtures/userData.json";
 
-describe("Login functionality", () => {
+describe("Login failed functionality", () => {
   const INCORRECT_PASSWORD = "incorrect-password";
 
   it("Verifies user cannot login with invalid credentials", () => {

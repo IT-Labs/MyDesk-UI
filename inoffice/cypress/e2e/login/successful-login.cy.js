@@ -3,7 +3,7 @@ import { homeEmployeePage } from "../../support/pages/home-employee";
 import * as userData from "../../fixtures/userData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
 
-describe("Login functionality", () => {
+describe("Sucess Login functionality", () => {
   it("Verifies user can login with valid credentials", () => {
     cy.visit("/");
     loginPage.doLogin(
@@ -37,7 +37,6 @@ describe("Login functionality", () => {
     loginPage.emailInput().type(userData.cypressAutomationUserEmail);
     loginPage.passwordInput().type(userData.genericPassword);
     loginPage.passwordInput().type(`{enter}`);
-
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     homeEmployeePage.assertUserNameInHeader(
       `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
@@ -50,11 +49,9 @@ describe("Login functionality", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     loginPage.registerButton().should("have.length", 0);
     cy.get(`a[href="/"]`).should("have.length", 0);
-
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
     loginPage.registerButton().should("have.length", 0);
     cy.get(`a[href="/"]`).should("have.length", 0);

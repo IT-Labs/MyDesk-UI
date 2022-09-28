@@ -22,6 +22,10 @@ export class LoginPage {
     return cy.get("[data-cy=login-incorrect-credentials-message]");
   }
 
+  showPasswordButton() {
+    return cy.get(".ant-input-password-icon");
+  }
+
   /**
    * Methods.
    */
