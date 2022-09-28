@@ -35,6 +35,11 @@ export class LoginPage {
     this.clickSubmitButton();
   }
 
+  doLoginWithEnter(email, password) {
+    this.emailInput().type(email);
+    this.passwordInput().type(`${password}{enter}`);
+  }
+
   clickSubmitButton() {
     this.submitButton().click();
   }
@@ -46,6 +51,32 @@ export class LoginPage {
         "The password or email that you've entered is incorrect. Please try again."
       )
       .and("be.visible");
+  }
+
+  assertPasswordInputIsMasked(password) {
+    this.passwordInput().type(password);
+    this.passwordInput()
+      .should("have.value", password)
+      .should("have.attr", "type", "password");
+  }
+
+  clickSubmitShowPasswordButton() {
+    this.showPasswordButton().click();
+  }
+
+  assertPasswordInputIsNotMasked(password) {
+    this.passwordInput().clear().type(password);
+    this.passwordInput()
+      .should("have.value", password)
+      .should("have.attr", "type", "text");
+  }
+
+  assertRegisterButtonDoesntExist() {
+    this.registerButton().should("not.exist");
+  }
+
+  assertLoginPageLinkDoesntExist() {
+    cy.get(`a[href="/"]`).should("not.exist");
   }
 }
 

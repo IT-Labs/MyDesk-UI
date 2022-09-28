@@ -34,9 +34,10 @@ describe("Sucess Login functionality", () => {
 
   it("Verifies user can login with valid credentials and pressing Enter key", () => {
     cy.visit("/");
-    loginPage.emailInput().type(userData.cypressAutomationUserEmail);
-    loginPage.passwordInput().type(userData.genericPassword);
-    loginPage.passwordInput().type(`{enter}`);
+    loginPage.doLoginWithEnter(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     homeEmployeePage.assertUserNameInHeader(
       `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
@@ -50,10 +51,10 @@ describe("Sucess Login functionality", () => {
       userData.genericPassword
     );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
-    loginPage.registerButton().should("have.length", 0);
-    cy.get(`a[href="/"]`).should("have.length", 0);
+    loginPage.assertRegisterButtonDoesntExist();
+    loginPage.assertLoginPageLinkDoesntExist();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
-    loginPage.registerButton().should("have.length", 0);
-    cy.get(`a[href="/"]`).should("have.length", 0);
+    loginPage.assertRegisterButtonDoesntExist();
+    loginPage.assertLoginPageLinkDoesntExist();
   });
 });
