@@ -19,6 +19,10 @@ export class LoginPage {
     return cy.get('[data-cy=login-incorrect-credentials-message]');
   }
 
+  registerButton() {
+    return cy.get('[data-cy=register-button]');
+  }
+
   /**
    * Methods.
    */
@@ -36,6 +40,10 @@ export class LoginPage {
     this.incorrectCredentialsMessage().
         should('have.text', 'The password or email that you\'ve entered is incorrect. Please try again.').
         and('be.visible');
+  }
+
+  clickRegisterButton() {
+    this.registerButton().click();
   }
 }
 
