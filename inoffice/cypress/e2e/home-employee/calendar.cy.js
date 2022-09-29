@@ -13,4 +13,13 @@ describe("Calendar functions in Homepage", () => {
     cy.reload();
     homeEmployeePage.assertPreviousMonthIsDisplayed();
   });
+
+  it.only("Verify the calendar displays the current date/month/year by default", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.assertCurrentDateIsDefaultDate();
+  });
 });

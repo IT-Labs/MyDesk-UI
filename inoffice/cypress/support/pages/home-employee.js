@@ -28,6 +28,14 @@ export class HomeEmployeePage {
     return cy.get(".ant-picker-month-btn").first();
   }
 
+  startDateYearLabel() {
+    return cy.get(".ant-picker-year-btn").first();
+  }
+
+  todayCell() {
+    return cy.get(".ant-picker-cell-today.ant-picker-cell-in-view");
+  }
+
   /**
    * Methods.
    */
@@ -75,6 +83,17 @@ export class HomeEmployeePage {
     const currentMoment = moment(new Date());
     const previousMonth = currentMoment.subtract(1, "months").format("MMM");
     return previousMonth;
+  }
+
+  assertCurrentDateIsDefaultDate() {
+    const currentMoment = moment(new Date());
+    const currentYear = currentMoment.format("YYYY");
+    const currentMonth = currentMoment.format("MMM");
+    const currentDay = currentMoment.format("DD");
+    this.clickCalendarIcon();
+    this.startDateYearLabel().should("have.text", currentYear);
+    this.startDateMonthLabel().should("have.text", currentMonth);
+    this.todayCell().should("have.text", currentDay);
   }
 }
 
