@@ -14,7 +14,7 @@ describe("Calendar functions in Homepage", () => {
     homeEmployeePage.assertPreviousMonthIsDisplayed();
   });
 
-  it.only("Verify the calendar displays the current date/month/year by default", () => {
+  it("Verify the calendar displays the current date/month/year by default", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,

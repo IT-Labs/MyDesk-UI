@@ -71,8 +71,6 @@ export class HomeEmployeePage {
     this.startDateMonthLabel().should("have.text", this.getPreviousMonth());
   }
 
-  //getCurrentMonth() {}
-
   getNextMonth() {
     const currentMoment = moment(new Date());
     const nextMonth = currentMoment.add(1, "months").format("MMM");
@@ -85,15 +83,29 @@ export class HomeEmployeePage {
     return previousMonth;
   }
 
-  assertCurrentDateIsDefaultDate() {
+  getCurrentMonth() {
+    const currentMoment = moment(new Date());
+    const currentMonth = currentMoment.format("MMM");
+    return currentMonth;
+  }
+
+  getCurrentYear() {
     const currentMoment = moment(new Date());
     const currentYear = currentMoment.format("YYYY");
-    const currentMonth = currentMoment.format("MMM");
+    return currentYear;
+  }
+
+  getCurrentDay() {
+    const currentMoment = moment(new Date());
     const currentDay = currentMoment.format("DD");
+    return currentDay;
+  }
+
+  assertCurrentDateIsDefaultDate() {
     this.clickCalendarIcon();
-    this.startDateYearLabel().should("have.text", currentYear);
-    this.startDateMonthLabel().should("have.text", currentMonth);
-    this.todayCell().should("have.text", currentDay);
+    this.startDateYearLabel().should("have.text", this.getCurrentYear());
+    this.startDateMonthLabel().should("have.text", this.getCurrentMonth());
+    this.todayCell().should("have.text", this.getCurrentDay());
   }
 }
 
