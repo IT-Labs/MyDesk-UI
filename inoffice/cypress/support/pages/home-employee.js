@@ -36,9 +36,15 @@ export class HomeEmployeePage {
     return cy.get(".ant-picker-cell-today.ant-picker-cell-in-view");
   }
 
-  firstDayOfNextMonthInCalendar() {
+  firstAvailableDayOfNextMonthInCalendar() {
     return cy
       .get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view")
+      .last();
+  }
+
+  lastAvailableDayOfNextMonthInCalendar() {
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
       .last();
   }
 
@@ -136,8 +142,12 @@ export class HomeEmployeePage {
     this.todayCell().should("have.text", this.getCurrentDay("DD"));
   }
 
-  selectFirstDayOfNextMonth() {
-    this.firstDayOfNextMonthInCalendar().click();
+  selectFirstAvailableDayOfNextMonth() {
+    this.firstAvailableDayOfNextMonthInCalendar().click();
+  }
+
+  selectLastAvailableDayOfNextMonth() {
+    this.lastAvailableDayOfNextMonthInCalendar().click();
   }
 
   assertSingleDateIsSelected() {
@@ -145,6 +155,22 @@ export class HomeEmployeePage {
       .invoke("val")
       .then((startDate) => {
         this.endDateInputInCalendar().should("have.value", startDate);
+      });
+  }
+
+  assertRangeDateIsSelected() {
+    this.endDateInputInCalendar()
+      .invoke("val")
+      .then((endDate) => {
+        cy.log("***************************");
+        cy.log(endDate);
+        this.startDateInputInCalendar()
+          .invoke("val")
+          .then((startDate) => {
+            expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
+              moment(startDate, "DD/MM/YYYY").toDate()
+            );
+          });
       });
   }
 }

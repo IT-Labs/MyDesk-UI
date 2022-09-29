@@ -30,8 +30,20 @@ describe("Calendar functions in Homepage", () => {
       userData.genericPassword
     );
     homeEmployeePage.openCalendar();
-    homeEmployeePage.selectFirstDayOfNextMonth();
-    homeEmployeePage.selectFirstDayOfNextMonth();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.assertSingleDateIsSelected();
+  });
+
+  it("Verify that the user can select a time span from the calendar", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.selectLastAvailableDayOfNextMonth();
+    homeEmployeePage.assertRangeDateIsSelected();
   });
 });
