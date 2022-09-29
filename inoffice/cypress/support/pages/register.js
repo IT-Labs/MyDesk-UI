@@ -161,6 +161,34 @@ export class RegisterPage {
   assertPasswordsDontMatchAlert() {
     this.passwordsDontMatchAlert().should('have.text', 'Password didn\'t match! Try again.').and('be.visible');
   }
+
+  verifyCreateYourAccountLable() {
+    this.createYourAccountLabel().
+    should('have.text','Create your account').
+    and('be.visible');
+  }
+
+  verifyRegisterFormIsVisible() {
+    this.emailInput().
+    should('be.visible');
+    this.emailInput().
+    should('be.visible');
+    this.firstNameInput().
+    should('be.visible'); 
+    this.lastNameInput(). 
+    should('be.visible');
+    this.jobTitleInput(). 
+    should('be.visible');
+    this.passwordInputField(). 
+    should('be.visible');
+    this.passwordConfirmInputField().
+    should('be.visible'); 
+  }
+
+  verifyRegisterButton() {
+    this.registerSubmitButton().
+    should('be.visible');
+  }
 }
 
 export const registerPage = new RegisterPage();

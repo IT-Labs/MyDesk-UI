@@ -94,7 +94,8 @@ const Login = () => {
   return !registerForm ? (
     <div className={styles.bg}>
       <div className={styles.login}>
-        <div className={styles.title}>
+        <div className={styles.title}
+             data-cy="login-logo-welcomebacktext">
           <div className={styles.logo}></div>
           <p>Welcome back! Please log in to continue</p>
         </div>
@@ -176,7 +177,7 @@ const Login = () => {
           graphScopes={["user.read", "user.readbasic.all"]}
           prompt={"select_account"}
         >
-          <Button className={styles.btn}>
+          <Button className={styles.btn} data-cy="login-microsoftssobtn-button">
             <img
               style={{ width: "150px", height: "50px" }}
               src={logo}

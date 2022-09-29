@@ -23,6 +23,15 @@ export class LoginPage {
     return cy.get('[data-cy=register-button]');
   }
 
+  microsoftSSOButton() {
+    return cy.get('[data-cy="login-microsoftssobtn-button"]');
+  }
+
+  welcomeBackText() {
+    return cy.get('[data-cy="login-logo-welcomebacktext"]');
+  }
+
+
   /**
    * Methods.
    */
@@ -44,6 +53,22 @@ export class LoginPage {
 
   clickRegisterButton() {
     this.registerButton().click();
+  }
+
+  verifyPresenceOfMicrosoftSSOButton() {
+    this.microsoftSSOButton().
+    should('be.visible');
+  }
+
+  verifyWelcomeBackText() {
+    this.welcomeBackText().
+    should('have.text','Welcome back! Please log in to continue').
+    and('be.visible');
+  }
+
+  verifyLoginPageTitle() {
+    cy.title().
+    should('include','inOffice')
   }
 }
 
