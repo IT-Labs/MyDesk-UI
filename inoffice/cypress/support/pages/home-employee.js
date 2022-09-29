@@ -36,6 +36,23 @@ export class HomeEmployeePage {
     return cy.get(".ant-picker-cell-today.ant-picker-cell-in-view");
   }
 
+  firstDayOfNextMonthInCalendar() {
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view")
+      .last();
+  }
+
+  startDateInputInCalendar() {
+    return cy.get(".ant-picker-input input").first();
+  }
+
+  endDateInputInCalendar() {
+    return cy.get(".ant-picker-input input").last();
+  }
+
+  //.ant-picker-input.ant-picker-input-active
+  //.ant-picker-input.ant-picker-input-active
+
   /**
    * Methods.
    */
@@ -47,7 +64,7 @@ export class HomeEmployeePage {
     this.logoutButton().click();
   }
 
-  clickCalendarIcon() {
+  openCalendar() {
     this.displayCalendarIcon().click({ force: true });
   }
 
@@ -60,32 +77,43 @@ export class HomeEmployeePage {
   }
 
   assertNextMonthIsDisplayed() {
-    this.clickCalendarIcon();
+    this.openCalendar();
     this.clickStartDateNextMonthButton();
-    this.startDateMonthLabel().should("have.text", this.getNextMonth());
+    this.startDateMonthLabel().should("have.text", this.getNextMonth("MMM"));
   }
 
   assertPreviousMonthIsDisplayed() {
-    this.clickCalendarIcon();
+    this.openCalendar();
     this.clickStartDatePrevMonthButton();
-    this.startDateMonthLabel().should("have.text", this.getPreviousMonth());
+    this.startDateMonthLabel().should(
+      "have.text",
+      this.getPreviousMonth("MMM")
+    );
   }
 
-  getNextMonth() {
+  getNextMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const nextMonth = currentMoment.add(1, "months").format("MMM");
+    const nextMonth = currentMoment.add(1, "months").format(monthFormat);
     return nextMonth;
   }
 
-  getPreviousMonth() {
+  getYearOfNextMonth() {
     const currentMoment = moment(new Date());
-    const previousMonth = currentMoment.subtract(1, "months").format("MMM");
+    const yearOfNextMonth = currentMoment.add(1, "months").format("YYYY");
+    return yearOfNextMonth;
+  }
+
+  getPreviousMonth(monthFormat) {
+    const currentMoment = moment(new Date());
+    const previousMonth = currentMoment
+      .subtract(1, "months")
+      .format(monthFormat);
     return previousMonth;
   }
 
-  getCurrentMonth() {
+  getCurrentMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const currentMonth = currentMoment.format("MMM");
+    const currentMonth = currentMoment.format(monthFormat);
     return currentMonth;
   }
 
@@ -95,17 +123,29 @@ export class HomeEmployeePage {
     return currentYear;
   }
 
-  getCurrentDay() {
+  getCurrentDay(dayFormat) {
     const currentMoment = moment(new Date());
-    const currentDay = currentMoment.format("DD");
+    const currentDay = currentMoment.format(dayFormat);
     return currentDay;
   }
 
   assertCurrentDateIsDefaultDate() {
-    this.clickCalendarIcon();
+    this.openCalendar();
     this.startDateYearLabel().should("have.text", this.getCurrentYear());
-    this.startDateMonthLabel().should("have.text", this.getCurrentMonth());
-    this.todayCell().should("have.text", this.getCurrentDay());
+    this.startDateMonthLabel().should("have.text", this.getCurrentMonth("MMM"));
+    this.todayCell().should("have.text", this.getCurrentDay("DD"));
+  }
+
+  selectFirstDayOfNextMonth() {
+    this.firstDayOfNextMonthInCalendar().click();
+  }
+
+  assertSingleDateIsSelected() {
+    this.startDateInputInCalendar()
+      .invoke("val")
+      .then((startDate) => {
+        this.endDateInputInCalendar().should("have.value", startDate);
+      });
   }
 }
 

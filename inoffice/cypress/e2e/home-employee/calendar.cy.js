@@ -22,4 +22,16 @@ describe("Calendar functions in Homepage", () => {
     );
     homeEmployeePage.assertCurrentDateIsDefaultDate();
   });
+
+  it("Verify that the user can select a single future date from the calendar", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.selectFirstDayOfNextMonth();
+    homeEmployeePage.selectFirstDayOfNextMonth();
+    homeEmployeePage.assertSingleDateIsSelected();
+  });
 });
