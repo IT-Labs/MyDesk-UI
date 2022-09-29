@@ -31,7 +31,6 @@ export class LoginPage {
     return cy.get('[data-cy="login-logo-welcomebacktext"]');
   }
 
-
   /**
    * Methods.
    */

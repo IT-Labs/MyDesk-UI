@@ -1,8 +1,4 @@
 import { loginPage } from '../../support/pages/login';
-import { homeEmployeePage } from '../../support/pages/home-employee';
-import * as userData from '../../fixtures/userData.json';
-import * as urlSlugs from '../../fixtures/urlSlugs.json';
-import { ItalicOutlined } from '@ant-design/icons';
 import { registerPage } from '../../support/pages/register';
 
 
@@ -29,5 +25,3 @@ it('Verify that the Register link redirects to the Register Page', () =>{
     registerPage.verifyRegisterFormIsVisible();
     registerPage.verifyRegisterButton();
 })
-
-
