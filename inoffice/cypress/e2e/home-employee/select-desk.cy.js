@@ -13,9 +13,23 @@ describe("Users can select a desk", () => {
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.filterByAvailability("Available");
-    //homeEmployeePage.selectFirstDesk();
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectDeskN(2);
     homeEmployeePage.verifyOnlyOneDeskIsSelected();
+  });
+
+  it.only("Complete a reservation successfully", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.filterByAvailability("Available");
+    homeEmployeePage.selectDeskN(1);
+    homeEmployeePage.reserveButton().click();
+    homeEmployeePage.verifyReservationIsSuccessful();
   });
 });

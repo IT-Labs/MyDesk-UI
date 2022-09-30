@@ -416,6 +416,7 @@ const Home = () => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Button
                   block
+                  data-cy="reserve-button"
                   disabled={
                     (selectedCardId.length === 0 || !isAvailable
                       ? true
@@ -446,6 +447,7 @@ const Home = () => {
                 </Button>
                 <Button
                   block
+                  data-cy="show-reviews-button"
                   disabled={selectedCardId.length === 0 ? true : false}
                   size="large"
                   className={`${styles.buttons} ${styles.tealBtn}`}

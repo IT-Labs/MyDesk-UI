@@ -74,6 +74,22 @@ export class HomeEmployeePage {
     return cy.get(".ant-list-item");
   }
 
+  reserveButton() {
+    return cy.get("[data-cy=reserve-button]");
+  }
+
+  showReviewsButton() {
+    return cy.get("[data-cy=show-reviews-button]");
+  }
+
+  modalMessageLabel() {
+    return cy.get(".ant-notification-notice-message");
+  }
+
+  modalDescriptionLabel() {
+    return cy.get(".ant-notification-notice-description");
+  }
+
   /**
    * Methods.
    */
@@ -204,6 +220,14 @@ export class HomeEmployeePage {
         `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
       )
       .should("have.length", 1);
+  }
+
+  verifyReservationIsSuccessful() {
+    this.modalMessageLabel().should("have.text", "Notification");
+    this.modalDescriptionLabel().should(
+      "have.text",
+      "You have successfully reserved a desk."
+    );
   }
 }
 
