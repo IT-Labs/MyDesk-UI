@@ -56,8 +56,23 @@ export class HomeEmployeePage {
     return cy.get(".ant-picker-input input").last();
   }
 
-  //.ant-picker-input.ant-picker-input-active
-  //.ant-picker-input.ant-picker-input-active
+  availabilityFilterDropdown() {
+    //return cy.get("[data-cy=filter-by-availability]");
+
+    return cy.get(
+      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+    );
+
+    /*
+    return cy.get(
+      "[data-cy=filter-by-availability] .ant-select-selector span .ant-select-selection-search-input"
+    );
+    */
+  }
+
+  desksCards() {
+    return cy.get(".ant-list-item");
+  }
 
   /**
    * Methods.
@@ -162,8 +177,6 @@ export class HomeEmployeePage {
     this.endDateInputInCalendar()
       .invoke("val")
       .then((endDate) => {
-        cy.log("***************************");
-        cy.log(endDate);
         this.startDateInputInCalendar()
           .invoke("val")
           .then((startDate) => {
@@ -172,6 +185,25 @@ export class HomeEmployeePage {
             );
           });
       });
+  }
+
+  filterByAvailability(availability) {
+    this.availabilityFilterDropdown().click();
+    cy.get(".ant-select-item-option-content").contains(availability).click();
+  }
+
+  selectDeskN(n) {
+    this.desksCards()
+      .eq(n - 1)
+      .click();
+  }
+
+  verifyOnlyOneDeskIsSelected() {
+    cy.get(".ant-col")
+      .find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
+      )
+      .should("have.length", 1);
   }
 }
 
