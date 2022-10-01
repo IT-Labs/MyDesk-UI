@@ -31,7 +31,7 @@ export class LoginPage {
   }
 
   registerButton() {
-    return cy.get('[data-cy=register-button]');
+    return cy.get("[data-cy=register-cta-button]");
   }
 
   microsoftSSOButton() {
@@ -111,19 +111,17 @@ export class LoginPage {
   }
 
   verifyPresenceOfMicrosoftSSOButton() {
-    this.microsoftSSOButton().
-    should('be.visible');
+    this.microsoftSSOButton().should("be.visible");
   }
 
   verifyWelcomeBackText() {
-    this.welcomeBackText().
-    should('have.text','Welcome back! Please log in to continue').
-    and('be.visible');
+    this.welcomeBackText()
+      .should("have.text", "Welcome back! Please log in to continue")
+      .and("be.visible");
   }
 
   verifyLoginPageTitle() {
-    cy.title().
-    should('include','inOffice')
+    cy.title().should("include", "inOffice");
   }
 }
 
