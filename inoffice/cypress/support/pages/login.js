@@ -44,6 +44,13 @@ export class LoginPage {
     this.passwordInput().type(`${password}{enter}`);
   }
 
+  doLoginWithRemember(email, password) {
+    this.emailInput().type(email);
+    this.passwordInput().type(password);
+    this.rememberMeCheckBox().click();
+    this.clickSubmitButton();
+  }
+
   clickSubmitButton() {
     this.submitButton().click();
   }
