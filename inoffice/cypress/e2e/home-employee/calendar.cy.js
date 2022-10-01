@@ -46,4 +46,14 @@ describe("Calendar functions in Homepage", () => {
     homeEmployeePage.selectLastAvailableDayOfNextMonth();
     homeEmployeePage.assertRangeDateIsSelected();
   });
+
+  it.only("Verify that all past days are shadowed and can not be selected", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.verifyPastDatesAreDisabledInCalendar();
+  });
 });

@@ -57,17 +57,9 @@ export class HomeEmployeePage {
   }
 
   availabilityFilterDropdown() {
-    //return cy.get("[data-cy=filter-by-availability]");
-
     return cy.get(
       "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
     );
-
-    /*
-    return cy.get(
-      "[data-cy=filter-by-availability] .ant-select-selector span .ant-select-selection-search-input"
-    );
-    */
   }
 
   desksCards() {
@@ -228,6 +220,24 @@ export class HomeEmployeePage {
       "have.text",
       "You have successfully reserved a desk."
     );
+  }
+
+  verifyPastDatesAreDisabledInCalendar() {
+    // previous days in the same week
+    this.todayCell()
+      .prevAll()
+      .then(($td) => {
+        expect($td).to.have.class("ant-picker-cell-disabled");
+      });
+
+    // days in the previous weeks
+    this.todayCell()
+      .parent()
+      .prevAll()
+      .find("td")
+      .then(($td) => {
+        expect($td).to.have.class("ant-picker-cell-disabled");
+      });
   }
 }
 
