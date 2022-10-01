@@ -123,6 +123,10 @@ export class LoginPage {
   verifyLoginPageTitle() {
     cy.title().should("include", "inOffice");
   }
+
+  assertCredentialsAreRemembered(email) {
+    this.emailInput().should("have.value", email);
+  }
 }
 
 export const loginPage = new LoginPage();
