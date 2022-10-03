@@ -47,7 +47,7 @@ describe("Calendar functions in Homepage", () => {
     homeEmployeePage.assertRangeDateIsSelected();
   });
 
-  it.only("Verify that all past days are shadowed and can not be selected", () => {
+  it("Verify that all past days are shadowed and can not be selected", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
@@ -55,5 +55,15 @@ describe("Calendar functions in Homepage", () => {
     );
     homeEmployeePage.openCalendar();
     homeEmployeePage.verifyPastDatesAreDisabledInCalendar();
+  });
+
+  it.skip("Verify that all weekends are shadowed and can not be selected", () => {
+    cy("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.verifyWeekendsAreDisabledInCalendar();
   });
 });

@@ -48,6 +48,12 @@ export class HomeEmployeePage {
       .last();
   }
 
+  lastAvailableDayOfCurrentMonthInCalendar() {
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
+      .first();
+  }
+
   startDateInputInCalendar() {
     return cy.get(".ant-picker-input input").first();
   }
@@ -162,7 +168,7 @@ export class HomeEmployeePage {
     this.openCalendar();
     this.startDateYearLabel().should("have.text", this.getCurrentYear());
     this.startDateMonthLabel().should("have.text", this.getCurrentMonth("MMM"));
-    this.todayCell().should("have.text", this.getCurrentDay("DD"));
+    this.todayCell().should("have.text", this.getCurrentDay("D"));
   }
 
   selectFirstAvailableDayOfNextMonth() {
@@ -226,7 +232,7 @@ export class HomeEmployeePage {
     // previous days in the same week
     this.todayCell()
       .prevAll()
-      .then(($td) => {
+      .each(($td) => {
         expect($td).to.have.class("ant-picker-cell-disabled");
       });
 
@@ -235,8 +241,34 @@ export class HomeEmployeePage {
       .parent()
       .prevAll()
       .find("td")
-      .then(($td) => {
+      .each(($td) => {
         expect($td).to.have.class("ant-picker-cell-disabled");
+      });
+  }
+
+  verifyWeekendsAreDisabledInCalendar() {
+    cy.get(".ant-picker-content")
+      .first()
+      .find("td")
+      .each(($td, $index) => {
+        const weekendsIndex = new Array(
+          0,
+          6,
+          7,
+          13,
+          14,
+          20,
+          21,
+          27,
+          28,
+          34,
+          35
+        );
+
+        if (weekendsIndex.includes($index)) {
+          cy.log($td.text() + " = " + $index);
+          expect($td).to.have.class("ant-picker-cell-disabled");
+        }
       });
   }
 }
