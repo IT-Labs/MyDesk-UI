@@ -11,4 +11,9 @@ describe("Password input validations", () => {
     loginPage.clickSubmitShowPasswordButton();
     loginPage.assertPasswordInputIsNotMasked(userData.genericPassword);
   });
+
+  it("Verify that the password cant be copied/pasted", () => {
+    cy.visit("/");
+    loginPage.assertPasswordCantBeCopiedAndPasted(userData.genericPassword);
+  });
 });

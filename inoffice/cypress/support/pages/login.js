@@ -127,6 +127,13 @@ export class LoginPage {
   assertCredentialsAreRemembered(email) {
     this.emailInput().should("have.value", email);
   }
+
+  assertPasswordCantBeCopiedAndPasted(password) {
+    this.passwordInput().type(password);
+    this.passwordInput()
+      .should("have.value", password)
+      .should("have.attr", "type", "password");
+  }
 }
 
 export const loginPage = new LoginPage();
