@@ -18,9 +18,10 @@
   font-weight: bold;
 }
 
-.inputSize {
-  width: 12.5rem;
-  scroll-behavior: auto;
+.inputSize:hover {
+  color: #40a9ff !important;
+  border-color: #40a9ff;
+  background: #fff;
 }
 
 .reserveForCoworker {

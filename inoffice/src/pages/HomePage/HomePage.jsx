@@ -36,6 +36,7 @@ import {
 } from "../../components/notification/Notification";
 
 import { getAvatar } from "../../redux/Avatar/Avatar";
+
 const Home = () => {
   const [officeid, setofficeid] = useState();
   const [selectedCardId, setSelectedCard] = useState([]);
@@ -346,6 +347,7 @@ const Home = () => {
                         </Menu.Item>
                       </Menu>
                     }
+                    trigger={["click"]}
                   >
                     <Button className={styles.inputSize}>
                       <Space
@@ -356,7 +358,13 @@ const Home = () => {
                         }}
                       >
                         All categories
-                        <DownOutlined style={{ color: "rgba(0,0,0,0.25)" }} />
+                        <DownOutlined
+                          style={{
+                            color: "rgba(0,0,0,0.25)",
+                            fontSize: "12px",
+                            paddingLeft: "68px",
+                          }}
+                        />
                       </Space>
                     </Button>
                   </Dropdown>
