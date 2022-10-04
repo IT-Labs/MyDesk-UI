@@ -253,6 +253,7 @@ const Home = () => {
                 <OfficeBranchSelection
                   onOfficebranchChange={changeofficebranch}
                   styles={styles.pStyles}
+                  dataCy="office-branch-select"
                 />
                 <div className={styles.leftInputs}>
                   <p className={styles.pStyles}>Select date</p>

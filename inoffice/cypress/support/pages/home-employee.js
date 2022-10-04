@@ -68,6 +68,10 @@ export class HomeEmployeePage {
     );
   }
 
+  officeBranchFilterDropdown() {
+    return cy.get("[data-cy=office-branch-select] .ant-select-selector");
+  }
+
   desksCards() {
     return cy.get(".ant-list-item");
   }
@@ -86,6 +90,12 @@ export class HomeEmployeePage {
 
   modalDescriptionLabel() {
     return cy.get(".ant-notification-notice-description");
+  }
+
+  officeDropdown() {
+    return cy.get(
+      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+    );
   }
 
   /**
@@ -202,8 +212,10 @@ export class HomeEmployeePage {
   }
 
   filterByAvailability(availability) {
-    this.availabilityFilterDropdown().click();
-    cy.get(".ant-select-item-option-content").contains(availability).click();
+    this.availabilityFilterDropdown().click({ force: true });
+    cy.get(".ant-select-item.ant-select-item-option")
+      .contains(availability)
+      .click({ force: true });
   }
 
   selectDeskN(n) {
@@ -270,6 +282,19 @@ export class HomeEmployeePage {
           expect($td).to.have.class("ant-picker-cell-disabled");
         }
       });
+  }
+
+  selectOffice(officeName) {
+    this.officeBranchFilterDropdown().click({ force: true });
+    cy.get(".ant-select-item.ant-select-item-option")
+      // ant-select-item ant-select-item-option ant-select-item-option-active
+      //ant-select-item-option-content
+      .contains(officeName)
+      .click({ force: true });
+  }
+
+  assertButtonReserveIsDisabled() {
+    this.reserveButton().should("be.disabled");
   }
 }
 
