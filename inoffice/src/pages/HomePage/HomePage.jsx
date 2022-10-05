@@ -149,7 +149,8 @@ const Home = () => {
         openNotification("You have successfully reserved a desk.");
       })
       .catch((error) => {
-        openError(error.response.data.error);
+        console.log(error.response);
+        openError(error.response.data.ErrorMessage);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
@@ -204,7 +205,8 @@ const Home = () => {
         setShowReserveForCoworker(false);
       })
       .catch((error) => {
-        openError(error.response.data.error);
+        console.log(error.response);
+        openError(error.response.data.ErrorMessage);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);

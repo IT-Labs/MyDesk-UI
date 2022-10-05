@@ -179,7 +179,7 @@ const ReservationList = () => {
           <Button
             className={styles.cancelBtn}
             onClick={() => {
-              setToBeCancelled(data.desk?.reservations.id);
+              setToBeCancelled(data.key);
               setVisible(true);
             }}
           >
