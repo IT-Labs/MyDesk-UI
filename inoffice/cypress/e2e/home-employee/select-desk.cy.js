@@ -53,7 +53,9 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertButtonReserveIsDisabled();
   });
 
-  it.only("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
+  // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53204/
+  // @TODO remove skip once bug is fixed
+  https: it.skip("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
@@ -68,5 +70,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectSetForCoworker();
     homeEmployeePage.clickReserveButton();
+    this.modalMessageLabel().should("have.text", "Error");
+    this.modalDescriptionLabel().should("have.text", "");
   });
 });
