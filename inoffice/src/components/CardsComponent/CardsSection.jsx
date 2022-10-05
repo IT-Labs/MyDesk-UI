@@ -1,11 +1,9 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { List, Card, Tooltip, Divider } from "antd";
+import React, { useState, useEffect } from "react";
+import { List, Card, Tooltip } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import Loading from "../Loading/Loading";
 import styles from "./CardsSection.module.scss";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { areIntervalsOverlapping } from "date-fns";
@@ -16,7 +14,7 @@ const CardsSection = (props) => {
   const [loading, setLoading] = useState(false);
   const [selectedCardInSection, setselectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
-  const [initialDesks, setInitnialDesks] = useState([]);
+  const [allDesks, setAllDesks] = useState([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
@@ -52,6 +50,19 @@ const CardsSection = (props) => {
     } else setDataDesks(desks);
   };
 
+  const getAllDesks = async () => {
+    await api
+      .get(`employee/office-desks/${props.officeid}`, {
+        signal: controller.signal,
+      })
+      .then((response) => {
+        setAllDesks(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const fetchData = async (skipProp) => {
     await api
       .get(`employee/office-desks/${props.officeid}/?top=20&skip=${skipProp}`, {
@@ -60,7 +71,6 @@ const CardsSection = (props) => {
       .then((response) => {
         if (skipProp === 0) {
           setDesks(response.data);
-          setInitnialDesks(response.data);
           setLoading(false);
         } else {
           setDesks([...dataDesks, ...response.data]);
@@ -79,6 +89,7 @@ const CardsSection = (props) => {
     setSkip(0);
     setLoading(true);
     fetchData(0);
+    getAllDesks();
   };
 
   const loadMoreData = () => {
@@ -92,6 +103,104 @@ const CardsSection = (props) => {
     fetchData(newSkip);
   };
 
+  const filterByAvailable = () => {
+    let filteredDesks = allDesks.filter((item) => {
+      if (props.employeeSearch.length === 0) {
+        if (props.available === null) {
+          return true;
+        } else if (
+          item.available &&
+          props.available &&
+          !item.categories?.unavailable
+        ) {
+          return true;
+        } else if (!item.available && !props.available) {
+          return true;
+        }
+        return false;
+      }
+      const specificUser = item.reservations.find((info) => {
+        const newGuy = getSpecificUser(info);
+        if (
+          info.startDate === newGuy.startDate &&
+          info.endDate === newGuy.endDate
+        ) {
+          return true;
+        }
+        return false;
+      });
+      if (
+        `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
+          .toLowerCase()
+          .includes(props.employeeSearch.toLowerCase()) &&
+        !checkAvailable(item.reservations, start, end)
+      ) {
+        return true;
+      }
+    });
+
+    setDesks(filteredDesks);
+  };
+
+  const filterByCategories = () => {
+    let filteredDesks = allDesks.filter(({ category }) => {
+      if (
+        !props.categories.nearWindow &&
+        !props.categories.doubleMonitor &&
+        !props.categories.singleMonitor
+      )
+        return true;
+      if (
+        category &&
+        props.categories.nearWindow &&
+        !props.categories.doubleMonitor &&
+        !props.categories.singleMonitor &&
+        category.nearWindow
+      ) {
+        return true;
+      }
+      if (
+        category &&
+        props.categories.nearWindow &&
+        props.categories.doubleMonitor &&
+        !props.categories.singleMonitor &&
+        category.nearWindow &&
+        category.doubleMonitor
+      ) {
+        return true;
+      }
+      if (
+        category &&
+        props.categories.nearWindow &&
+        !props.categories.doubleMonitor &&
+        props.categories.singleMonitor &&
+        category.nearWindow &&
+        category.singleMonitor
+      ) {
+        return true;
+      }
+      if (
+        category &&
+        !props.categories.nearWindow &&
+        !props.categories.doubleMonitor &&
+        props.categories.singleMonitor &&
+        category.singleMonitor
+      ) {
+        return true;
+      }
+      if (
+        category &&
+        !props.categories.nearWindow &&
+        props.categories.doubleMonitor &&
+        !props.categories.singleMonitor &&
+        category.doubleMonitor
+      )
+        return true;
+    });
+
+    setDesks(filteredDesks);
+  };
+
   useEffect(() => {
     loadInitialDesks();
     setHasMore(true);
@@ -103,8 +212,16 @@ const CardsSection = (props) => {
   }, [props.officeid, props.refresh]);
 
   useEffect(() => {
-    setDesks(initialDesks);
+    setHasMore(false);
+    setDesks([]);
+    filterByAvailable();
   }, [props.available]);
+
+  useEffect(() => {
+    setHasMore(false);
+    setDesks([]);
+    filterByCategories();
+  }, [props.categories]);
 
   const getSpecificUser = ({ startDate, endDate }) => {
     if (start && end) {
@@ -143,107 +260,10 @@ const CardsSection = (props) => {
         style={{
           overflow: dataDesks.length ? "auto" : "hidden",
         }}
-        loader={
-          <div className={styles.loading}>
-            <Loading />
-          </div>
-        }
-        endMessage={<Divider plain>No more desks to load</Divider>}
       >
         <List
           grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
-          dataSource={dataDesks
-            .filter((item) => {
-              if (props.employeeSearch.length === 0) {
-                if (props.available === null) {
-                  return true;
-                } else if (
-                  item.available &&
-                  props.available &&
-                  !item.categories?.unavailable
-                ) {
-                  return true;
-                } else if (!item.available && !props.available) {
-                  return true;
-                }
-                return false;
-              }
-              const specificUser = item.reservations.find((info) => {
-                const newGuy = getSpecificUser(info);
-                if (
-                  info.startDate === newGuy.startDate &&
-                  info.endDate === newGuy.endDate
-                ) {
-                  return true;
-                }
-                return false;
-              });
-              if (
-                `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
-                  .toLowerCase()
-                  .includes(props.employeeSearch.toLowerCase()) &&
-                !checkAvailable(item.reservations, start, end)
-              ) {
-                return true;
-              }
-            })
-            .filter(({ category }) => {
-              if (
-                !props.categories.nearWindow &&
-                !props.categories.doubleMonitor &&
-                !props.categories.singleMonitor
-              )
-                return true;
-              if (
-                category &&
-                props.categories.nearWindow &&
-                !props.categories.doubleMonitor &&
-                !props.categories.singleMonitor &&
-                category.nearWindow
-              ) {
-                console.log("nearWindow");
-                return true;
-              }
-              if (
-                category &&
-                props.categories.nearWindow &&
-                props.categories.doubleMonitor &&
-                !props.categories.singleMonitor &&
-                category.nearWindow &&
-                category.doubleMonitor
-              ) {
-                console.log("doubleMonitor nearWindow");
-                return true;
-              }
-              if (
-                category &&
-                props.categories.nearWindow &&
-                !props.categories.doubleMonitor &&
-                props.categories.singleMonitor &&
-                category.nearWindow &&
-                category.singleMonitor
-              ) {
-                console.log("singleMonitor nearWindow");
-                return true;
-              }
-              if (
-                category &&
-                !props.categories.nearWindow &&
-                !props.categories.doubleMonitor &&
-                props.categories.singleMonitor &&
-                category.singleMonitor
-              ) {
-                return true;
-              }
-              if (
-                category &&
-                !props.categories.nearWindow &&
-                props.categories.doubleMonitor &&
-                !props.categories.singleMonitor &&
-                category.doubleMonitor
-              )
-                return true;
-            })}
+          dataSource={dataDesks}
           renderItem={(item) => {
             const available = checkAvailable(item.reservations, start, end);
             Object.assign(item, { available: available });
