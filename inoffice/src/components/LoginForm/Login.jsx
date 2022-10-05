@@ -1,16 +1,14 @@
 import "antd/dist/antd.css";
 import "../../index.scss";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MicrosoftLogin from "react-microsoft-login";
-import { useEffect } from "react";
 import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import styles from "./Login.module.scss";
-import { useState } from "react";
 import logo from "../../assets/Microsoft logo.png";
-import { Button, Checkbox, Form, Input, Alert } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Alert, Button, Checkbox, Form, Input } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { openError } from "../notification/Notification";
 import RegisterUser from "../RegisterUser/RegisterUser";
 import { encode as base64_encode } from "base-64";
@@ -96,7 +94,7 @@ const Login = () => {
   return !registerForm ? (
     <div className={styles.bg}>
       <div className={styles.login}>
-        <div className={styles.title}>
+        <div className={styles.title} data-cy="login-logo-welcomebacktext">
           <div className={styles.logo}></div>
           <p>Welcome back! Please log in to continue</p>
         </div>
@@ -133,11 +131,12 @@ const Login = () => {
                 />
               ) : null}
               <div className={`${styles.rememberwrap}`}>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox data-cy="remember-me">Remember me</Checkbox>
                 <Button
                   className={`${styles.register}`}
                   type="link"
                   size="small"
+                  data-cy="register-cta-button"
                   onClick={() => handleShowRegister(true)}
                 >
                   Register
@@ -177,7 +176,7 @@ const Login = () => {
           graphScopes={["user.read", "user.readbasic.all"]}
           prompt={"select_account"}
         >
-          <Button className={styles.btn}>
+          <Button className={styles.btn} data-cy="login-microsoftssobtn-button">
             <img
               style={{ width: "150px", height: "50px" }}
               src={logo}
