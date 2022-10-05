@@ -203,7 +203,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "10%",
+      width: "16.6666666667%",
     },
     {
       title: "Single monitor",
