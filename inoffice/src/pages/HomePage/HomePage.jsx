@@ -287,11 +287,12 @@ const Home = () => {
               md={11}
               className={styles.rightSideHome}
             >
-              <div className={styles.rightInputRow}>
+              <div className={styles.rightInputRow} data-cy="desk-filters">
                 <div>
                   <p className={styles.pStyles}>Search by name</p>
                   <Input
                     className={styles.inputSize}
+                    data-cy="search-by-name"
                     onChange={(e) => setEmployeeSearch(e.target.value)}
                   />
                 </div>
@@ -299,6 +300,7 @@ const Home = () => {
                   <p className={styles.pStyles}>Filter by availability</p>
                   <Select
                     showSearch
+                    data-cy="filter-by-availability"
                     className={styles.inputSize}
                     defaultValue={selectValue}
                     onChange={changeVal}
@@ -318,7 +320,10 @@ const Home = () => {
                   <p className={styles.pStyles}>Filter by category</p>
                   <Dropdown
                     overlay={
-                      <Menu className={styles.menu}>
+                      <Menu
+                        className={styles.menu}
+                        data-cy="filter-by-category"
+                      >
                         <Menu.Item>
                           <Checkbox
                             checked={singleMonitor}
@@ -419,6 +424,7 @@ const Home = () => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <Button
                   block
+                  data-cy="reserve-button"
                   disabled={
                     (selectedCardId.length === 0 || !isAvailable
                       ? true
@@ -449,6 +455,7 @@ const Home = () => {
                 </Button>
                 <Button
                   block
+                  data-cy="show-reviews-button"
                   disabled={selectedCardId.length === 0 ? true : false}
                   size="large"
                   className={`${styles.buttons} ${styles.tealBtn}`}
