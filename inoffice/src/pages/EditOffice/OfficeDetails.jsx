@@ -186,7 +186,7 @@ const OfficeDetails = ({ props }) => {
       dataIndex: "indexForOffice",
       key: 1,
       align: "center",
-      width: "16.6666666667%",
+      width: "15%",
     },
     {
       title: "Unavailable desks",
@@ -203,7 +203,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "16.6666666667%",
+      width: "15%",
     },
     {
       title: "Single monitor",
@@ -221,7 +221,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "16.6666666667%",
+      width: "15%",
     },
     {
       title: "Dual monitor",
@@ -239,7 +239,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "16.6666666667%",
+      width: "15%",
     },
     {
       title: "Near window",
@@ -256,7 +256,7 @@ const OfficeDetails = ({ props }) => {
         );
       },
       align: "center",
-      width: "16.6666666667%",
+      width: "15%",
     },
     {
       title: "Delete",
@@ -285,7 +285,7 @@ const OfficeDetails = ({ props }) => {
           </Popconfirm>
         );
       },
-      width: "10%",
+      width: "15%",
     },
   ];
 
