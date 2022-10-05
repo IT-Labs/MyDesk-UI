@@ -52,4 +52,21 @@ describe("Users can select a desk", () => {
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.assertButtonReserveIsDisabled();
   });
+
+  it.only("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    cy.wait(10000);
+    homeEmployeePage.filterByAvailability("Available");
+    homeEmployeePage.selectDeskN(1);
+    homeEmployeePage.selectSetForCoworker();
+    homeEmployeePage.clickReserveButton();
+  });
 });

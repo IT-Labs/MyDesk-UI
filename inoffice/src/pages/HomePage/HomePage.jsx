@@ -387,6 +387,7 @@ const Home = () => {
             <div className={styles.buttonReview}>
               <div>
                 <Checkbox
+                  data-cy="set-for-coworker"
                   onClick={() => setForCoworker(!forCoworker)}
                   checked={forCoworker}
                 />

@@ -98,6 +98,10 @@ export class HomeEmployeePage {
     );
   }
 
+  setForCoworkerCheckbox() {
+    return cy.get("[data-cy=set-for-coworker]");
+  }
+
   /**
    * Methods.
    */
@@ -296,6 +300,16 @@ export class HomeEmployeePage {
   assertButtonReserveIsDisabled() {
     this.reserveButton().should("be.disabled");
   }
+
+  selectSetForCoworker() {
+    this.setForCoworkerCheckbox().click();
+  }
+
+  clickReserveButton() {
+    this.reserveButton().click();
+  }
+
+  assertCoworkerIsRequiredWhenSetForCoworker() {}
 }
 
 export const homeEmployeePage = new HomeEmployeePage();
