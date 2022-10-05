@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { List, Card, Layout, Tooltip } from "antd";
+import { List, Card, Tooltip, Divider } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
 import api from "../../helper/api";
 import { useSelector } from "react-redux";
@@ -13,11 +13,12 @@ import { checkAvailable, findAvailable } from "../../utils/checkAvailable.js";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
-  const [loadingData, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const [selectedCardInSection, setselectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
   const [initialDesks, setInitnialDesks] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
   const { Meta } = Card;
   const media = window.matchMedia("(max-width: 820px)");
@@ -51,26 +52,50 @@ const CardsSection = (props) => {
     } else setDataDesks(desks);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-
+  const fetchData = async (skipProp) => {
     await api
-      .get("employee/office-desks/" + props.officeid, {
+      .get(`employee/office-desks/${props.officeid}/?top=20&skip=${skipProp}`, {
         signal: controller.signal,
       })
       .then((response) => {
-        setDesks(response.data);
-        setInitnialDesks(response.data);
-
-        setLoading(false);
+        if (skipProp === 0) {
+          setDesks(response.data);
+          setInitnialDesks(response.data);
+          setLoading(false);
+        } else {
+          setDesks([...dataDesks, ...response.data]);
+          if (!response.data.length) {
+            setHasMore(false);
+          }
+          setLoading(false);
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const loadInitialDesks = () => {
+    setSkip(0);
+    setLoading(true);
+    fetchData(0);
+  };
+
+  const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
+
+    let newSkip = skip + 20;
+    setSkip(newSkip);
+    setLoading(true);
+    fetchData(newSkip);
+  };
+
   useEffect(() => {
-    fetchData();
+    loadInitialDesks();
+    setHasMore(true);
+    setSkip(0);
     return () => {
       controller.abort();
       controller = new AbortController();
@@ -102,218 +127,220 @@ const CardsSection = (props) => {
   };
 
   return (
-    <>
-      {loadingData && (
-        <div className={styles.loading}>
-          <Loading />
-        </div>
-      )}
-      {!loadingData && (
-        <InfiniteScroll
-          dataLength={dataDesks.length}
-          scrollableTarget="scrollableDiv"
-          display="flex"
-          className={styles.scrollableDiv}
-        >
-          <Layout style={{ background: "transparent" }}>
-            <List
-              grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
-              dataSource={dataDesks
-                .filter((item) => {
-                  if (props.employeeSearch.length === 0) {
-                    if (props.available === null) {
-                      return true;
-                    } else if (
-                      item.available &&
-                      props.available &&
-                      !item.categories?.unavailable
-                    ) {
-                      return true;
-                    } else if (!item.available && !props.available) {
-                      return true;
-                    }
-                    return false;
-                  }
-                  const specificUser = item.reservations.find((info) => {
-                    const newGuy = getSpecificUser(info);
-                    if (
-                      info.startDate === newGuy.startDate &&
-                      info.endDate === newGuy.endDate
-                    ) {
-                      return true;
-                    }
-                    return false;
-                  });
-                  if (
-                    `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
-                      .toLowerCase()
-                      .includes(props.employeeSearch.toLowerCase()) &&
-                    !checkAvailable(item.reservations, start, end)
-                  ) {
-                    return true;
-                  }
-                })
-                .filter(({ category }) => {
-                  if (
-                    !props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor
-                  )
-                    return true;
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.nearWindow
-                  ) {
-                    console.log("nearWindow");
-                    return true;
-                  }
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.nearWindow &&
-                    category.doubleMonitor
-                  ) {
-                    console.log("doubleMonitor nearWindow");
-                    return true;
-                  }
-                  if (
-                    category &&
-                    props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    props.categories.singleMonitor &&
-                    category.nearWindow &&
-                    category.singleMonitor
-                  ) {
-                    console.log("singleMonitor nearWindow");
-                    return true;
-                  }
-                  if (
-                    category &&
-                    !props.categories.nearWindow &&
-                    !props.categories.doubleMonitor &&
-                    props.categories.singleMonitor &&
-                    category.singleMonitor
-                  ) {
-                    return true;
-                  }
-                  if (
-                    category &&
-                    !props.categories.nearWindow &&
-                    props.categories.doubleMonitor &&
-                    !props.categories.singleMonitor &&
-                    category.doubleMonitor
-                  )
-                    return true;
-                })}
-              renderItem={(item) => {
-                const available = checkAvailable(item.reservations, start, end);
-                Object.assign(item, { available: available });
-                const specificUser = item.reservations.find((info) => {
-                  const newGuy = getSpecificUser(info);
-                  if (
-                    info.startDate === newGuy.startDate &&
-                    info.endDate === newGuy.endDate
-                  ) {
-                    return true;
-                  }
-                  return false;
-                });
+    <div
+      id="scrollableDiv"
+      style={{
+        height: 400,
+        overflow: dataDesks.length ? "auto" : "hidden",
+        border: "1px solid rgba(140, 140, 140, 0.35)",
+      }}
+    >
+      <InfiniteScroll
+        dataLength={dataDesks.length}
+        next={loadMoreData}
+        hasMore={hasMore}
+        scrollableTarget="scrollableDiv"
+        style={{
+          overflow: dataDesks.length ? "auto" : "hidden",
+        }}
+        loader={
+          <div className={styles.loading}>
+            <Loading />
+          </div>
+        }
+        endMessage={<Divider plain>No more desks to load</Divider>}
+      >
+        <List
+          grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
+          dataSource={dataDesks
+            .filter((item) => {
+              if (props.employeeSearch.length === 0) {
+                if (props.available === null) {
+                  return true;
+                } else if (
+                  item.available &&
+                  props.available &&
+                  !item.categories?.unavailable
+                ) {
+                  return true;
+                } else if (!item.available && !props.available) {
+                  return true;
+                }
+                return false;
+              }
+              const specificUser = item.reservations.find((info) => {
+                const newGuy = getSpecificUser(info);
+                if (
+                  info.startDate === newGuy.startDate &&
+                  info.endDate === newGuy.endDate
+                ) {
+                  return true;
+                }
+                return false;
+              });
+              if (
+                `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
+                  .toLowerCase()
+                  .includes(props.employeeSearch.toLowerCase()) &&
+                !checkAvailable(item.reservations, start, end)
+              ) {
+                return true;
+              }
+            })
+            .filter(({ category }) => {
+              if (
+                !props.categories.nearWindow &&
+                !props.categories.doubleMonitor &&
+                !props.categories.singleMonitor
+              )
+                return true;
+              if (
+                category &&
+                props.categories.nearWindow &&
+                !props.categories.doubleMonitor &&
+                !props.categories.singleMonitor &&
+                category.nearWindow
+              ) {
+                console.log("nearWindow");
+                return true;
+              }
+              if (
+                category &&
+                props.categories.nearWindow &&
+                props.categories.doubleMonitor &&
+                !props.categories.singleMonitor &&
+                category.nearWindow &&
+                category.doubleMonitor
+              ) {
+                console.log("doubleMonitor nearWindow");
+                return true;
+              }
+              if (
+                category &&
+                props.categories.nearWindow &&
+                !props.categories.doubleMonitor &&
+                props.categories.singleMonitor &&
+                category.nearWindow &&
+                category.singleMonitor
+              ) {
+                console.log("singleMonitor nearWindow");
+                return true;
+              }
+              if (
+                category &&
+                !props.categories.nearWindow &&
+                !props.categories.doubleMonitor &&
+                props.categories.singleMonitor &&
+                category.singleMonitor
+              ) {
+                return true;
+              }
+              if (
+                category &&
+                !props.categories.nearWindow &&
+                props.categories.doubleMonitor &&
+                !props.categories.singleMonitor &&
+                category.doubleMonitor
+              )
+                return true;
+            })}
+          renderItem={(item) => {
+            const available = checkAvailable(item.reservations, start, end);
+            Object.assign(item, { available: available });
+            const specificUser = item.reservations.find((info) => {
+              const newGuy = getSpecificUser(info);
+              if (
+                info.startDate === newGuy.startDate &&
+                info.endDate === newGuy.endDate
+              ) {
+                return true;
+              }
+              return false;
+            });
 
-                return (
-                  <List.Item
-                    style={{
-                      border:
-                        item === selectedCardInSection ? "solid 2px" : "none",
-                      transition: "all 0.3s ease-in-out",
-                    }}
-                  >
-                    <Card
-                      onClick={() => selectCard(item)}
-                      bodyStyle={{
-                        // backgroundColor: checkAvailable(item.reservation),
-                        background: item.category?.unavailable
-                          ? "#c1c1c1"
-                          : available
-                          ? "#69e28d"
-                          : "#f37076",
-                        height: "10rem",
-                      }}
-                      hoverable={true}
-                      bordered={true}
-                    >
-                      <Meta
-                        title={
-                          <div className={styles.meta}>
-                            <p style={{ fontSize: "1rem" }}>
-                              Desk {item.indexForOffice}
-                            </p>
-                            <Tooltip
-                              autoAdjustOverflow={true}
-                              overlayStyle={{ width: 120 }}
-                              title={`${
-                                item.category?.doubleMonitor
-                                  ? "Dual monitors\n"
-                                  : ""
-                              }
+            return (
+              <List.Item
+                style={{
+                  border: item === selectedCardInSection ? "solid 2px" : "none",
+                  transition: "all 0.3s ease-in-out",
+                }}
+              >
+                <Card
+                  onClick={() => selectCard(item)}
+                  bodyStyle={{
+                    // backgroundColor: checkAvailable(item.reservation),
+                    background: item.category?.unavailable
+                      ? "#c1c1c1"
+                      : available
+                      ? "#69e28d"
+                      : "#f37076",
+                    height: "10rem",
+                  }}
+                  hoverable={true}
+                  bordered={true}
+                >
+                  <Meta
+                    title={
+                      <div className={styles.meta}>
+                        <p style={{ fontSize: "1rem" }}>
+                          Desk {item.indexForOffice}
+                        </p>
+                        <Tooltip
+                          autoAdjustOverflow={true}
+                          overlayStyle={{ width: 120 }}
+                          title={`${
+                            item.category?.doubleMonitor
+                              ? "Dual monitors\n"
+                              : ""
+                          }
                               ${
                                 item.category?.singleMonitor
                                   ? "Single monitor\n"
                                   : ""
                               } ${
-                                !item.category?.singleMonitor &&
-                                !item.category?.doubleMonitor
-                                  ? "No monitors\n"
-                                  : ""
-                              }${
-                                item.category?.nearWindow ? "Near window\n" : ""
-                              }`}
-                            >
-                              <InfoCircleOutlined
-                                className={styles.infoCircle}
-                              />
-                            </Tooltip>
-                          </div>
-                        }
-                        description={
-                          <div className={styles.cardContentInformation}>
-                            <div>
-                              <p className={styles.basicText}>
-                                {item.category?.unavailable
-                                  ? "Unavailable"
-                                  : item.reservations.length > 0 &&
-                                    !available &&
-                                    `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
-                                {}
-                              </p>
-                              <p className={styles.basicText}>
-                                {!item.category?.unavailable &&
-                                  item.reservations.length > 0 &&
-                                  !available &&
-                                  `${moment(specificUser?.startDate).format(
-                                    "DD-MM"
-                                  )}
+                            !item.category?.singleMonitor &&
+                            !item.category?.doubleMonitor
+                              ? "No monitors\n"
+                              : ""
+                          }${item.category?.nearWindow ? "Near window\n" : ""}`}
+                        >
+                          <InfoCircleOutlined className={styles.infoCircle} />
+                        </Tooltip>
+                      </div>
+                    }
+                    description={
+                      <div className={styles.cardContentInformation}>
+                        <div>
+                          <p className={styles.basicText}>
+                            {item.category?.unavailable
+                              ? "Unavailable"
+                              : item.reservations.length > 0 &&
+                                !available &&
+                                `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
+                            {}
+                          </p>
+                          <p className={styles.basicText}>
+                            {!item.category?.unavailable &&
+                              item.reservations.length > 0 &&
+                              !available &&
+                              `${moment(specificUser?.startDate).format(
+                                "DD-MM"
+                              )}
                                   / ${moment(specificUser?.endDate).format(
                                     "DD-MM"
                                   )}`}
-                              </p>
-                            </div>
-                          </div>
-                        }
-                      />
-                    </Card>
-                  </List.Item>
-                );
-              }}
-            />
-          </Layout>
-        </InfiniteScroll>
-      )}
-    </>
+                          </p>
+                        </div>
+                      </div>
+                    }
+                  />
+                </Card>
+              </List.Item>
+            );
+          }}
+        />
+      </InfiniteScroll>
+    </div>
   );
 };
 export default CardsSection;
