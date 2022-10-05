@@ -57,8 +57,10 @@ describe("Calendar functions in Homepage", () => {
     homeEmployeePage.verifyPastDatesAreDisabledInCalendar();
   });
 
-  it.skip("Verify that all weekends are shadowed and can not be selected", () => {
-    cy("/");
+  // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53148/
+  // @TODO remove skip once bug is fixed
+  https: it.skip("Verify that all weekends are shadowed and can not be selected", () => {
+    cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
       userData.genericPassword
