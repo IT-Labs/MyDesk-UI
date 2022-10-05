@@ -55,7 +55,7 @@ describe("Users can select a desk", () => {
 
   // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53204/
   // @TODO remove skip once bug is fixed
-  https: it.skip("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
+  it.skip("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,

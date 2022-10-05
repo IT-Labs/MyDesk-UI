@@ -291,8 +291,6 @@ export class HomeEmployeePage {
   selectOffice(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
     cy.get(".ant-select-item.ant-select-item-option")
-      // ant-select-item ant-select-item-option ant-select-item-option-active
-      //ant-select-item-option-content
       .contains(officeName)
       .click({ force: true });
   }
