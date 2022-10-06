@@ -45,6 +45,7 @@ const Officebranchselection = (props) => {
         <Form.Item>
           <p className={props.styles}>Select office</p>
           <Select
+            data-cy={props.dataCy}
             onChange={handleChange}
             placeholder="Select office-branch"
             defaultValue={data[0].name}

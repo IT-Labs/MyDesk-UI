@@ -256,6 +256,7 @@ const Home = () => {
                 <OfficeBranchSelection
                   onOfficebranchChange={changeofficebranch}
                   styles={styles.pStyles}
+                  dataCy="office-branch-select"
                 />
                 <div className={styles.leftInputs}>
                   <p className={styles.pStyles}>Select date</p>
@@ -396,6 +397,7 @@ const Home = () => {
             <div className={styles.buttonReview}>
               <div>
                 <Checkbox
+                  data-cy="set-for-coworker"
                   onClick={() => setForCoworker(!forCoworker)}
                   checked={forCoworker}
                 />

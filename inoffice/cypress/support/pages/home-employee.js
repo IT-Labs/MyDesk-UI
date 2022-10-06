@@ -68,6 +68,10 @@ export class HomeEmployeePage {
     );
   }
 
+  officeBranchFilterDropdown() {
+    return cy.get("[data-cy=office-branch-select] .ant-select-selector");
+  }
+
   desksCards() {
     return cy.get(".ant-list-item");
   }
@@ -90,6 +94,16 @@ export class HomeEmployeePage {
 
   modalDescriptionLabel() {
     return cy.get(".ant-notification-notice-description");
+  }
+
+  officeDropdown() {
+    return cy.get(
+      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+    );
+  }
+
+  setForCoworkerCheckbox() {
+    return cy.get("[data-cy=set-for-coworker]");
   }
 
   availabilityOptionDropdown() {
@@ -210,8 +224,10 @@ export class HomeEmployeePage {
   }
 
   filterByAvailability(availability) {
-    this.availabilityFilterDropdown().click();
-    this.availabilityOptionDropdown().contains(availability).click();
+    this.availabilityFilterDropdown().click({ force: true });
+    this.availabilityOptionDropdown()
+      .contains(availability)
+      .click({ force: true });
   }
 
   selectDeskN(n) {
@@ -279,6 +295,27 @@ export class HomeEmployeePage {
         }
       });
   }
+
+  selectOffice(officeName) {
+    this.officeBranchFilterDropdown().click({ force: true });
+    cy.get(".ant-select-item.ant-select-item-option")
+      .contains(officeName)
+      .click({ force: true });
+  }
+
+  assertButtonReserveIsDisabled() {
+    this.reserveButton().should("be.disabled");
+  }
+
+  selectSetForCoworker() {
+    this.setForCoworkerCheckbox().click();
+  }
+
+  clickReserveButton() {
+    this.reserveButton().click();
+  }
+
+  assertCoworkerIsRequiredWhenSetForCoworker() {}
 }
 
 export const homeEmployeePage = new HomeEmployeePage();
