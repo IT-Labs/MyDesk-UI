@@ -37,21 +37,15 @@ export class HomeEmployeePage {
   }
 
   firstAvailableDayOfNextMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view")
-      .last();
+    return cy.get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view").last();
   }
 
   lastAvailableDayOfNextMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
-      .last();
+    return cy.get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view").last();
   }
 
   lastAvailableDayOfCurrentMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
-      .first();
+    return cy.get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view").first();
   }
 
   startDateInputInCalendar() {
@@ -64,7 +58,7 @@ export class HomeEmployeePage {
 
   availabilityFilterDropdown() {
     return cy.get(
-      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+        "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item",
     );
   }
 
@@ -98,7 +92,7 @@ export class HomeEmployeePage {
 
   officeDropdown() {
     return cy.get(
-      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+        "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item",
     );
   }
 
@@ -108,6 +102,14 @@ export class HomeEmployeePage {
 
   availabilityOptionDropdown() {
     return cy.get(".ant-select-item-option-content");
+  }
+
+  modalContainer() {
+    return cy.get("[data-cy=\"modal-container\"]");
+  }
+
+  loadingDots() {
+    return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
   }
 
   /**
@@ -143,8 +145,8 @@ export class HomeEmployeePage {
     this.openCalendar();
     this.clickStartDatePrevMonthButton();
     this.startDateMonthLabel().should(
-      "have.text",
-      this.getPreviousMonth("MMM")
+        "have.text",
+        this.getPreviousMonth("MMM"),
     );
   }
 
@@ -162,9 +164,7 @@ export class HomeEmployeePage {
 
   getPreviousMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const previousMonth = currentMoment
-      .subtract(1, "months")
-      .format(monthFormat);
+    const previousMonth = currentMoment.subtract(1, "months").format(monthFormat);
     return previousMonth;
   }
 
@@ -202,80 +202,59 @@ export class HomeEmployeePage {
   }
 
   assertSingleDateIsSelected() {
-    this.startDateInputInCalendar()
-      .invoke("val")
-      .then((startDate) => {
-        this.endDateInputInCalendar().should("have.value", startDate);
-      });
+    this.startDateInputInCalendar().invoke("val").then((startDate) => {
+      this.endDateInputInCalendar().should("have.value", startDate);
+    });
   }
 
   assertRangeDateIsSelected() {
-    this.endDateInputInCalendar()
-      .invoke("val")
-      .then((endDate) => {
-        this.startDateInputInCalendar()
-          .invoke("val")
-          .then((startDate) => {
-            expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
-              moment(startDate, "DD/MM/YYYY").toDate()
-            );
-          });
+    this.endDateInputInCalendar().invoke("val").then((endDate) => {
+      this.startDateInputInCalendar().invoke("val").then((startDate) => {
+        expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
+            moment(startDate, "DD/MM/YYYY").toDate(),
+        );
       });
+    });
   }
 
   filterByAvailability(availability) {
     this.availabilityFilterDropdown().click({ force: true });
-    this.availabilityOptionDropdown()
-      .contains(availability)
-      .click({ force: true });
+    this.availabilityOptionDropdown().contains(availability).click({ force: true });
   }
 
   selectDeskN(n) {
-    this.desksCards()
-      .eq(n - 1)
-      .click();
+    this.desksCards().eq(n - 1).click();
   }
 
   verifyOnlyOneDeskIsSelected() {
-    this.desksCard()
-      .find(
-        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
-      )
-      .should("have.length", 1);
+    this.desksCard().find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`,
+    ).should("have.length", 1);
   }
 
   verifyReservationIsSuccessful() {
     this.modalMessageLabel().should("have.text", "Notification");
     this.modalDescriptionLabel().should(
-      "have.text",
-      "You have successfully reserved a desk."
+        "have.text",
+        "You have successfully reserved a desk.",
     );
   }
 
   verifyPastDatesAreDisabledInCalendar() {
     // previous days in the same week
-    this.todayCell()
-      .prevAll()
-      .each(($td) => {
-        expect($td).to.have.class("ant-picker-cell-disabled");
-      });
+    this.todayCell().prevAll().each(($td) => {
+      expect($td).to.have.class("ant-picker-cell-disabled");
+    });
 
     // days in the previous weeks
-    this.todayCell()
-      .parent()
-      .prevAll()
-      .find("td")
-      .each(($td) => {
-        expect($td).to.have.class("ant-picker-cell-disabled");
-      });
+    this.todayCell().parent().prevAll().find("td").each(($td) => {
+      expect($td).to.have.class("ant-picker-cell-disabled");
+    });
   }
 
   verifyWeekendsAreDisabledInCalendar() {
-    cy.get(".ant-picker-content")
-      .first()
-      .find("td")
-      .each(($td, $index) => {
-        const weekendsIndex = new Array(
+    cy.get(".ant-picker-content").first().find("td").each(($td, $index) => {
+      const weekendsIndex = new Array(
           0,
           6,
           7,
@@ -286,21 +265,43 @@ export class HomeEmployeePage {
           27,
           28,
           34,
-          35
-        );
+          35,
+      );
 
-        if (weekendsIndex.includes($index)) {
-          cy.log($td.text() + " = " + $index);
-          expect($td).to.have.class("ant-picker-cell-disabled");
-        }
-      });
+      if (weekendsIndex.includes($index)) {
+        cy.log($td.text() + " = " + $index);
+        expect($td).to.have.class("ant-picker-cell-disabled");
+      }
+    });
   }
 
   selectOffice(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
-    cy.get(".ant-select-item.ant-select-item-option")
-      .contains(officeName)
-      .click({ force: true });
+    cy.get(".ant-select-item.ant-select-item-option").contains(officeName).click({ force: true });
+  }
+
+  assertShowReviewsButtonIsDisabled() {
+    this.showReviewsButton().should("be.disabled");
+  }
+
+  clickShowReviewsButton() {
+    this.showReviewsButton().click();
+  }
+
+  assertModalIsDisplayed() {
+    this.modalContainer().contains("Reviews for selected entity").should("be.visible");
+  }
+
+  clickModalOkButton() {
+    this.modalContainer().contains("OK").click();
+  }
+
+  assertLoadingDotsNotVisible() {
+    this.loadingDots().should("not.exist");
+  }
+
+  assertModalIsNotDisplayed() {
+    this.modalContainer().contains("Reviews for selected entity").should("not.be.visible");
   }
 
   assertButtonReserveIsDisabled() {
