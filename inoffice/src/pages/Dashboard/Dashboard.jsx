@@ -322,10 +322,16 @@ const Dashboard = () => {
       title: "Review output",
       dataIndex: "reviewOutput",
       key: 2,
-
+      width: "90px",
       align: "center",
     },
-    { title: "Desk number", dataIndex: "deskIndex", key: 3, align: "center" },
+    {
+      title: "Desk number",
+      dataIndex: "deskIndex",
+      key: 3,
+      align: "center",
+      width: "90px",
+    },
     {
       title: "Options",
       dataIndex: "options",
@@ -428,10 +434,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div
-            // style={{
-            //   width: "100%",
-            //   marginTop: "1%",
-            // }}
+              style={{
+                paddingBottom: "20px",
+              }}
             >
               <div className={styles.dataRow}>
                 <div className={styles.pieCard}>

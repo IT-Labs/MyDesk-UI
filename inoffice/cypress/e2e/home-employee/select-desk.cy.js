@@ -3,7 +3,7 @@ import { homeEmployeePage } from "../../support/pages/home-employee";
 import * as userData from "../../fixtures/userData.json";
 
 describe("Users can select a desk", () => {
-  it("Verify that the user can select a single future date from the calendar", () => {
+  it("Verify that the user can select only one desk in a reservation", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,

@@ -76,6 +76,10 @@ export class HomeEmployeePage {
     return cy.get(".ant-list-item");
   }
 
+  desksCard() {
+    return cy.get(".ant-col");
+  }
+
   reserveButton() {
     return cy.get("[data-cy=reserve-button]");
   }
@@ -100,6 +104,10 @@ export class HomeEmployeePage {
 
   setForCoworkerCheckbox() {
     return cy.get("[data-cy=set-for-coworker]");
+  }
+
+  availabilityOptionDropdown() {
+    return cy.get(".ant-select-item-option-content");
   }
 
   /**
@@ -217,7 +225,7 @@ export class HomeEmployeePage {
 
   filterByAvailability(availability) {
     this.availabilityFilterDropdown().click({ force: true });
-    cy.get(".ant-select-item.ant-select-item-option")
+    this.availabilityOptionDropdown()
       .contains(availability)
       .click({ force: true });
   }
@@ -229,7 +237,7 @@ export class HomeEmployeePage {
   }
 
   verifyOnlyOneDeskIsSelected() {
-    cy.get(".ant-col")
+    this.desksCard()
       .find(
         `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
       )

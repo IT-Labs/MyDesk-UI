@@ -1,9 +1,9 @@
 .loading {
-  height: 400px;
   max-height: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .scrollableDiv {
