@@ -1,10 +1,10 @@
-import { loginPage } from '../../support/pages/login';
-import { homeEmployeePage } from '../../support/pages/home-employee';
-import * as userData from '../../fixtures/userData.json';
+import { loginPage } from "../../support/pages/login";
+import { homeEmployeePage } from "../../support/pages/home-employee";
+import * as userData from "../../fixtures/userData.json";
 
-describe('Show reviews in Homepage', () => {
-  it('Verify user is not able to click on the Show reviews button before selecting the entity', () => {
-    cy.visit('/');
+describe("Show reviews in Homepage", () => {
+  it("Verify user is not able to click on the Show reviews button before selecting the entity", () => {
+    cy.visit("/");
     loginPage.doLogin(
         userData.cypressAutomationUserEmail,
         userData.genericPassword,
@@ -12,32 +12,32 @@ describe('Show reviews in Homepage', () => {
     homeEmployeePage.assertShowReviewsButtonIsDisabled();
   });
 
-  it('Verify user is able to click on the Show reviews button after selecting the entity', () => {
-    cy.visit('/');
+  it("Verify user is able to click on the Show reviews button after selecting the entity", () => {
+    cy.visit("/");
     loginPage.doLogin(
         userData.cypressAutomationUserEmail,
         userData.genericPassword,
     );
 
-    homeEmployeePage.selectOffice('Blue-Office Resen');
+    homeEmployeePage.selectOffice("Blue-Office Resen");
     homeEmployeePage.assertLoadingDotsNotVisible();
-    homeEmployeePage.filterByAvailability('Available');
+    homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
     homeEmployeePage.clickShowReviewsButton();
     homeEmployeePage.assertModalIsDisplayed();
   });
 
-  it('Verify clicking OK button closes the modal', () => {
-    cy.visit('/');
+  it("Verify clicking OK button closes the modal", () => {
+    cy.visit("/");
     loginPage.doLogin(
         userData.cypressAutomationUserEmail,
         userData.genericPassword,
     );
 
-    homeEmployeePage.selectOffice('Blue-Office Resen');
+    homeEmployeePage.selectOffice("Blue-Office Resen");
     homeEmployeePage.assertLoadingDotsNotVisible();
-    homeEmployeePage.filterByAvailability('Available');
+    homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
     homeEmployeePage.clickShowReviewsButton();
@@ -47,20 +47,20 @@ describe('Show reviews in Homepage', () => {
 
   // https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53150/
   // TODO: Delete skip once bug is fixed and verified.
-  it.skip('Verify clicking outside the modal closes it', () => {
-    cy.visit('/');
+  it.skip("Verify clicking outside the modal closes it", () => {
+    cy.visit("/");
     loginPage.doLogin(
         userData.cypressAutomationUserEmail,
         userData.genericPassword,
     );
 
-    homeEmployeePage.selectOffice('Blue-Office Resen');
+    homeEmployeePage.selectOffice("Blue-Office Resen");
     homeEmployeePage.assertLoadingDotsNotVisible();
-    homeEmployeePage.filterByAvailability('Available');
+    homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
     homeEmployeePage.clickShowReviewsButton();
-    cy.clickOnScreenPosition('topLeft');
+    cy.clickOnScreenPosition("topLeft");
     homeEmployeePage.assertModalIsNotDisplayed();
   });
 });
