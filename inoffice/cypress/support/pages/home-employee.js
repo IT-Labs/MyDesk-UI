@@ -1,70 +1,64 @@
-import moment from "moment";
+import moment from 'moment';
 
 export class HomeEmployeePage {
   /**
    * Locators.
    */
   userHeaderLink() {
-    return cy.get("[data-cy=user-header-link]");
+    return cy.get('[data-cy=user-header-link]');
   }
 
   logoutButton() {
-    return cy.get("[data-cy=logout-button]");
+    return cy.get('[data-cy=logout-button]');
   }
 
   displayCalendarIcon() {
-    return cy.get(".anticon-calendar");
+    return cy.get('.anticon-calendar');
   }
 
   startDateNextMonthCalendarButton() {
-    return cy.get(".ant-picker-header-next-btn").first();
+    return cy.get('.ant-picker-header-next-btn').first();
   }
 
   startDatePreviousMonthCalendarButton() {
-    return cy.get(".ant-picker-header-prev-btn").first();
+    return cy.get('.ant-picker-header-prev-btn').first();
   }
 
   startDateMonthLabel() {
-    return cy.get(".ant-picker-month-btn").first();
+    return cy.get('.ant-picker-month-btn').first();
   }
 
   startDateYearLabel() {
-    return cy.get(".ant-picker-year-btn").first();
+    return cy.get('.ant-picker-year-btn').first();
   }
 
   todayCell() {
-    return cy.get(".ant-picker-cell-today.ant-picker-cell-in-view");
+    return cy.get('.ant-picker-cell-today.ant-picker-cell-in-view');
   }
 
   firstAvailableDayOfNextMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view")
-      .last();
+    return cy.get('.ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view').last();
   }
 
   lastAvailableDayOfNextMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
-      .last();
+    return cy.get('.ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view').last();
   }
 
   lastAvailableDayOfCurrentMonthInCalendar() {
-    return cy
-      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
-      .first();
+    return cy.get('.ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view').first();
   }
 
   startDateInputInCalendar() {
-    return cy.get(".ant-picker-input input").first();
+    return cy.get('.ant-picker-input input').first();
   }
 
   endDateInputInCalendar() {
-    return cy.get(".ant-picker-input input").last();
+    return cy.get('.ant-picker-input input').last();
   }
 
   availabilityFilterDropdown() {
     return cy.get(
-      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+        '[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item',
     );
   }
 
@@ -73,48 +67,56 @@ export class HomeEmployeePage {
   }
 
   desksCards() {
-    return cy.get(".ant-list-item");
+    return cy.get('.ant-list-item');
   }
 
   desksCard() {
-    return cy.get(".ant-col");
+    return cy.get('.ant-col');
   }
 
   reserveButton() {
-    return cy.get("[data-cy=reserve-button]");
+    return cy.get('[data-cy=reserve-button]');
   }
 
   showReviewsButton() {
-    return cy.get("[data-cy=show-reviews-button]");
+    return cy.get('[data-cy=show-reviews-button]');
   }
 
   modalMessageLabel() {
-    return cy.get(".ant-notification-notice-message");
+    return cy.get('.ant-notification-notice-message');
   }
 
   modalDescriptionLabel() {
-    return cy.get(".ant-notification-notice-description");
+    return cy.get('.ant-notification-notice-description');
   }
 
   officeDropdown() {
     return cy.get(
-      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
+        '[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item',
     );
   }
 
   setForCoworkerCheckbox() {
-    return cy.get("[data-cy=set-for-coworker]");
+    return cy.get('[data-cy=set-for-coworker]');
   }
 
   availabilityOptionDropdown() {
-    return cy.get(".ant-select-item-option-content");
+    return cy.get('.ant-select-item-option-content');
+  }
+
+  modalContainer() {
+    return cy.get('[data-cy="modal-container"]');
+  }
+
+  loadingDots() {
+    return cy.get('[data-cy=loading-dots]', { timeout: 20000 });
   }
 
   /**
    * Methods.
    */
   assertUserNameInHeader(userFullName) {
-    this.userHeaderLink().should("have.text", userFullName).and("be.visible");
+    this.userHeaderLink().should('have.text', userFullName).and('be.visible');
   }
 
   clickLogoutButton() {
@@ -136,35 +138,33 @@ export class HomeEmployeePage {
   assertNextMonthIsDisplayed() {
     this.openCalendar();
     this.clickStartDateNextMonthButton();
-    this.startDateMonthLabel().should("have.text", this.getNextMonth("MMM"));
+    this.startDateMonthLabel().should('have.text', this.getNextMonth('MMM'));
   }
 
   assertPreviousMonthIsDisplayed() {
     this.openCalendar();
     this.clickStartDatePrevMonthButton();
     this.startDateMonthLabel().should(
-      "have.text",
-      this.getPreviousMonth("MMM")
+        'have.text',
+        this.getPreviousMonth('MMM'),
     );
   }
 
   getNextMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const nextMonth = currentMoment.add(1, "months").format(monthFormat);
+    const nextMonth = currentMoment.add(1, 'months').format(monthFormat);
     return nextMonth;
   }
 
   getYearOfNextMonth() {
     const currentMoment = moment(new Date());
-    const yearOfNextMonth = currentMoment.add(1, "months").format("YYYY");
+    const yearOfNextMonth = currentMoment.add(1, 'months').format('YYYY');
     return yearOfNextMonth;
   }
 
   getPreviousMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const previousMonth = currentMoment
-      .subtract(1, "months")
-      .format(monthFormat);
+    const previousMonth = currentMoment.subtract(1, 'months').format(monthFormat);
     return previousMonth;
   }
 
@@ -176,7 +176,7 @@ export class HomeEmployeePage {
 
   getCurrentYear() {
     const currentMoment = moment(new Date());
-    const currentYear = currentMoment.format("YYYY");
+    const currentYear = currentMoment.format('YYYY');
     return currentYear;
   }
 
@@ -188,9 +188,9 @@ export class HomeEmployeePage {
 
   assertCurrentDateIsDefaultDate() {
     this.openCalendar();
-    this.startDateYearLabel().should("have.text", this.getCurrentYear());
-    this.startDateMonthLabel().should("have.text", this.getCurrentMonth("MMM"));
-    this.todayCell().should("have.text", this.getCurrentDay("D"));
+    this.startDateYearLabel().should('have.text', this.getCurrentYear());
+    this.startDateMonthLabel().should('have.text', this.getCurrentMonth('MMM'));
+    this.todayCell().should('have.text', this.getCurrentDay('D'));
   }
 
   selectFirstAvailableDayOfNextMonth() {
@@ -202,25 +202,19 @@ export class HomeEmployeePage {
   }
 
   assertSingleDateIsSelected() {
-    this.startDateInputInCalendar()
-      .invoke("val")
-      .then((startDate) => {
-        this.endDateInputInCalendar().should("have.value", startDate);
-      });
+    this.startDateInputInCalendar().invoke('val').then((startDate) => {
+      this.endDateInputInCalendar().should('have.value', startDate);
+    });
   }
 
   assertRangeDateIsSelected() {
-    this.endDateInputInCalendar()
-      .invoke("val")
-      .then((endDate) => {
-        this.startDateInputInCalendar()
-          .invoke("val")
-          .then((startDate) => {
-            expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
-              moment(startDate, "DD/MM/YYYY").toDate()
-            );
-          });
+    this.endDateInputInCalendar().invoke('val').then((endDate) => {
+      this.startDateInputInCalendar().invoke('val').then((startDate) => {
+        expect(moment(endDate, 'DD/MM/YYYY').toDate()).to.be.greaterThan(
+            moment(startDate, 'DD/MM/YYYY').toDate(),
+        );
       });
+    });
   }
 
   filterByAvailability(availability) {
@@ -231,51 +225,38 @@ export class HomeEmployeePage {
   }
 
   selectDeskN(n) {
-    this.desksCards()
-      .eq(n - 1)
-      .click();
+    this.desksCards().eq(n - 1).click();
   }
 
   verifyOnlyOneDeskIsSelected() {
-    this.desksCard()
-      .find(
-        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
-      )
-      .should("have.length", 1);
+    this.desksCard().find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`,
+    ).should('have.length', 1);
   }
 
   verifyReservationIsSuccessful() {
-    this.modalMessageLabel().should("have.text", "Notification");
+    this.modalMessageLabel().should('have.text', 'Notification');
     this.modalDescriptionLabel().should(
-      "have.text",
-      "You have successfully reserved a desk."
+        'have.text',
+        'You have successfully reserved a desk.',
     );
   }
 
   verifyPastDatesAreDisabledInCalendar() {
     // previous days in the same week
-    this.todayCell()
-      .prevAll()
-      .each(($td) => {
-        expect($td).to.have.class("ant-picker-cell-disabled");
-      });
+    this.todayCell().prevAll().each(($td) => {
+      expect($td).to.have.class('ant-picker-cell-disabled');
+    });
 
     // days in the previous weeks
-    this.todayCell()
-      .parent()
-      .prevAll()
-      .find("td")
-      .each(($td) => {
-        expect($td).to.have.class("ant-picker-cell-disabled");
-      });
+    this.todayCell().parent().prevAll().find('td').each(($td) => {
+      expect($td).to.have.class('ant-picker-cell-disabled');
+    });
   }
 
   verifyWeekendsAreDisabledInCalendar() {
-    cy.get(".ant-picker-content")
-      .first()
-      .find("td")
-      .each(($td, $index) => {
-        const weekendsIndex = new Array(
+    cy.get('.ant-picker-content').first().find('td').each(($td, $index) => {
+      const weekendsIndex = new Array(
           0,
           6,
           7,
@@ -286,25 +267,47 @@ export class HomeEmployeePage {
           27,
           28,
           34,
-          35
-        );
+          35,
+      );
 
-        if (weekendsIndex.includes($index)) {
-          cy.log($td.text() + " = " + $index);
-          expect($td).to.have.class("ant-picker-cell-disabled");
-        }
-      });
+      if (weekendsIndex.includes($index)) {
+        cy.log($td.text() + ' = ' + $index);
+        expect($td).to.have.class('ant-picker-cell-disabled');
+      }
+    });
   }
 
   selectOffice(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
-    cy.get(".ant-select-item.ant-select-item-option")
-      .contains(officeName)
-      .click({ force: true });
+    cy.get('.ant-select-item.ant-select-item-option').contains(officeName).click({ force: true });
+  }
+
+  assertShowReviewsButtonIsDisabled() {
+    this.showReviewsButton().should('be.disabled');
+  }
+
+  clickShowReviewsButton() {
+    this.showReviewsButton().click();
+  }
+
+  assertModalIsDisplayed() {
+    this.modalContainer().contains('Reviews for selected entity').should('be.visible');
+  }
+
+  clickModalOkButton() {
+    this.modalContainer().contains('OK').click();
+  }
+
+  assertLoadingDotsNotVisible() {
+    this.loadingDots().should('not.exist');
+  }
+
+  assertModalIsNotDisplayed() {
+    this.modalContainer().contains('Reviews for selected entity').should('not.be.visible');
   }
 
   assertButtonReserveIsDisabled() {
-    this.reserveButton().should("be.disabled");
+    this.reserveButton().should('be.disabled');
   }
 
   selectSetForCoworker() {

@@ -1,59 +1,44 @@
-import React, { useEffect } from "react";
-import UserHead from "../../components/Head/UserHead";
-import Layout, { Content } from "antd/lib/layout/layout";
-import {
-  Button,
-  Row,
-  Col,
-  Modal,
-  Select,
-  Checkbox,
-  Menu,
-  Dropdown,
-  Space,
-} from "antd";
-import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
-import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
-import OfficeImage from "../../components/inputs/OfficeImage/OfficeImage";
-import CardsSection from "../../components/CardsComponent/CardsSection";
-import styles from "./Homepage.module.scss";
+import React, { useEffect, useState } from 'react';
+import UserHead from '../../components/Head/UserHead';
+import Layout, { Content } from 'antd/lib/layout/layout';
+import { Button, Checkbox, Col, Dropdown, Menu, Modal, Row, Select, Space } from 'antd';
+import OfficeBranchSelection from '../../components/inputs/OfficeBranchSelection/OfficeBranchSelection';
+import CalendarImplementation from '../../components/inputs/Calendar/CalendarImplementation';
+import OfficeImage from '../../components/inputs/OfficeImage/OfficeImage';
+import CardsSection from '../../components/CardsComponent/CardsSection';
+import styles from './Homepage.module.scss';
+import api from '../../helper/api';
 
-import { useState } from "react";
-import api from "../../helper/api";
+import Input from 'antd/lib/input/Input';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Input from "antd/lib/input/Input";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { useDispatch, useSelector } from "react-redux";
+import { fetchEmployees } from '../../utils/fetchEmployees';
 
-import { fetchEmployees } from "../../utils/fetchEmployees";
+import { setEnd, setStart } from '../../redux/Date/Date';
+import { DownOutlined } from '@ant-design/icons';
+import { openError, openNotification } from '../../components/notification/Notification';
 
-import { setEnd, setStart } from "../../redux/Date/Date";
-import { DownOutlined } from "@ant-design/icons";
-import {
-  openError,
-  openNotification,
-} from "../../components/notification/Notification";
-
-import { getAvatar } from "../../redux/Avatar/Avatar";
+import { getAvatar } from '../../redux/Avatar/Avatar';
 
 const Home = () => {
-  const [officeid, setofficeid] = useState();
-  const [selectedCardId, setSelectedCard] = useState([]);
-  const [startDateRes, setStartDate] = useState([]);
-  const [endDateRes, setEndDate] = useState([]);
-  const [refreshCards, setRefreshCards] = useState();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectValue, setSelectValue] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [dates, setDates] = useState([]);
-  const [isAvailable, setIsAvailable] = useState(true);
-  const [employeeSearch, setEmployeeSearch] = useState("");
-  const [defValue, setDefValue] = useState("Reserve for Coworker");
-  const [selectedCategories, setSelectedCategories] = useState({});
-  const [singleMonitor, setSingleMonitor] = useState(false);
-  const [dualMonitor, setDualMonitor] = useState(false);
-  const [nearWindow, setNearWindow] = useState(false);
+  const [ officeid, setofficeid ] = useState();
+  const [ selectedCardId, setSelectedCard ] = useState([]);
+  const [ startDateRes, setStartDate ] = useState([]);
+  const [ endDateRes, setEndDate ] = useState([]);
+  const [ refreshCards, setRefreshCards ] = useState();
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [ selectValue, setSelectValue ] = useState(null);
+  const [ reviews, setReviews ] = useState([]);
+  const [ dates, setDates ] = useState([]);
+  const [ isAvailable, setIsAvailable ] = useState(true);
+  const [ employeeSearch, setEmployeeSearch ] = useState('');
+  const [ defValue, setDefValue ] = useState('Reserve for Coworker');
+  const [ selectedCategories, setSelectedCategories ] = useState({});
+  const [ singleMonitor, setSingleMonitor ] = useState(false);
+  const [ dualMonitor, setDualMonitor ] = useState(false);
+  const [ nearWindow, setNearWindow ] = useState(false);
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
@@ -470,19 +455,20 @@ const Home = () => {
               </div>
 
               <Modal
-                maskClosable={false}
-                title="Reviews for selected entity"
-                visible={isModalVisible}
-                onOk={closeModalFunction}
-                onCancel={closeModalFunction}
-                cancelButtonProps={{ style: { display: "none" } }}
+                  data-cy="modal-container"
+                  maskClosable={ false }
+                  title="Reviews for selected entity"
+                  visible={ isModalVisible }
+                  onOk={ closeModalFunction }
+                  onCancel={ closeModalFunction }
+                  cancelButtonProps={ { style: { display: 'none' } } }
               >
-                <InfiniteScroll className={styles.reviewModal} dataLength={3}>
+                <InfiniteScroll className={ styles.reviewModal } dataLength={ 3 }>
                   <ul>
-                    {reviews &&
-                      reviews.map(({ id, reviews }) => (
-                        <li key={id}>{reviews}</li>
-                      ))}
+                    { reviews &&
+                    reviews.map(({ id, reviews }) => (
+                        <li key={ id }>{ reviews }</li>
+                    )) }
                   </ul>
                 </InfiniteScroll>
               </Modal>
