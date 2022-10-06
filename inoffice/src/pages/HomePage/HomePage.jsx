@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UserHead from "../../components/Head/UserHead";
 import Layout, { Content } from "antd/lib/layout/layout";
 import {
   Button,
-  Row,
-  Col,
-  Modal,
-  Select,
   Checkbox,
-  Menu,
+  Col,
   Dropdown,
+  Menu,
+  Modal,
+  Row,
+  Select,
   Space,
 } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
@@ -17,8 +17,6 @@ import CalendarImplementation from "../../components/inputs/Calendar/CalendarImp
 import OfficeImage from "../../components/inputs/OfficeImage/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
 import styles from "./Homepage.module.scss";
-
-import { useState } from "react";
 import api from "../../helper/api";
 
 import Input from "antd/lib/input/Input";
