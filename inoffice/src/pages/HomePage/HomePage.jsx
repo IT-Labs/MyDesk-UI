@@ -118,7 +118,11 @@ const Home = () => {
     api
       .get(`entity/reviews/${selectedCardId.indexForOffice}`)
       .then(({ data }) => {
-        setReviews(data);
+        if (data.length) {
+          setReviews(data);
+        } else {
+          setReviews([{ reviews: "There were no available reviews" }]);
+        }
       })
       .catch(() => {
         setReviews(["There were no available reviews"]);
@@ -480,9 +484,9 @@ const Home = () => {
                 <InfiniteScroll className={styles.reviewModal} dataLength={3}>
                   <ul>
                     {reviews &&
-                      reviews.map(({ id, reviews }) => (
-                        <li key={id}>{reviews}</li>
-                      ))}
+                      reviews.map(({ id, reviews }) =>
+                        id ? <li key={id}>{reviews}</li> : <p>{reviews}</p>
+                      )}
                   </ul>
                 </InfiniteScroll>
               </Modal>
