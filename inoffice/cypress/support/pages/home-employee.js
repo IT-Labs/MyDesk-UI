@@ -110,6 +110,12 @@ export class HomeEmployeePage {
     return cy.get(".ant-select-item-option-content");
   }
 
+  officeDropdownAllOptions() {
+    return cy.get(
+      ".rc-virtual-list-holder-inner .ant-select-item.ant-select-item-option"
+    );
+  }
+
   /**
    * Methods.
    */
@@ -316,6 +322,13 @@ export class HomeEmployeePage {
   }
 
   assertCoworkerIsRequiredWhenSetForCoworker() {}
+
+  getOfficesListInHomepage() {
+    this.officeBranchFilterDropdown().click({ force: true });
+    this.officeDropdownAllOptions().then(($officesInHomepage) => {
+      Cypress.env("officesInHomepage", $officesInHomepage);
+    });
+  }
 }
 
 export const homeEmployeePage = new HomeEmployeePage();

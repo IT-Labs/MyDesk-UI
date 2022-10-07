@@ -9,7 +9,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(Cypress.env("default_office"));
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -26,7 +26,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(Cypress.env("default_office"));
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -43,7 +43,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(Cypress.env("default_office"));
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -61,7 +61,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(Cypress.env("default_office"));
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
