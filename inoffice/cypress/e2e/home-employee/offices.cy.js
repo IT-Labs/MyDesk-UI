@@ -17,7 +17,7 @@ describe("Users can select a desk", () => {
     employeeReservationsPage.assertOfficesAreTheSameAsHomepage();
   });
 
-  it.only("Verify that the user can select an office from the list", () => {
+  it("Verify that the user can select an office from the list", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
@@ -30,5 +30,21 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
     employeeReservationsPage.assertOfficeIsFiltered();
+  });
+
+  // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53491/
+  // @TODO complete once bug is fixed
+  it.skip("Verify that when the user selects the office, only the reservations made in the selected office are being shown", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
+    homeEmployeePage.assertUserNameInHeader(
+      `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
+    );
+    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.visit(urlSlugs.employee + urlSlugs.reservations);
   });
 });
