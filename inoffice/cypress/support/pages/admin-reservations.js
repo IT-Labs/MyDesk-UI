@@ -1,0 +1,53 @@
+export class AdminReservationsPage {
+  /**
+   * Locators.
+   */
+
+  officeBranchFilterDropdown() {
+    return cy.get("[data-cy=office-branch-select] .ant-select-selector");
+  }
+
+  officeBranchFilterInput() {
+    return cy.get('input[type="search"]');
+  }
+
+  officeDropdownAllOptions() {
+    return cy.get(
+      ".rc-virtual-list-holder-inner .ant-select-item.ant-select-item-option"
+    );
+  }
+
+  selectedOfficeLabel() {
+    return cy.get(".ant-select-selection-item");
+  }
+
+  /**
+   * Methods.
+   */
+
+  getOfficesListInReservations() {
+    this.officeBranchFilterDropdown().click({ force: true });
+    this.officeDropdownAllOptions().then(($officesInReservations) => {
+      Cypress.env("officesInReservations", $officesInReservations);
+    });
+  }
+
+  assertOfficesAreTheSameAsHomepage() {
+    expect(Cypress.env("officesInHomepage")).to.deep.equal(
+      Cypress.env("officesInReservations")
+    );
+  }
+
+  assertOfficeIsFiltered() {
+    this.officeBranchFilterDropdown().click({ force: true });
+    this.officeBranchFilterInput().type(
+      `${Cypress.env("default_office")}{enter}`
+    );
+    this.selectedOfficeLabel().should(
+      "have.text",
+      Cypress.env("default_office")
+    );
+  }
+}
+
+export const adminReservationsPage = new AdminReservationsPage();

@@ -1,6 +1,8 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
 import { employeeReservationsPage } from "../../support/pages/employee-reservations";
+import { adminReservationsPage } from "../../support/pages/admin-reservations";
+
 import * as userData from "../../fixtures/userData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
 
@@ -27,7 +29,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertUserNameInHeader(
       `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
     );
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
     employeeReservationsPage.assertOfficeIsFiltered();
   });
@@ -44,7 +46,9 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertUserNameInHeader(
       `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
     );
-    homeEmployeePage.assertLoadingDotsNotVisible();
-    cy.visit(urlSlugs.employee + urlSlugs.reservations);
+    cy.assertLoadingDotsNotVisible();
+    cy.visit(urlSlugs.admin + urlSlugs.reservations);
+    cy.assertLoadingDotsNotVisible();
+    adminReservationsPage.assertOfficeIsFiltered();
   });
 });

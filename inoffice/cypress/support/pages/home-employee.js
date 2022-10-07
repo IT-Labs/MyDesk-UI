@@ -120,10 +120,6 @@ export class HomeEmployeePage {
     return cy.get('[data-cy="modal-container"]');
   }
 
-  loadingDots() {
-    return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
-  }
-
   /**
    * Methods.
    */
@@ -333,10 +329,6 @@ export class HomeEmployeePage {
 
   clickModalOkButton() {
     this.modalContainer().contains("OK").click();
-  }
-
-  assertLoadingDotsNotVisible() {
-    this.loadingDots().should("not.exist");
   }
 
   assertModalIsNotDisplayed() {

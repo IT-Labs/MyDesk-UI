@@ -7,7 +7,10 @@ Cypress.on("uncaught:exception", (err) => {
   }
 });
 
-Cypress.Commands.add('clickOnScreenPosition', (position) => {
-      cy.get('body').click(position);
-    },
-);
+Cypress.Commands.add("clickOnScreenPosition", (position) => {
+  cy.get("body").click(position);
+});
+
+Cypress.Commands.add("assertLoadingDotsNotVisible", (position) => {
+  cy.get("[data-cy=loading-dots]", { timeout: 20000 }).should("not.exist");
+});
