@@ -15,12 +15,14 @@ export const findAvailable = ({ startDate, endDate }, start, end) => {
   return !flag;
 };
 
-export const checkAvailable = (res, start, end) => {
+export const checkAvailable = (cardItem, start, end) => {
   let isAvailable = true;
-
+  if (cardItem.category?.unavailable) {
+    return false;
+  }
   if (start && end) {
     try {
-      res.forEach((item) => {
+      cardItem.reservations.forEach((item) => {
         const availability = findAvailable(item, start, end);
         if (!availability) {
           isAvailable = false;

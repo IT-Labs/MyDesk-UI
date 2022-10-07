@@ -23,13 +23,14 @@ const CardsSection = (props) => {
 
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
+
   const selectCard = (e) => {
     let isAvailable = true;
     const res = e.reservations;
     if (res.length > 0) {
       res.forEach((item) => {
         const availability = findAvailable(item, start, end);
-        if (!availability) {
+        if (!availability || !e.available) {
           isAvailable = false;
         }
       });
@@ -265,7 +266,7 @@ const CardsSection = (props) => {
           grid={{ gutter: 0, column: media.matches ? 1 : 4 }}
           dataSource={dataDesks}
           renderItem={(item) => {
-            const available = checkAvailable(item.reservations, start, end);
+            const available = checkAvailable(item, start, end);
             Object.assign(item, { available: available });
             const specificUser = item.reservations.find((info) => {
               const newGuy = getSpecificUser(info);
