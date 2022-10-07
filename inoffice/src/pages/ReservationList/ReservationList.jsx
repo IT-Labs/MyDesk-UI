@@ -220,7 +220,7 @@ const ReservationList = () => {
         );
       },
     },
-    { title: "Office", dataIndex: "office", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Date",
