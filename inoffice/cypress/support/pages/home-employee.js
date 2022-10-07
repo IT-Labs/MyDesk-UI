@@ -116,6 +116,14 @@ export class HomeEmployeePage {
     );
   }
 
+  modalContainer() {
+    return cy.get('[data-cy="modal-container"]');
+  }
+
+  loadingDots() {
+    return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
+  }
+
   /**
    * Methods.
    */
@@ -307,6 +315,34 @@ export class HomeEmployeePage {
     cy.get(".ant-select-item.ant-select-item-option")
       .contains(officeName)
       .click({ force: true });
+  }
+
+  assertShowReviewsButtonIsDisabled() {
+    this.showReviewsButton().should("be.disabled");
+  }
+
+  clickShowReviewsButton() {
+    this.showReviewsButton().click();
+  }
+
+  assertModalIsDisplayed() {
+    this.modalContainer()
+      .contains("Reviews for selected entity")
+      .should("be.visible");
+  }
+
+  clickModalOkButton() {
+    this.modalContainer().contains("OK").click();
+  }
+
+  assertLoadingDotsNotVisible() {
+    this.loadingDots().should("not.exist");
+  }
+
+  assertModalIsNotDisplayed() {
+    this.modalContainer()
+      .contains("Reviews for selected entity")
+      .should("not.be.visible");
   }
 
   assertButtonReserveIsDisabled() {
