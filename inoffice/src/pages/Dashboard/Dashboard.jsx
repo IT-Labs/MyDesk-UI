@@ -375,7 +375,7 @@ const Dashboard = () => {
                 className={styles.select}
                 optionFilterProp="children"
                 filterOption={(input, option) =>
-                  option.children.includes(input)
+                  option.children.toLowerCase().includes(input.toLowerCase())
                 }
                 filterSort={(optionA, optionB) =>
                   optionA.children
