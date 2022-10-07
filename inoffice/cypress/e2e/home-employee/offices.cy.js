@@ -17,12 +17,17 @@ describe("Users can select a desk", () => {
     employeeReservationsPage.assertOfficesAreTheSameAsHomepage();
   });
 
-  it("Verify that the user can select an office from the list", () => {
+  it.only("Verify that the user can select an office from the list", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
+    cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
+    homeEmployeePage.assertUserNameInHeader(
+      `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
+    );
+    homeEmployeePage.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
     employeeReservationsPage.assertOfficeIsFiltered();
   });

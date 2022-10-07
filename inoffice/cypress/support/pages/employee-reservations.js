@@ -11,6 +11,12 @@ export class EmployeeReservationsPage {
     return cy.get('input[type="search"]');
   }
 
+  officeDropdownAllOptions() {
+    return cy.get(
+      ".rc-virtual-list-holder-inner .ant-select-item.ant-select-item-option"
+    );
+  }
+
   selectedOfficeLabel() {
     return cy.get(".ant-select-selection-item");
   }
@@ -34,7 +40,9 @@ export class EmployeeReservationsPage {
 
   assertOfficeIsFiltered() {
     this.officeBranchFilterDropdown().click({ force: true });
-    this.officeBranchFilterInput().type(`Cypress.env("default_office"){enter}`);
+    this.officeBranchFilterInput().type(
+      `${Cypress.env("default_office")}{enter}`
+    );
     this.selectedOfficeLabel().should(
       "have.text",
       Cypress.env("default_office")

@@ -65,7 +65,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    cy.wait(10000);
+    homeEmployeePage.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectSetForCoworker();
