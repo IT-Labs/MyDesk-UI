@@ -1,3 +1,5 @@
+@import "../../sass/abstracts/variables";
+
 .officeImagePlan {
   display: flex;
   justify-content: center;
@@ -138,4 +140,11 @@
 .imgContainer {
   background-color: white;
   height: 400px;
+}
+
+.btn,
+.btn::after,
+.btn:focus,
+.btn .antd-btn .antd-btn-default {
+  width: 150px !important;
 }

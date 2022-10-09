@@ -111,8 +111,8 @@ const FutureReservations = () => {
       {!loadingData ? (
         <Table
           columns={columns}
-          dataSource={futureReservations.filter(({ officeName }) =>
-            officeName?.includes(officeSelect)
+          dataSource={futureReservations.filter((reservation) =>
+            reservation.desk.office.name?.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}
