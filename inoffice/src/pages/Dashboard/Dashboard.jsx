@@ -5,7 +5,7 @@ import UserHead from "../../components/Head/UserHead";
 import { Pie } from "@ant-design/charts";
 import api from "../../helper/api";
 import styles from "./Dashboard.module.scss";
-import { Button, Modal, Select, Table } from "antd";
+import { Button, Modal, Select, Table, Row, Col } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
@@ -355,137 +355,148 @@ const Dashboard = () => {
   ];
 
   return (
-    <Layout>
-      <UserHead />
-      <Layout className="panelBg">
-        <Sidebar selected="1" />
-        <Content className={styles.content}>
-          <div className={styles.container}>
-            <div>
-              <UserSearch />
-            </div>
-            <div className={styles.title}>
-              <h2>Dashboard</h2>
-            </div>
-            <div className={styles.inputs}>
-              <Select
-                showSearch
-                placeholder="All offices"
-                onChange={selectFilter}
-                className={styles.select}
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.children.toLowerCase().includes(input.toLowerCase())
-                }
-                filterSort={(optionA, optionB) =>
-                  optionA.children
-                    .toLowerCase()
-                    .localeCompare(optionB.children.toLowerCase())
-                }
-              >
-                <Select.Option key={0} value={null}>
-                  All offices
-                </Select.Option>
-                {offices &&
-                  offices.map((item) => (
-                    <Select.Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Select.Option>
-                  ))}
-              </Select>
-              <div className={styles.select}>
-                <CalendarImplementation
-                  dateFunction={setDate}
-                  startDate={startDateRes}
-                  endDate={endDateRes}
-                  dates={dates}
-                  clearDate={clearDate}
-                  dashboard={true}
-                />
+    <>
+      <Layout>
+        <UserHead />
+        <Layout className="panelBg">
+          <Sidebar selected="1" />
+          <Content className={styles.content}>
+            <div className={styles.container}>
+              <div>
+                <UserSearch />
               </div>
-            </div>
-            <div className={styles.infoCards}>
-              <div className={styles.dashboardCard}>
-                <p>AVAILABLE</p>
-                <div className={styles.tile}>
-                  <h2>{isNaN(availableDesks) ? 0 : availableDesks}</h2>
-                  <CheckCircleFilled
-                    className={`${styles.tabIcon} ${styles.checkmark}`}
-                  />
-                </div>
+              <div className={styles.title}>
+                <h2>Dashboard</h2>
               </div>
-              <div className={styles.dashboardCard}>
-                <p>RESERVED</p>
-                <div className={styles.tile}>
-                  <h2>{reservedDesks ? reservedDesks : 0}</h2>
-                  <CloseCircleFilled
-                    className={`${styles.tabIcon} ${styles.xmark}`}
-                  />
-                </div>
-              </div>
-              <div className={styles.dashboardCard}>
-                <p>TOTAL</p>
-                <div className={styles.tile}>
-                  <h2>{allDesks}</h2>
-                  <InfoCircleFilled
-                    className={`${styles.tabIcon} ${styles.imark}`}
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              style={{
-                paddingBottom: "20px",
-              }}
-            >
-              <div className={styles.dataRow}>
-                <div className={styles.pieCard}>
-                  <h3>Desks available/reserved</h3>
-                  {deskData.length > 0 ? (
-                    <Pie {...config} />
-                  ) : (
-                    <div className={styles.loading}>
-                      <Loading />
-                    </div>
-                  )}
-                </div>
-                <div className={styles.tableCard}>
-                  <h3>User reviews</h3>
-                  {reviews.length > 0 ? (
-                    <Table
-                      columns={colums}
-                      dataSource={reviews}
-                      pagination={{ pageSize: 4, position: ["bottomRight"] }}
-                    />
-                  ) : (
-                    <div className={styles.noReviews}>
-                      <h1>¯\_(ツ)_/¯</h1>
-                      <h3>No reviews for this office</h3>
-                    </div>
-                  )}
-                </div>
-                <Modal
-                  title="Review for desk"
-                  centered
-                  maskClosable={false}
-                  visible={activeModal}
-                  onOk={() => {
-                    setWrittenReview("");
-                    setActiveModal(false);
-                  }}
-                  width={800}
-                  cancelButtonProps={{ style: { display: "none" } }}
+              <div className={styles.inputs}>
+                <Select
+                  showSearch
+                  placeholder="All offices"
+                  onChange={selectFilter}
+                  className={styles.select}
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().includes(input.toLowerCase())
+                  }
+                  filterSort={(optionA, optionB) =>
+                    optionA.children
+                      .toLowerCase()
+                      .localeCompare(optionB.children.toLowerCase())
+                  }
                 >
-                  <div className={styles.modal}>
-                    <p>{writtenReview}</p>
+                  <Select.Option key={0} value={null}>
+                    All offices
+                  </Select.Option>
+                  {offices &&
+                    offices.map((item) => (
+                      <Select.Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+                <div className={styles.select}>
+                  <CalendarImplementation
+                    dateFunction={setDate}
+                    startDate={startDateRes}
+                    endDate={endDateRes}
+                    dates={dates}
+                    clearDate={clearDate}
+                    dashboard={true}
+                  />
+                </div>
+              </div>
+              <div className={styles.infoCards}>
+                <div className={styles.dashboardCard}>
+                  <p>AVAILABLE</p>
+                  <div className={styles.tile}>
+                    <h2>{isNaN(availableDesks) ? 0 : availableDesks}</h2>
+                    <CheckCircleFilled
+                      className={`${styles.tabIcon} ${styles.checkmark}`}
+                    />
                   </div>
-                </Modal>
+                </div>
+                <div className={styles.dashboardCard}>
+                  <p>RESERVED</p>
+                  <div className={styles.tile}>
+                    <h2>{reservedDesks ? reservedDesks : 0}</h2>
+                    <CloseCircleFilled
+                      className={`${styles.tabIcon} ${styles.xmark}`}
+                    />
+                  </div>
+                </div>
+                <div className={styles.dashboardCard}>
+                  <p>TOTAL</p>
+                  <div className={styles.tile}>
+                    <h2>{allDesks}</h2>
+                    <InfoCircleFilled
+                      className={`${styles.tabIcon} ${styles.imark}`}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  paddingBottom: "20px",
+                }}
+              >
+                <div className={styles.dataRow}>
+                  <div className={styles.pieCard}>
+                    <h3>Desks available/reserved</h3>
+                    {deskData.length > 0 ? (
+                      <Pie {...config} />
+                    ) : (
+                      <div className={styles.loading}>
+                        <Loading />
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.tableCard}>
+                    <h3>User reviews</h3>
+                    {reviews.length > 0 ? (
+                      <Table
+                        columns={colums}
+                        dataSource={reviews}
+                        pagination={{ pageSize: 4, position: ["bottomRight"] }}
+                      />
+                    ) : (
+                      <div className={styles.noReviews}>
+                        <h1>¯\_(ツ)_/¯</h1>
+                        <h3>No reviews for this office</h3>
+                      </div>
+                    )}
+                  </div>
+                  <Modal
+                    title="Review for desk"
+                    centered
+                    maskClosable={false}
+                    visible={activeModal}
+                    onOk={() => {
+                      setWrittenReview("");
+                      setActiveModal(false);
+                    }}
+                    width={800}
+                    cancelButtonProps={{ style: { display: "none" } }}
+                  >
+                    <div className={styles.modal}>
+                      <p>{writtenReview}</p>
+                    </div>
+                  </Modal>
+                </div>
               </div>
             </div>
-          </div>
-        </Content>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+      <div>
+        <Row className={styles.footerSection} align="center">
+          <Col align="center" span={24}>
+            <p className={styles.footerText}>
+              inOffice ©2022 Created by inOfficeTeam
+            </p>
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 };
 export default Dashboard;

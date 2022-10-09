@@ -1,7 +1,7 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHead from "../../components/Head/UserHead";
-import { Card } from "antd";
+import { Card, Row, Col } from "antd";
 import FutureReservations from "./FutureReservations/FutureReservations";
 import PastReservations from "./PastReservations/PastReservations";
 import { useState, useEffect } from "react";
@@ -52,48 +52,66 @@ const EmployeeReservationList = () => {
 
   if (token.roles[0] === "EMPLOYEE") {
     return (
-      <Layout>
-        <UserHead />
+      <>
         <Layout>
-          <Sidebar selected="1" />
+          <UserHead />
+          <Layout>
+            <Sidebar selected="1" />
 
-          <Content className={styles.contentStyle}>
-            <Card
-              className={styles.cardStyle}
-              title={<CardTitle data={data} />}
-              tabList={tabList}
-              activeTabKey={activeTabKey1}
-              onTabChange={(key) => {
-                onTab1Change(key);
-              }}
-            >
-              {contentList[activeTabKey1]}
-            </Card>
-          </Content>
+            <Content className={styles.contentStyle}>
+              <Card
+                className={styles.cardStyle}
+                title={<CardTitle data={data} />}
+                tabList={tabList}
+                activeTabKey={activeTabKey1}
+                onTabChange={(key) => {
+                  onTab1Change(key);
+                }}
+              >
+                {contentList[activeTabKey1]}
+              </Card>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+        <Row className={styles.footerSection} align="center">
+          <Col align="center" span={24}>
+            <p className={styles.footerText}>
+              inOffice ©2022 Created by inOfficeTeam
+            </p>
+          </Col>
+        </Row>
+      </>
     );
   } else {
     return (
-      <Layout>
-        <UserHead />
+      <>
         <Layout>
-          <Sidebar selected="5" />
-          <Content className={styles.contentStyle}>
-            <Card
-              className={styles.cardStyle}
-              title={<CardTitle data={data} />}
-              tabList={tabList}
-              activeTabKey={activeTabKey1}
-              onTabChange={(key) => {
-                onTab1Change(key);
-              }}
-            >
-              {contentList[activeTabKey1]}
-            </Card>
-          </Content>
+          <UserHead />
+          <Layout>
+            <Sidebar selected="5" />
+            <Content className={styles.contentStyle}>
+              <Card
+                className={styles.cardStyle}
+                title={<CardTitle data={data} />}
+                tabList={tabList}
+                activeTabKey={activeTabKey1}
+                onTabChange={(key) => {
+                  onTab1Change(key);
+                }}
+              >
+                {contentList[activeTabKey1]}
+              </Card>
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+        <Row className={styles.footerSection} align="center">
+          <Col align="center" span={24}>
+            <p className={styles.footerText}>
+              inOffice ©2022 Created by inOfficeTeam
+            </p>
+          </Col>
+        </Row>
+      </>
     );
   }
 };

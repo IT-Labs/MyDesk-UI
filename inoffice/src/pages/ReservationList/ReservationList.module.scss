@@ -58,6 +58,14 @@
   border-radius: 50%;
 }
 
+.footerText {
+  font-size: 1.2em;
+}
+
+.footerSection {
+  margin-top: 2%;
+}
+
 @media screen and (max-width: 480px) {
   .title {
     display: block;

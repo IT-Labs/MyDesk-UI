@@ -54,97 +54,117 @@ const Offices = () => {
   const addOfficeText = "Add office";
 
   return (
-    <Layout>
-      <UserHeade />
+    <>
       <Layout>
-        <Sidebar selected="2" />
-        <Content
-          style={{
-            display: "flex",
-            justifyContent: "top",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Row
+        <UserHeade />
+        <Layout>
+          <Sidebar selected="2" />
+          <Content
             style={{
-              background: "transparent",
-              width: "80%",
-              borderRadius: "14px",
-              border: 0,
+              display: "flex",
+              justifyContent: "top",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <Col span={24}>
-              <Card
-                title={
-                  <Title onSubmit={onSubmit} addOfficeText={addOfficeText} />
-                }
-                style={{
-                  boxShadow: "0 2px 2px 1px #2c28283c",
-                  padding: "10px",
-                  borderRadius: 7,
-                }}
-              >
-                <div style={{ overflowX: "scroll" }}>
-                  <Input
-                    style={{ width: 200 }}
-                    onChange={handleChange}
-                    placeholder="Search Office"
-                  />
-                  <List
-                    bordered
-                    style={{ minWidth: 400 }}
-                    pagination={{ pageSize: 5, position: "bottom" }}
-                    dataSource={data.filter(({ name }) =>
-                      name.toLowerCase().includes(inputFilter.toLowerCase())
-                    )}
-                    renderItem={(office) => (
-                      <List.Item style={{ marginBottom: 10 }}>
-                        <Typography.Text mark></Typography.Text> {office.name}{" "}
-                        <Popconfirm
-                          title="Do you want to delete this office?"
-                          onConfirm={() => deleteFunc(office.id)}
-                          okText="Yes"
-                          cancelText="No"
-                          className="deleteButton"
-                          shape="round"
-                          placement="topRight"
-                          icon={
-                            <QuestionCircleOutlined style={{ color: "red" }} />
-                          }
-                        >
+            <Row
+              style={{
+                background: "transparent",
+                width: "80%",
+                borderRadius: "14px",
+                border: 0,
+              }}
+            >
+              <Col span={24}>
+                <Card
+                  title={
+                    <Title onSubmit={onSubmit} addOfficeText={addOfficeText} />
+                  }
+                  style={{
+                    boxShadow: "0 2px 2px 1px #2c28283c",
+                    padding: "10px",
+                    borderRadius: 7,
+                  }}
+                >
+                  <div style={{ overflowX: "scroll" }}>
+                    <Input
+                      style={{ width: 200 }}
+                      onChange={handleChange}
+                      placeholder="Search Office"
+                    />
+                    <List
+                      bordered
+                      style={{ minWidth: 400 }}
+                      pagination={{ pageSize: 5, position: "bottom" }}
+                      dataSource={data.filter(({ name }) =>
+                        name.toLowerCase().includes(inputFilter.toLowerCase())
+                      )}
+                      renderItem={(office) => (
+                        <List.Item style={{ marginBottom: 10 }}>
+                          <Typography.Text mark></Typography.Text> {office.name}{" "}
+                          <Popconfirm
+                            title="Do you want to delete this office?"
+                            onConfirm={() => deleteFunc(office.id)}
+                            okText="Yes"
+                            cancelText="No"
+                            className="deleteButton"
+                            shape="round"
+                            placement="topRight"
+                            icon={
+                              <QuestionCircleOutlined
+                                style={{ color: "red" }}
+                              />
+                            }
+                          >
+                            <Button
+                              type="primary"
+                              danger
+                              style={{
+                                border: "0",
+                                borderRadius: "5px",
+                                boxShadow: " 0px 3px 6px #2C28281C",
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </Popconfirm>
                           <Button
                             type="primary"
-                            danger
-                            style={{
-                              border: "0",
-                              borderRadius: "5px",
-                              boxShadow: " 0px 3px 6px #2C28281C",
+                            className="editButton"
+                            onClick={() => {
+                              window.location =
+                                "edit/" + office.name + "/" + office.id;
                             }}
                           >
-                            Delete
+                            Edit
                           </Button>
-                        </Popconfirm>
-                        <Button
-                          type="primary"
-                          className="editButton"
-                          onClick={() => {
-                            window.location =
-                              "edit/" + office.name + "/" + office.id;
-                          }}
-                        >
-                          Edit
-                        </Button>
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              </Card>
-            </Col>
-          </Row>
-        </Content>
+                        </List.Item>
+                      )}
+                    />
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+      <Row
+        style={{
+          marginTop: "2%",
+        }}
+        align="center"
+      >
+        <Col align="center" span={24}>
+          <p
+            style={{
+              fontSize: "1.2em",
+            }}
+          >
+            inOffice ©2022 Created by inOfficeTeam
+          </p>
+        </Col>
+      </Row>
+    </>
   );
 };
 

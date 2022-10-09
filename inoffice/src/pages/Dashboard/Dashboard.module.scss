@@ -182,6 +182,14 @@
   overflow-x: hidden;
 }
 
+.footerText {
+  font-size: 1.2em;
+}
+
+.footerSection {
+  margin-top: 2%;
+}
+
 @media screen and (max-width: 480px) {
   .dataRow {
     flex-direction: column;
