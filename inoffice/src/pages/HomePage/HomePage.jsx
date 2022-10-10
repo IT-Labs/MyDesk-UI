@@ -472,7 +472,7 @@ const Home = () => {
               </div>
 
               <Modal
-                maskClosable={false}
+                maskClosable={true}
                 title="Reviews for selected entity"
                 visible={isModalVisible}
                 onOk={closeModalFunction}
