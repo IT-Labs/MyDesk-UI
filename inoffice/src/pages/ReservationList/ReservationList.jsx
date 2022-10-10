@@ -248,7 +248,7 @@ const ReservationList = () => {
       sortDirections: ["ascend"],
     },
   ];
-  const [filterVal, setFilterVal] = useState("");
+  const [filterOffice, setFilterOffice] = useState("");
 
   const tabList = [
     {
@@ -337,7 +337,7 @@ const ReservationList = () => {
                       <Select
                         showSearch
                         defaultValue="Select office"
-                        onChange={(val) => setFilterVal(val)}
+                        onChange={(officeName) => setFilterOffice(officeName)}
                         style={{ width: 200 }}
                       >
                         <Select.Option key={0} value="">
@@ -369,9 +369,9 @@ const ReservationList = () => {
                   <Table
                     columns={tabKey === "past" ? pastColumns : futureColumns}
                     dataSource={reservations.filter(
-                      ({ office, employee }) =>
-                        office.includes(filterVal) &&
-                        employee
+                      (reservation) =>
+                        reservation.desk.office.name.includes(filterOffice) &&
+                        reservation.employee
                           .toLowerCase()
                           .includes(filterInput.toLowerCase())
                     )}
