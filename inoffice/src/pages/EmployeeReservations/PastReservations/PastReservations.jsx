@@ -120,7 +120,7 @@ const PastReservations = ({ officeName }) => {
       },
       sortDirections: ["ascend"],
     },
-    { title: "Office", dataIndex: "officeName", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Options",
