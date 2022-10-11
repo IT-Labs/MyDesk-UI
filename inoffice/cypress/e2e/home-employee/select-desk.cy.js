@@ -1,6 +1,7 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
 import * as userData from "../../fixtures/userData.json";
+import * as officesData from "../../fixtures/officesData.json";
 
 describe("Users can select a desk", () => {
   it("Verify that the user can select only one desk in a reservation", () => {
@@ -9,7 +10,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice(Cypress.env("default_office"));
+    homeEmployeePage.selectOffice(officesData.default_office);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -26,7 +27,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice(Cypress.env("default_office"));
+    homeEmployeePage.selectOffice(officesData.default_office);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -43,7 +44,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice(Cypress.env("default_office"));
+    homeEmployeePage.selectOffice(officesData.default_office);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
@@ -61,7 +62,7 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice(Cypress.env("default_office"));
+    homeEmployeePage.selectOffice(officesData.default_office);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();

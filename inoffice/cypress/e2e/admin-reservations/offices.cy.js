@@ -4,6 +4,7 @@ import { adminReservationsPage } from "../../support/pages/admin-reservations";
 
 import * as userData from "../../fixtures/userData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
+import * as officesData from "../../fixtures/officesData.json";
 
 describe("Users can select a desk", () => {
   // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53491/
@@ -21,6 +22,6 @@ describe("Users can select a desk", () => {
     cy.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.admin + urlSlugs.reservations);
     cy.assertLoadingDotsNotVisible();
-    adminReservationsPage.assertOfficeIsFiltered();
+    adminReservationsPage.assertOfficeIsFiltered(officesData.default_office);
   });
 });

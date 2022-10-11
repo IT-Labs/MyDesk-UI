@@ -38,15 +38,10 @@ export class EmployeeReservationsPage {
     );
   }
 
-  assertOfficeIsFiltered() {
+  assertOfficeIsFiltered(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
-    this.officeBranchFilterInput().type(
-      `${Cypress.env("default_office")}{enter}`
-    );
-    this.selectedOfficeLabel().should(
-      "have.text",
-      Cypress.env("default_office")
-    );
+    this.officeBranchFilterInput().type(`${officeName}{enter}`);
+    this.selectedOfficeLabel().should("have.text", officeName);
   }
 }
 
