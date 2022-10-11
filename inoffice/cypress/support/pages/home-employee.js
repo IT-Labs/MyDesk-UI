@@ -82,11 +82,11 @@ export class HomeEmployeePage {
     return cy.get("[data-cy=show-reviews-button]");
   }
 
-  modalMessageLabel() {
+  notificationModalMessageLabel() {
     return cy.get(".ant-notification-notice-message");
   }
 
-  modalDescriptionLabel() {
+  notificationModalDescriptionLabel() {
     return cy.get(".ant-notification-notice-description");
   }
 
@@ -97,7 +97,15 @@ export class HomeEmployeePage {
   }
 
   setForCoworkerCheckbox() {
-    return cy.get("[data-cy=set-for-coworker]");
+    return cy.get("[data-cy=set-for-coworker-check]");
+  }
+
+  coworkerSelect(){
+    return cy.get('[data-cy=coworker-select]')
+  }
+
+  coworkerSearchInput(){
+    return cy.get('[data-cy=coworker-select] .ant-select-selector .ant-select-selection-search input[type=search]')
   }
 
   availabilityOptionDropdown() {
@@ -111,6 +119,23 @@ export class HomeEmployeePage {
   loadingDots() {
     return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
   }
+
+  confirmationModalTitle(){
+    return cy.get('.ant-modal-header .ant-modal-title')
+  }
+
+  confirmationModalMessage(){
+    return cy.get('.ant-modal-body')
+  }
+
+  confirmationModalOkButton(){
+    return cy.get('.ant-modal-footer .ant-btn-primary')
+  }
+
+  confirmationModalCancelButton(){
+    return cy.get('.ant-modal-footer .ant-btn-default')
+  }
+
 
   /**
    * Methods.
@@ -233,8 +258,8 @@ export class HomeEmployeePage {
   }
 
   verifyReservationIsSuccessful() {
-    this.modalMessageLabel().should("have.text", "Notification");
-    this.modalDescriptionLabel().should(
+    this.notificationModalMessageLabel().should("have.text", "Notification");
+    this.notificationModalDescriptionLabel().should(
         "have.text",
         "You have successfully reserved a desk.",
     );
@@ -312,11 +337,35 @@ export class HomeEmployeePage {
     this.setForCoworkerCheckbox().click();
   }
 
+  selectACoworker(coworkerName){
+    this.coworkerSelect().click();
+    this.coworkerSearchInput().type(`${coworkerName}{enter}`);
+  }
+
   clickReserveButton() {
     this.reserveButton().click();
   }
 
   assertCoworkerIsRequiredWhenSetForCoworker() {}
+
+  confirmReservationForCoworker(coworkerName){
+    this.confirmationModalTitle().should("have.text", "Reserve desk for co-worker");
+    this.confirmationModalMessage().should("contain", `Are you sure you want to reserve this desk for ${coworkerName}`);
+    this.confirmationModalOkButton().click();
+  }
+
+  assertReservationForCoworkerIsSuccessful(){
+    this.notificationModalMessageLabel().should("have.text", "Notification");
+    this.notificationModalDescriptionLabel().should("have.text", "You have successfully reserved for your co-worker");
+  }
+
+  reserveForACoworker(coworkerName){
+    this.selectSetForCoworker();
+    this.selectACoworker(coworkerName);
+    this.clickReserveButton();
+    this.confirmReservationForCoworker(coworkerName);
+
+  }
 }
 
 export const homeEmployeePage = new HomeEmployeePage();
