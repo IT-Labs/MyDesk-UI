@@ -42,11 +42,12 @@ const CardsSection = (props) => {
   };
 
   const setDesks = (desks) => {
-    if (props.available === 2) {
-      const filtered = desks.filter((item) => !item.reservationId);
-      setDataDesks(filtered);
-    } else if (props.available === 3) {
-      const filtered = desks.filter((item) => item.reservationId);
+    if (!desks.length) {
+      setDataDesks(desks);
+    }
+
+    if (props.available !== null) {
+      const filtered = desks.filter((item) => !item.category.unavailable);
       setDataDesks(filtered);
     } else setDataDesks(desks);
   };
@@ -57,12 +58,24 @@ const CardsSection = (props) => {
         signal: controller.signal,
       })
       .then((response) => {
-        setAllDesks(response.data);
+        addAvailableProp(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  function addAvailableProp(allDataDesk) {
+    if (!allDataDesk.length) {
+      return;
+    }
+    const addAvailable = allDataDesk.map((item) => {
+      const available = checkAvailable(item, start, end);
+      Object.assign(item, { available: available });
+      return item;
+    });
+    setAllDesks(addAvailable);
+  }
 
   const fetchData = async (skipProp) => {
     await api
@@ -112,7 +125,7 @@ const CardsSection = (props) => {
         } else if (
           item.available &&
           props.available &&
-          !item.categories?.unavailable
+          !item.category?.unavailable
         ) {
           return true;
         } else if (!item.available && !props.available) {
@@ -224,6 +237,10 @@ const CardsSection = (props) => {
     filterByCategories();
   }, [props.categories]);
 
+  useEffect(() => {
+    addAvailableProp(allDesks);
+  }, [end]);
+
   const getSpecificUser = ({ startDate, endDate }) => {
     if (start && end) {
       const start1 = start?.split("T");
@@ -292,7 +309,7 @@ const CardsSection = (props) => {
                     // backgroundColor: checkAvailable(item.reservation),
                     background: item.category?.unavailable
                       ? "#c1c1c1"
-                      : available
+                      : item.available
                       ? "#69e28d"
                       : "#f37076",
                     height: "10rem",
@@ -336,14 +353,14 @@ const CardsSection = (props) => {
                             {item.category?.unavailable
                               ? "Unavailable"
                               : item.reservations.length > 0 &&
-                                !available &&
+                                !item.available &&
                                 `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
                             {}
                           </p>
                           <p className={styles.basicText}>
                             {!item.category?.unavailable &&
                               item.reservations.length > 0 &&
-                              !available &&
+                              !item.available &&
                               `${moment(specificUser?.startDate).format(
                                 "DD-MM"
                               )}

@@ -181,7 +181,6 @@ const Home = () => {
   useEffect(() => {}, [selectValue]);
 
   const changeVal = (e) => {
-    console.log(e);
     setSelectValue(e);
   };
 
@@ -247,6 +246,14 @@ const Home = () => {
     dispatch(getAvatar());
   }, []);
 
+  useEffect(() => {
+    changeVal(null);
+    setSingleMonitor(false);
+    setDualMonitor(false);
+    setNearWindow(false);
+    setSelectedCategories({});
+  }, [dates]);
+
   return (
     <Layout className={styles.layout}>
       <UserHead isHome={true} />
@@ -308,6 +315,7 @@ const Home = () => {
                     data-cy="filter-by-availability"
                     className={styles.inputSize}
                     defaultValue={selectValue}
+                    value={selectValue}
                     onChange={changeVal}
                   >
                     <Select.Option value={null} key={1}>
@@ -329,7 +337,7 @@ const Home = () => {
                         className={styles.menu}
                         data-cy="filter-by-category"
                       >
-                        <Menu.Item>
+                        <Menu.Item key="0">
                           <Checkbox
                             checked={singleMonitor}
                             onClick={clickSingleMonitor}
@@ -338,7 +346,7 @@ const Home = () => {
                             Single monitor
                           </Checkbox>
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item key="1">
                           <Checkbox
                             checked={dualMonitor}
                             onClick={clickDualMonitor}
@@ -347,7 +355,7 @@ const Home = () => {
                             Dual monitor
                           </Checkbox>
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item key="2">
                           <Checkbox
                             checked={nearWindow}
                             onClick={clickNearWindow}
