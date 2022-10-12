@@ -120,7 +120,7 @@ const PastReservations = ({ officeName }) => {
       },
       sortDirections: ["ascend"],
     },
-    { title: "Office", dataIndex: "officeName", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Options",
@@ -146,8 +146,8 @@ const PastReservations = ({ officeName }) => {
       {!loadingData ? (
         <Table
           columns={columns}
-          dataSource={pastReservations.filter((item) =>
-            item.officeName?.includes(officeSelect)
+          dataSource={pastReservations.filter((reservation) =>
+            reservation.desk.office.name?.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}

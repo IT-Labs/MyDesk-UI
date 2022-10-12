@@ -2,7 +2,17 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import UserHeade from "../../components/Head/UserHead";
-import { Button, Card, Input, Modal, Select, Table, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Input,
+  Modal,
+  Select,
+  Table,
+  Tooltip,
+  Row,
+  Col,
+} from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.scss";
 import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
@@ -220,7 +230,7 @@ const ReservationList = () => {
         );
       },
     },
-    { title: "Office", dataIndex: "office", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Date",
@@ -238,7 +248,7 @@ const ReservationList = () => {
       sortDirections: ["ascend"],
     },
   ];
-  const [filterVal, setFilterVal] = useState("");
+  const [filterOffice, setFilterOffice] = useState("");
 
   const tabList = [
     {
@@ -292,119 +302,130 @@ const ReservationList = () => {
   }));
 
   return (
-    <Layout>
-      <UserHeade />
+    <>
       <Layout>
-        <Sidebar selected="4" />
-        <Content className={styles.content}>
-          <div style={{ width: "80%" }}>
-            <Card
-              title={
-                <Title
-                  reservations={reservations}
-                  columns={columnsForExcel}
-                  sheet={excelSheet}
-                />
-              }
-              className={styles.resList}
-              tabList={tabList}
-              onTabChange={(key) => {
-                setTabKey(key);
-                if (key === "past") {
-                  sortPast(initRes);
-                  setExcelSheet("Past Reservation List");
-                } else {
-                  sortFuture(initRes);
-                  setExcelSheet("Future Reservation List");
+        <UserHeade />
+        <Layout>
+          <Sidebar selected="4" />
+          <Content className={styles.content}>
+            <div style={{ width: "80%" }}>
+              <Card
+                title={
+                  <Title
+                    reservations={reservations}
+                    columns={columnsForExcel}
+                    sheet={excelSheet}
+                  />
                 }
-              }}
-            >
-              <div className={styles.inputs}>
-                <div>
-                  <SearchOutlined style={{ margin: 10 }} />
-                  <Tooltip title="Select which office you want to filter by">
-                    <Select
-                      showSearch
-                      data-cy="office-branch-select"
-                      defaultValue="Select office"
-                      onChange={(val) => setFilterVal(val)}
-                      style={{ width: 200 }}
-                    >
-                      <Select.Option key={0} value="">
-                        All offices
-                      </Select.Option>
-                      {offices.map(({ name, id }) => (
-                        <Select.Option key={id} value={name}>
-                          {name}
+                className={styles.resList}
+                tabList={tabList}
+                onTabChange={(key) => {
+                  setTabKey(key);
+                  if (key === "past") {
+                    sortPast(initRes);
+                    setExcelSheet("Past Reservation List");
+                  } else {
+                    sortFuture(initRes);
+                    setExcelSheet("Future Reservation List");
+                  }
+                }}
+              >
+                <div className={styles.inputs}>
+                  <div>
+                    <SearchOutlined style={{ margin: 10 }} />
+                    <Tooltip title="Select which office you want to filter by">
+                      <Select
+                        showSearch
+                        data-cy="office-branch-select"
+                        defaultValue="Select office"
+                        onChange={(officeName) => setFilterOffice(officeName)}
+                        style={{ width: 200 }}
+                      >
+                        <Select.Option key={0} value="">
+                          All offices
                         </Select.Option>
-                      ))}
-                    </Select>
-                  </Tooltip>
+                        {offices.map(({ name, id }) => (
+                          <Select.Option key={id} value={name}>
+                            {name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <FileSearchOutlined style={{ margin: 10 }} />
+                    <Tooltip title="Enter the First or the Last name of the user you want to search">
+                      <Input
+                        value={filterInput}
+                        onChange={(e) => setFilterInput(e.target.value)}
+                        className={styles.searchInput}
+                        onPress
+                        placeholder="Search by name"
+                        style={{ width: 200 }}
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
-                <div>
-                  <FileSearchOutlined style={{ margin: 10 }} />
-                  <Tooltip title="Enter the First or the Last name of the user you want to search">
-                    <Input
-                      value={filterInput}
-                      onChange={(e) => setFilterInput(e.target.value)}
-                      className={styles.searchInput}
-                      onPress
-                      placeholder="Search by name"
-                      style={{ width: 200 }}
-                    />
-                  </Tooltip>
-                </div>
-              </div>
-              {reservations.length > 0 ? (
-                <Table
-                  columns={tabKey === "past" ? pastColumns : futureColumns}
-                  dataSource={reservations.filter(
-                    ({ office, employee }) =>
-                      office.includes(filterVal) &&
-                      employee.toLowerCase().includes(filterInput.toLowerCase())
-                  )}
-                  pagination={{ pageSize: 4, position: ["bottomRight"] }}
-                />
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: 444,
-                  }}
-                >
+                {reservations.length > 0 ? (
+                  <Table
+                    columns={tabKey === "past" ? pastColumns : futureColumns}
+                    dataSource={reservations.filter(
+                      (reservation) =>
+                        reservation.desk.office.name.includes(filterOffice) &&
+                        reservation.employee
+                          .toLowerCase()
+                          .includes(filterInput.toLowerCase())
+                    )}
+                    pagination={{ pageSize: 4, position: ["bottomRight"] }}
+                  />
+                ) : (
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "column",
-                      height: 200,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 444,
                     }}
                   >
-                    <Loading />
-                    <p>Loading, please wait</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: 200,
+                      }}
+                    >
+                      <Loading />
+                      <p>Loading, please wait</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              <Modal
-                maskClosable={false}
-                title="Cancel user's reservation?"
-                centered
-                visible={visible}
-                onOk={() => {
-                  cancelReservation(toBeCancelled);
-                  setToBeCancelled(null);
-                  setVisible(false);
-                }}
-                onCancel={() => setVisible(false)}
-              >
-                <p>Do you really want to cancel this user’s reservation?</p>
-              </Modal>
-            </Card>
-          </div>
-        </Content>
+                )}
+                <Modal
+                  maskClosable={false}
+                  title="Cancel user's reservation?"
+                  centered
+                  visible={visible}
+                  onOk={() => {
+                    cancelReservation(toBeCancelled);
+                    setToBeCancelled(null);
+                    setVisible(false);
+                  }}
+                  onCancel={() => setVisible(false)}
+                >
+                  <p>Do you really want to cancel this user’s reservation?</p>
+                </Modal>
+              </Card>
+            </div>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+      <Row className={styles.footerSection} align="center">
+        <Col align="center" span={24}>
+          <p className={styles.footerText}>
+            inOffice ©2022 Created by inOfficeTeam
+          </p>
+        </Col>
+      </Row>
+    </>
   );
 };
 

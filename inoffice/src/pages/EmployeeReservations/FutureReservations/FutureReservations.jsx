@@ -83,7 +83,7 @@ const FutureReservations = () => {
       },
       sortDirections: ["descend"],
     },
-    { title: "Office", dataIndex: "officeName", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     { title: "Entity", dataIndex: "entity", key: 3 },
     {
       title: "Options",
@@ -111,8 +111,8 @@ const FutureReservations = () => {
       {!loadingData ? (
         <Table
           columns={columns}
-          dataSource={futureReservations.filter(({ officeName }) =>
-            officeName?.includes(officeSelect)
+          dataSource={futureReservations.filter((reservation) =>
+            reservation.desk.office.name?.includes(officeSelect)
           )}
           pagination={{ pageSize: 4, position: ["bottomRight"] }}
           scroll={{ x: 400 }}
