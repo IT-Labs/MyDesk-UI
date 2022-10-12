@@ -18,7 +18,7 @@ describe("Users can select a desk", () => {
     employeeReservationsPage.assertOfficesAreTheSameAsHomepage();
   });
 
-  it("Verify that the user can select an office from the list", () => {
+  it.only("Verify that the user can select an office from the list", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,

@@ -21,6 +21,10 @@ export class EmployeeReservationsPage {
     return cy.get(".ant-select-selection-item");
   }
 
+  myReservationsTableBody() {
+    return cy.get(".ant-table-tbody");
+  }
+
   /**
    * Methods.
    */
@@ -42,6 +46,16 @@ export class EmployeeReservationsPage {
     this.officeBranchFilterDropdown().click({ force: true });
     this.officeBranchFilterInput().type(`${officeName}{enter}`);
     this.selectedOfficeLabel().should("have.text", officeName);
+
+    this.myReservationsTableBody()
+      .find("tr.ant-table-row.ant-table-row-level-0")
+      .each(($tr) => {
+        cy.get($tr)
+          .find("td")
+          .each(($td, $index) => {
+            if ($index == 1) expect($td).to.have.text(officeName); //  index 1 = office name
+          });
+      });
   }
 }
 
