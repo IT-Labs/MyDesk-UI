@@ -367,6 +367,7 @@ const Dashboard = () => {
               </div>
               <div className={styles.title}>
                 <h2>Dashboard</h2>
+                <h3 className={styles.title}>Select office</h3>
               </div>
               <div className={styles.inputs}>
                 <Select
