@@ -185,7 +185,13 @@ const Home = () => {
     setSelectValue(e);
   };
 
-  const reserveForCoworker = async (person) => {
+  const reserveForCoworker = async () => {
+    if (!selectedCoworker.email) {
+      openError("Co-worker must be selected");
+      setShowReserveForCoworker(false);
+      return;
+    }
+
     const data = {
       startDate: startDateRes,
       endDate: endDateRes,
