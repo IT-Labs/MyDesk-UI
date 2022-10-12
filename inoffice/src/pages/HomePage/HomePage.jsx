@@ -11,6 +11,7 @@ import {
   Row,
   Select,
   Space,
+  Tooltip,
 } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
@@ -337,24 +338,41 @@ const Home = () => {
                         className={styles.menu}
                         data-cy="filter-by-category"
                       >
-                        <Menu.Item key="0">
-                          <Checkbox
-                            checked={singleMonitor}
-                            onClick={clickSingleMonitor}
-                            disabled={dualMonitor}
-                          >
-                            Single monitor
-                          </Checkbox>
-                        </Menu.Item>
-                        <Menu.Item key="1">
-                          <Checkbox
-                            checked={dualMonitor}
-                            onClick={clickDualMonitor}
-                            disabled={singleMonitor}
-                          >
-                            Dual monitor
-                          </Checkbox>
-                        </Menu.Item>
+                        <Tooltip
+                          title={`${
+                            dualMonitor
+                              ? "Both options can not be selected at the same time."
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <Checkbox
+                              checked={singleMonitor}
+                              onClick={clickSingleMonitor}
+                              disabled={dualMonitor}
+                            >
+                              Single monitor
+                            </Checkbox>
+                          </Menu.Item>
+                        </Tooltip>
+
+                        <Tooltip
+                          title={`${
+                            singleMonitor
+                              ? "Both options can not be selected at the same time."
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <Checkbox
+                              checked={dualMonitor}
+                              onClick={clickDualMonitor}
+                              disabled={singleMonitor}
+                            >
+                              Dual monitor
+                            </Checkbox>
+                          </Menu.Item>
+                        </Tooltip>
                         <Menu.Item key="2">
                           <Checkbox
                             checked={nearWindow}
