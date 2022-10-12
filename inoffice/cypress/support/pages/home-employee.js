@@ -37,15 +37,21 @@ export class HomeEmployeePage {
   }
 
   firstAvailableDayOfNextMonthInCalendar() {
-    return cy.get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view").last();
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-start.ant-picker-cell-in-view")
+      .last();
   }
 
   lastAvailableDayOfNextMonthInCalendar() {
-    return cy.get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view").last();
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
+      .last();
   }
 
   lastAvailableDayOfCurrentMonthInCalendar() {
-    return cy.get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view").first();
+    return cy
+      .get(".ant-picker-cell.ant-picker-cell-end.ant-picker-cell-in-view")
+      .first();
   }
 
   startDateInputInCalendar() {
@@ -58,7 +64,7 @@ export class HomeEmployeePage {
 
   availabilityFilterDropdown() {
     return cy.get(
-        "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item",
+      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
     );
   }
 
@@ -92,7 +98,7 @@ export class HomeEmployeePage {
 
   officeDropdown() {
     return cy.get(
-        "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item",
+      "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
     );
   }
 
@@ -100,12 +106,14 @@ export class HomeEmployeePage {
     return cy.get("[data-cy=set-for-coworker-check]");
   }
 
-  coworkerSelect(){
-    return cy.get('[data-cy=coworker-select]')
+  coworkerSelect() {
+    return cy.get("[data-cy=coworker-select]");
   }
 
-  coworkerSearchInput(){
-    return cy.get('[data-cy=coworker-select] .ant-select-selector .ant-select-selection-search input[type=search]')
+  coworkerSearchInput() {
+    return cy.get(
+      "[data-cy=coworker-select] .ant-select-selector .ant-select-selection-search input[type=search]"
+    );
   }
 
   availabilityOptionDropdown() {
@@ -113,29 +121,28 @@ export class HomeEmployeePage {
   }
 
   modalContainer() {
-    return cy.get("[data-cy=\"modal-container\"]");
+    return cy.get('[data-cy="modal-container"]');
   }
 
   loadingDots() {
     return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
   }
 
-  confirmationModalTitle(){
-    return cy.get('.ant-modal-header .ant-modal-title')
+  confirmationModalTitle() {
+    return cy.get(".ant-modal-header .ant-modal-title");
   }
 
-  confirmationModalMessage(){
-    return cy.get('.ant-modal-body')
+  confirmationModalMessage() {
+    return cy.get(".ant-modal-body");
   }
 
-  confirmationModalOkButton(){
-    return cy.get('.ant-modal-footer .ant-btn-primary')
+  confirmationModalOkButton() {
+    return cy.get(".ant-modal-footer .ant-btn-primary");
   }
 
-  confirmationModalCancelButton(){
-    return cy.get('.ant-modal-footer .ant-btn-default')
+  confirmationModalCancelButton() {
+    return cy.get(".ant-modal-footer .ant-btn-default");
   }
-
 
   /**
    * Methods.
@@ -170,8 +177,8 @@ export class HomeEmployeePage {
     this.openCalendar();
     this.clickStartDatePrevMonthButton();
     this.startDateMonthLabel().should(
-        "have.text",
-        this.getPreviousMonth("MMM"),
+      "have.text",
+      this.getPreviousMonth("MMM")
     );
   }
 
@@ -189,7 +196,9 @@ export class HomeEmployeePage {
 
   getPreviousMonth(monthFormat) {
     const currentMoment = moment(new Date());
-    const previousMonth = currentMoment.subtract(1, "months").format(monthFormat);
+    const previousMonth = currentMoment
+      .subtract(1, "months")
+      .format(monthFormat);
     return previousMonth;
   }
 
@@ -227,59 +236,89 @@ export class HomeEmployeePage {
   }
 
   assertSingleDateIsSelected() {
-    this.startDateInputInCalendar().invoke("val").then((startDate) => {
-      this.endDateInputInCalendar().should("have.value", startDate);
-    });
+    this.startDateInputInCalendar()
+      .invoke("val")
+      .then((startDate) => {
+        this.endDateInputInCalendar().should("have.value", startDate);
+      });
   }
 
   assertRangeDateIsSelected() {
-    this.endDateInputInCalendar().invoke("val").then((endDate) => {
-      this.startDateInputInCalendar().invoke("val").then((startDate) => {
-        expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
-            moment(startDate, "DD/MM/YYYY").toDate(),
-        );
+    this.endDateInputInCalendar()
+      .invoke("val")
+      .then((endDate) => {
+        this.startDateInputInCalendar()
+          .invoke("val")
+          .then((startDate) => {
+            expect(moment(endDate, "DD/MM/YYYY").toDate()).to.be.greaterThan(
+              moment(startDate, "DD/MM/YYYY").toDate()
+            );
+          });
       });
-    });
   }
 
   filterByAvailability(availability) {
     this.availabilityFilterDropdown().click({ force: true });
-    this.availabilityOptionDropdown().contains(availability).click({ force: true });
+    this.availabilityOptionDropdown()
+      .contains(availability)
+      .click({ force: true });
   }
 
   selectDeskN(n) {
-    this.desksCards().eq(n - 1).click();
+    this.desksCards()
+      .eq(n - 1)
+      .click();
   }
 
   verifyOnlyOneDeskIsSelected() {
-    this.desksCard().find(
-        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`,
-    ).should("have.length", 1);
+    this.desksCard()
+      .find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"]`
+      )
+      .should("have.length", 1);
+  }
+
+  getDeskNumberInSelectedDesk() {
+    this.desksCard()
+      .find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"] div div div div div div p`
+      )
+      .first()
+      .as("selectedDeskNumber");
   }
 
   verifyReservationIsSuccessful() {
     this.notificationModalMessageLabel().should("have.text", "Notification");
     this.notificationModalDescriptionLabel().should(
-        "have.text",
-        "You have successfully reserved a desk.",
+      "have.text",
+      "You have successfully reserved a desk."
     );
   }
 
   verifyPastDatesAreDisabledInCalendar() {
     // previous days in the same week
-    this.todayCell().prevAll().each(($td) => {
-      expect($td).to.have.class("ant-picker-cell-disabled");
-    });
+    this.todayCell()
+      .prevAll()
+      .each(($td) => {
+        expect($td).to.have.class("ant-picker-cell-disabled");
+      });
 
     // days in the previous weeks
-    this.todayCell().parent().prevAll().find("td").each(($td) => {
-      expect($td).to.have.class("ant-picker-cell-disabled");
-    });
+    this.todayCell()
+      .parent()
+      .prevAll()
+      .find("td")
+      .each(($td) => {
+        expect($td).to.have.class("ant-picker-cell-disabled");
+      });
   }
 
   verifyWeekendsAreDisabledInCalendar() {
-    cy.get(".ant-picker-content").first().find("td").each(($td, $index) => {
-      const weekendsIndex = new Array(
+    cy.get(".ant-picker-content")
+      .first()
+      .find("td")
+      .each(($td, $index) => {
+        const weekendsIndex = new Array(
           0,
           6,
           7,
@@ -290,19 +329,21 @@ export class HomeEmployeePage {
           27,
           28,
           34,
-          35,
-      );
+          35
+        );
 
-      if (weekendsIndex.includes($index)) {
-        cy.log($td.text() + " = " + $index);
-        expect($td).to.have.class("ant-picker-cell-disabled");
-      }
-    });
+        if (weekendsIndex.includes($index)) {
+          cy.log($td.text() + " = " + $index);
+          expect($td).to.have.class("ant-picker-cell-disabled");
+        }
+      });
   }
 
   selectOffice(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
-    cy.get(".ant-select-item.ant-select-item-option").contains(officeName).click({ force: true });
+    cy.get(".ant-select-item.ant-select-item-option")
+      .contains(officeName)
+      .click({ force: true });
   }
 
   assertShowReviewsButtonIsDisabled() {
@@ -314,7 +355,9 @@ export class HomeEmployeePage {
   }
 
   assertModalIsDisplayed() {
-    this.modalContainer().contains("Reviews for selected entity").should("be.visible");
+    this.modalContainer()
+      .contains("Reviews for selected entity")
+      .should("be.visible");
   }
 
   clickModalOkButton() {
@@ -326,7 +369,9 @@ export class HomeEmployeePage {
   }
 
   assertModalIsNotDisplayed() {
-    this.modalContainer().contains("Reviews for selected entity").should("not.be.visible");
+    this.modalContainer()
+      .contains("Reviews for selected entity")
+      .should("not.be.visible");
   }
 
   assertButtonReserveIsDisabled() {
@@ -337,7 +382,7 @@ export class HomeEmployeePage {
     this.setForCoworkerCheckbox().click();
   }
 
-  selectACoworker(coworkerName){
+  selectACoworker(coworkerName) {
     this.coworkerSelect().click();
     this.coworkerSearchInput().type(`${coworkerName}{enter}`);
   }
@@ -348,23 +393,46 @@ export class HomeEmployeePage {
 
   assertCoworkerIsRequiredWhenSetForCoworker() {}
 
-  confirmReservationForCoworker(coworkerName){
-    this.confirmationModalTitle().should("have.text", "Reserve desk for co-worker");
-    this.confirmationModalMessage().should("contain", `Are you sure you want to reserve this desk for ${coworkerName}`);
+  confirmReservationForCoworker(coworkerName) {
+    this.confirmationModalTitle().should(
+      "have.text",
+      "Reserve desk for co-worker"
+    );
+    this.confirmationModalMessage().should(
+      "contain",
+      `Are you sure you want to reserve this desk for ${coworkerName}`
+    );
     this.confirmationModalOkButton().click();
   }
 
-  assertReservationForCoworkerIsSuccessful(){
+  assertReservationForCoworkerIsSuccessful() {
     this.notificationModalMessageLabel().should("have.text", "Notification");
-    this.notificationModalDescriptionLabel().should("have.text", "You have successfully reserved for your co-worker");
+    this.notificationModalDescriptionLabel().should(
+      "have.text",
+      "You have successfully reserved for your co-worker"
+    );
   }
 
-  reserveForACoworker(coworkerName){
+  reserveForACoworker(coworkerName) {
     this.selectSetForCoworker();
     this.selectACoworker(coworkerName);
     this.clickReserveButton();
     this.confirmReservationForCoworker(coworkerName);
+  }
 
+  verifyReservedDeskHasCoworkerName(coworkerName) {
+    cy.get("@selectedDeskNumber")
+      .invoke("text")
+      .then((deskNumber) => {
+        this.desksCard()
+          .find(
+            `.ant-list-item[style="border: none; transition: all 0.3s ease-in-out 0s;"]  div div div div div.ant-card-meta-title`
+          )
+          .contains(new RegExp("^" + deskNumber + "$", "g"))
+          .parents(".ant-card-body")
+          .find(".ant-card-meta-description")
+          .should("contain", coworkerName);
+      });
   }
 }
 
