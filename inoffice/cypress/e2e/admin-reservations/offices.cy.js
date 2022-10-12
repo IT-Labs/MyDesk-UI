@@ -22,6 +22,6 @@ describe("Users can select a desk", () => {
     cy.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.admin + urlSlugs.reservations);
     cy.assertLoadingDotsNotVisible();
-    adminReservationsPage.assertOfficeIsFiltered(officesData.default_office);
+    adminReservationsPage.assertOfficeIsFiltered(officesData.defaultOffice);
   });
 });
