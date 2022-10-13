@@ -336,6 +336,7 @@ const ReservationList = () => {
                     <Tooltip title="Select which office you want to filter by">
                       <Select
                         showSearch
+                        data-cy="office-branch-select"
                         defaultValue="Select office"
                         onChange={(officeName) => setFilterOffice(officeName)}
                         style={{ width: 200 }}

@@ -6,8 +6,8 @@ describe("Show reviews in Homepage", () => {
   it("Verify user is not able to click on the Show reviews button before selecting the entity", () => {
     cy.visit("/");
     loginPage.doLogin(
-        userData.cypressAutomationUserEmail,
-        userData.genericPassword,
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
     );
     homeEmployeePage.assertShowReviewsButtonIsDisabled();
   });
@@ -15,12 +15,12 @@ describe("Show reviews in Homepage", () => {
   it("Verify user is able to click on the Show reviews button after selecting the entity", () => {
     cy.visit("/");
     loginPage.doLogin(
-        userData.cypressAutomationUserEmail,
-        userData.genericPassword,
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
@@ -31,12 +31,12 @@ describe("Show reviews in Homepage", () => {
   it("Verify clicking OK button closes the modal", () => {
     cy.visit("/");
     loginPage.doLogin(
-        userData.cypressAutomationUserEmail,
-        userData.genericPassword,
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
@@ -50,12 +50,12 @@ describe("Show reviews in Homepage", () => {
   it.skip("Verify clicking outside the modal closes it", () => {
     cy.visit("/");
     loginPage.doLogin(
-        userData.cypressAutomationUserEmail,
-        userData.genericPassword,
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
 
