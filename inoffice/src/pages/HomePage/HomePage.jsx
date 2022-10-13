@@ -310,9 +310,13 @@ const Home = () => {
                 <div>
                   <p className={styles.pStyles}>Search by name</p>
                   <Input
+                    value={employeeSearch}
                     className={styles.inputSize}
                     data-cy="search-by-name"
-                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                    onChange={(e) =>
+                      setEmployeeSearch(e.target.value.replace(/\s+/, ""))
+                    }
+                    onPress
                   />
                 </div>
                 <div>
@@ -399,7 +403,13 @@ const Home = () => {
                           width: "100%",
                         }}
                       >
-                        All categories
+                        {singleMonitor && !nearWindow
+                          ? "Single Monitor"
+                          : dualMonitor && !nearWindow
+                          ? "Dual Monitor"
+                          : nearWindow && !singleMonitor && !dualMonitor
+                          ? "Near Window"
+                          : "All Categories"}
                         <DownOutlined
                           style={{
                             color: "rgba(0,0,0,0.25)",

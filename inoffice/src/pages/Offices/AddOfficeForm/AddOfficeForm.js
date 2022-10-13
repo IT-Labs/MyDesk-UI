@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import api from "../../../helper/api";
 import { Form, Input, Button } from "antd";
 import {
@@ -9,6 +9,12 @@ import { useSelector } from "react-redux";
 
 const AddOfficeForm = () => {
   const offices = useSelector((state) => state.offices.offices);
+  const [errorName, setErrorName] = useState("");
+
+  function resetErrorHighlighted() {
+    setErrorName("");
+  }
+
   const handleSubmit = (e) => {
     const name = e.name.replace(/\s+/, "-");
     const location = e.location.replace(/\s+/, "-");
@@ -21,7 +27,8 @@ const AddOfficeForm = () => {
     );
 
     if (office) {
-      openError("That office already exists");
+      setErrorName("error");
+      openError("An office with that name and location already exists");
       return;
     }
     if (e.name.length > 25 || e.location.length > 25) {
@@ -54,6 +61,7 @@ const AddOfficeForm = () => {
       >
         <Form.Item
           name="name"
+          validateStatus={errorName}
           rules={[
             {
               required: true,
@@ -61,14 +69,18 @@ const AddOfficeForm = () => {
             },
           ]}
         >
-          <Input placeholder="Office name" />
+          <Input placeholder="Office name" onChange={resetErrorHighlighted} />
         </Form.Item>
         <Form.Item
           name="location"
+          validateStatus={errorName}
           on
           rules={[{ required: true, message: "Please input office location!" }]}
         >
-          <Input placeholder="Office location" />
+          <Input
+            placeholder="Office location"
+            onChange={resetErrorHighlighted}
+          />
         </Form.Item>
         <Form.Item>
           <Button
