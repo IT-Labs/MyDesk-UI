@@ -18,6 +18,7 @@ const OfficeDetails = ({ props }) => {
 
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [saveBtnDisabled, setSaveBtnDisabled] = useState(true);
 
   const getDesks = () => {
     setIsLoading(true);
@@ -73,6 +74,7 @@ const OfficeDetails = ({ props }) => {
     api
       .put("admin/office-desks", properlySortedData, config)
       .then((res) => {
+        setSaveBtnDisabled(true);
         getDesks();
         openNotification("You have successfully updated the entities");
         setIsLoading(false);
@@ -123,7 +125,7 @@ const OfficeDetails = ({ props }) => {
       }
       return item;
     });
-
+    setSaveBtnDisabled(false);
     setDesks(newItem);
 
     // const newChecked = [...checked, checkedValues.target.value];
@@ -155,6 +157,7 @@ const OfficeDetails = ({ props }) => {
     api
       .post("admin/office-desks/" + officeId, data)
       .then((res) => {
+        setSaveBtnDisabled(false);
         openNotification("You have successfully added new entities");
         getDesks();
       })
@@ -170,6 +173,7 @@ const OfficeDetails = ({ props }) => {
     api
       .delete("admin/office-desks/" + deskId)
       .then(() => {
+        setSaveBtnDisabled(false);
         getDesks();
         openNotification("You have successfully deleted the entity");
       })
@@ -349,12 +353,13 @@ const OfficeDetails = ({ props }) => {
               onConfirm={() => save()}
               okText="OK"
               cancelText="Cancel"
-              className={`${styles.uploadOfficePlan} greenBtn`}
+              className={saveBtnDisabled ? null : "greenBtn"}
               shape="round"
               placement="topRight"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              disabled={saveBtnDisabled}
             >
-              <button
+              <Button
                 style={{
                   width: 150,
                   marginLeft: 5,
@@ -362,9 +367,10 @@ const OfficeDetails = ({ props }) => {
                   height: 30,
                   cursor: "pointer",
                 }}
+                disabled={saveBtnDisabled}
               >
                 Save
-              </button>
+              </Button>
             </Popconfirm>
           </div>
           <div className={styles.imgContainer}>
