@@ -271,7 +271,7 @@ const OfficeDetails = ({ props }) => {
       render: (text, item, id) => {
         return (
           <Popconfirm
-            title="Are you sure to delete this desk?"
+            title="Are you sure you want to delete this desk?"
             onConfirm={() => deleteNotification(item.id)}
             okText="OK"
             cancelText="Cancel"
