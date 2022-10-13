@@ -399,7 +399,13 @@ const Home = () => {
                           width: "100%",
                         }}
                       >
-                        All categories
+                        {singleMonitor && !nearWindow
+                          ? "Single Monitor"
+                          : dualMonitor && !nearWindow
+                          ? "Dual Monitor"
+                          : nearWindow && !singleMonitor && !dualMonitor
+                          ? "Near Window"
+                          : "All Categories"}
                         <DownOutlined
                           style={{
                             color: "rgba(0,0,0,0.25)",
