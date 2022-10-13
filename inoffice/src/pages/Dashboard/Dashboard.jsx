@@ -181,11 +181,13 @@ const Dashboard = () => {
 
     const deskInfo = initialDesk.filter((item) => item.officeId === officeId);
     filterData(deskInfo);
+
     const foundOffice = offices.find((item) => item.id === officeId);
 
     const reviewFilter = initialReviews.filter((item) =>
       item.officeName.includes(foundOffice.name)
     );
+
     setReviews(reviewFilter);
   };
 
@@ -367,7 +369,7 @@ const Dashboard = () => {
               </div>
               <div className={styles.title}>
                 <h2>Dashboard</h2>
-                <h3 className={styles.title}>Select office</h3>
+                <h3>Select office</h3>
               </div>
               <div className={styles.inputs}>
                 <Select
