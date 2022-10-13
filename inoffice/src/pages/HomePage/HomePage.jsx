@@ -310,9 +310,13 @@ const Home = () => {
                 <div>
                   <p className={styles.pStyles}>Search by name</p>
                   <Input
+                    value={employeeSearch}
                     className={styles.inputSize}
                     data-cy="search-by-name"
-                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                    onChange={(e) =>
+                      setEmployeeSearch(e.target.value.replace(/\s+/, ""))
+                    }
+                    onPress
                   />
                 </div>
                 <div>
