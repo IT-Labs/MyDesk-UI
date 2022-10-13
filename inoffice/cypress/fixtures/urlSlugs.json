@@ -1,5 +1,6 @@
 {
   "employee": "/employee",
+  "admin": "/admin",
   "home": "/home",
   "reservations": "/reservations"
 }

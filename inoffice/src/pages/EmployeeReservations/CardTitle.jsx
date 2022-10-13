@@ -15,6 +15,7 @@ export const CardTitle = ({ data }) => {
       <Tooltip title="Select which office you want to filter by">
         <Select
           showSearch
+          data-cy="office-branch-select"
           placeholder="Select office"
           defaultValue={"Select office"}
           style={{ width: 200 }}
