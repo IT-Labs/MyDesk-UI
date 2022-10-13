@@ -181,13 +181,11 @@ const Dashboard = () => {
 
     const deskInfo = initialDesk.filter((item) => item.officeId === officeId);
     filterData(deskInfo);
-
     const foundOffice = offices.find((item) => item.id === officeId);
 
     const reviewFilter = initialReviews.filter((item) =>
-      item.officeName.includes(foundOffice.name)
+      item.reservation.desk.office.name.includes(foundOffice.name)
     );
-
     setReviews(reviewFilter);
   };
 
