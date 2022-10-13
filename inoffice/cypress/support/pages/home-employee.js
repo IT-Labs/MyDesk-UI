@@ -124,8 +124,14 @@ export class HomeEmployeePage {
     return cy.get('[data-cy="modal-container"]');
   }
 
-  loadingDots() {
-    return cy.get("[data-cy=loading-dots]", { timeout: 20000 });
+  officeDropdownAllOptions() {
+    return cy.get(
+      ".rc-virtual-list-holder-inner .ant-select-item.ant-select-item-option"
+    );
+  }
+
+  modalContainer() {
+    return cy.get('[data-cy="modal-container"]');
   }
 
   confirmationModalTitle() {
@@ -288,8 +294,8 @@ export class HomeEmployeePage {
   }
 
   verifyReservationIsSuccessful() {
-    this.notificationModalMessageLabel().should("have.text", "Notification");
-    this.notificationModalDescriptionLabel().should(
+    this.modalMessageLabel().should("have.text", "Notification");
+    this.modalDescriptionLabel().should(
       "have.text",
       "You have successfully reserved a desk."
     );
@@ -364,10 +370,6 @@ export class HomeEmployeePage {
     this.modalContainer().contains("OK").click();
   }
 
-  assertLoadingDotsNotVisible() {
-    this.loadingDots().should("not.exist");
-  }
-
   assertModalIsNotDisplayed() {
     this.modalContainer()
       .contains("Reviews for selected entity")
@@ -433,6 +435,13 @@ export class HomeEmployeePage {
           .find(".ant-card-meta-description")
           .should("contain", coworkerName);
       });
+  }
+
+  getOfficesListInHomepage() {
+    this.officeBranchFilterDropdown().click({ force: true });
+    this.officeDropdownAllOptions().then(($officesInHomepage) => {
+      Cypress.env("officesInHomepage", $officesInHomepage);
+    });
   }
 }
 

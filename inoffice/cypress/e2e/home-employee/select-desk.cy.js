@@ -2,6 +2,7 @@ import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
 import * as userData from "../../fixtures/userData.json";
 import * as coworkerData from "../../fixtures/coworkerData.json";
+import * as officesData from "../../fixtures/officesData.json";
 
 describe("Users can select a desk", () => {
   it("Verify that the user can select only one desk in a reservation", () => {
@@ -10,11 +11,11 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(officesData.defaultOffice);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectDeskN(2);
@@ -27,11 +28,11 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(officesData.defaultOffice);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.reserveButton().click();
@@ -44,11 +45,11 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(officesData.defaultOffice);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Reserved");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.assertButtonReserveIsDisabled();
@@ -62,11 +63,11 @@ describe("Users can select a desk", () => {
       userData.cypressAutomationUserEmail,
       userData.genericPassword
     );
-    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.selectOffice(officesData.defaultOffice);
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectSetForCoworker();
@@ -85,7 +86,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.openCalendar();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
-    homeEmployeePage.assertLoadingDotsNotVisible();
+    cy.assertLoadingDotsNotVisible();
     homeEmployeePage.filterByAvailability("Available");
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.getDeskNumberInSelectedDesk();

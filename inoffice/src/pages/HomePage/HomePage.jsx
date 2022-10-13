@@ -11,6 +11,7 @@ import {
   Row,
   Select,
   Space,
+  Tooltip,
 } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
@@ -181,11 +182,16 @@ const Home = () => {
   useEffect(() => {}, [selectValue]);
 
   const changeVal = (e) => {
-    console.log(e);
     setSelectValue(e);
   };
 
-  const reserveForCoworker = async (person) => {
+  const reserveForCoworker = async () => {
+    if (!selectedCoworker.email) {
+      openError("Co-worker must be selected");
+      setShowReserveForCoworker(false);
+      return;
+    }
+
     const data = {
       startDate: startDateRes,
       endDate: endDateRes,
@@ -247,6 +253,14 @@ const Home = () => {
     dispatch(getAvatar());
   }, []);
 
+  useEffect(() => {
+    changeVal(null);
+    setSingleMonitor(false);
+    setDualMonitor(false);
+    setNearWindow(false);
+    setSelectedCategories({});
+  }, [dates]);
+
   return (
     <Layout className={styles.layout}>
       <UserHead isHome={true} />
@@ -296,9 +310,13 @@ const Home = () => {
                 <div>
                   <p className={styles.pStyles}>Search by name</p>
                   <Input
+                    value={employeeSearch}
                     className={styles.inputSize}
                     data-cy="search-by-name"
-                    onChange={(e) => setEmployeeSearch(e.target.value)}
+                    onChange={(e) =>
+                      setEmployeeSearch(e.target.value.replace(/\s+/, ""))
+                    }
+                    onPress
                   />
                 </div>
                 <div>
@@ -308,6 +326,7 @@ const Home = () => {
                     data-cy="filter-by-availability"
                     className={styles.inputSize}
                     defaultValue={selectValue}
+                    value={selectValue}
                     onChange={changeVal}
                   >
                     <Select.Option value={null} key={1}>
@@ -329,25 +348,42 @@ const Home = () => {
                         className={styles.menu}
                         data-cy="filter-by-category"
                       >
-                        <Menu.Item>
-                          <Checkbox
-                            checked={singleMonitor}
-                            onClick={clickSingleMonitor}
-                            disabled={dualMonitor}
-                          >
-                            Single monitor
-                          </Checkbox>
-                        </Menu.Item>
-                        <Menu.Item>
-                          <Checkbox
-                            checked={dualMonitor}
-                            onClick={clickDualMonitor}
-                            disabled={singleMonitor}
-                          >
-                            Dual monitor
-                          </Checkbox>
-                        </Menu.Item>
-                        <Menu.Item>
+                        <Tooltip
+                          title={`${
+                            dualMonitor
+                              ? "Both options can not be selected at the same time."
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <Checkbox
+                              checked={singleMonitor}
+                              onClick={clickSingleMonitor}
+                              disabled={dualMonitor}
+                            >
+                              Single monitor
+                            </Checkbox>
+                          </Menu.Item>
+                        </Tooltip>
+
+                        <Tooltip
+                          title={`${
+                            singleMonitor
+                              ? "Both options can not be selected at the same time."
+                              : ""
+                          }`}
+                        >
+                          <Menu.Item>
+                            <Checkbox
+                              checked={dualMonitor}
+                              onClick={clickDualMonitor}
+                              disabled={singleMonitor}
+                            >
+                              Dual monitor
+                            </Checkbox>
+                          </Menu.Item>
+                        </Tooltip>
+                        <Menu.Item key="2">
                           <Checkbox
                             checked={nearWindow}
                             onClick={clickNearWindow}
@@ -367,7 +403,13 @@ const Home = () => {
                           width: "100%",
                         }}
                       >
-                        All categories
+                        {singleMonitor && !nearWindow
+                          ? "Single Monitor"
+                          : dualMonitor && !nearWindow
+                          ? "Dual Monitor"
+                          : nearWindow && !singleMonitor && !dualMonitor
+                          ? "Near Window"
+                          : "All Categories"}
                         <DownOutlined
                           style={{
                             color: "rgba(0,0,0,0.25)",

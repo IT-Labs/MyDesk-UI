@@ -145,7 +145,7 @@ const ReservationList = () => {
             style={{
               width: "100%",
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "start",
               alignItems: "center",
             }}
           >
@@ -158,7 +158,7 @@ const ReservationList = () => {
               }}
               className={styles.avatar}
             />
-            <span>{record.employee}</span>
+            <span style={{ marginLeft: "15px" }}>{record.employee}</span>
           </div>
         );
       },
@@ -212,7 +212,7 @@ const ReservationList = () => {
             style={{
               width: "100%",
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "start",
               alignItems: "center",
             }}
           >
@@ -225,7 +225,7 @@ const ReservationList = () => {
               }}
               className={styles.avatar}
             />
-            <span>{record.employee}</span>
+            <span style={{ marginLeft: "15px" }}>{record.employee}</span>
           </div>
         );
       },
@@ -336,6 +336,7 @@ const ReservationList = () => {
                     <Tooltip title="Select which office you want to filter by">
                       <Select
                         showSearch
+                        data-cy="office-branch-select"
                         defaultValue="Select office"
                         onChange={(officeName) => setFilterOffice(officeName)}
                         style={{ width: 200 }}
@@ -356,7 +357,9 @@ const ReservationList = () => {
                     <Tooltip title="Enter the First or the Last name of the user you want to search">
                       <Input
                         value={filterInput}
-                        onChange={(e) => setFilterInput(e.target.value)}
+                        onChange={(e) =>
+                          setFilterInput(e.target.value.replace(/\s+/, ""))
+                        }
                         className={styles.searchInput}
                         onPress
                         placeholder="Search by name"
@@ -410,7 +413,7 @@ const ReservationList = () => {
                   }}
                   onCancel={() => setVisible(false)}
                 >
-                  <p>Do you really want to cancel this user’s reservation?</p>
+                  <p>Do you really want to cancel this reservation?</p>
                 </Modal>
               </Card>
             </div>
