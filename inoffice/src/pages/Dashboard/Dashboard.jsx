@@ -186,6 +186,7 @@ const Dashboard = () => {
     const reviewFilter = initialReviews.filter((item) =>
       item.reservation.desk.office.name.includes(foundOffice.name)
     );
+
     setReviews(reviewFilter);
   };
 
@@ -327,10 +328,17 @@ const Dashboard = () => {
     },
     {
       title: "Desk number",
-      dataIndex: "deskIndex",
+      dataIndex: ["reservation", "desk", "indexForOffice"],
       key: 3,
       align: "center",
       width: "90px",
+      render: (text, data, id) => {
+        return (
+          <p style={{ fontSize: "0.9rem" }}>
+            Desk [{data.reservation.desk.indexForOffice}]
+          </p>
+        );
+      },
     },
     {
       title: "Options",
