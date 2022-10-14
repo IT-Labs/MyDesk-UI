@@ -88,11 +88,11 @@ export class HomeEmployeePage {
     return cy.get("[data-cy=show-reviews-button]");
   }
 
-  modalMessageLabel() {
+  notificationModalMessageLabel() {
     return cy.get(".ant-notification-notice-message");
   }
 
-  modalDescriptionLabel() {
+  notificationModalDescriptionLabel() {
     return cy.get(".ant-notification-notice-description");
   }
 
@@ -103,11 +103,25 @@ export class HomeEmployeePage {
   }
 
   setForCoworkerCheckbox() {
-    return cy.get("[data-cy=set-for-coworker]");
+    return cy.get("[data-cy=set-for-coworker-check]");
+  }
+
+  coworkerSelect() {
+    return cy.get("[data-cy=coworker-select]");
+  }
+
+  coworkerSearchInput() {
+    return cy.get(
+      "[data-cy=coworker-select] .ant-select-selector .ant-select-selection-search input[type=search]"
+    );
   }
 
   availabilityOptionDropdown() {
     return cy.get(".ant-select-item-option-content");
+  }
+
+  modalContainer() {
+    return cy.get('[data-cy="modal-container"]');
   }
 
   officeDropdownAllOptions() {
@@ -118,6 +132,22 @@ export class HomeEmployeePage {
 
   modalContainer() {
     return cy.get('[data-cy="modal-container"]');
+  }
+
+  confirmationModalTitle() {
+    return cy.get(".ant-modal-header .ant-modal-title");
+  }
+
+  confirmationModalMessage() {
+    return cy.get(".ant-modal-body");
+  }
+
+  confirmationModalOkButton() {
+    return cy.get(".ant-modal-footer .ant-btn-primary");
+  }
+
+  confirmationModalCancelButton() {
+    return cy.get(".ant-modal-footer .ant-btn-default");
   }
 
   /**
@@ -254,6 +284,15 @@ export class HomeEmployeePage {
       .should("have.length", 1);
   }
 
+  getDeskNumberInSelectedDesk() {
+    this.desksCard()
+      .find(
+        `.ant-list-item[style="border: 2px solid; transition: all 0.3s ease-in-out 0s;"] div div div div div div p`
+      )
+      .first()
+      .as("selectedDeskNumber");
+  }
+
   verifyReservationIsSuccessful() {
     this.modalMessageLabel().should("have.text", "Notification");
     this.modalDescriptionLabel().should(
@@ -345,11 +384,58 @@ export class HomeEmployeePage {
     this.setForCoworkerCheckbox().click();
   }
 
+  selectACoworker(coworkerName) {
+    this.coworkerSelect().click();
+    this.coworkerSearchInput().type(`${coworkerName}{enter}`);
+  }
+
   clickReserveButton() {
     this.reserveButton().click();
   }
 
   assertCoworkerIsRequiredWhenSetForCoworker() {}
+
+  confirmReservationForCoworker(coworkerName) {
+    this.confirmationModalTitle().should(
+      "have.text",
+      "Reserve desk for co-worker"
+    );
+    this.confirmationModalMessage().should(
+      "contain",
+      `Are you sure you want to reserve this desk for ${coworkerName}`
+    );
+    this.confirmationModalOkButton().click();
+  }
+
+  assertReservationForCoworkerIsSuccessful() {
+    this.notificationModalMessageLabel().should("have.text", "Notification");
+    this.notificationModalDescriptionLabel().should(
+      "have.text",
+      "You have successfully reserved for your co-worker"
+    );
+  }
+
+  reserveForACoworker(coworkerName) {
+    this.selectSetForCoworker();
+    this.selectACoworker(coworkerName);
+    this.clickReserveButton();
+    this.confirmReservationForCoworker(coworkerName);
+  }
+
+  verifyReservedDeskHasCoworkerName(coworkerName) {
+    cy.get("@selectedDeskNumber")
+      .invoke("text")
+      .then((deskNumber) => {
+        this.desksCard()
+          .find(
+            `.ant-list-item[style="border: none; transition: all 0.3s ease-in-out 0s;"]  div div div div div.ant-card-meta-title`
+          )
+          .contains(new RegExp("^" + deskNumber + "$", "g"))
+          .parents(".ant-card-body")
+          .find(".ant-card-meta-description")
+          .should("contain", coworkerName);
+      });
+  }
 
   getOfficesListInHomepage() {
     this.officeBranchFilterDropdown().click({ force: true });
