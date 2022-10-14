@@ -1,6 +1,7 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
 import * as userData from "../../fixtures/userData.json";
+import * as coworkerData from "../../fixtures/coworkerData.json";
 import * as officesData from "../../fixtures/officesData.json";
 
 describe("Users can select a desk", () => {
@@ -71,7 +72,27 @@ describe("Users can select a desk", () => {
     homeEmployeePage.selectDeskN(1);
     homeEmployeePage.selectSetForCoworker();
     homeEmployeePage.clickReserveButton();
-    this.modalMessageLabel().should("have.text", "Error");
-    this.modalDescriptionLabel().should("have.text", "");
+    this.notificationModalMessageLabel().should("have.text", "Error");
+    this.notificationModalDescriptionLabel().should("have.text", "");
+  });
+
+  it.only("Verify users can complete reservations successfully for a coworker", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    homeEmployeePage.selectOffice("IT-Labs Skopje");
+    homeEmployeePage.openCalendar();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    homeEmployeePage.selectFirstAvailableDayOfNextMonth();
+    cy.assertLoadingDotsNotVisible();
+    homeEmployeePage.filterByAvailability("Available");
+    homeEmployeePage.selectDeskN(1);
+    homeEmployeePage.getDeskNumberInSelectedDesk();
+    homeEmployeePage.reserveForACoworker(coworkerData.projectManager);
+    homeEmployeePage.verifyReservedDeskHasCoworkerName(
+      coworkerData.projectManager
+    );
   });
 });

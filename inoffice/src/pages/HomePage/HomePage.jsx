@@ -441,12 +441,13 @@ const Home = () => {
             <div className={styles.buttonReview}>
               <div>
                 <Checkbox
-                  data-cy="set-for-coworker"
+                  data-cy="set-for-coworker-check"
                   onClick={() => setForCoworker(!forCoworker)}
                   checked={forCoworker}
                 />
                 <Select
                   value={defValue}
+                  data-cy="coworker-select"
                   placement={"topRight"}
                   className={`${styles.inputSize} ${styles.reserveForCoworker}`}
                   showSearch
