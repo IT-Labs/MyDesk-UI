@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import api from "../../../helper/api";
@@ -14,6 +14,11 @@ const AddOffice = (props) => {
   const officeLocation = props.params.name.split(" ")[1];
   const officeId = props.params.id;
   const navigate = useNavigate();
+  const [errorName, setErrorName] = useState("");
+
+  function resetErrorHighlighted() {
+    setErrorName("");
+  }
 
   /**
    * It takes the officeName and officeLocation from the form and replaces the spaces with dashes. Then
@@ -35,6 +40,7 @@ const AddOffice = (props) => {
       );
       return;
     }
+
     const data = {
       name:
         e.officeName.replace(/\s+/, "-") +
@@ -42,6 +48,23 @@ const AddOffice = (props) => {
         e.officeLocation.replace(/\s+/, "-"),
       officeImage: e.officePlan,
     };
+
+    let officeImageChange = true;
+    if (data.officeImage.length) {
+      officeImageChange = imageUrl.length
+        ? imageUrl.toLowercase() === data.officeImage.toLowerCase()
+        : imageUrl === data.officeImage;
+    }
+
+    const office =
+      (officeName + " " + officeLocation).toLowerCase() ===
+        data.name.toLowerCase() && officeImageChange;
+
+    if (office) {
+      setErrorName("error");
+      openError("An office with that name and location already exists");
+      return;
+    }
 
     api
       .put("admin/office/" + officeId, data)
@@ -53,7 +76,7 @@ const AddOffice = (props) => {
         props.hideModal();
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
         openError("An office with that name and location already exists");
       });
   };
@@ -78,16 +101,21 @@ const AddOffice = (props) => {
 
         <Form.Item
           name="officeName"
+          validateStatus={errorName}
           rules={[{ required: false, message: "Please enter office name" }]}
         >
-          <Input placeholder="Office name" />
+          <Input placeholder="Office name" onChange={resetErrorHighlighted} />
         </Form.Item>
 
         <Form.Item
           name="officeLocation"
+          validateStatus={errorName}
           rules={[{ required: false, message: "Please enter office location" }]}
         >
-          <Input placeholder="Office location" />
+          <Input
+            placeholder="Office location"
+            onChange={resetErrorHighlighted}
+          />
         </Form.Item>
 
         <Form.Item>

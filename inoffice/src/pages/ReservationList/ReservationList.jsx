@@ -122,7 +122,7 @@ const ReservationList = () => {
       });
     api.get("admin/offices").then(({ data }) => {
       let sorted = data.sort((a, b) => {
-        return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
+        return a.name < b.name ? -1 : 1;
       });
       setOffices(sorted);
     });
