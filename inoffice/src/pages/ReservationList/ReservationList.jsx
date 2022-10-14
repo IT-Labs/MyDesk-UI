@@ -138,7 +138,7 @@ const ReservationList = () => {
       title: "Employee",
       dataIndex: "employee",
       key: 1,
-      width: "30%",
+      width: "40px",
       render: (text, record, index) => {
         return (
           <div
@@ -163,12 +163,18 @@ const ReservationList = () => {
         );
       },
     },
-    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
-    { title: "Entity", dataIndex: "entity", key: 3 },
+    {
+      title: "Office",
+      dataIndex: ["desk", "office", "name"],
+      key: 2,
+      width: "25px",
+    },
+    { title: "Entity", dataIndex: "entity", key: 3, width: "10px" },
     {
       title: "Date",
       dataIndex: "date",
       key: 3,
+      width: "40px",
       sorter: {
         compare: (a, b) => {
           const date1 = new Date(a.startDate).getTime();
@@ -183,6 +189,7 @@ const ReservationList = () => {
     {
       title: "Cancel",
       dataIndex: "cancel",
+      width: "10px",
       key: 4,
       render: (text, data, index) => {
         return (
