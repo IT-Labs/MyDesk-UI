@@ -88,3 +88,7 @@ Cypress.Commands.add(
     });
   }
 );
+
+Cypress.Commands.add("getTokenFromLocalStorage", (position) => {
+  return cy.wrap(localStorage.getItem("accessToken"));
+});

@@ -2,5 +2,6 @@
   "baseApiUrl": "https://inofficeapinet.azurewebsites.net",
   "token": "/token",
   "createOffice": "/admin/office",
-  "getOffices": "/admin/offices"
+  "getOffices": "/admin/offices",
+  "myFutureReservations" : "/employee/future-reservation"
 }

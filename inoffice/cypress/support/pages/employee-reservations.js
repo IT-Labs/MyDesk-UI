@@ -1,3 +1,6 @@
+import { employeeReservationsAPI } from "../api/employee-reservations";
+import moment from "moment";
+
 export class EmployeeReservationsPage {
   /**
    * Locators.
@@ -56,6 +59,42 @@ export class EmployeeReservationsPage {
             if ($index == 1) expect($td).to.have.text(officeName); //  index 1 = office name
           });
       });
+  }
+
+  getMyFutureReservationsUI() {
+    this.myReservationsTableBody()
+      .find("tr.ant-table-row.ant-table-row-level-0")
+      .as("myFutureReservationsUI");
+  }
+
+  verifyMyFutureReservationsAreShown() {
+    this.getMyFutureReservationsUI();
+    employeeReservationsAPI.getMyFutureReservationsAPI();
+    cy.get("@myFutureReservationsAPI").each(($tr, $index) => {
+      cy.get("@myFutureReservationsUI").each(($trUI, $indexUI) => {
+        // getting sure we are applying the assertions in the right object index
+        if ($index == $indexUI) {
+          // dates
+          expect($trUI.find("td:nth-child(1)")).to.have.text(
+            `${moment($tr["startDate"]).format("DD/MM/YYYY")} - ${moment(
+              $tr["endDate"]
+            ).format("DD/MM/YYYY")}`
+          );
+          // office name
+          expect($trUI.find("td:nth-child(2)")).to.have.text(
+            $tr["desk"]["office"]["name"]
+          );
+          // desk Number
+          expect($trUI.find("td:nth-child(3)")).to.have.text(
+            `Desk [${$tr["desk"]["indexForOffice"]}]`
+          );
+          // button Cancel
+          expect($trUI.find("td:nth-child(4)").find("button")).to.have.text(
+            `Cancel`
+          );
+        }
+      });
+    });
   }
 }
 
