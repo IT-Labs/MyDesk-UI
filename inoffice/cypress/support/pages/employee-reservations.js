@@ -1,4 +1,3 @@
-import { employeeReservationsAPI } from "../api/employee-reservations";
 import moment from "moment";
 
 export class EmployeeReservationsPage {
@@ -69,7 +68,7 @@ export class EmployeeReservationsPage {
 
   verifyMyFutureReservationsAreShown() {
     this.getMyFutureReservationsUI();
-    employeeReservationsAPI.getMyFutureReservationsAPI();
+    cy.getEmployeeFutureReservationsAPI();
     cy.get("@myFutureReservationsAPI").each(($tr, $index) => {
       cy.get("@myFutureReservationsUI").each(($trUI, $indexUI) => {
         // getting sure we are applying the assertions in the right object index

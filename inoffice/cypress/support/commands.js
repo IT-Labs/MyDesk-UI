@@ -92,3 +92,16 @@ Cypress.Commands.add(
 Cypress.Commands.add("getTokenFromLocalStorage", (position) => {
   return cy.wrap(localStorage.getItem("accessToken"));
 });
+
+Cypress.Commands.add("getEmployeeFutureReservationsAPI", (position) => {
+  cy.getTokenFromLocalStorage().then((userToken) => {
+    cy.request({
+      url: `${apiEndpoints.baseApiUrl}${apiEndpoints.myFutureReservations}`,
+      auth: {
+        bearer: userToken,
+      },
+    })
+      .its("body")
+      .as("myFutureReservationsAPI");
+  });
+});
