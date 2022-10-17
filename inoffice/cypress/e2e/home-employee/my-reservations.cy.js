@@ -17,4 +17,20 @@ describe("Employees can manage their reservations", () => {
     cy.assertLoadingDotsNotVisible();
     employeeReservationsPage.verifyMyFutureReservationsAreShown();
   });
+
+  it.only("Verify future reserved desk can be cancelled in My reservations", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
+    cy.assertLoadingDotsNotVisible();
+    cy.visit(urlSlugs.employee + urlSlugs.reservations);
+    cy.url().should("contain", urlSlugs.employee + urlSlugs.reservations);
+    cy.assertLoadingDotsNotVisible();
+    employeeReservationsPage.verifyThereIsAtLeastOneReservedDesk();
+    employeeReservationsPage.cancelMyReservation();
+    employeeReservationsPage.verifyCancellationIsSuccessful();
+  });
 });

@@ -294,8 +294,8 @@ export class HomeEmployeePage {
   }
 
   verifyReservationIsSuccessful() {
-    this.modalMessageLabel().should("have.text", "Notification");
-    this.modalDescriptionLabel().should(
+    this.notificationModalMessageLabel().should("have.text", "Notification");
+    this.notificationModalDescriptionLabel().should(
       "have.text",
       "You have successfully reserved a desk."
     );
