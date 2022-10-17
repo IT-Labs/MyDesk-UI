@@ -55,7 +55,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertButtonReserveIsDisabled();
   });
 
-  it.only("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
+  it("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
