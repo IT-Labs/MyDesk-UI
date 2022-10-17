@@ -6,10 +6,8 @@ import * as userData from "../../fixtures/userData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
 import * as officesData from "../../fixtures/officesData.json";
 
-describe("Users can select a desk", () => {
-  // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53491/
-  // @TODO complete once bug is fixed
-  it.skip("Verify that when the user selects the office, only the reservations made in the selected office are being shown", () => {
+describe("Admin users can manage the reservations list", () => {
+  it("Verify that when the user selects the office, only the reservations made in the selected office are being shown", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
