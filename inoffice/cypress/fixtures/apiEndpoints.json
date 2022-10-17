@@ -3,5 +3,7 @@
   "token": "/token",
   "createOffice": "/admin/office",
   "getOffices": "/admin/offices",
-  "myFutureReservations" : "/employee/future-reservation"
+  "myFutureReservations" : "/employee/future-reservation",
+  "employeeOfficeImage": "/employee/office/image/",
+  "employeeOfficeDesks": "/employee/office-desks/"
 }
