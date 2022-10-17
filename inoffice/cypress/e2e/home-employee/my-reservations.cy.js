@@ -18,7 +18,7 @@ describe("Employees can manage their reservations", () => {
     employeeReservationsPage.verifyMyFutureReservationsAreShown();
   });
 
-  it.only("Verify future reserved desk can be cancelled in My reservations", () => {
+  it("Verify future reserved desk can be cancelled in My reservations", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
