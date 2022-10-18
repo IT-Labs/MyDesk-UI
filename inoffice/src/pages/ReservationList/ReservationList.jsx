@@ -132,6 +132,10 @@ const ReservationList = () => {
   };
 
   const filterReservation = () => {
+    if (!reservations.length) {
+      return;
+    }
+
     const filteredReservations = reservations.filter((reservation) =>
       reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
     );

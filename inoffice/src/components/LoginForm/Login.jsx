@@ -1,6 +1,6 @@
 import "antd/dist/antd.css";
 import "../../index.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MicrosoftLogin from "react-microsoft-login";
 import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +21,17 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [registerForm, setRegisterForm] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(false);
+  // const [errorMsg, setErrorMsg] = useState(false);
   const [loadingData, setLoading] = useState(false);
 
+  const inputRef = useRef();
   useEffect(() => {
-    setErrorMsg(false);
-  }, [email, password]);
+    inputRef.current.focus();
+  }, [inputRef]);
+
+  // useEffect(() => {
+  //   setErrorMsg(false);
+  // }, [email, password]);
 
   useEffect(() => {
     if (localStorage.getItem("msal.idtoken")) {
@@ -91,7 +96,10 @@ const Login = () => {
         navigate("/employee/home");
       })
       .catch((err) => {
-        setErrorMsg(true);
+        // setErrorMsg(true);
+        openError(
+          "The password or email that you've entered is incorrect. Please try again."
+        );
         console.log(err);
       });
   };
@@ -127,6 +135,7 @@ const Login = () => {
                     required
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     onChange={(e) => setEmail(e.target.value)}
+                    ref={inputRef}
                   />
                   <Input.Password
                     className={styles.input}
@@ -137,15 +146,23 @@ const Login = () => {
                     required
                     autoComplete="false"
                     onChange={(e) => setPassword(e.target.value)}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      return false;
+                    }}
+                    onCopy={(e) => {
+                      e.preventDefault();
+                      return false;
+                    }}
                   />
-                  {errorMsg ? (
+                  {/* {errorMsg ? (
                     <Alert
                       message="The password or email that you've entered is incorrect. Please try again."
                       data-cy="login-incorrect-credentials-message"
                       type="error"
                       className={`${styles.alert} ${styles.input}`}
                     />
-                  ) : null}
+                  ) : null} */}
                   <div className={`${styles.rememberwrap}`}>
                     <Checkbox data-cy="remember-me">Remember me</Checkbox>
                     <Button

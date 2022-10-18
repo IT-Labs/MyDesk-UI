@@ -154,7 +154,7 @@ const CardsSection = (props) => {
       }
     });
 
-    filteredDesks.length === 0
+    filteredDesks.length === 0 && props.employeeSearch.length !== 0
       ? props.getEmployeeSearch(true)
       : props.getEmployeeSearch(false);
 
