@@ -2,5 +2,6 @@
   "employee": "/employee",
   "admin": "/admin",
   "home": "/home",
-  "reservations": "/reservations"
+  "reservations": "/reservations",
+  "offices": "/offices"
 }

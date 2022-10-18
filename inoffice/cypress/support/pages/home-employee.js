@@ -150,6 +150,12 @@ export class HomeEmployeePage {
     return cy.get(".ant-modal-footer .ant-btn-default");
   }
 
+  availableDesks() {
+    return cy.get(
+      `.ant-list-item[style="border: none; transition: all 0.3s ease-in-out 0s;"] .ant-card .ant-card-body[style="background: rgb(105, 226, 141); height: 10rem;"]`
+    );
+  }
+
   /**
    * Methods.
    */
@@ -264,16 +270,18 @@ export class HomeEmployeePage {
   }
 
   filterByAvailability(availability) {
-    this.availabilityFilterDropdown().click({ force: true });
-    this.availabilityOptionDropdown()
-      .contains(availability)
-      .click({ force: true });
+    this.availabilityFilterDropdown().click();
+    this.availabilityOptionDropdown().contains(availability).click();
   }
 
   selectDeskN(n) {
     this.desksCards()
       .eq(n - 1)
       .click();
+  }
+
+  selectFirstAvailableDesk() {
+    this.availableDesks().first().click();
   }
 
   verifyOnlyOneDeskIsSelected() {
@@ -393,7 +401,15 @@ export class HomeEmployeePage {
     this.reserveButton().click();
   }
 
-  assertCoworkerIsRequiredWhenSetForCoworker() {}
+  verifyCoworkerIsRequiredWhenSetForCoworker() {
+    this.confirmReservationForCoworker("");
+    this.assertErrorInNotificationMessage("Co-worker must be selected");
+  }
+
+  assertErrorInNotificationMessage(errorMessage) {
+    this.notificationModalMessageLabel().should("have.text", "Error");
+    this.notificationModalDescriptionLabel().should("have.text", errorMessage);
+  }
 
   confirmReservationForCoworker(coworkerName) {
     this.confirmationModalTitle().should(
