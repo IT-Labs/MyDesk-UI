@@ -133,6 +133,7 @@ const CardsSection = (props) => {
         }
         return false;
       }
+
       const specificUser = item.reservations.find((info) => {
         const newGuy = getSpecificUser(info);
         if (
@@ -143,15 +144,19 @@ const CardsSection = (props) => {
         }
         return false;
       });
+
       if (
-        `${specificUser?.employee?.firstName} ${specificUser?.employee?.lastName}`
+        `${specificUser?.employee?.firstName} ${specificUser?.employee?.surname}`
           .toLowerCase()
-          .includes(props.employeeSearch.toLowerCase()) &&
-        !checkAvailable(item.reservations, start, end)
+          .includes(props.employeeSearch.toLowerCase())
       ) {
         return true;
       }
     });
+
+    filteredDesks.length === 0
+      ? props.getEmployeeSearch(true)
+      : props.getEmployeeSearch(false);
 
     setDesks(filteredDesks);
   };
@@ -229,7 +234,7 @@ const CardsSection = (props) => {
     setHasMore(false);
     setDesks([]);
     filterByAvailable();
-  }, [props.available]);
+  }, [props.available, props.employeeSearch]);
 
   useEffect(() => {
     setHasMore(false);

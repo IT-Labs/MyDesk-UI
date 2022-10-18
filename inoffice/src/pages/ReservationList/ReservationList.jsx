@@ -12,6 +12,7 @@ import {
   Tooltip,
   Row,
   Col,
+  Alert,
 } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.scss";
@@ -34,6 +35,8 @@ const ReservationList = () => {
   const [excelSheet, setExcelSheet] = useState("Future Reservation List");
   const [initRes, setInitRes] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [filterOffice, setFilterOffice] = useState("");
+  const [invalidSearchInput, setInvalidSearchInput] = useState(false);
 
   const [toBeCancelled, setToBeCancelled] = useState(null);
 
@@ -48,7 +51,7 @@ const ReservationList = () => {
       }
     );
     const response = await tmp.blob();
-    console.log(response);
+
     if (response) {
       return URL.createObjectURL(response);
     } else {
@@ -83,7 +86,6 @@ const ReservationList = () => {
     const results = await Promise.all(
       res.map(async (item, id) => {
         const image = await getImage(item.employee.email);
-        // console.log(image);
         const info = await newInfo(item, image).then((res) => {
           return res;
         });
@@ -128,6 +130,19 @@ const ReservationList = () => {
     });
     // .catch((err) => console.log(err));
   };
+
+  const filterReservation = () => {
+    const filteredReservations = reservations.filter((reservation) =>
+      reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
+    );
+    filteredReservations.length
+      ? setInvalidSearchInput(false)
+      : setInvalidSearchInput(true);
+  };
+
+  useEffect(() => {
+    filterReservation();
+  }, [filterInput]);
 
   useEffect(() => {
     getAllRes();
@@ -255,7 +270,6 @@ const ReservationList = () => {
       sortDirections: ["ascend"],
     },
   ];
-  const [filterOffice, setFilterOffice] = useState("");
 
   const tabList = [
     {
@@ -372,6 +386,14 @@ const ReservationList = () => {
                         placeholder="Search by name"
                         style={{ width: 200 }}
                       />
+                      {invalidSearchInput ? (
+                        <Alert
+                          message="There is no data or input is invalid."
+                          data-cy="login-incorrect-credentials-message"
+                          type="error"
+                          className={`${styles.alert} ${styles.input}`}
+                        />
+                      ) : null}
                     </Tooltip>
                   </div>
                 </div>
