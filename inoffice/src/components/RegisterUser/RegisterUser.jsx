@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Alert, Button, Form, Input } from "antd";
 import { encode as base64_encode } from "base-64";
 import api from "../../helper/api";
@@ -23,6 +23,11 @@ const RegisterUser = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(false);
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
 
   useEffect(() => {
     setErrorMsg(false);
@@ -93,6 +98,7 @@ const RegisterUser = (props) => {
                 defaultValue=""
                 required
                 onChange={(e) => setEmail(e.target.value)}
+                ref={inputRef}
               />
               <Input
                 className={styles.input}
