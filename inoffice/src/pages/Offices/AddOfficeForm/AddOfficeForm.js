@@ -69,7 +69,7 @@ const AddOfficeForm = () => {
             },
           ]}
         >
-          <Input placeholder="Office name" onChange={resetErrorHighlighted} />
+          <Input placeholder="Office name" data-cy="officename-input" onChange={resetErrorHighlighted} />
         </Form.Item>
         <Form.Item
           name="location"
@@ -79,12 +79,14 @@ const AddOfficeForm = () => {
         >
           <Input
             placeholder="Office location"
+            data-cy="officelocation-input"
             onChange={resetErrorHighlighted}
           />
         </Form.Item>
         <Form.Item>
           <Button
             htmlType="submit"
+            data-cy="saveoffice-button"
             className="formButton greenBtn"
             type="primary"
           >

@@ -201,6 +201,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
+            data-cy="checkbox-unavailable"
             checked={item.category?.unavailable}
             onChange={() => check(item.id, "unavailable")}
           ></Checkbox>
@@ -218,6 +219,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
+            data-cy="checkbox-1monitor"
             checked={item.category?.singleMonitor}
             disabled={item.category?.doubleMonitor}
             onChange={() => check(item.id, "singleMonitor")}
@@ -236,6 +238,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
+            data-cy="checkbox-2monitor"
             checked={item.category?.doubleMonitor}
             disabled={item.category?.singleMonitor}
             onChange={() => check(item.id, "dualMonitor")}
@@ -254,6 +257,7 @@ const OfficeDetails = ({ props }) => {
         return (
           <Checkbox
             className={styles.checkbox}
+            data-cy="checkbox-nearwindow"
             checked={item.category?.nearWindow}
             onChange={() => check(item.id, "nearWindow")}
           ></Checkbox>
@@ -282,6 +286,7 @@ const OfficeDetails = ({ props }) => {
           >
             <DeleteFilled
               className={styles.deleteIconDesks}
+              data-cy="delete-desk"
               key={item.id}
               value={item.id}
               style={{ padding: 0 }}
@@ -316,6 +321,7 @@ const OfficeDetails = ({ props }) => {
             <Form.Item name="numberOfDesks">
               <Input
                 className={styles.input}
+                data-cy="input-numberofdesks"
                 placeholder="Enter number of desks"
                 type="number"
                 rules
@@ -323,6 +329,7 @@ const OfficeDetails = ({ props }) => {
             </Form.Item>
             <Button
               htmlType="submit"
+              data-cy="button-addentities"
               className={`${styles.uploadOfficePlan} btn ${styles.btn}`}
               block
             >
@@ -360,6 +367,7 @@ const OfficeDetails = ({ props }) => {
               disabled={saveBtnDisabled}
             >
               <Button
+              data-cy="save-button"
                 style={{
                   width: 150,
                   marginLeft: 5,
