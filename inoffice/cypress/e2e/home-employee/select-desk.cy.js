@@ -76,7 +76,7 @@ describe("Users can select a desk", () => {
     this.notificationModalDescriptionLabel().should("have.text", "");
   });
 
-  it.only("Verify users can complete reservations successfully for a coworker", () => {
+  it("Verify users can complete reservations successfully for a coworker", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,

@@ -24,7 +24,7 @@ describe("Admin users can manage the reservations list", () => {
     adminReservationsPage.assertOfficeIsFiltered(officesData.defaultOffice);
   });
 
-  it.only("Verify that when an users is searched, only the reservations of that user are being shown", () => {
+  it("Verify that when an users is searched, only the reservations of that user are being shown", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
