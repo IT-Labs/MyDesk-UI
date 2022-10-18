@@ -27,6 +27,8 @@ import { setInitialDesks } from "../../redux/Dashboard/Dashboard";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
+  const [desksForSelectedOffice, setDesksForSelectedOffice] = useState([]);
+
   const [deskData, setDeskData] = useState([]);
   const [availableDesks, setAvailableDesks] = useState(0);
   const [reservedDesks, setReservedDesks] = useState(0);
@@ -84,6 +86,9 @@ const Dashboard = () => {
    * It takes an array of objects, and returns an array of objects.
    */
   const filterData = (deskInfo) => {
+    if (!deskInfo.length) {
+      return;
+    }
     count.current = 0;
     setDesks(deskInfo);
     let unavailableDesk;
@@ -108,6 +113,7 @@ const Dashboard = () => {
         value: unavailableData,
       },
     ]);
+
     setAvailableDesks(availableDesk);
     setReservedDesks(unavailableData);
   };
@@ -134,7 +140,6 @@ const Dashboard = () => {
           });
 
           dispatch(setInitialDesks(deskInfo));
-          filterData(deskInfo);
         } else {
           filterData(initialDesk);
         }
@@ -180,67 +185,24 @@ const Dashboard = () => {
     }
 
     const deskInfo = initialDesk.filter((item) => item.officeId === officeId);
-    filterData(deskInfo);
+    setDesksForSelectedOffice(deskInfo);
     const foundOffice = offices.find((item) => item.id === officeId);
 
     const reviewFilter = initialReviews.filter((item) =>
       item.reservation.desk.office.name.includes(foundOffice.name)
     );
-
+    clearDate();
     setReviews(reviewFilter);
   };
 
   const clearDate = () => {
     setReviews(initialReviews);
+    setAvailableDesks(0);
+    setReservedDesks(0);
+    setAllDesks(0);
     dispatch(setStart(null));
     dispatch(setEnd(null));
     setDates([]);
-  };
-
-  useEffect(() => {
-    filterData(desks);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [start]);
-
-  /* Creating a pie chart. */
-  const config = {
-    appendPadding: 10,
-    data: deskData,
-    angleField: "value",
-    colorField: "type",
-    radius: 1,
-    innerRadius: 0.6,
-    label: {
-      type: "inner",
-      offset: "-50%",
-      content: "{value}",
-      style: {
-        textAlign: "center",
-        fontSize: 20,
-      },
-    },
-    interactions: [
-      {
-        type: "element-selected",
-      },
-      {
-        type: "element-active",
-      },
-    ],
-    statistic: {
-      title: false,
-      content: {
-        style: {
-          whiteSpace: "pre-wrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        },
-        content: `${allDesks ? allDesks : "Loading..."}`,
-      },
-    },
-    theme: {
-      colors10: ["#2DCE98", "#F53C56"],
-    },
   };
 
   /* Fetching reviews from an API and then mapping over the data to create a new array of objects. */
@@ -299,15 +261,58 @@ const Dashboard = () => {
         }
       }
     });
+
     setReviews([]);
     setReviews(arrayOfReviews);
   };
 
   const setDate = (startDate, endDate, range) => {
+    filterData(desksForSelectedOffice);
     filterReviewByDate(range);
     setStartDate(startDate);
     setEndDate(endDate);
     setDates(range);
+  };
+
+  /* Creating a pie chart. */
+  const config = {
+    appendPadding: 10,
+    data: dates ? deskData : [],
+    angleField: "value",
+    colorField: "type",
+    radius: 1,
+    innerRadius: 0.6,
+    label: {
+      type: "inner",
+      offset: "-50%",
+      content: "{value}",
+      style: {
+        textAlign: "center",
+        fontSize: 20,
+      },
+    },
+    interactions: [
+      {
+        type: "element-selected",
+      },
+      {
+        type: "element-active",
+      },
+    ],
+    statistic: {
+      title: false,
+      content: {
+        style: {
+          whiteSpace: "pre-wrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        },
+        content: `${allDesks ? allDesks : "Loading..."}`,
+      },
+    },
+    theme: {
+      colors10: ["#2DCE98", "#F53C56"],
+    },
   };
 
   /* Creating a table with 4 columns. */

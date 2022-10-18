@@ -5,6 +5,7 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
   return (
     <Button
       className="btn"
+      data-cy="addoffice-button"
       block
       onClick={() => {
         // window.location = "/admin/addoffice";

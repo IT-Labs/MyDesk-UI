@@ -90,6 +90,7 @@ const Offices = () => {
                     <Input
                       style={{ width: 200 }}
                       onChange={handleChange}
+                      data-cy="SearchOffice-Input"
                       placeholder="Search Office"
                     />
                     <List
@@ -117,6 +118,7 @@ const Offices = () => {
                             }
                           >
                             <Button
+                            data-cy="deleteoffice-button"
                               type="primary"
                               danger
                               style={{
@@ -129,6 +131,7 @@ const Offices = () => {
                             </Button>
                           </Popconfirm>
                           <Button
+                          data-cy="editoffice-button"
                             type="primary"
                             className="editButton"
                             onClick={() => {

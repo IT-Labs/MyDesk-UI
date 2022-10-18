@@ -346,6 +346,10 @@ td {
   max-width: 33% !important;
 }
 
+.ant-table-pagination.ant-pagination {
+  margin: 6px 0;
+}
+
 .ant-tabs-tab-btn:hover,
 .ant-tabs-tab:hover,
 .ant-tabs-tab-btn:active {
@@ -501,10 +505,10 @@ p {
 }
 
 .sideBarLogo {
-  background: url("./assets/Group\ 190.svg") no-repeat;
-  width: 20px;
+  background: url("./assets/Logo\ MY\ DESK.svg") no-repeat;
+  width: 155px !important;
   top: 5px;
-  left: 10px;
+  left: 22px;
   min-height: 70px;
   /* scale: calc(); */
 }

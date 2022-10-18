@@ -156,6 +156,13 @@
   justify-content: space-evenly;
 }
 
+.alert {
+  position: absolute;
+  top: 82px;
+  height: 25px;
+  font-size: 13px;
+}
+
 @media screen and (max-width: 820px) {
   .leftSideHome {
     display: block;
