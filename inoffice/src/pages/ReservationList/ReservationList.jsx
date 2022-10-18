@@ -371,6 +371,7 @@ const ReservationList = () => {
                         onPress
                         placeholder="Search by name"
                         style={{ width: 200 }}
+                        data-cy="search-by-name-input"
                       />
                     </Tooltip>
                   </div>
