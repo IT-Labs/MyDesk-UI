@@ -1,6 +1,6 @@
 import "antd/dist/antd.css";
 import "../../index.scss";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MicrosoftLogin from "react-microsoft-login";
 import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,11 @@ const Login = () => {
   const [registerForm, setRegisterForm] = useState(false);
   // const [errorMsg, setErrorMsg] = useState(false);
   const [loadingData, setLoading] = useState(false);
+
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
 
   // useEffect(() => {
   //   setErrorMsg(false);
@@ -130,6 +135,7 @@ const Login = () => {
                     required
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     onChange={(e) => setEmail(e.target.value)}
+                    ref={inputRef}
                   />
                   <Input.Password
                     className={styles.input}
