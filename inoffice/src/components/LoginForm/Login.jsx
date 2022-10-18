@@ -140,6 +140,14 @@ const Login = () => {
                     required
                     autoComplete="false"
                     onChange={(e) => setPassword(e.target.value)}
+                    onPaste={(e) => {
+                      e.preventDefault();
+                      return false;
+                    }}
+                    onCopy={(e) => {
+                      e.preventDefault();
+                      return false;
+                    }}
                   />
                   {/* {errorMsg ? (
                     <Alert

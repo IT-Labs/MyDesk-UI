@@ -43,7 +43,7 @@ const RegisterUser = (props) => {
   };
 
   const handleRegister = async () => {
-    if (passwordValidation) {
+    if (passwordValidation()) {
       openError(
         "Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number."
       );
@@ -69,8 +69,8 @@ const RegisterUser = (props) => {
         showRegisterPage(false);
       })
       .catch((err) => {
-        openError("Registration failed.");
-        console.log(err);
+        openError(err.response.data[0]);
+        console.log(err.response);
       });
   };
 
@@ -83,7 +83,7 @@ const RegisterUser = (props) => {
         </div>
         <div>
           <Form className={styles.form} onFinish={handleRegister}>
-            <Form.Item name="login">
+            <Form.Item name="register">
               <Input
                 className={styles.input}
                 placeholder="Email"
@@ -132,6 +132,14 @@ const RegisterUser = (props) => {
                 defaultValue=""
                 required
                 onChange={(e) => setPassword(e.target.value)}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
+                onCopy={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
               />
 
               <Input.Password
@@ -142,6 +150,14 @@ const RegisterUser = (props) => {
                 defaultValue=""
                 required
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
+                onCopy={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
               />
               {errorMsg ? (
                 <Alert
