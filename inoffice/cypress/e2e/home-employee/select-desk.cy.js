@@ -55,9 +55,7 @@ describe("Users can select a desk", () => {
     homeEmployeePage.assertButtonReserveIsDisabled();
   });
 
-  // Failing due to bug https://dev.azure.com/ITLabs-LLC/Internship%202022/_workitems/edit/53204/
-  // @TODO remove skip once bug is fixed
-  it.skip("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
+  it("Verify that when the user forgot to choose a co-worker from the search bar and clicks the Reserve button, the error notification message appears", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
@@ -68,15 +66,13 @@ describe("Users can select a desk", () => {
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     homeEmployeePage.selectFirstAvailableDayOfNextMonth();
     cy.assertLoadingDotsNotVisible();
-    homeEmployeePage.filterByAvailability("Available");
-    homeEmployeePage.selectDeskN(1);
+    homeEmployeePage.selectFirstAvailableDesk();
     homeEmployeePage.selectSetForCoworker();
     homeEmployeePage.clickReserveButton();
-    this.notificationModalMessageLabel().should("have.text", "Error");
-    this.notificationModalDescriptionLabel().should("have.text", "");
+    homeEmployeePage.verifyCoworkerIsRequiredWhenSetForCoworker();
   });
 
-  it.only("Verify users can complete reservations successfully for a coworker", () => {
+  it("Verify users can complete reservations successfully for a coworker", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
