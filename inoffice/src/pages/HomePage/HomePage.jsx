@@ -12,6 +12,7 @@ import {
   Select,
   Space,
   Tooltip,
+  Alert,
 } from "antd";
 import OfficeBranchSelection from "../../components/inputs/OfficeBranchSelection/OfficeBranchSelection";
 import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
@@ -56,6 +57,7 @@ const Home = () => {
 
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
+  const [invalidSearchInput, setInvalidSearchInput] = useState(false);
   const [forCoworker, setForCoworker] = useState(false);
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
@@ -249,6 +251,10 @@ const Home = () => {
     setSelectedCoworker(foundEmployee);
   };
 
+  const getEmployeeSearch = (value) => {
+    setInvalidSearchInput(value);
+  };
+
   useEffect(() => {
     dispatch(getAvatar());
   }, []);
@@ -318,6 +324,14 @@ const Home = () => {
                     }
                     onPress
                   />
+                  {invalidSearchInput ? (
+                    <Alert
+                      message="There is no data or input is invalid."
+                      data-cy="login-incorrect-credentials-message"
+                      type="error"
+                      className={`${styles.alert} ${styles.input}`}
+                    />
+                  ) : null}
                 </div>
                 <div>
                   <p className={styles.pStyles}>Filter by availability</p>
@@ -432,6 +446,7 @@ const Home = () => {
                   available={selectValue}
                   employeeSearch={employeeSearch}
                   categories={selectedCategories}
+                  getEmployeeSearch={getEmployeeSearch}
                 />
               </Col>
             </Col>

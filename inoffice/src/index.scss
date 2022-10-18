@@ -346,6 +346,10 @@ td {
   max-width: 33% !important;
 }
 
+.ant-table-pagination.ant-pagination {
+  margin: 6px 0;
+}
+
 .ant-tabs-tab-btn:hover,
 .ant-tabs-tab:hover,
 .ant-tabs-tab-btn:active {
