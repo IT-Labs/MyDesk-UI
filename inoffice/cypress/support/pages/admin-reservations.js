@@ -21,6 +21,14 @@ export class AdminReservationsPage {
     return cy.get(".ant-select-selection-item");
   }
 
+  myReservationsTableBody() {
+    return cy.get(".ant-table-tbody");
+  }
+
+  searchByNameInput() {
+    return cy.get("[data-cy=search-by-name-input]");
+  }
+
   /**
    * Methods.
    */
@@ -42,6 +50,29 @@ export class AdminReservationsPage {
     this.officeBranchFilterDropdown().click({ force: true });
     this.officeBranchFilterInput().type(`${officeName}{enter}`);
     this.selectedOfficeLabel().should("have.text", officeName);
+
+    this.myReservationsTableBody()
+      .find("tr.ant-table-row.ant-table-row-level-0")
+      .each(($tr) => {
+        cy.get($tr)
+          .find("td")
+          .each(($td, $index) => {
+            if ($index == 1) expect($td).to.have.text(officeName); //  index 1 = office name
+          });
+      });
+  }
+
+  assertUserIsFiltered(coworkerName) {
+    this.searchByNameInput().type(coworkerName);
+    this.myReservationsTableBody()
+      .find("tr.ant-table-row.ant-table-row-level-0")
+      .each(($tr) => {
+        cy.get($tr)
+          .find("td")
+          .each(($td, $index) => {
+            if ($index == 0) expect($td).to.contain.text(coworkerName); //  index 0 = user name
+          });
+      });
   }
 }
 
