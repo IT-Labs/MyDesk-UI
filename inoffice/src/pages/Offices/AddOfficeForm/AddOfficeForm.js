@@ -10,15 +10,23 @@ import { useSelector } from "react-redux";
 const AddOfficeForm = () => {
   const offices = useSelector((state) => state.offices.offices);
   const [errorName, setErrorName] = useState("");
+  const [ifHaveChanges, setIfHaveChanges] = useState(false);
 
   function resetErrorHighlighted() {
+    setIfHaveChanges(true);
     setErrorName("");
+  }
+
+  if (ifHaveChanges) {
+    window.onbeforeunload = function () {
+      return "Changes that you made may not be saved.";
+    };
   }
 
   const handleSubmit = (e) => {
     const name = e.name.replace(/\s+/, "-");
     const location = e.location.replace(/\s+/, "-");
-    console.log(name, location);
+
     const data = {
       name: name + " " + location,
     };
@@ -69,7 +77,11 @@ const AddOfficeForm = () => {
             },
           ]}
         >
-          <Input placeholder="Office name" data-cy="officename-input" onChange={resetErrorHighlighted} />
+          <Input
+            placeholder="Office name"
+            data-cy="officename-input"
+            onChange={resetErrorHighlighted}
+          />
         </Form.Item>
         <Form.Item
           name="location"
