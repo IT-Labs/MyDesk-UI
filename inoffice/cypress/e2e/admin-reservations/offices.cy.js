@@ -39,4 +39,21 @@ describe("Admin users can manage the reservations list", () => {
     cy.assertLoadingDotsNotVisible();
     adminReservationsPage.assertUserIsFiltered(coworkerData.projectManager);
   });
+
+  it.only("Verify admins can cancel reservations", () => {
+    cy.visit("/");
+    loginPage.doLogin(
+      userData.cypressAutomationUserEmail,
+      userData.genericPassword
+    );
+    cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
+    homeEmployeePage.assertUserNameInHeader(
+      `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
+    );
+    cy.assertLoadingDotsNotVisible();
+    cy.visit(urlSlugs.admin + urlSlugs.reservations);
+    cy.assertLoadingDotsNotVisible();
+    adminReservationsPage.verifyAdminCanCancelReservations();
+    //adminReservationsPage.assertUserIsFiltered(coworkerData.projectManager);
+  });
 });

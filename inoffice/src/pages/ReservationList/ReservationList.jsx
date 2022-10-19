@@ -292,7 +292,7 @@ const ReservationList = () => {
     await api
       .delete("employee/reserve/" + id)
       .then((response) => {
-        openNotification("You have successfully canceled the reservation");
+        openNotification("You have successfully cancelled the reservation");
         const filteredRes = initRes.filter((item) => item.key !== id);
         setInitRes(filteredRes);
         sortFuture(filteredRes);
