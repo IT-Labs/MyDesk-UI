@@ -49,18 +49,13 @@ const AddOffice = (props) => {
       officeImage: e.officePlan,
     };
 
-    let officeImageChange = true;
-    if (data.officeImage.length) {
-      officeImageChange = imageUrl.length
-        ? imageUrl.toLowercase() === data.officeImage.toLowerCase()
-        : imageUrl === data.officeImage;
-    }
+    let officeImageChange = imageUrl !== data.officeImage;
 
-    const office =
+    const officeChange =
       (officeName + " " + officeLocation).toLowerCase() ===
-        data.name.toLowerCase() && officeImageChange;
+        data.name.toLowerCase() && !officeImageChange;
 
-    if (office) {
+    if (officeChange) {
       setErrorName("error");
       openError("An office with that name and location already exists");
       return;

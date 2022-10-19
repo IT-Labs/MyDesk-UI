@@ -45,6 +45,9 @@ const OfficeDetails = ({ props }) => {
         console.log(error);
       });
   };
+  const getNewImage = () => {
+    getImage();
+  };
 
   useEffect(() => {
     getDesks();
@@ -313,6 +316,7 @@ const OfficeDetails = ({ props }) => {
               className={styles.uploadOfficePlanButton}
               triggerText="Update office plan/information"
               imageUrl={imageUrl}
+              getNewProps={getNewImage}
             />
           </div>
         </div>
@@ -367,7 +371,7 @@ const OfficeDetails = ({ props }) => {
               disabled={saveBtnDisabled}
             >
               <Button
-              data-cy="save-button"
+                data-cy="save-button"
                 style={{
                   width: 150,
                   marginLeft: 5,

@@ -359,7 +359,7 @@ const CardsSection = (props) => {
                               ? "Unavailable"
                               : item.reservations.length > 0 &&
                                 !item.available &&
-                                `${specificUser?.employee.firstName} ${specificUser?.employee.lastName}`}
+                                `${specificUser?.employee.firstName} ${specificUser?.employee.surname}`}
                             {}
                           </p>
                           <p className={styles.basicText}>

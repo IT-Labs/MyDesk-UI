@@ -10,6 +10,7 @@ const UploadOfficePlan = (props) => {
   };
   const hideModal = () => {
     setVisible(false);
+    props.getNewProps();
   };
   return (
     <React.Fragment>
