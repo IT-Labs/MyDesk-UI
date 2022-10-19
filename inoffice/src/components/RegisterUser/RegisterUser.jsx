@@ -88,18 +88,34 @@ const RegisterUser = (props) => {
         </div>
         <div>
           <Form className={styles.form} onFinish={handleRegister}>
-            <Form.Item name="register">
-              <Input
-                className={styles.input}
-                placeholder="Email"
-                data-cy="register-email-input"
-                type="TextArea"
-                prefix={<MailOutlined className="site-form-item-icon" />}
-                defaultValue=""
-                required
-                onChange={(e) => setEmail(e.target.value)}
-                ref={inputRef}
-              />
+            <Input
+              className={styles.input}
+              placeholder="Email"
+              data-cy="register-email-input"
+              type="TextArea"
+              prefix={<MailOutlined className="site-form-item-icon" />}
+              defaultValue=""
+              required
+              onChange={(e) => setEmail(e.target.value)}
+              ref={inputRef}
+            />
+            <Form.Item
+              style={{ marginBottom: "0px" }}
+              name="First Name"
+              rules={[
+                {
+                  message:
+                    "First Name must contain only upper and lower character",
+                  validator: (_, value) => {
+                    if (value.match(/^[A-Za-z]*$/)) {
+                      return Promise.resolve();
+                    } else {
+                      return Promise.reject("Some message here");
+                    }
+                  },
+                },
+              ]}
+            >
               <Input
                 className={styles.input}
                 placeholder="First Name"
@@ -110,6 +126,24 @@ const RegisterUser = (props) => {
                 required
                 onChange={(e) => setFirstName(e.target.value)}
               />
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "0px" }}
+              name="Last Name"
+              rules={[
+                {
+                  message:
+                    "Last Name must contain only upper and lower character",
+                  validator: (_, value) => {
+                    if (value.match(/^[A-Za-z]*$/)) {
+                      return Promise.resolve();
+                    } else {
+                      return Promise.reject("Some message here");
+                    }
+                  },
+                },
+              ]}
+            >
               <Input
                 className={styles.input}
                 placeholder="Last Name"
@@ -120,6 +154,8 @@ const RegisterUser = (props) => {
                 defaultValue=""
                 onChange={(e) => setLastName(e.target.value)}
               />
+            </Form.Item>
+            <Form.Item>
               <Input
                 className={styles.input}
                 placeholder="Job Title"
