@@ -50,6 +50,7 @@ const Dashboard = () => {
   const [startDateRes, setStartDate] = useState([]);
   const [endDateRes, setEndDate] = useState([]);
   const [dates, setDates] = useState([]);
+  const [selectedOffice, setSelectedOffice] = useState({});
 
   /**
    * If the start and end dates of the item are within the start and end dates of the range, return
@@ -187,6 +188,7 @@ const Dashboard = () => {
     const deskInfo = initialDesk.filter((item) => item.officeId === officeId);
     setDesksForSelectedOffice(deskInfo);
     const foundOffice = offices.find((item) => item.id === officeId);
+    setSelectedOffice(foundOffice);
 
     const reviewFilter = initialReviews.filter((item) =>
       item.reservation.desk.office.name.includes(foundOffice.name)
@@ -196,7 +198,6 @@ const Dashboard = () => {
   };
 
   const clearDate = () => {
-    setReviews(initialReviews);
     setAvailableDesks(0);
     setReservedDesks(0);
     setAllDesks(0);
@@ -245,9 +246,10 @@ const Dashboard = () => {
   }, []);
 
   const filterReviewByDate = (range) => {
-    setReviews(initialReviews);
-    let arrayOfReviews = [];
-    initialReviews.forEach((review) => {
+    let filteredReviews = [];
+    let arrayOfReviews = selectedOffice ? reviews : initialReviews;
+
+    arrayOfReviews.forEach((review) => {
       if (review.reservation) {
         const isAfterStartDate = moment(review.reservation.startDate).isAfter(
           range[0]
@@ -257,13 +259,12 @@ const Dashboard = () => {
         );
 
         if (isAfterStartDate && isBeforeEndDate) {
-          arrayOfReviews.push(review);
+          filteredReviews.push(review);
         }
       }
     });
 
-    setReviews([]);
-    setReviews(arrayOfReviews);
+    setReviews(filteredReviews);
   };
 
   const setDate = (startDate, endDate, range) => {
