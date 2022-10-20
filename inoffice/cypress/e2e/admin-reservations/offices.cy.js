@@ -40,7 +40,7 @@ describe("Admin users can manage the reservations list", () => {
     adminReservationsPage.assertUserIsFiltered(coworkerData.projectManager);
   });
 
-  it.only("Verify admins can cancel reservations", () => {
+  it("Verify admins can cancel reservations", () => {
     cy.visit("/");
     loginPage.doLogin(
       userData.cypressAutomationUserEmail,
@@ -54,6 +54,5 @@ describe("Admin users can manage the reservations list", () => {
     cy.visit(urlSlugs.admin + urlSlugs.reservations);
     cy.assertLoadingDotsNotVisible();
     adminReservationsPage.verifyAdminCanCancelReservations();
-    //adminReservationsPage.assertUserIsFiltered(coworkerData.projectManager);
   });
 });

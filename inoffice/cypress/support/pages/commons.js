@@ -2,7 +2,6 @@ export class CommonsPage {
   /**
    * Locators.
    */
-
   confirmationModalTitle() {
     return cy.get(".ant-modal-header .ant-modal-title");
   }
