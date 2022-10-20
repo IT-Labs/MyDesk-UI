@@ -14,22 +14,27 @@ import {
   MehOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import Loading from "../../components/Loading/Loading";
-
 import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
 import { useDispatch, useSelector } from "react-redux";
 import { setEnd, setStart } from "../../redux/Date/Date";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
-
 import UserSearch from "../../components/UserSearch/UserSearch";
 import { setInitialDesks } from "../../redux/Dashboard/Dashboard";
 
 const Dashboard = () => {
   const [desks, setDesks] = useState([]);
   const [desksForSelectedOffice, setDesksForSelectedOffice] = useState([]);
-
-  const [deskData, setDeskData] = useState([]);
+  const [deskData, setDeskData] = useState([
+    {
+      type: "Available",
+      value: 0,
+    },
+    {
+      type: "Reserved",
+      value: 0,
+    },
+  ]);
   const [availableDesks, setAvailableDesks] = useState(0);
   const [reservedDesks, setReservedDesks] = useState(0);
   const [allDesks, setAllDesks] = useState(0);
@@ -41,16 +46,18 @@ const Dashboard = () => {
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
   const count = useRef(0);
-
   const initialDesk = useSelector((state) => state.dashboard.initialDesk);
-
   const moment = extendMoment(Moment);
   const dispatch = useDispatch();
-
   const [startDateRes, setStartDate] = useState([]);
   const [endDateRes, setEndDate] = useState([]);
   const [dates, setDates] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState({});
+
+  useEffect(() => {
+    fetchOfficeData();
+    fetchReviews();
+  }, []);
 
   /**
    * If the start and end dates of the item are within the start and end dates of the range, return
@@ -90,6 +97,7 @@ const Dashboard = () => {
     if (!deskInfo.length) {
       return;
     }
+
     count.current = 0;
     setDesks(deskInfo);
     let unavailableDesk;
@@ -100,7 +108,6 @@ const Dashboard = () => {
 
     const unavailableData = count.current;
 
-    console.log(unavailableData);
     const availableDesk = parseInt(deskInfo.length) - unavailableData;
 
     setAllDesks(deskInfo.length);
@@ -128,6 +135,7 @@ const Dashboard = () => {
       .then(async ({ data }) => {
         const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
         setOffices(sortedOffices);
+
         if (initialDesk.length === 0 || !initialDesk) {
           const deskRes = await Promise.all(
             data.map((item) => {
@@ -141,7 +149,7 @@ const Dashboard = () => {
           });
 
           dispatch(setInitialDesks(deskInfo));
-        } else {
+        } else if (dates.length) {
           filterData(initialDesk);
         }
       })
@@ -200,6 +208,16 @@ const Dashboard = () => {
   const clearDate = () => {
     setAvailableDesks(0);
     setReservedDesks(0);
+    setDeskData([
+      {
+        type: "Available",
+        value: 0,
+      },
+      {
+        type: "Reserved",
+        value: 0,
+      },
+    ]);
     setAllDesks(0);
     dispatch(setStart(null));
     dispatch(setEnd(null));
@@ -239,12 +257,6 @@ const Dashboard = () => {
       });
   };
 
-  useEffect(() => {
-    fetchOfficeData();
-    fetchReviews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const filterReviewByDate = (range) => {
     let filteredReviews = [];
     let arrayOfReviews = selectedOffice ? reviews : initialReviews;
@@ -278,7 +290,7 @@ const Dashboard = () => {
   /* Creating a pie chart. */
   const config = {
     appendPadding: 10,
-    data: dates ? deskData : [],
+    data: deskData,
     angleField: "value",
     colorField: "type",
     radius: 1,
@@ -308,7 +320,7 @@ const Dashboard = () => {
           overflow: "hidden",
           textOverflow: "ellipsis",
         },
-        content: `${allDesks ? allDesks : "Loading..."}`,
+        content: `${allDesks ? allDesks : "0"}`,
       },
     },
     theme: {
@@ -381,12 +393,11 @@ const Dashboard = () => {
               </div>
               <div className={styles.title}>
                 <h2>Dashboard</h2>
-                <h3>Select office</h3>
               </div>
               <div className={styles.inputs}>
                 <Select
                   showSearch
-                  placeholder="All offices"
+                  placeholder="Select office"
                   onChange={selectFilter}
                   className={styles.select}
                   optionFilterProp="children"
@@ -457,13 +468,7 @@ const Dashboard = () => {
                 <div className={styles.dataRow}>
                   <div className={styles.pieCard}>
                     <h3>Desks available/reserved</h3>
-                    {deskData.length > 0 ? (
-                      <Pie {...config} />
-                    ) : (
-                      <div className={styles.loading}>
-                        <Loading />
-                      </div>
-                    )}
+                    <Pie {...config} />
                   </div>
                   <div className={styles.tableCard}>
                     <h3>User reviews</h3>
