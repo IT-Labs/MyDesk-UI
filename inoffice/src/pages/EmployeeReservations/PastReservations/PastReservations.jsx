@@ -92,12 +92,14 @@ const PastReservations = ({ officeName }) => {
         setBtnDisabled(false);
         setRefreshState({});
         setLoading(false);
+        setReview("");
         openNotification("Thank you. Your review has been successfully saved.");
       })
       .catch((error) => {
         openError(
           "An error occurred while saving your review, please try again"
         );
+        setReview("");
         setLoading(false);
         setVisible(false);
         setBtnDisabled(false);
@@ -166,19 +168,20 @@ const PastReservations = ({ officeName }) => {
         okButtonProps={{ disabled: btnDisabled }}
         confirmLoading={loadingData}
         onCancel={() => {
+          setReview("");
           setVisible(false);
           controller.abort();
           controller = new AbortController();
           openError("Cancelled review request");
         }}
         width={800}
-        // style={{ height: 120 }}
       >
         <TextArea
           rows={4}
           onChange={(e) => setReview(e.target.value)}
           allowClear={true}
           maxLength={200}
+          value={review}
         />
       </Modal>
 
