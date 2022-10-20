@@ -182,6 +182,7 @@ const RegisterUser = (props) => {
                   e.preventDefault();
                   return false;
                 }}
+                onMouseDown={(e) => e.preventDefault()}
               />
 
               <Input.Password
@@ -200,6 +201,7 @@ const RegisterUser = (props) => {
                   e.preventDefault();
                   return false;
                 }}
+                onMouseDown={(e) => e.preventDefault()}
               />
               {errorMsg ? (
                 <Alert
