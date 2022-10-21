@@ -165,7 +165,6 @@ const Dashboard = () => {
    * @returns An array of objects.
    */
   const fetchDeskData = async (officeId) => {
-    console.log(officeId);
     return api
       .get("employee/office-desks/" + officeId)
       .then((response) => {
