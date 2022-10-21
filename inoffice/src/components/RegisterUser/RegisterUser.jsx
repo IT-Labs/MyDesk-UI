@@ -24,6 +24,24 @@ const RegisterUser = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(false);
   const inputRef = useRef();
+  const unselectablePassword = document.getElementById("password");
+  const unselectableConfirmPassword =
+    document.getElementById("confirmPassword");
+
+  unselectablePassword?.addEventListener(
+    "select",
+    function () {
+      this.selectionStart = this.selectionEnd;
+    },
+    false
+  );
+  unselectableConfirmPassword?.addEventListener(
+    "select",
+    function () {
+      this.selectionStart = this.selectionEnd;
+    },
+    false
+  );
 
   useEffect(() => {
     inputRef.current.focus();
@@ -168,6 +186,7 @@ const RegisterUser = (props) => {
               />
               <Input.Password
                 className={styles.input}
+                id="password"
                 data-cy="password-input"
                 placeholder="Password"
                 prefix={<LockOutlined />}
@@ -187,6 +206,7 @@ const RegisterUser = (props) => {
 
               <Input.Password
                 className={styles.input}
+                id="confirmPassword"
                 data-cy="password-confirm-input"
                 placeholder="Confirm Password"
                 prefix={<LockOutlined />}

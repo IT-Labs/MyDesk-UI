@@ -23,8 +23,17 @@ const Login = () => {
   const [registerForm, setRegisterForm] = useState(false);
   // const [errorMsg, setErrorMsg] = useState(false);
   const [loadingData, setLoading] = useState(false);
-
   const inputRef = useRef();
+  const unselectablePassword = document.getElementById("password");
+
+  unselectablePassword?.addEventListener(
+    "select",
+    function () {
+      this.selectionStart = this.selectionEnd;
+    },
+    false
+  );
+
   useEffect(() => {
     inputRef.current.focus();
   }, [inputRef]);
@@ -139,6 +148,7 @@ const Login = () => {
                   />
                   <Input.Password
                     className={styles.input}
+                    id="password"
                     data-cy="login-password-input"
                     prefix={<LockOutlined />}
                     placeholder="Password"
@@ -154,6 +164,7 @@ const Login = () => {
                       e.preventDefault();
                       return false;
                     }}
+                    onMouseDown={(e) => e.preventDefault()}
                   />
                   {/* {errorMsg ? (
                     <Alert
