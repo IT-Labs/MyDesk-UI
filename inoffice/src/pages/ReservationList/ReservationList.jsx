@@ -66,7 +66,7 @@ const ReservationList = () => {
     return {
       ...item,
       avatar: image,
-      employee: `${item.employee.firstName} ${item.employee.lastName}`,
+      employee: `${item.employee.firstName} ${item.employee.surname}`,
       office: item.officeName ? item.officeName : "Undefined office",
       entity: item.desk.indexForOffice
         ? `Desk [${item.desk.indexForOffice}]`
