@@ -54,6 +54,7 @@ const Dashboard = () => {
   const [endDateRes, setEndDate] = useState([]);
   const [dates, setDates] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState({});
+  const currentRange = [moment(), moment()];
 
   useEffect(() => {
     fetchOfficeData();
@@ -65,15 +66,16 @@ const Dashboard = () => {
    * true.
    * @returns A boolean value.
    */
-  const findAvailable = (item) => {
+  const findAvailable = (item, range) => {
     const startSelected = item.startDate;
     const endSelected = item.endDate;
-    const momentStart = start;
-    const momentEnd = end;
+    const itemStartDate = moment(startSelected).format("YYYY-MM-DD");
+    const selectedStartDate = range[0].format("YYYY-MM-DD");
+    const isSameDate = itemStartDate === selectedStartDate;
     const momentRange = extendMoment(moment);
     const range1 = momentRange.range(startSelected, endSelected);
-    const range2 = momentRange.range(momentStart, momentEnd);
-    const flag = range2.overlaps(range1, { adjacent: true });
+    const range2 = momentRange.range(range[0], range[1]);
+    const flag = range2.overlaps(range1, { adjacent: true }) || isSameDate;
     return flag;
   };
 
@@ -81,10 +83,10 @@ const Dashboard = () => {
    * If the length of the array is greater than 0, then for each item in the array, if the item is
    * available, then increment the count by 1.
    */
-  const checkAvailable = (res) => {
+  const checkAvailable = (res, range) => {
     if (res.length > 0) {
       res.forEach((item) => {
-        const flag = findAvailable(item);
+        const flag = findAvailable(item, range);
         if (flag) count.current = count.current + 1;
       });
     }
@@ -94,17 +96,16 @@ const Dashboard = () => {
   /**
    * It takes an array of objects, and returns an array of objects.
    */
-  const filterData = (deskInfo) => {
+  const filterData = (deskInfo, range) => {
     if (!deskInfo.length) {
       return;
     }
 
     count.current = 0;
     setDesks(deskInfo);
-    let unavailableDesk;
 
     deskInfo.forEach((item) => {
-      checkAvailable(item.reservations);
+      checkAvailable(item.reservations, range);
     });
 
     const unavailableData = count.current;
@@ -151,7 +152,7 @@ const Dashboard = () => {
 
           dispatch(setInitialDesks(deskInfo));
         } else if (dates.length) {
-          filterData(initialDesk);
+          filterData(initialDesk, currentRange);
         }
       })
       .catch((error) => {
@@ -188,8 +189,9 @@ const Dashboard = () => {
    */
   const selectFilter = (officeId) => {
     if (!officeId) {
-      filterData(initialDesk);
+      filterData(initialDesk, currentRange);
       setReviews(initialReviews);
+      setDesksForSelectedOffice(initialDesk);
       return;
     }
 
@@ -204,6 +206,14 @@ const Dashboard = () => {
     clearDate();
     setReviewsForSelectedOffice(reviewFilter);
     setReviews(reviewFilter);
+  };
+
+  const setDate = (startDate, endDate, range) => {
+    filterData(desksForSelectedOffice, range);
+    filterReviewByDate(range);
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setDates(range);
   };
 
   const clearDate = () => {
@@ -289,14 +299,6 @@ const Dashboard = () => {
     });
 
     setReviews(filteredReviews);
-  };
-
-  const setDate = (startDate, endDate, range) => {
-    filterData(desksForSelectedOffice);
-    filterReviewByDate(range);
-    setStartDate(startDate);
-    setEndDate(endDate);
-    setDates(range);
   };
 
   /* Creating a pie chart. */
