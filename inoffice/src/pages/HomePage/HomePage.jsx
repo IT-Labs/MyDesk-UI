@@ -244,7 +244,7 @@ const Home = () => {
       return;
     }
     const foundEmployee = employees.find(
-      (item) => `${item.firstName} ${item.lastName} ${item.jobTitle}` === val
+      (item) => `${item.firstName} ${item.surname} ${item.jobTitle}` === val
     );
     const name = val.split(" ");
     setDefValue(`${name[0]} ${name[1]}`);
@@ -474,12 +474,12 @@ const Home = () => {
                     employees.map((item) => (
                       <Select.Option
                         key={item.id}
-                        value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
+                        value={`${item.firstName} ${item.surname} ${item.jobTitle}`}
                         style={{ height: 50 }}
                       >
                         <h4
                           style={{ fontSize: 14, padding: 0, margin: 0 }}
-                        >{`${item.firstName} ${item.lastName}`}</h4>
+                        >{`${item.firstName} ${item.surname}`}</h4>
                         <p style={{ fontSize: 12 }}>{item.jobTitle}</p>
                       </Select.Option>
                     ))}
@@ -553,7 +553,7 @@ const Home = () => {
                 onOk={() => reserveForCoworker(selectedCoworker)}
               >
                 Are you sure you want to reserve this desk for{" "}
-                {selectedCoworker.firstName} {selectedCoworker.lastName}?
+                {selectedCoworker.firstName} {selectedCoworker.surname}?
               </Modal>
             </div>
           </Row>

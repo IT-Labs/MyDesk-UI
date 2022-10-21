@@ -34,7 +34,7 @@ const UserSearch = () => {
         const end = new Date(item.endDate);
         return {
           ...item,
-          employee: `${item.employee.firstName} ${item.employee.lastName}`,
+          employee: `${item.employee.firstName} ${item.employee.surname}`,
           office: item.officeName ? item.officeName : "Undefined office",
           entity: item.desk.indexForOffice
             ? `Desk [${item.desk.indexForOffice}]`
@@ -62,7 +62,7 @@ const UserSearch = () => {
       dataIndex: "entity",
       key: 1,
     },
-    { title: "Office", dataIndex: "office", key: 2 },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
     {
       title: "Date",
       dataIndex: "date",
@@ -109,8 +109,8 @@ const UserSearch = () => {
 
   const findEmployee = (e) => {
     const foundEmployee = employees.find(
-      ({ firstName, lastName, jobTitle }) =>
-        `${firstName} ${lastName} ${jobTitle}` === e
+      ({ firstName, surname, jobTitle }) =>
+        `${firstName} ${surname} ${jobTitle}` === e
     );
     setVisible(true);
     setEmployee(foundEmployee);
@@ -130,11 +130,11 @@ const UserSearch = () => {
           employees.map((item) => (
             <Select.Option
               key={item.id}
-              value={`${item.firstName} ${item.lastName} ${item.jobTitle}`}
+              value={`${item.firstName} ${item.surname} ${item.jobTitle}`}
             >
               <h4
                 style={{ fontSize: 14 }}
-              >{`${item.firstName} ${item.lastName}`}</h4>
+              >{`${item.firstName} ${item.surname}`}</h4>
               <p style={{ fontSize: 9 }}>{item.jobTitle}</p>
             </Select.Option>
           ))
@@ -152,7 +152,7 @@ const UserSearch = () => {
         cancelButtonProps={{ style: { display: "none" } }}
       >
         <h3>
-          Name: {employee.firstName} {employee.lastName}
+          Name: {employee.firstName} {employee.surname}
         </h3>
         <h3>Job title: {employee.jobTitle}</h3>
         <h3>E-Mail: {employee.email}</h3>
@@ -163,7 +163,7 @@ const UserSearch = () => {
           className="newTable"
           dataSource={reservations.filter(
             (item) =>
-              item.employee === `${employee.firstName} ${employee.lastName}`
+              item.employee === `${employee.firstName} ${employee.surname}`
           )}
           style={{ height: 300, maxHeight: 300 }}
           scroll={{ y: 250 }}
