@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../../helper/api";
 import { Form, Input, Button } from "antd";
 import {
@@ -12,18 +12,33 @@ const AddOfficeForm = () => {
   const [errorName, setErrorName] = useState("");
   const [ifHaveChanges, setIfHaveChanges] = useState(false);
 
+  useEffect(() => {
+    if (ifHaveChanges) {
+      window.onbeforeunload = function () {
+        return "Changes that you made may not be saved.";
+      };
+    } else {
+      window.onbeforeunload = function () {
+        return null;
+      };
+    }
+  }, [ifHaveChanges]);
+
   function resetErrorHighlighted() {
     setIfHaveChanges(true);
     setErrorName("");
   }
 
-  if (ifHaveChanges) {
+  function onCancel() {
+    setIfHaveChanges(false);
     window.onbeforeunload = function () {
-      return "Changes that you made may not be saved.";
+      return null;
     };
+    window.location = "/admin/offices";
   }
 
   const handleSubmit = (e) => {
+    setIfHaveChanges(false);
     const name = e.name.replace(/\s+/, "-");
     const location = e.location.replace(/\s+/, "-");
 
@@ -104,10 +119,7 @@ const AddOfficeForm = () => {
           >
             Save
           </Button>
-          <Button
-            className="formButton redButton"
-            onClick={() => (window.location = "/admin/offices")}
-          >
+          <Button className="formButton redButton" onClick={() => onCancel()}>
             Cancel
           </Button>
         </Form.Item>
