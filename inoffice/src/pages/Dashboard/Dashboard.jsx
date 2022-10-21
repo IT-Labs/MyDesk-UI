@@ -41,6 +41,7 @@ const Dashboard = () => {
   const [writtenReview, setWrittenReview] = useState("");
   const [activeModal, setActiveModal] = useState(false);
   const [reviews, setReviews] = useState([]);
+  const [reviewsForSelectedOffice, setReviewsForSelectedOffice] = useState([]);
   const [offices, setOffices] = useState([]);
   const [initialReviews, setInitialReviews] = useState([]);
   const start = useSelector((state) => state.date.start);
@@ -202,6 +203,7 @@ const Dashboard = () => {
       item.reservation.desk.office.name.includes(foundOffice.name)
     );
     clearDate();
+    setReviewsForSelectedOffice(reviewFilter);
     setReviews(reviewFilter);
   };
 
@@ -222,6 +224,9 @@ const Dashboard = () => {
     dispatch(setStart(null));
     dispatch(setEnd(null));
     setDates([]);
+    selectedOffice
+      ? setReviews(reviewsForSelectedOffice)
+      : setReviews(initialReviews);
   };
 
   /* Fetching reviews from an API and then mapping over the data to create a new array of objects. */
@@ -259,10 +264,18 @@ const Dashboard = () => {
 
   const filterReviewByDate = (range) => {
     let filteredReviews = [];
-    let arrayOfReviews = selectedOffice ? reviews : initialReviews;
+    let arrayOfReviews = selectedOffice
+      ? reviewsForSelectedOffice
+      : initialReviews;
 
     arrayOfReviews.forEach((review) => {
       if (review.reservation) {
+        const reservationDate = moment(review.reservation.startDate).format(
+          "YYYY-MM-DD"
+        );
+        const selectedStartDate = range[0].format("YYYY-MM-DD");
+        const isSameDate = reservationDate === selectedStartDate;
+
         const isAfterStartDate = moment(review.reservation.startDate).isAfter(
           range[0]
         );
@@ -270,7 +283,7 @@ const Dashboard = () => {
           range[1]
         );
 
-        if (isAfterStartDate && isBeforeEndDate) {
+        if ((isAfterStartDate && isBeforeEndDate) || isSameDate) {
           filteredReviews.push(review);
         }
       }
