@@ -1,3 +1,5 @@
+import { commonsPage } from "../pages/commons";
+
 export class AdminReservationsPage {
   /**
    * Locators.
@@ -27,6 +29,10 @@ export class AdminReservationsPage {
 
   searchByNameInput() {
     return cy.get("[data-cy=search-by-name-input]");
+  }
+
+  reservationsListTableBody() {
+    return cy.get(".ant-table-tbody");
   }
 
   /**
@@ -73,6 +79,40 @@ export class AdminReservationsPage {
             if ($index == 0) expect($td).to.contain.text(coworkerName); //  index 0 = user name
           });
       });
+  }
+
+  cancelTheFirstReservationInTheList() {
+    this.reservationsListTableBody()
+      .find("tr")
+      .first()
+      .find("td:nth-child(5)")
+      .find("button")
+      .click();
+    this.confirmReservationCancellation();
+  }
+
+  confirmReservationCancellation() {
+    commonsPage
+      .confirmationModalTitle()
+      .should("have.text", "Cancel user's reservation?");
+    commonsPage
+      .confirmationModalMessage()
+      .should("have.text", "Do you really want to cancel this reservation?");
+    commonsPage.confirmationModalOkButton().click();
+  }
+
+  verifyCancellationIsSuccessful() {
+    commonsPage
+      .notificationModalMessageLabel()
+      .should("have.text", "Notification");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", "You have successfully cancelled the reservation");
+  }
+
+  verifyAdminCanCancelReservations() {
+    this.cancelTheFirstReservationInTheList();
+    this.verifyCancellationIsSuccessful();
   }
 }
 

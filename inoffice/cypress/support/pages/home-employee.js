@@ -1,3 +1,4 @@
+import { commonsPage } from "../pages/commons";
 import moment from "moment";
 
 export class HomeEmployeePage {
@@ -88,14 +89,6 @@ export class HomeEmployeePage {
     return cy.get("[data-cy=show-reviews-button]");
   }
 
-  notificationModalMessageLabel() {
-    return cy.get(".ant-notification-notice-message");
-  }
-
-  notificationModalDescriptionLabel() {
-    return cy.get(".ant-notification-notice-description");
-  }
-
   officeDropdown() {
     return cy.get(
       "[data-cy=filter-by-availability] .ant-select-selector span.ant-select-selection-item"
@@ -132,22 +125,6 @@ export class HomeEmployeePage {
 
   modalContainer() {
     return cy.get('[data-cy="modal-container"]');
-  }
-
-  confirmationModalTitle() {
-    return cy.get(".ant-modal-header .ant-modal-title");
-  }
-
-  confirmationModalMessage() {
-    return cy.get(".ant-modal-body");
-  }
-
-  confirmationModalOkButton() {
-    return cy.get(".ant-modal-footer .ant-btn-primary");
-  }
-
-  confirmationModalCancelButton() {
-    return cy.get(".ant-modal-footer .ant-btn-default");
   }
 
   availableDesks() {
@@ -302,11 +279,12 @@ export class HomeEmployeePage {
   }
 
   verifyReservationIsSuccessful() {
-    this.notificationModalMessageLabel().should("have.text", "Notification");
-    this.notificationModalDescriptionLabel().should(
-      "have.text",
-      "You have successfully reserved a desk."
-    );
+    commonsPage
+      .notificationModalMessageLabel()
+      .should("have.text", "Notification");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", "You have successfully reserved a desk.");
   }
 
   verifyPastDatesAreDisabledInCalendar() {
@@ -407,28 +385,32 @@ export class HomeEmployeePage {
   }
 
   assertErrorInNotificationMessage(errorMessage) {
-    this.notificationModalMessageLabel().should("have.text", "Error");
-    this.notificationModalDescriptionLabel().should("have.text", errorMessage);
+    commonsPage.notificationModalMessageLabel().should("have.text", "Error");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", errorMessage);
   }
 
   confirmReservationForCoworker(coworkerName) {
-    this.confirmationModalTitle().should(
-      "have.text",
-      "Reserve desk for co-worker"
-    );
-    this.confirmationModalMessage().should(
-      "contain",
-      `Are you sure you want to reserve this desk for ${coworkerName}`
-    );
-    this.confirmationModalOkButton().click();
+    commonsPage
+      .confirmationModalTitle()
+      .should("have.text", "Reserve desk for co-worker");
+    commonsPage
+      .confirmationModalMessage()
+      .should(
+        "contain",
+        `Are you sure you want to reserve this desk for ${coworkerName}`
+      );
+    commonsPage.confirmationModalOkButton().click();
   }
 
   assertReservationForCoworkerIsSuccessful() {
-    this.notificationModalMessageLabel().should("have.text", "Notification");
-    this.notificationModalDescriptionLabel().should(
-      "have.text",
-      "You have successfully reserved for your co-worker"
-    );
+    commonsPage
+      .notificationModalMessageLabel()
+      .should("have.text", "Notification");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", "You have successfully reserved for your co-worker");
   }
 
   reserveForACoworker(coworkerName) {

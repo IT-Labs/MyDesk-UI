@@ -1,3 +1,4 @@
+import { commonsPage } from "../pages/commons";
 import moment from "moment";
 
 export class EmployeeReservationsPage {
@@ -29,30 +30,6 @@ export class EmployeeReservationsPage {
 
   modalContainer() {
     return cy.get('[data-cy="modal-container"]');
-  }
-
-  confirmationModalTitle() {
-    return cy.get(".ant-modal-header .ant-modal-title");
-  }
-
-  confirmationModalMessage() {
-    return cy.get(".ant-modal-body");
-  }
-
-  confirmationModalOkButton() {
-    return cy.get(".ant-modal-footer .ant-btn-primary");
-  }
-
-  confirmationModalCancelButton() {
-    return cy.get(".ant-modal-footer .ant-btn-default");
-  }
-
-  notificationModalMessageLabel() {
-    return cy.get(".ant-notification-notice-message");
-  }
-
-  notificationModalDescriptionLabel() {
-    return cy.get(".ant-notification-notice-description");
   }
 
   /**
@@ -130,23 +107,25 @@ export class EmployeeReservationsPage {
   }
 
   confirmReserveCancellation() {
-    this.confirmationModalTitle().should(
-      "have.text",
-      "Are you sure you want to cancel your reservation?"
-    );
-    this.confirmationModalMessage().should(
-      "have.text",
-      `You are able to reserve your seat again but someone can reserve it before you.`
-    );
-    this.confirmationModalOkButton().click();
+    commonsPage
+      .confirmationModalTitle()
+      .should("have.text", "Are you sure you want to cancel your reservation?");
+    commonsPage
+      .confirmationModalMessage()
+      .should(
+        "have.text",
+        `You are able to reserve your seat again but someone can reserve it before you.`
+      );
+    commonsPage.confirmationModalOkButton().click();
   }
 
   verifyCancellationIsSuccessful() {
-    this.notificationModalMessageLabel().should("have.text", "Notification");
-    this.notificationModalDescriptionLabel().should(
-      "have.text",
-      "You have successfully cancelled a reservation"
-    );
+    commonsPage
+      .notificationModalMessageLabel()
+      .should("have.text", "Notification");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", "You have successfully cancelled a reservation");
   }
 
   cancelMyReservation() {
