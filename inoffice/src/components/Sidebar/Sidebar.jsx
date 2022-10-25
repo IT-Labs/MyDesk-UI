@@ -74,7 +74,7 @@ const Sidebar = (props) => {
           <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
             <div>
               <Tooltip title="Home" placement="bottom">
-                <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+                <NavLink id="myDeskLogo" to="/employee/home"></NavLink>
               </Tooltip>
             </div>
           </Menu.Item>
@@ -137,7 +137,7 @@ const Sidebar = (props) => {
         className="sideMenu"
       >
         <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
-          <NavLink id="inOfficeLogo" to="/employee/home"></NavLink>
+          <NavLink id="myDeskLogo" to="/employee/home"></NavLink>
         </Menu.Item>
         <Menu.Item key="1" icon={<TeamOutlined />}>
           <Link to={"/employee/reservations"}>

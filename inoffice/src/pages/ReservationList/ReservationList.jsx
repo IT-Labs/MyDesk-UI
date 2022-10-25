@@ -493,7 +493,7 @@ const ReservationList = () => {
       <Row className={styles.footerSection} align="center">
         <Col align="center" span={24}>
           <p className={styles.footerText}>
-            inOffice ©2022 Created by inOfficeTeam
+            MyDesk ©2022 Created by MyDeskTeam
           </p>
         </Col>
       </Row>
