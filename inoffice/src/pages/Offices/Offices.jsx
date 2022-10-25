@@ -118,7 +118,7 @@ const Offices = () => {
                             }
                           >
                             <Button
-                            data-cy="deleteoffice-button"
+                              data-cy="deleteoffice-button"
                               type="primary"
                               danger
                               style={{
@@ -131,7 +131,7 @@ const Offices = () => {
                             </Button>
                           </Popconfirm>
                           <Button
-                          data-cy="editoffice-button"
+                            data-cy="editoffice-button"
                             type="primary"
                             className="editButton"
                             onClick={() => {
@@ -163,7 +163,7 @@ const Offices = () => {
               fontSize: "1.2em",
             }}
           >
-            inOffice ©2022 Created by inOfficeTeam
+            MyDesk ©2022 Created by MyDeskTeam
           </p>
         </Col>
       </Row>

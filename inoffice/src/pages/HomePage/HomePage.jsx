@@ -39,7 +39,7 @@ import { getAvatar } from "../../redux/Avatar/Avatar";
 
 const Home = () => {
   const [officeid, setofficeid] = useState();
-  const [selectedCardId, setSelectedCard] = useState([]);
+  const [selectedCard, setSelectedCard] = useState([]);
   const [startDateRes, setStartDate] = useState([]);
   const [endDateRes, setEndDate] = useState([]);
   const [refreshCards, setRefreshCards] = useState();
@@ -105,7 +105,7 @@ const Home = () => {
     setForCoworker(false);
   }
 
-  function selectedCard(value, availability) {
+  function onSelectCard(value, availability) {
     setSelectedCard(value);
     setIsAvailable(availability);
   }
@@ -117,7 +117,7 @@ const Home = () => {
   const showReviewsForSelectedCard = () => {
     setIsModalVisible(true);
     api
-      .get(`entity/reviews/${selectedCardId.indexForOffice}`)
+      .get(`entity/reviews/${selectedCard.id}`)
       .then(({ data }) => {
         if (data.length) {
           setReviews(data);
@@ -172,7 +172,7 @@ const Home = () => {
 
   const makeReservation = () => {
     const data = {
-      deskId: selectedCardId.id,
+      deskId: selectedCard.id,
       startDate: startDateRes,
       endDate: endDateRes,
       employeeEmail: user.preferred_username,
@@ -198,7 +198,7 @@ const Home = () => {
       startDate: startDateRes,
       endDate: endDateRes,
       employeeEmail: selectedCoworker.email,
-      deskId: selectedCardId.id,
+      deskId: selectedCard.id,
     };
     const config = {
       Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
@@ -284,7 +284,7 @@ const Home = () => {
                   <p className={styles.pStyles}>Select date</p>
                   <CalendarImplementation
                     dateFunction={setDate}
-                    onSelectCard={selectedCard}
+                    onSelectCard={onSelectCard}
                     officeid={officeid}
                     startDate={startDateRes}
                     endDate={endDateRes}
@@ -441,7 +441,7 @@ const Home = () => {
               >
                 <CardsSection
                   refresh={refreshCards}
-                  selectedCard={selectedCard}
+                  selectedCard={onSelectCard}
                   officeid={officeid}
                   available={selectValue}
                   employeeSearch={employeeSearch}
@@ -490,13 +490,13 @@ const Home = () => {
                   block
                   data-cy="reserve-button"
                   disabled={
-                    (selectedCardId.length === 0 || !isAvailable
+                    (selectedCard.length === 0 || !isAvailable
                       ? true
                       : false) ||
                     (startDateRes.length === 0 || endDateRes.length === 0
                       ? true
                       : false) ||
-                    (((selectedCardId.length === 0 || !isAvailable
+                    (((selectedCard.length === 0 || !isAvailable
                       ? true
                       : false) ||
                       (startDateRes.length === 0 || endDateRes.length === 0
@@ -506,7 +506,7 @@ const Home = () => {
                     Object.keys(selectedCoworker).length === 0
                       ? true
                       : false) ||
-                    selectedCardId.categories?.unavailable ||
+                    selectedCard.categories?.unavailable ||
                     defValue.length === 0
                   }
                   onClick={() => checkTypeOfReservation()}
@@ -520,7 +520,7 @@ const Home = () => {
                 <Button
                   block
                   data-cy="show-reviews-button"
-                  disabled={selectedCardId.length === 0 ? true : false}
+                  disabled={selectedCard.length === 0 ? true : false}
                   size="large"
                   className={`${styles.buttons} ${styles.tealBtn}`}
                   onClick={() => showReviewsForSelectedCard()}
@@ -561,7 +561,7 @@ const Home = () => {
           <Row className={styles.footerSection} align="center">
             <Col align="center" span={24}>
               <p className={styles.footerText}>
-                inOffice ©2022 Created by inOfficeTeam
+                MyDesk ©2022 Created by MyDeskTeam
               </p>
             </Col>
           </Row>
