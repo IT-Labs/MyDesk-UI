@@ -52,6 +52,7 @@ const Login = () => {
     localStorage.setItem("accessToken", data.accessToken);
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
       localStorage.removeItem("msal.idtoken");
+      navigate("/");
     }
     const userInfo = {
       Email: data.mail,
@@ -99,9 +100,9 @@ const Login = () => {
       .post("/token", body)
       .then((res) => {
         let token = res.data;
-        const accessTocken = token.replace("Bearer ", "");
-        localStorage.setItem("accessToken", accessTocken);
-        localStorage.setItem("msal.idtoken", accessTocken);
+        const accessToken = token.replace("Bearer ", "");
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("msal.idtoken", accessToken);
         navigate("/employee/home");
       })
       .catch((err) => {
@@ -134,7 +135,7 @@ const Login = () => {
             </div>
             <div>
               <Form className={styles.form} onFinish={handleSubmit}>
-                <Form.Item name="login">
+                <Form.Item>
                   <Input
                     className={styles.input}
                     data-cy="login-email-input"

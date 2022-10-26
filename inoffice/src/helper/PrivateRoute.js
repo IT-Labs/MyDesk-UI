@@ -11,20 +11,24 @@ import { openNotification } from "../components/notification/Notification";
  */
 const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
   const dispatch = useDispatch();
+  const token = localStorage.getItem("msal.idtoken");
+  const navigate = useNavigate();
+  let isAuthenticated = false;
+  let dateNow = new Date();
+
   useEffect(() => {
     dispatch(getAvatar());
   }, []);
-  const token = localStorage.getItem("msal.idtoken");
-  const navigate = useNavigate();
+
   if (!token) {
     navigate("/");
+    window.location.assign("/");
   }
 
-  let isAuthenticated = false;
-  let dateNow = new Date();
   if (jwt(token).exp * 1000 < dateNow.getTime()) {
     localStorage.clear();
     navigate("/");
+    window.location.assign("/");
   }
 
   if (
