@@ -119,7 +119,6 @@ const RegisterUser = (props) => {
             />
             <Form.Item
               style={{ marginBottom: "0px" }}
-              name="First Name"
               rules={[
                 {
                   message:
@@ -147,7 +146,6 @@ const RegisterUser = (props) => {
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "0px" }}
-              name="Last Name"
               rules={[
                 {
                   message:

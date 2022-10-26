@@ -29,6 +29,8 @@ import placeholderAvatar from "../../assets/avatar.png";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
+  const [allFutureReservations, setAllFutureReservations] = useState([]);
+  const [allPastReservations, setAllPastReservations] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [excelSheet, setExcelSheet] = useState("Future Reservation List");
   const [initRes, setInitRes] = useState([]);
@@ -246,59 +248,145 @@ const ReservationList = () => {
       setOffices(sorted);
     });
     // .catch((err) => console.log(err));
-    getAllFutureReservations(0);
+    getFutureReservations(0);
   };
 
-  const getAllFutureReservations = (skip) => {
+  const getFutureReservations = (skip) => {
     setLoadingTableData(true);
     api
       .get(`employee/future-reservation/all?top=4&skip=${skip}`)
       .then(({ data }) => {
         setTotalCount(data.totalCount);
         sortResStruct(data.values);
+        getAllFutureReservations();
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  const getAllPastReservations = (skip) => {
+  const getAllFutureReservations = () => {
+    api
+      .get(`employee/future-reservation/all`)
+      .then(({ data }) => {
+        setAllFutureReservations(data.values);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const getPastReservations = (skip) => {
     setLoadingTableData(true);
     api
       .get(`employee/past-reservations/all?top=4&skip=${skip}`)
       .then(({ data }) => {
         setTotalCount(data.totalCount);
         sortResStruct(data.values);
+        getAllPastReservations();
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
-  const filterReservation = () => {
-    if (!reservations.length) {
+  const getAllPastReservations = () => {
+    api
+      .get(`employee/past-reservations/all`)
+      .then(({ data }) => {
+        setAllPastReservations(data.values);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const filterReservationByName = () => {
+    if (!filterInput.length) {
+      setCurrentPage(1);
+      tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
       return;
     }
 
-    const filteredReservations = reservations.filter((reservation) =>
-      reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
+    setLoadingTableData(true);
+
+    let allSelectedReservations;
+    if (tabKey === "past") {
+      allSelectedReservations = allPastReservations;
+    } else {
+      allSelectedReservations = allFutureReservations;
+    }
+
+    const filteredReservations = allSelectedReservations.filter(
+      (reservation) =>
+        reservation.employee.firstName
+          .toLowerCase()
+          .includes(filterInput.toLowerCase()) ||
+        reservation.employee.surname
+          .toLowerCase()
+          .includes(filterInput.toLowerCase())
     );
-    filteredReservations.length
-      ? setInvalidSearchInput(false)
-      : setInvalidSearchInput(true);
+
+    if (filteredReservations.length) {
+      setCurrentPage(1);
+      setTotalCount(filteredReservations.length);
+      sortResStruct(filteredReservations);
+      setInvalidSearchInput(false);
+    } else {
+      setCurrentPage(1);
+      setTotalCount(null);
+      setLoadingTableData(false);
+      setInvalidSearchInput(true);
+    }
+  };
+
+  const filterReservationByOffice = () => {
+    if (!filterOffice.length) {
+      setCurrentPage(1);
+      tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
+      return;
+    }
+
+    setLoadingTableData(true);
+
+    let allSelectedReservations;
+    if (tabKey === "past") {
+      allSelectedReservations = allPastReservations;
+    } else {
+      allSelectedReservations = allFutureReservations;
+    }
+    const filteredReservations = allSelectedReservations.filter((reservation) =>
+      reservation.desk.office.name.includes(filterOffice)
+    );
+
+    if (filteredReservations.length) {
+      setCurrentPage(1);
+      setTotalCount(filteredReservations.length);
+      sortResStruct(filteredReservations);
+    } else {
+      setCurrentPage(1);
+      setTotalCount(null);
+      setLoadingTableData(false);
+    }
   };
 
   const onPageChanged = (pageNumber) => {
+    if (filterOffice.length || filterInput.length) {
+      setCurrentPage(1);
+      tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
+      return;
+    }
+
     const currentPage = pageNumber.current;
     let skipPages = 0;
     setCurrentPage(currentPage);
     if (tabKey === "past") {
       skipPages = (currentPage - 1) * 4;
-      getAllPastReservations(skipPages);
+      getPastReservations(skipPages);
     } else {
       skipPages = (currentPage - 1) * 4;
       setSkipPage(skipPages);
-      getAllFutureReservations(skipPages);
+      getFutureReservations(skipPages);
     }
   };
 
@@ -309,7 +397,7 @@ const ReservationList = () => {
         openNotification("You have successfully cancelled the reservation");
         const filteredRes = initRes.filter((item) => item.key !== id);
         setInitRes(filteredRes);
-        getAllFutureReservations(skipPage);
+        getFutureReservations(skipPage);
       })
       .catch((error) => {
         console.error(error);
@@ -320,12 +408,16 @@ const ReservationList = () => {
   };
 
   useEffect(() => {
-    filterReservation();
+    filterReservationByName();
   }, [filterInput]);
 
   useEffect(() => {
     getAllOffices();
   }, []);
+
+  useEffect(() => {
+    filterReservationByOffice();
+  }, [filterOffice]);
 
   useEffect(() => {
     const keyDownHandler = (event) => {
@@ -371,12 +463,12 @@ const ReservationList = () => {
                   if (key === "past") {
                     setTotalCount(0);
                     setCurrentPage(1);
-                    getAllPastReservations(0);
+                    getPastReservations(0);
                     setExcelSheet("Past Reservation List");
                   } else {
                     setTotalCount(0);
                     setCurrentPage(1);
-                    getAllFutureReservations(0);
+                    getFutureReservations(0);
                     setExcelSheet("Future Reservation List");
                   }
                 }}
@@ -407,14 +499,14 @@ const ReservationList = () => {
                     <FileSearchOutlined style={{ margin: 10 }} />
                     <Tooltip title="Enter the First or the Last name of the user you want to search">
                       <Input
+                        className={styles.searchInput}
+                        style={{ width: 200 }}
+                        placeholder="Search by name"
+                        data-cy="search-by-name-input"
                         value={filterInput}
                         onChange={(e) =>
                           setFilterInput(e.target.value.replace(/\s+/, ""))
                         }
-                        className={styles.searchInput}
-                        placeholder="Search by name"
-                        style={{ width: 200 }}
-                        data-cy="search-by-name-input"
                       />
                       {invalidSearchInput ? (
                         <Alert

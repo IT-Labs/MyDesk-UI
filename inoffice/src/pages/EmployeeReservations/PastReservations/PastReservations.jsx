@@ -37,7 +37,7 @@ const PastReservations = ({ officeName }) => {
       await api
         .get("employee/past-reservations")
         .then((response) => {
-          const sorted = sortByNewest(response.data);
+          const sorted = sortByNewest(response.data.values);
           setLoading(false);
           dispatch(setPastReservations(sorted));
         })
@@ -86,7 +86,7 @@ const PastReservations = ({ officeName }) => {
     }
 
     await api
-      .post("employee/review", data, { signal: controller.signal })
+      .post("employee/review", data)
       .then((response) => {
         setVisible(false);
         setBtnDisabled(false);
@@ -177,6 +177,7 @@ const PastReservations = ({ officeName }) => {
         width={800}
       >
         <TextArea
+          showCount
           rows={4}
           onChange={(e) => setReview(e.target.value)}
           allowClear={true}

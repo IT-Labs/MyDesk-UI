@@ -83,14 +83,11 @@ const Dashboard = () => {
    * If the length of the array is greater than 0, then for each item in the array, if the item is
    * available, then increment the count by 1.
    */
-  const checkAvailable = (res, range) => {
-    if (res.length > 0) {
-      res.forEach((item) => {
-        const flag = findAvailable(item, range);
-        if (flag) count.current = count.current + 1;
-      });
+  const checkAvailable = (reservations, range) => {
+    if (reservations.length > 0) {
+      reservations.some((reservation) => findAvailable(reservation, range));
+      count.current = count.current + 1;
     }
-    // return "#f37076" : "#69e28d",
   };
 
   /**

@@ -316,13 +316,17 @@ const Home = () => {
                 <div>
                   <p className={styles.pStyles}>Search by name</p>
                   <Input
-                    value={employeeSearch}
                     className={styles.inputSize}
                     data-cy="search-by-name"
+                    value={employeeSearch}
                     onChange={(e) =>
                       setEmployeeSearch(e.target.value.replace(/\s+/, ""))
                     }
-                    onPress
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") {
+                        setEmployeeSearch("");
+                      }
+                    }}
                   />
                   {invalidSearchInput ? (
                     <Alert
