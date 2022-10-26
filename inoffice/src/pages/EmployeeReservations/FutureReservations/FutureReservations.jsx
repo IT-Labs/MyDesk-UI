@@ -35,7 +35,7 @@ const FutureReservations = () => {
       await api
         .get("employee/future-reservation")
         .then((response) => {
-          const sorted = sortByOldest(response.data);
+          const sorted = sortByOldest(response.data.values);
           setLoading(false);
           dispatch(setFutureReservation(sorted));
         })
