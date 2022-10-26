@@ -499,14 +499,14 @@ const ReservationList = () => {
                     <FileSearchOutlined style={{ margin: 10 }} />
                     <Tooltip title="Enter the First or the Last name of the user you want to search">
                       <Input
+                        className={styles.searchInput}
+                        style={{ width: 200 }}
+                        placeholder="Search by name"
+                        data-cy="search-by-name-input"
                         value={filterInput}
                         onChange={(e) =>
                           setFilterInput(e.target.value.replace(/\s+/, ""))
                         }
-                        className={styles.searchInput}
-                        placeholder="Search by name"
-                        style={{ width: 200 }}
-                        data-cy="search-by-name-input"
                       />
                       {invalidSearchInput ? (
                         <Alert
