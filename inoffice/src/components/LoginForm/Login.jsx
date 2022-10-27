@@ -10,7 +10,6 @@ import logo from "../../assets/Microsoft logo.png";
 import { Alert, Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { openError } from "../notification/Notification";
-import RegisterUser from "../RegisterUser/RegisterUser";
 import Loading from "../Loading/Loading";
 import { encode as base64_encode } from "base-64";
 
@@ -20,7 +19,6 @@ const Login = () => {
   const [postedOnce, setPostedOnce] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [registerForm, setRegisterForm] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [loadingData, setLoading] = useState(false);
   const inputRef = useRef();
@@ -85,7 +83,6 @@ const Login = () => {
           }
         });
     }
-
     return;
   };
 
@@ -115,10 +112,6 @@ const Login = () => {
       });
   };
 
-  const handleShowRegister = (showRegisterPage) => {
-    setRegisterForm(showRegisterPage);
-  };
-
   return (
     <>
       {loadingData && (
@@ -126,7 +119,7 @@ const Login = () => {
           <Loading />
         </div>
       )}
-      {!loadingData && !registerForm && (
+      {!loadingData && (
         <div className={styles.bg}>
           <div className={styles.login}>
             <div className={styles.title} data-cy="login-logo-welcomebacktext">
@@ -178,15 +171,6 @@ const Login = () => {
                   ) : null}
                   <div className={`${styles.rememberwrap}`}>
                     <Checkbox data-cy="remember-me">Remember me</Checkbox>
-                    <Button
-                      className={`${styles.register}`}
-                      type="link"
-                      size="small"
-                      data-cy="register-cta-button"
-                      onClick={() => handleShowRegister(true)}
-                    >
-                      Register
-                    </Button>
                   </div>
                   <Button
                     htmlType="submit"
@@ -235,9 +219,6 @@ const Login = () => {
             </MicrosoftLogin>
           </div>
         </div>
-      )}
-      {!loadingData && registerForm && (
-        <RegisterUser handleShowRegister={handleShowRegister}></RegisterUser>
       )}
     </>
   );
