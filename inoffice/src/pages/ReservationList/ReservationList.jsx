@@ -179,6 +179,77 @@ const ReservationList = () => {
     },
   ];
 
+  const newInfo = async (item, image) => {
+    const start = new Date(item.startDate);
+    const end = new Date(item.endDate);
+
+    return {
+      ...item,
+      avatar: image,
+      employee: `${item.employee.firstName} ${item.employee.surname}`,
+      office: item.desk.office.name
+        ? item.desk.office.name
+        : "Undefined office",
+      entity: item.desk.indexForOffice
+        ? `Desk [${item.desk.indexForOffice}]`
+        : "Undefined Desk",
+      key: item.id,
+      startDate: Date.parse(start),
+      endDate: Date.parse(end),
+      date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
+        "DD/MM/YYYY"
+      )}`,
+      email: item.employee.email,
+      ...item.employee,
+    };
+  };
+
+  const sortResStruct = async (res, isAllFuture) => {
+    const results = await Promise.all(
+      res.map(async (item) => {
+        const info = await newInfo(item, null).then((res) => {
+          return res;
+        });
+
+        return info;
+      })
+    );
+
+    if (isAllFuture === null) {
+      setLoadingTableData(false);
+      setReservations(results);
+      getImagesForRes(results, null);
+    } else if (isAllFuture) {
+      getImagesForRes(results, true);
+    } else {
+      getImagesForRes(results, false);
+    }
+
+    return;
+  };
+
+  const getImagesForRes = async (res, isAllFuture) => {
+    const results = await Promise.all(
+      res.map(async (item) => {
+        const image = await getImage(item.email);
+        const info = await addImage(item, image).then((res) => {
+          return res;
+        });
+
+        return info;
+      })
+    );
+
+    if (isAllFuture === null) {
+      setInitRes(results);
+      setReservations(results);
+    } else if (isAllFuture) {
+      setAllFutureReservations(results);
+    } else {
+      setAllPastReservations(results);
+    }
+  };
+
   const getImage = async (mail) => {
     const tmp = await fetch(
       `https://graph.microsoft.com/v1.0/users/${mail}/photo/$value`,
@@ -198,46 +269,11 @@ const ReservationList = () => {
     }
   };
 
-  const newInfo = async (item, image) => {
-    const start = new Date(item.startDate);
-    const end = new Date(item.endDate);
-
+  const addImage = async (item, image) => {
     return {
       ...item,
       avatar: image,
-      employee: `${item.employee.firstName} ${item.employee.surname}`,
-      office: item.officeName ? item.officeName : "Undefined office",
-      entity: item.desk.indexForOffice
-        ? `Desk [${item.desk.indexForOffice}]`
-        : "Undefined Desk",
-      key: item.id,
-      startDate: Date.parse(start),
-      endDate: Date.parse(end),
-      date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
-        "DD/MM/YYYY"
-      )}`,
-      email: item.employee.email,
-      ...item.employee,
     };
-  };
-
-  const sortResStruct = async (res) => {
-    const results = await Promise.all(
-      res.map(async (item, id) => {
-        const image = await getImage(item.employee.email);
-        const info = await newInfo(item, image).then((res) => {
-          return res;
-        });
-
-        return info;
-      })
-    );
-
-    setLoadingTableData(false);
-    setInitRes(results);
-    setReservations(results);
-
-    return;
   };
 
   const getAllOffices = () => {
@@ -257,8 +293,7 @@ const ReservationList = () => {
       .get(`employee/future-reservation/all?top=4&skip=${skip}`)
       .then(({ data }) => {
         setTotalCount(data.totalCount);
-        sortResStruct(data.values);
-        getAllFutureReservations();
+        sortResStruct(data.values, null);
       })
       .catch((err) => {
         console.log(err.response);
@@ -269,7 +304,7 @@ const ReservationList = () => {
     api
       .get(`employee/future-reservation/all`)
       .then(({ data }) => {
-        setAllFutureReservations(data.values);
+        sortResStruct(data.values, true);
       })
       .catch((err) => {
         console.log(err.response);
@@ -282,8 +317,7 @@ const ReservationList = () => {
       .get(`employee/past-reservations/all?top=4&skip=${skip}`)
       .then(({ data }) => {
         setTotalCount(data.totalCount);
-        sortResStruct(data.values);
-        getAllPastReservations();
+        sortResStruct(data.values, null);
       })
       .catch((err) => {
         console.log(err.response);
@@ -294,7 +328,7 @@ const ReservationList = () => {
     api
       .get(`employee/past-reservations/all`)
       .then(({ data }) => {
-        setAllPastReservations(data.values);
+        sortResStruct(data.values, false);
       })
       .catch((err) => {
         console.log(err.response);
@@ -302,8 +336,9 @@ const ReservationList = () => {
   };
 
   const filterReservationByName = () => {
+    setCurrentPage(1);
     if (!filterInput.length) {
-      setCurrentPage(1);
+      setInvalidSearchInput(false);
       tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
       return;
     }
@@ -317,32 +352,27 @@ const ReservationList = () => {
       allSelectedReservations = allFutureReservations;
     }
 
-    const filteredReservations = allSelectedReservations.filter(
-      (reservation) =>
-        reservation.employee.firstName
-          .toLowerCase()
-          .includes(filterInput.toLowerCase()) ||
-        reservation.employee.surname
-          .toLowerCase()
-          .includes(filterInput.toLowerCase())
+    const filteredReservations = allSelectedReservations.filter((reservation) =>
+      reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
     );
 
     if (filteredReservations.length) {
       setCurrentPage(1);
       setTotalCount(filteredReservations.length);
-      sortResStruct(filteredReservations);
+      setReservations(filteredReservations);
+      setLoadingTableData(false);
       setInvalidSearchInput(false);
     } else {
       setCurrentPage(1);
-      setTotalCount(null);
+      setTotalCount(1);
       setLoadingTableData(false);
       setInvalidSearchInput(true);
     }
   };
 
   const filterReservationByOffice = () => {
+    setCurrentPage(1);
     if (!filterOffice.length) {
-      setCurrentPage(1);
       tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
       return;
     }
@@ -355,31 +385,32 @@ const ReservationList = () => {
     } else {
       allSelectedReservations = allFutureReservations;
     }
+
     const filteredReservations = allSelectedReservations.filter((reservation) =>
-      reservation.desk.office.name.includes(filterOffice)
+      reservation.office.includes(filterOffice)
     );
 
     if (filteredReservations.length) {
       setCurrentPage(1);
       setTotalCount(filteredReservations.length);
-      sortResStruct(filteredReservations);
+      setReservations(filteredReservations);
+      setLoadingTableData(false);
     } else {
       setCurrentPage(1);
-      setTotalCount(null);
+      setTotalCount(1);
       setLoadingTableData(false);
     }
   };
 
   const onPageChanged = (pageNumber) => {
+    const currentPage = pageNumber.current;
+    setCurrentPage(currentPage);
+
     if (filterOffice.length || filterInput.length) {
-      setCurrentPage(1);
-      tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
       return;
     }
 
-    const currentPage = pageNumber.current;
     let skipPages = 0;
-    setCurrentPage(currentPage);
     if (tabKey === "past") {
       skipPages = (currentPage - 1) * 4;
       getPastReservations(skipPages);
@@ -413,6 +444,8 @@ const ReservationList = () => {
 
   useEffect(() => {
     getAllOffices();
+    getAllFutureReservations();
+    getAllPastReservations();
   }, []);
 
   useEffect(() => {
@@ -451,7 +484,11 @@ const ReservationList = () => {
               <Card
                 title={
                   <Title
-                    reservations={reservations}
+                    reservations={
+                      tabKey === "past"
+                        ? allPastReservations
+                        : allFutureReservations
+                    }
                     columns={columnsForExcel}
                     sheet={excelSheet}
                   />
@@ -461,11 +498,15 @@ const ReservationList = () => {
                 onTabChange={(key) => {
                   setTabKey(key);
                   if (key === "past") {
+                    setFilterOffice("");
+                    setFilterInput("");
                     setTotalCount(0);
                     setCurrentPage(1);
                     getPastReservations(0);
                     setExcelSheet("Past Reservation List");
                   } else {
+                    setFilterOffice("");
+                    setFilterInput("");
                     setTotalCount(0);
                     setCurrentPage(1);
                     getFutureReservations(0);
@@ -481,6 +522,7 @@ const ReservationList = () => {
                         showSearch
                         data-cy="office-branch-select"
                         defaultValue="Select office"
+                        value={filterOffice}
                         onChange={(officeName) => setFilterOffice(officeName)}
                         style={{ width: 200 }}
                       >
@@ -524,7 +566,7 @@ const ReservationList = () => {
                     columns={tabKey === "past" ? pastColumns : futureColumns}
                     dataSource={reservations.filter(
                       (reservation) =>
-                        reservation.desk.office.name.includes(filterOffice) &&
+                        reservation.office.includes(filterOffice) &&
                         reservation.employee
                           .toLowerCase()
                           .includes(filterInput.toLowerCase())

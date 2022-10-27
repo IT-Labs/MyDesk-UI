@@ -56,10 +56,98 @@ const Dashboard = () => {
   const [selectedOffice, setSelectedOffice] = useState({});
   const currentRange = [moment(), moment()];
 
-  useEffect(() => {
-    fetchOfficeData();
-    fetchReviews();
-  }, []);
+  /* Creating a pie chart. */
+  const config = {
+    appendPadding: 10,
+    data: deskData,
+    angleField: "value",
+    colorField: "type",
+    radius: 1,
+    innerRadius: 0.6,
+    label: {
+      type: "inner",
+      offset: "-50%",
+      content: "{value}",
+      style: {
+        textAlign: "center",
+        fontSize: 20,
+      },
+    },
+    interactions: [
+      {
+        type: "element-selected",
+      },
+      {
+        type: "element-active",
+      },
+    ],
+    statistic: {
+      title: false,
+      content: {
+        style: {
+          whiteSpace: "pre-wrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        },
+        content: `${allDesks ? allDesks : "0"}`,
+      },
+    },
+    theme: {
+      colors10: ["#2DCE98", "#F53C56"],
+    },
+  };
+
+  /* Creating a table with 4 columns. */
+  const colums = [
+    {
+      title: "Review",
+      dataIndex: "review",
+      key: 1,
+      ellipsis: true,
+      width: "45%",
+    },
+    {
+      title: "Review output",
+      dataIndex: "reviewOutput",
+      key: 2,
+      width: "90px",
+      align: "center",
+    },
+    {
+      title: "Desk number",
+      dataIndex: ["reservation", "desk", "indexForOffice"],
+      key: 3,
+      align: "center",
+      width: "90px",
+      render: (text, data, id) => {
+        return (
+          <p style={{ fontSize: "0.9rem" }}>
+            Desk [{data.reservation.desk.indexForOffice}]
+          </p>
+        );
+      },
+    },
+    {
+      title: "Options",
+      dataIndex: "options",
+      key: 4,
+      align: "center",
+      width: "150px",
+      render: (text, data, id) => {
+        return (
+          <Button
+            onClick={() => {
+              setWrittenReview(data.review);
+              setActiveModal(true);
+            }}
+            className={styles.reviewBtn}
+          >
+            Show Review
+          </Button>
+        );
+      },
+    },
+  ];
 
   /**
    * If the start and end dates of the item are within the start and end dates of the range, return
@@ -85,8 +173,12 @@ const Dashboard = () => {
    */
   const checkAvailable = (reservations, range) => {
     if (reservations.length > 0) {
-      reservations.some((reservation) => findAvailable(reservation, range));
-      count.current = count.current + 1;
+      let flag = reservations.some((reservation) =>
+        findAvailable(reservation, range)
+      );
+      if (flag) {
+        count.current = count.current + 1;
+      }
     }
   };
 
@@ -102,7 +194,11 @@ const Dashboard = () => {
     setDesks(deskInfo);
 
     deskInfo.forEach((item) => {
-      checkAvailable(item.reservations, range);
+      if (item.category.unavailable) {
+        count.current = count.current + 1;
+      } else {
+        checkAvailable(item.reservations, range);
+      }
     });
 
     const unavailableData = count.current;
@@ -298,98 +394,10 @@ const Dashboard = () => {
     setReviews(filteredReviews);
   };
 
-  /* Creating a pie chart. */
-  const config = {
-    appendPadding: 10,
-    data: deskData,
-    angleField: "value",
-    colorField: "type",
-    radius: 1,
-    innerRadius: 0.6,
-    label: {
-      type: "inner",
-      offset: "-50%",
-      content: "{value}",
-      style: {
-        textAlign: "center",
-        fontSize: 20,
-      },
-    },
-    interactions: [
-      {
-        type: "element-selected",
-      },
-      {
-        type: "element-active",
-      },
-    ],
-    statistic: {
-      title: false,
-      content: {
-        style: {
-          whiteSpace: "pre-wrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        },
-        content: `${allDesks ? allDesks : "0"}`,
-      },
-    },
-    theme: {
-      colors10: ["#2DCE98", "#F53C56"],
-    },
-  };
-
-  /* Creating a table with 4 columns. */
-  const colums = [
-    {
-      title: "Review",
-      dataIndex: "review",
-      key: 1,
-      ellipsis: true,
-      width: "45%",
-    },
-    {
-      title: "Review output",
-      dataIndex: "reviewOutput",
-      key: 2,
-      width: "90px",
-      align: "center",
-    },
-    {
-      title: "Desk number",
-      dataIndex: ["reservation", "desk", "indexForOffice"],
-      key: 3,
-      align: "center",
-      width: "90px",
-      render: (text, data, id) => {
-        return (
-          <p style={{ fontSize: "0.9rem" }}>
-            Desk [{data.reservation.desk.indexForOffice}]
-          </p>
-        );
-      },
-    },
-    {
-      title: "Options",
-      dataIndex: "options",
-      key: 4,
-      align: "center",
-      width: "150px",
-      render: (text, data, id) => {
-        return (
-          <Button
-            onClick={() => {
-              setWrittenReview(data.review);
-              setActiveModal(true);
-            }}
-            className={styles.reviewBtn}
-          >
-            Show Review
-          </Button>
-        );
-      },
-    },
-  ];
+  useEffect(() => {
+    fetchOfficeData();
+    fetchReviews();
+  }, []);
 
   return (
     <>
