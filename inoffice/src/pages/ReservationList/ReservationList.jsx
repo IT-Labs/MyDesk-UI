@@ -16,7 +16,11 @@ import {
 } from "antd";
 import api from "../../helper/api";
 import styles from "./ReservationList.module.scss";
-import { FileSearchOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  FileSearchOutlined,
+  SearchOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import Loading from "../../components/Loading/Loading";
 import Title from "./Title";
@@ -43,6 +47,11 @@ const ReservationList = () => {
   const [tabKey, setTabKey] = useState("");
   const [toBeCancelled, setToBeCancelled] = useState(null);
   const [loadingTableData, setLoadingTableData] = useState(false);
+  const [loadingAllReservations, setLoadingAllReservations] = useState(true);
+  const [loadingAllFutureReservations, setLoadingAllFutureReservations] =
+    useState(false);
+  const [loadingAllPastReservations, setLoadingAllPastReservations] =
+    useState(false);
   const [skipPage, setSkipPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -222,8 +231,10 @@ const ReservationList = () => {
       setReservations(results);
       getImagesForRes(results, null);
     } else if (isAllFuture) {
+      setAllFutureReservations(results);
       getImagesForRes(results, true);
     } else {
+      setAllPastReservations(results);
       getImagesForRes(results, false);
     }
 
@@ -247,8 +258,10 @@ const ReservationList = () => {
       setReservations(results);
     } else if (isAllFuture) {
       setAllFutureReservations(results);
+      setLoadingAllFutureReservations(true);
     } else {
       setAllPastReservations(results);
+      setLoadingAllPastReservations(true);
     }
   };
 
@@ -379,6 +392,7 @@ const ReservationList = () => {
       setInvalidSearchInput(false);
       setIfNoData(false);
     } else {
+      setReservations(filteredReservations);
       setCurrentPage(1);
       setTotalCount(1);
       setLoadingTableData(false);
@@ -427,6 +441,7 @@ const ReservationList = () => {
       setLoadingTableData(false);
       setIfNoData(false);
     } else {
+      setReservations(filteredReservations);
       setIfNoData(true);
       setCurrentPage(1);
       setTotalCount(1);
@@ -501,6 +516,12 @@ const ReservationList = () => {
   }, [filterOffice]);
 
   useEffect(() => {
+    if (loadingAllFutureReservations && loadingAllPastReservations) {
+      setLoadingAllReservations(false);
+    }
+  }, [loadingAllFutureReservations, loadingAllPastReservations]);
+
+  useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -570,6 +591,8 @@ const ReservationList = () => {
                         value={filterOffice}
                         onChange={(officeName) => setFilterOffice(officeName)}
                         style={{ width: 200 }}
+                        loading={loadingAllReservations}
+                        disabled={loadingAllReservations}
                       >
                         <Select.Option key={0} value="">
                           All offices
@@ -590,6 +613,10 @@ const ReservationList = () => {
                         style={{ width: 200 }}
                         placeholder="Search by name"
                         data-cy="search-by-name-input"
+                        disabled={loadingAllReservations}
+                        prefix={
+                          loadingAllReservations ? <LoadingOutlined /> : null
+                        }
                         value={filterInput}
                         onChange={(e) =>
                           setFilterInput(e.target.value.replace(/\s+/, ""))
@@ -606,50 +633,24 @@ const ReservationList = () => {
                     </Tooltip>
                   </div>
                 </div>
-                {reservations.length > 0 ? (
-                  <Table
-                    columns={tabKey === "past" ? pastColumns : futureColumns}
-                    dataSource={reservations.filter(
-                      (reservation) =>
-                        reservation.office.includes(filterOffice) &&
-                        reservation.employee
-                          .toLowerCase()
-                          .includes(filterInput.toLowerCase())
-                    )}
-                    pagination={{
-                      pageSize: 4,
-                      total: totalCount,
-                      current: currentPage,
-                      position: ["bottomRight"],
-                      showSizeChanger: false,
-                    }}
-                    loading={{
-                      spinning: loadingTableData,
-                      indicator: <Loading />,
-                    }}
-                    onChange={onPageChanged}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 444,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        height: 200,
-                      }}
-                    >
-                      <Loading />
-                      <p>Loading, please wait</p>
-                    </div>
-                  </div>
-                )}
+
+                <Table
+                  columns={tabKey === "past" ? pastColumns : futureColumns}
+                  dataSource={reservations}
+                  pagination={{
+                    pageSize: 4,
+                    total: totalCount,
+                    current: currentPage,
+                    position: ["bottomRight"],
+                    showSizeChanger: false,
+                  }}
+                  loading={{
+                    spinning: loadingTableData,
+                    indicator: <Loading />,
+                  }}
+                  onChange={onPageChanged}
+                />
+
                 <Modal
                   maskClosable={false}
                   title="Cancel user's reservation?"
