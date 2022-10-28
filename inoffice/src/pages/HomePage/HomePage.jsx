@@ -80,7 +80,6 @@ const Home = () => {
       ...selectedCategories,
       singleMonitor: !singleMonitor,
     });
-    setSingleMonitor(!singleMonitor);
   };
 
   const clickDualMonitor = () => {
@@ -181,9 +180,8 @@ const Home = () => {
     sendReservation(data);
   };
 
-  useEffect(() => {}, [selectValue]);
-
-  const changeVal = (e) => {
+  const filterByAvailability = (e) => {
+    setEmployeeSearch("");
     setSelectValue(e);
   };
 
@@ -259,8 +257,10 @@ const Home = () => {
     dispatch(getAvatar());
   }, []);
 
+  useEffect(() => {}, [selectValue]);
+
   useEffect(() => {
-    changeVal(null);
+    filterByAvailability(null);
     setSingleMonitor(false);
     setDualMonitor(false);
     setNearWindow(false);
@@ -294,14 +294,7 @@ const Home = () => {
                   />
                 </div>
               </div>
-              <Col
-                className={`${styles.officeImgCol} ${styles.cardColColor}`}
-                // style={{
-                //   width: "100%",
-                //   display: "flex",
-                //   justifyContent: "center",
-                // }}
-              >
+              <Col className={`${styles.officeImgCol} ${styles.cardColColor}`}>
                 <OfficeImage officeid={officeid} />
               </Col>
             </Col>
@@ -345,7 +338,7 @@ const Home = () => {
                     className={styles.inputSize}
                     defaultValue={selectValue}
                     value={selectValue}
-                    onChange={changeVal}
+                    onChange={filterByAvailability}
                   >
                     <Select.Option value={null} key={1}>
                       All

@@ -15,6 +15,7 @@ const CardsSection = (props) => {
   const [selectedCardInSection, setselectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
   const [allDesks, setAllDesks] = useState([]);
+  const [desksByAvailable, setDesksByAvailable] = useState([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
@@ -158,11 +159,20 @@ const CardsSection = (props) => {
       ? props.getEmployeeSearch(true)
       : props.getEmployeeSearch(false);
 
+    setDesksByAvailable(filteredDesks);
     setDesks(filteredDesks);
   };
 
   const filterByCategories = () => {
-    let filteredDesks = allDesks.filter(({ category }) => {
+    let desksNeedToFilter;
+
+    if (props.available === null && !props.employeeSearch.length) {
+      desksNeedToFilter = allDesks;
+    } else {
+      desksNeedToFilter = desksByAvailable;
+    }
+
+    let filteredDesks = desksNeedToFilter.filter(({ category }) => {
       if (
         !props.categories.nearWindow &&
         !props.categories.doubleMonitor &&
@@ -245,6 +255,16 @@ const CardsSection = (props) => {
   useEffect(() => {
     addAvailableProp(allDesks);
   }, [end]);
+
+  useEffect(() => {
+    if (
+      props?.categories?.singleMonitor ||
+      props?.categories?.doubleMonitor ||
+      props?.categories?.nearWindow
+    ) {
+      filterByCategories();
+    }
+  }, [desksByAvailable]);
 
   const getSpecificUser = ({ startDate, endDate }) => {
     if (start && end) {
