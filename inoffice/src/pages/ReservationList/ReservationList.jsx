@@ -31,6 +31,8 @@ const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
   const [allFutureReservations, setAllFutureReservations] = useState([]);
   const [allPastReservations, setAllPastReservations] = useState([]);
+  const [exportReservations, setExportReservations] = useState([]);
+  const [ifNoData, setIfNoData] = useState(false);
   const [filterInput, setFilterInput] = useState("");
   const [excelSheet, setExcelSheet] = useState("Future Reservation List");
   const [initRes, setInitRes] = useState([]);
@@ -336,66 +338,96 @@ const ReservationList = () => {
   };
 
   const filterReservationByName = () => {
+    let allSelectedReservations;
+    let filteredReservations;
     setCurrentPage(1);
-    if (!filterInput.length) {
+
+    if (!filterInput.length && !filterOffice.length) {
       setInvalidSearchInput(false);
       tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
+      onExportReservation([]);
+      setIfNoData(false);
       return;
     }
 
     setLoadingTableData(true);
 
-    let allSelectedReservations;
     if (tabKey === "past") {
       allSelectedReservations = allPastReservations;
     } else {
       allSelectedReservations = allFutureReservations;
     }
 
-    const filteredReservations = allSelectedReservations.filter((reservation) =>
-      reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
-    );
+    if (!filterOffice.length) {
+      filteredReservations = allSelectedReservations.filter((reservation) =>
+        reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    } else {
+      filteredReservations = allSelectedReservations.filter(
+        (reservation) =>
+          reservation.office.includes(filterOffice) &&
+          reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    }
 
     if (filteredReservations.length) {
       setCurrentPage(1);
       setTotalCount(filteredReservations.length);
       setReservations(filteredReservations);
+      onExportReservation(filteredReservations);
       setLoadingTableData(false);
       setInvalidSearchInput(false);
+      setIfNoData(false);
     } else {
       setCurrentPage(1);
       setTotalCount(1);
       setLoadingTableData(false);
       setInvalidSearchInput(true);
+      setIfNoData(true);
     }
   };
 
   const filterReservationByOffice = () => {
+    let allSelectedReservations;
+    let filteredReservations;
     setCurrentPage(1);
-    if (!filterOffice.length) {
+
+    if (!filterInput.length && !filterOffice.length) {
       tabKey === "past" ? getPastReservations(0) : getFutureReservations(0);
+      onExportReservation([]);
+      setIfNoData(false);
       return;
     }
 
     setLoadingTableData(true);
 
-    let allSelectedReservations;
     if (tabKey === "past") {
       allSelectedReservations = allPastReservations;
     } else {
       allSelectedReservations = allFutureReservations;
     }
 
-    const filteredReservations = allSelectedReservations.filter((reservation) =>
-      reservation.office.includes(filterOffice)
-    );
+    if (!filterInput.length) {
+      filteredReservations = allSelectedReservations.filter((reservation) =>
+        reservation.office.includes(filterOffice)
+      );
+    } else {
+      filteredReservations = allSelectedReservations.filter(
+        (reservation) =>
+          reservation.office.includes(filterOffice) &&
+          reservation.employee.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    }
 
     if (filteredReservations.length) {
       setCurrentPage(1);
       setTotalCount(filteredReservations.length);
       setReservations(filteredReservations);
+      onExportReservation(filteredReservations);
       setLoadingTableData(false);
+      setIfNoData(false);
     } else {
+      setIfNoData(true);
       setCurrentPage(1);
       setTotalCount(1);
       setLoadingTableData(false);
@@ -421,6 +453,18 @@ const ReservationList = () => {
     }
   };
 
+  const onExportReservation = (reservationsData) => {
+    if (reservationsData.length) {
+      setExportReservations(reservationsData);
+    } else {
+      if (tabKey === "past") {
+        setExportReservations(allPastReservations);
+      } else {
+        setExportReservations(allFutureReservations);
+      }
+    }
+  };
+
   const cancelReservation = async (id) => {
     await api
       .delete("employee/reserve/" + id)
@@ -439,14 +483,18 @@ const ReservationList = () => {
   };
 
   useEffect(() => {
-    filterReservationByName();
-  }, [filterInput]);
-
-  useEffect(() => {
     getAllOffices();
     getAllFutureReservations();
     getAllPastReservations();
   }, []);
+
+  useEffect(() => {
+    onExportReservation([]);
+  }, [allFutureReservations, tabKey]);
+
+  useEffect(() => {
+    filterReservationByName();
+  }, [filterInput]);
 
   useEffect(() => {
     filterReservationByOffice();
@@ -484,13 +532,10 @@ const ReservationList = () => {
               <Card
                 title={
                   <Title
-                    reservations={
-                      tabKey === "past"
-                        ? allPastReservations
-                        : allFutureReservations
-                    }
+                    reservations={exportReservations}
                     columns={columnsForExcel}
                     sheet={excelSheet}
+                    ifNoData={ifNoData}
                   />
                 }
                 className={styles.resList}

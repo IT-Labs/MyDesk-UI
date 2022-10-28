@@ -3,7 +3,7 @@ import { Excel } from "antd-table-saveas-excel";
 import { Button } from "antd";
 import styles from "./ReservationList.module.scss";
 
-const Title = ({ reservations, columns, sheet }) => {
+const Title = ({ reservations, columns, sheet, ifNoData }) => {
   const handleClick = () => {
     const excel = new Excel();
     excel
@@ -18,8 +18,9 @@ const Title = ({ reservations, columns, sheet }) => {
     <div className={styles.title}>
       <p style={{ fontSize: "1.125rem" }}>Reservation list</p>
       <Button
-        className={styles.cancelBtn}
+        className={ifNoData ? null : styles.cancelBtn}
         style={{ width: 120, height: 40 }}
+        disabled={ifNoData}
         onClick={handleClick}
       >
         Export Data
