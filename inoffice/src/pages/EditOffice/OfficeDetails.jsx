@@ -85,7 +85,9 @@ const OfficeDetails = ({ props }) => {
       .catch((error) => {
         console.log(error.response.data);
         setIsLoading(false);
-        openError("It seems there was an error while saving");
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError("It seems there was an error while saving");
       });
   };
 
@@ -164,11 +166,14 @@ const OfficeDetails = ({ props }) => {
         openNotification("You have successfully added new entities");
         getDesks();
       })
-      .catch((err) => {
-        openError(
-          "An error occurred while updating the entities, please try again"
-        );
-        console.log(err);
+      .catch((error) => {
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(
+              "An error occurred while updating the entities, please try again"
+            );
+
+        console.log(error.response);
       });
   };
 
@@ -180,10 +185,12 @@ const OfficeDetails = ({ props }) => {
         getDesks();
         openNotification("You have successfully deleted the entity");
       })
-      .catch(() => {
-        openError(
-          "An error occurred while deleting the entity, please try again"
-        );
+      .catch((error) => {
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(
+              "An error occurred while deleting the entity, please try again"
+            );
       });
   };
 

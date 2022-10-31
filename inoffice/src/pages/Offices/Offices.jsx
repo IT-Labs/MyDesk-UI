@@ -36,9 +36,12 @@ const Offices = () => {
         openNotification("You have successfully deleted the selected office");
       })
       .catch((error) => {
-        openError(
-          "An error occurred while deleting the office, please try again"
-        );
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(
+              "An error occurred while deleting the office, please try again"
+            );
+
         console.log(error);
       });
   };
