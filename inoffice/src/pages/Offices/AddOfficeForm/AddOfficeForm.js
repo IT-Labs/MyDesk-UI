@@ -68,7 +68,9 @@ const AddOfficeForm = () => {
         window.location = "/admin/offices";
       })
       .catch((err) => {
-        openError(err.response.data);
+        err.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(err.response.data);
       });
   };
 

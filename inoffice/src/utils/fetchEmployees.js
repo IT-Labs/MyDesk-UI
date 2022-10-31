@@ -11,8 +11,10 @@ export const fetchEmployees = async (api, dispatch, user) => {
       dispatch(setEmployees(filteredData));
     })
     .catch((err) => {
-      openError(
-        "We could not get employees, you cannot reserve for other people."
-      );
+      err.response.status === 401
+        ? openError("Your session has expired, please login again.")
+        : openError(
+            "We could not get employees, you cannot reserve for other people."
+          );
     });
 };

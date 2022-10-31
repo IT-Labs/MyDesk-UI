@@ -154,7 +154,9 @@ const Home = () => {
       })
       .catch((error) => {
         console.log(error.response);
-        openError(error.response.data.ErrorMessage);
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(error.response.data.ErrorMessage);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);
@@ -214,7 +216,9 @@ const Home = () => {
       })
       .catch((error) => {
         console.log(error.response);
-        openError(error.response.data.ErrorMessage);
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(error.response.data.ErrorMessage);
         setDates([]);
         setSelectedCard([]);
         setStartDate([]);

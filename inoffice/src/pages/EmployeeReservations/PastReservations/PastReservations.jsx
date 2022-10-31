@@ -96,9 +96,12 @@ const PastReservations = ({ officeName }) => {
         openNotification("Thank you. Your review has been successfully saved.");
       })
       .catch((error) => {
-        openError(
-          "An error occurred while saving your review, please try again"
-        );
+        error.response.status === 401
+          ? openError("Your session has expired, please login again.")
+          : openError(
+              "An error occurred while saving your review, please try again"
+            );
+
         setReview("");
         setLoading(false);
         setVisible(false);
