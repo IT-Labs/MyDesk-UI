@@ -1,15 +1,122 @@
 trigger:
+  - feature/*
+  - bug/*
+  - story/*
   - main
 
 pool:
   vmImage: ubuntu-latest
+  
+variables:
+  artifactName: 'drop'
+  serviceConnection: 'ITL Gold'
+  apiUrl: https://inofficeapinet-dev.azurewebsites.net
+  deployment_token_dev: '507e0b32e861f6806eb52709ec4fa5544d86bba4ffdd4bf15cd44524f9c8ef0c2-13c52ad2-1cb1-4b09-b5e6-de7261f7d83f003160518'
 
-steps:
-  - checkout: self
-    submodules: true
+stages:
 
-  - task: AzureStaticWebApp@0
-    inputs:
-      app_location: "inoffice"
-      output_location: "build"
-      azure_static_web_apps_api_token: $(deployment_token)
+
+- stage: PublishArtifact
+
+  jobs:
+  - job: build
+    displayName: Build app
+    steps:
+    - task: CopyFiles@2
+      displayName: 'Copy Build Output'
+      inputs:
+          Contents: 'inoffice/**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'               
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish to Azure Pipelines'
+      inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: 'www'
+          
+
+- stage: Dev
+  displayName: Deploy to dev environment 
+  dependsOn: PublishArtifact
+  condition: succeeded()
+
+  jobs:
+    - deployment: deploy
+      displayName: Deploy to dev
+      environment: development
+      variables:
+      - group: mydesk-fe-dev
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+
+            - download: none
+            - checkout: none
+
+            - task: DownloadBuildArtifacts@1
+              displayName: Download artifacts
+              inputs:
+                buildType: current
+                downloadType: single
+                artifactName: www
+                downloadPath: $(System.ArtifactsDirectory)
+
+            - task: AzureStaticWebApp@0
+              displayName: Deploy to dev
+              inputs:
+                app_location: inoffice
+                skip_app_build: false
+                skip_api_build: false
+                verbose: true
+                azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
+                deployment_environment: development
+                workingDirectory: $(System.ArtifactsDirectory)/www
+              env:
+                REACT_APP_API_URL: $(REACT_APP_API_URL)
+                REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
+                REACT_APP_TENANT_ID: $(REACT_APP_TENANT_ID)
+                REACT_APP_URL: $(REACT_APP_URL)
+
+
+- stage: Production
+  displayName: Deploy to production environment 
+  dependsOn: Dev
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+  jobs:
+    - deployment: deploy
+      displayName: Deploy to production
+      environment: development
+      variables:
+      - group: mydesk-fe-production
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+
+            - download: none
+            - checkout: none
+
+            - task: DownloadBuildArtifacts@1
+              displayName: Download artifacts
+              inputs:
+                buildType: current
+                downloadType: single
+                artifactName: www
+                downloadPath: $(System.ArtifactsDirectory)
+
+            - task: AzureStaticWebApp@0
+              displayName: Deploy to production
+              inputs:
+                app_location: inoffice
+                skip_app_build: false
+                skip_api_build: false
+                verbose: true
+                azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
+                workingDirectory: $(System.ArtifactsDirectory)/www
+              env:
+                REACT_APP_API_URL: $(REACT_APP_API_URL)
+                REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
+                REACT_APP_TENANT_ID: $(REACT_APP_TENANT_ID)
+                REACT_APP_URL: $(REACT_APP_URL)
+

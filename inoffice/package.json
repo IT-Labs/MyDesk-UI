@@ -33,6 +33,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "start:production": "env-cmd -f .env.production react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
@@ -80,7 +81,6 @@
     "@storybook/react": "^6.5.9",
     "@storybook/testing-library": "^0.0.13",
     "babel-plugin-named-exports-order": "^0.0.2",
-    "cypress": "^10.8.0",
     "prop-types": "^15.8.1",
     "web-vitals": "^2.1.4",
     "webpack": "^5.73.0"
