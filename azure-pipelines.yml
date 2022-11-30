@@ -16,19 +16,32 @@ variables:
 stages:
 
 
-- stage: PublishArtifact
+- stage: Build
 
   jobs:
   - job: build
     displayName: Build app
     steps:
+    
+    - script: npm install
+      displayName: 'Install Dependencies'
+      condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
+      workingDirectory: '$(System.DefaultWorkingDirectory)/inoffice'
+     
+    - script: npm run build
+      displayName: 'Build application'
+      condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
+      workingDirectory: '$(System.DefaultWorkingDirectory)/inoffice'
+    
     - task: CopyFiles@2
       displayName: 'Copy Build Output'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
       inputs:
           Contents: 'inoffice/**'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'               
     - task: PublishBuildArtifacts@1
       displayName: 'Publish to Azure Pipelines'
+      condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
       inputs:
           PathtoPublish: $(Build.ArtifactStagingDirectory)
           ArtifactName: 'www'
@@ -36,8 +49,8 @@ stages:
 
 - stage: Dev
   displayName: Deploy to dev environment 
-  dependsOn: PublishArtifact
-  condition: succeeded()
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
   jobs:
     - deployment: deploy
@@ -86,7 +99,7 @@ stages:
   jobs:
     - deployment: deploy
       displayName: Deploy to production
-      environment: development
+      environment: production
       variables:
       - group: mydesk-fe-production
       strategy:
