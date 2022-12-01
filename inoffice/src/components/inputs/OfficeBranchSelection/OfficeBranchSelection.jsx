@@ -15,12 +15,16 @@ const Officebranchselection = (props) => {
       setLoading(true);
       try {
         const { data: response } = await api.get("employee/offices");
+
         const sorted = response.sort((a, b) => {
           return a.name < b.name ? -1 : 1;
         });
 
-        props.onOfficebranchChange(sorted[0].id);
-        setData(sorted);
+        if (response.length) {
+          props.onOfficebranchChange(sorted[0].id);
+          setData(sorted);
+        }
+
       } catch (error) {
         console.error(error.message);
       }
@@ -48,7 +52,7 @@ const Officebranchselection = (props) => {
             data-cy={props.dataCy}
             onChange={handleChange}
             placeholder="Select office-branch"
-            defaultValue={data[0].name}
+            defaultValue={data.length ? data[0].name : null}
             style={{ width: "18.75rem" }}
           >
             {data.map((item) => (
