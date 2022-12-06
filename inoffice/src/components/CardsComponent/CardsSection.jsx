@@ -54,6 +54,9 @@ const CardsSection = (props) => {
   };
 
   const getAllDesks = async () => {
+    if (!props.officeid) {
+      return;
+    }
     await api
       .get(`employee/office-desks/${props.officeid}`, {
         signal: controller.signal,
@@ -79,6 +82,9 @@ const CardsSection = (props) => {
   }
 
   const fetchData = async (skipProp) => {
+    if (!props.officeid) {
+      return;
+    }
     await api
       .get(`employee/office-desks/${props.officeid}/?top=20&skip=${skipProp}`, {
         signal: controller.signal,
