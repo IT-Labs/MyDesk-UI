@@ -28,17 +28,16 @@ const CardsSection = (props) => {
   const selectCard = (e) => {
     let isAvailable = true;
     const res = e.reservations;
-    if (res.length > 0) {
+    if (res.length && end !== null) {
       res.forEach((item) => {
         const availability = findAvailable(item, start, end);
         if (!availability || !e.available) {
           isAvailable = false;
         }
       });
-    } else isAvailable = true;
+    }
 
-    const availability = isAvailable ? true : false;
-    props.selectedCard(e, availability);
+    props.selectedCard(e, isAvailable);
     setselectedCardInSection(e);
   };
 
@@ -92,6 +91,7 @@ const CardsSection = (props) => {
       .then((response) => {
         if (skipProp === 0) {
           setDesks(response.data);
+          setHasMore(true);
           setLoading(false);
         } else {
           setDesks([...dataDesks, ...response.data]);

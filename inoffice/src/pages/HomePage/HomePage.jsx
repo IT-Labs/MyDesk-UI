@@ -49,7 +49,7 @@ const Home = () => {
   const [dates, setDates] = useState([]);
   const [isAvailable, setIsAvailable] = useState(true);
   const [employeeSearch, setEmployeeSearch] = useState("");
-  const [defValue, setDefValue] = useState("Reserve for Coworker");
+  const [defCoWorkerValue, setDefCoWorkerValue] = useState("Select a CoWorker");
   const [selectedCategories, setSelectedCategories] = useState({});
   const [singleMonitor, setSingleMonitor] = useState(false);
   const [dualMonitor, setDualMonitor] = useState(false);
@@ -59,6 +59,7 @@ const Home = () => {
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
   const [invalidSearchInput, setInvalidSearchInput] = useState(false);
   const [forCoworker, setForCoworker] = useState(false);
+  const [disableReserveBtn, setDisableReserveBtn] = useState(true);
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
   const user = useSelector((state) => state.user.decodedUser);
@@ -99,7 +100,7 @@ const Home = () => {
   };
 
   async function changeofficebranch(value) {
-    setDefValue("Reserve for Co-worker");
+    setDefCoWorkerValue("Select a CoWorker");
     setofficeid(value);
     setForCoworker(false);
   }
@@ -213,6 +214,7 @@ const Home = () => {
         setEndDate([]);
         openNotification("You have successfully reserved for your co-worker");
         setShowReserveForCoworker(false);
+        setForCoworker(false);
       })
       .catch((error) => {
         console.log(error.response);
@@ -241,15 +243,16 @@ const Home = () => {
 
   const setCoworker = (val) => {
     if (val.length === 0) {
-      setDefValue("");
+      setDefCoWorkerValue("Select a CoWorker");
       setSelectedCoworker({});
       return;
     }
     const foundEmployee = employees.find(
       (item) => `${item.firstName} ${item.surname} ${item.jobTitle}` === val
     );
+
     const name = val.split(" ");
-    setDefValue(`${name[0]} ${name[1]}`);
+    setDefCoWorkerValue(`${name[0]} ${name[1]}`);
     setSelectedCoworker(foundEmployee);
   };
 
@@ -261,6 +264,11 @@ const Home = () => {
     dispatch(getAvatar());
   }, []);
 
+  useEffect(() => {
+    setSelectedCoworker({});
+    setDefCoWorkerValue("Select a CoWorker");
+  }, [forCoworker]);
+
   useEffect(() => {}, [selectValue]);
 
   useEffect(() => {
@@ -270,6 +278,14 @@ const Home = () => {
     setNearWindow(false);
     setSelectedCategories({});
   }, [dates]);
+
+  useEffect(() => {
+    const btnEnable =
+      (selectedCard.length === 0 || !isAvailable || dates.length === 0)
+      || (forCoworker && Object.keys(selectedCoworker).length === 0);
+
+    setDisableReserveBtn(btnEnable);
+  }, [dates, selectedCard, selectedCoworker, endDateRes, isAvailable]);
 
   return (
     <Layout className={styles.layout}>
@@ -462,15 +478,15 @@ const Home = () => {
                   checked={forCoworker}
                 />
                 <Select
-                  value={defValue}
+                  value={defCoWorkerValue}
                   data-cy="coworker-select"
                   placement={"topRight"}
                   className={`${styles.inputSize} ${styles.reserveForCoworker}`}
                   showSearch
                   onChange={setCoworker}
                   disabled={!forCoworker}
+                  placeholder="Select a CoWorker"
                 >
-                  <Select.Option value="">None</Select.Option>
                   {employees &&
                     employees.map((item) => (
                       <Select.Option
@@ -490,26 +506,7 @@ const Home = () => {
                 <Button
                   block
                   data-cy="reserve-button"
-                  disabled={
-                    (selectedCard.length === 0 || !isAvailable
-                      ? true
-                      : false) ||
-                    (startDateRes.length === 0 || endDateRes.length === 0
-                      ? true
-                      : false) ||
-                    (((selectedCard.length === 0 || !isAvailable
-                      ? true
-                      : false) ||
-                      (startDateRes.length === 0 || endDateRes.length === 0
-                        ? true
-                        : false)) &&
-                    forCoworker &&
-                    Object.keys(selectedCoworker).length === 0
-                      ? true
-                      : false) ||
-                    selectedCard.categories?.unavailable ||
-                    defValue.length === 0
-                  }
+                  disabled={disableReserveBtn}
                   onClick={() => checkTypeOfReservation()}
                   className={`${styles.buttons} ${
                     forCoworker ? styles.orangeBtn : styles.tealBtn
