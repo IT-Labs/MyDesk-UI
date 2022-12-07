@@ -1,7 +1,7 @@
 import React from "react";
-import AddOfficeContainer from "./AddOfficeContainer/AddOfficeContainer";
+import AddUsersContainer from "./AddUsersContainer/AddUsersContainer";
 
-const Title = ({ addOfficeText, onSubmit }) => {
+const Title = ({ officeName, addUserTextBtn, onSubmit }) => {
   return (
     <div
       style={{
@@ -10,10 +10,10 @@ const Title = ({ addOfficeText, onSubmit }) => {
         alignItems: "center",
       }}
     >
-      <p style={{ fontSize: "1.125rem" }}>Offices</p>
-      <AddOfficeContainer
+      <p style={{ fontSize: "1.125rem" }}>{officeName}</p>
+      <AddUsersContainer
         id="addButton"
-        addOfficeText={addOfficeText}
+        addUserTextBtn={addUserTextBtn}
         onSubmit={onSubmit}
       />
     </div>

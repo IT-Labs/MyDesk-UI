@@ -1,0 +1,9 @@
+@import "../Offices/Offices.css";
+
+.assignAsAdminButton {
+    display:flex;
+    justify-content: space-between;
+    border-radius: 17px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }

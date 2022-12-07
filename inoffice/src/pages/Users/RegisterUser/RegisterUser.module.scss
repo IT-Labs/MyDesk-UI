@@ -1,0 +1,32 @@
+@import "../../../sass/abstracts/variables";
+@import "../../../components/LoginForm/Login.module.scss";
+
+.login {
+  height: 555px;
+}
+
+.form {
+  margin-top: -10px;
+}
+
+.register {
+  margin-top: -25px;
+}
+
+.alert {
+  top: -10px;
+  height: 30px;
+}
+
+.input {
+  height: 32px;
+}
+
+.form {
+  padding: 0 40px;
+}
+
+.title > p {
+  position: relative;
+  top: -15px;
+}

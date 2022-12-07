@@ -1,7 +1,8 @@
 import { openError } from "../components/notification/Notification";
 import { setEmployees } from "../redux/Employees/employees";
+import api from "../helper/api";
 
-export const fetchEmployees = async (api, dispatch, user) => {
+export const fetchEmployees = async (dispatch, user) => {
   await api
     .get("employee/all")
     .then(({ data }) => {

@@ -1,22 +1,20 @@
 import React from "react";
 import { Button } from "antd";
 
-const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
+const AddUserButton = ({ addUserTextBtn, buttonRef, showModal }) => {
   return (
     <Button
       className="btn"
-      data-cy="addoffice-button"
       block
       onClick={() => {
-        // window.location = "/admin/addoffice";
         showModal();
       }}
       id="addButton"
       ref={buttonRef}
       type="primary"
     >
-      {addOfficeText}
+      {addUserTextBtn}
     </Button>
   );
 };
-export default Trigger;
+export default AddUserButton;

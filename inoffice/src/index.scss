@@ -191,20 +191,26 @@ p.lorem-text {
   overflow: hidden;
   margin-right: 17px;
 }
-#addOffice {
+
+#addButton {
   margin-top: 1%;
   margin-right: 1%;
   display: inline-block;
+  width: 133px;
+  margin-right: 23px;
 }
+
 .formButton {
   margin-right: 30px;
   display: inline-block;
 }
+
 h1 {
   margin-left: 1%;
   font-size: 3em;
   display: inline-block;
 }
+
 .editButton {
   float: right;
   margin-right: 10px;
@@ -225,6 +231,7 @@ h1 {
     }
   }
 }
+
 .deleteButton {
   color: white;
   float: right;
@@ -240,9 +247,11 @@ h1 {
 .uploadOfficePlan {
   color: white;
 }
+
 .list {
   background-color: white;
 }
+
 .conferenceRoomCapacity {
   float: right;
   margin-right: 10px;

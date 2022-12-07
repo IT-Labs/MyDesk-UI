@@ -19,7 +19,7 @@ const UserSearch = () => {
   const { decodedUser } = useSelector((state) => state.user);
 
   const getUsers = async () => {
-    fetchEmployees(api, dispatch, notification, decodedUser);
+    fetchEmployees(dispatch, notification, decodedUser);
   };
 
   const sortFuture = (res) => {

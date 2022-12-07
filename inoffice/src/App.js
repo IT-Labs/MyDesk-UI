@@ -10,11 +10,10 @@ import { useDispatch } from "react-redux";
 import { setDecodedUser } from "./redux/User/user";
 
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
-
 const Home = lazy(() => import("./pages/HomePage/HomePage"));
 const Offices = lazy(() => import("./pages/Offices/Offices"));
+const Users = lazy(() => import("./pages/Users/Users"));
 const NoPermissions = lazy(() => import("./pages/NoPermissions/NoPermissions"));
-
 const ReservationList = lazy(() =>
   import("./pages/ReservationList/ReservationList")
 );
@@ -78,6 +77,12 @@ const App = () => {
               />
             }
           />
+
+          <Route
+            path="/admin/users"
+            element={<PrivateRoute component={Users} compRoles={["ADMIN"]} />}
+          />
+
           <Route path="/denied" element={<NoPermissions />} />
         </Routes>
       </div>

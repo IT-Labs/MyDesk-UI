@@ -104,6 +104,11 @@ const Sidebar = (props) => {
               </Link>
             </Tooltip>
           </Menu.Item>
+          <Menu.Item key="6" icon={<FeatherIcon icon="users" />}>
+            <Tooltip title="Users">
+              <Link to={"/admin/users"}>{!collapsed && <>Users</>}</Link>
+            </Tooltip>
+          </Menu.Item>
         </Menu>
       </Sider>
     );

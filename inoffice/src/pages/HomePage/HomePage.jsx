@@ -131,7 +131,7 @@ const Home = () => {
   };
 
   const getUsers = async () => {
-    fetchEmployees(api, dispatch, user);
+    fetchEmployees(dispatch, user);
   };
 
   useEffect(() => {
