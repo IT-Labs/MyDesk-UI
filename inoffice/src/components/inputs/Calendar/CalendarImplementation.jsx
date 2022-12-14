@@ -33,8 +33,8 @@ const CalendarImplementation = (props) => {
   }, []);
 
   return props.isHome ? (
-    <div style={{ position: "absolute", right: "0" }}>
-      <Space direction="vertical" size={12}>
+    <div style={{ width: "100%" }}>
+      <Space style={{ width: "100%" }} direction="vertical" size={12}>
         <RangePicker
           disabledDate={disabledDate}
           format={dateFormat}

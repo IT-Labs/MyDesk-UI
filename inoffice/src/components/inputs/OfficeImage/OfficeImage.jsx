@@ -28,13 +28,7 @@ const OfficeImage = (props) => {
   }, [props.officeid]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <div>
       {data ? (
         <Image
           src={data}

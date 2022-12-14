@@ -11,6 +11,7 @@ import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";
 import { Link, NavLink } from "react-router-dom";
+import styles from "./Sidebar.module.scss";
 
 const Sidebar = (props) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -43,7 +44,6 @@ const Sidebar = (props) => {
           overflow: "none",
           height: "100.7vh",
           position: "relative",
-          top: "-70px",
           left: 0,
         }}
         theme="light"
@@ -71,7 +71,11 @@ const Sidebar = (props) => {
           mode="inline"
           className="sideMenu"
         >
-          <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
+          <Menu.Item
+            key="0"
+            className={`${styles.sideBarLogo} sideBarLogo`}
+            style={{ width: width }}
+          >
             <div>
               <Tooltip title="Home" placement="bottom">
                 <NavLink id="myDeskLogo" to="/employee/home"></NavLink>

@@ -1,15 +1,14 @@
-import React, { Component } from "react";
-import UserHead from "../../components/Head/UserHead";
+import React from "react";
+import MainLayout from "../../layouts/MainLayout";
 
-export default class NoPermissions extends Component {
-  render() {
-    return (
-      <div>
-        <UserHead />
-        <h1 className="FormLogin" style={{ color: "red" }}>
-          401: Sorry, You Are Not Allowed to Access This Page
-        </h1>
+const NoPermissions = () => {
+  return (
+    <MainLayout isHome={true}>
+      <div className="acccess-denied-wrap">
+        <h1>401: Sorry, You Are Not Allowed to Access This Page</h1>
       </div>
-    );
-  }
-}
+    </MainLayout>
+  );
+};
+
+export default NoPermissions;

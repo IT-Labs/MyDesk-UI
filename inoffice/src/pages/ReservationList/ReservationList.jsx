@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
-import UserHeade from "../../components/Head/UserHead";
 import {
   Button,
   Card,
@@ -10,8 +9,6 @@ import {
   Select,
   Table,
   Tooltip,
-  Row,
-  Col,
   Alert,
 } from "antd";
 import api from "../../helper/api";
@@ -28,8 +25,8 @@ import {
   openError,
   openNotification,
 } from "../../components/notification/Notification";
-
 import placeholderAvatar from "../../assets/avatar.png";
+import MainLayout from "../../layouts/MainLayout";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -55,6 +52,7 @@ const ReservationList = () => {
   const [skipPage, setSkipPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const media = window.matchMedia("(max-width: 820px)");
 
   const futureColumns = [
     {
@@ -72,15 +70,17 @@ const ReservationList = () => {
               alignItems: "center",
             }}
           >
-            <img
-              src={record.avatar}
-              alt=""
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null;
-                currentTarget.src = placeholderAvatar;
-              }}
-              className={styles.avatar}
-            />
+            {!media.matches && (
+              <img
+                src={record.avatar}
+                alt=""
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null;
+                  currentTarget.src = placeholderAvatar;
+                }}
+                className={styles.avatar}
+              />
+            )}
             <span style={{ marginLeft: "15px" }}>{record.employee}</span>
           </div>
         );
@@ -96,7 +96,7 @@ const ReservationList = () => {
     {
       title: "Date",
       dataIndex: "date",
-      key: 3,
+      key: 4,
       width: "40px",
       sorter: {
         compare: (a, b) => {
@@ -112,8 +112,8 @@ const ReservationList = () => {
     {
       title: "Cancel",
       dataIndex: "cancel",
-      width: "10px",
-      key: 4,
+      width: "5px",
+      key: 5,
       render: (text, data, index) => {
         return (
           <Button
@@ -545,141 +545,133 @@ const ReservationList = () => {
   }));
 
   return (
-    <>
-      <Layout>
-        <UserHeade />
-        <Layout>
-          <Sidebar selected="4" />
-          <Content className={styles.content}>
-            <div style={{ width: "80%" }}>
-              <Card
-                title={
-                  <Title
-                    reservations={exportReservations}
-                    columns={columnsForExcel}
-                    sheet={excelSheet}
-                    ifNoData={ifNoData}
-                  />
-                }
-                className={styles.resList}
-                tabList={tabList}
-                onTabChange={(key) => {
-                  setTabKey(key);
-                  if (key === "past") {
-                    setFilterOffice("");
-                    setFilterInput("");
-                    setTotalCount(0);
-                    setCurrentPage(1);
-                    getPastReservations(0);
-                    setExcelSheet("Past Reservation List");
-                  } else {
-                    setFilterOffice("");
-                    setFilterInput("");
-                    setTotalCount(0);
-                    setCurrentPage(1);
-                    getFutureReservations(0);
-                    setExcelSheet("Future Reservation List");
-                  }
-                }}
-              >
-                <div className={styles.inputs}>
-                  <div>
-                    <SearchOutlined style={{ margin: 10 }} />
-                    <Tooltip title="Select which office you want to filter by">
-                      <Select
-                        showSearch
-                        data-cy="office-branch-select"
-                        defaultValue="Select office"
-                        value={filterOffice}
-                        onChange={(officeName) => setFilterOffice(officeName)}
-                        style={{ width: 200 }}
-                        loading={loadingAllReservations}
-                        disabled={loadingAllReservations}
-                      >
-                        <Select.Option key={0} value="">
-                          All offices
-                        </Select.Option>
-                        {offices.map(({ name, id }) => (
-                          <Select.Option key={id} value={name}>
-                            {name}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </Tooltip>
-                  </div>
-                  <div>
-                    <FileSearchOutlined style={{ margin: 10 }} />
-                    <Tooltip title="Enter the First or the Last name of the user you want to search">
-                      <Input
-                        className={styles.searchInput}
-                        style={{ width: 200 }}
-                        placeholder="Search by name"
-                        data-cy="search-by-name-input"
-                        disabled={loadingAllReservations}
-                        prefix={
-                          loadingAllReservations ? <LoadingOutlined /> : null
-                        }
-                        value={filterInput}
-                        onChange={(e) =>
-                          setFilterInput(e.target.value.replace(/\s+/, ""))
-                        }
-                      />
-                      {invalidSearchInput ? (
-                        <Alert
-                          message="There is no data or input is invalid."
-                          data-cy="login-incorrect-credentials-message"
-                          type="error"
-                          className={`${styles.alert} ${styles.input}`}
-                        />
-                      ) : null}
-                    </Tooltip>
-                  </div>
-                </div>
-
-                <Table
-                  columns={tabKey === "past" ? pastColumns : futureColumns}
-                  dataSource={reservations}
-                  pagination={{
-                    pageSize: 4,
-                    total: totalCount,
-                    current: currentPage,
-                    position: ["bottomRight"],
-                    showSizeChanger: false,
-                  }}
-                  loading={{
-                    spinning: loadingTableData,
-                    indicator: <Loading />,
-                  }}
-                  onChange={onPageChanged}
+    <Layout>
+      <Sidebar selected="4" />
+      <MainLayout isHome={false}>
+        <Content className={styles.content}>
+          <div className={styles.contentWrapper}>
+            <Card
+              title={
+                <Title
+                  reservations={exportReservations}
+                  columns={columnsForExcel}
+                  sheet={excelSheet}
+                  ifNoData={ifNoData}
                 />
+              }
+              className={styles.resList}
+              tabList={tabList}
+              onTabChange={(key) => {
+                setTabKey(key);
+                if (key === "past") {
+                  setFilterOffice("");
+                  setFilterInput("");
+                  setTotalCount(0);
+                  setCurrentPage(1);
+                  getPastReservations(0);
+                  setExcelSheet("Past Reservation List");
+                } else {
+                  setFilterOffice("");
+                  setFilterInput("");
+                  setTotalCount(0);
+                  setCurrentPage(1);
+                  getFutureReservations(0);
+                  setExcelSheet("Future Reservation List");
+                }
+              }}
+            >
+              <div className={styles.inputs}>
+                <div>
+                  <SearchOutlined style={{ margin: 10 }} />
+                  <Tooltip title="Select which office you want to filter by">
+                    <Select
+                      showSearch
+                      data-cy="office-branch-select"
+                      defaultValue="Select office"
+                      value={filterOffice}
+                      onChange={(officeName) => setFilterOffice(officeName)}
+                      style={{ width: 200 }}
+                      loading={loadingAllReservations}
+                      disabled={loadingAllReservations}
+                    >
+                      <Select.Option key={0} value="">
+                        All offices
+                      </Select.Option>
+                      {offices.map(({ name, id }) => (
+                        <Select.Option key={id} value={name}>
+                          {name}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Tooltip>
+                </div>
+                <div>
+                  <FileSearchOutlined style={{ margin: 10 }} />
+                  <Tooltip title="Enter the First or the Last name of the user you want to search">
+                    <Input
+                      className={styles.searchInput}
+                      style={{ width: 200 }}
+                      placeholder="Search by name"
+                      data-cy="search-by-name-input"
+                      disabled={loadingAllReservations}
+                      prefix={
+                        loadingAllReservations ? <LoadingOutlined /> : null
+                      }
+                      value={filterInput}
+                      onChange={(e) =>
+                        setFilterInput(e.target.value.replace(/\s+/, ""))
+                      }
+                    />
+                    {invalidSearchInput ? (
+                      <Alert
+                        message="There is no data or input is invalid."
+                        data-cy="login-incorrect-credentials-message"
+                        type="error"
+                        className={`${styles.alert} ${styles.input}`}
+                      />
+                    ) : null}
+                  </Tooltip>
+                </div>
+              </div>
 
-                <Modal
-                  maskClosable={false}
-                  title="Cancel user's reservation?"
-                  centered
-                  visible={visible}
-                  onOk={() => {
-                    cancelReservation(toBeCancelled);
-                    setToBeCancelled(null);
-                    setVisible(false);
-                  }}
-                  onCancel={() => setVisible(false)}
-                >
-                  <p>Do you really want to cancel this reservation?</p>
-                </Modal>
-              </Card>
-            </div>
-          </Content>
-        </Layout>
-      </Layout>
-      <Row className={styles.footerSection} align="center">
-        <Col align="center" span={24}>
-          <p className={styles.footerText}>
-            MyDesk ©2022 Created by MyDeskTeam
-          </p>
-        </Col>
-      </Row>
-    </>
+              <Table
+                style={{ overflow: "auto", overflowY: "hidden" }}
+                columns={tabKey === "past" ? pastColumns : futureColumns}
+                dataSource={reservations}
+                pagination={{
+                  pageSize: 4,
+                  total: totalCount,
+                  current: currentPage,
+                  position: ["bottomRight"],
+                  showSizeChanger: false,
+                  size: "small",
+                }}
+                loading={{
+                  spinning: loadingTableData,
+                  indicator: <Loading />,
+                }}
+                onChange={onPageChanged}
+              />
+
+              <Modal
+                maskClosable={false}
+                title="Cancel user's reservation?"
+                centered
+                visible={visible}
+                onOk={() => {
+                  cancelReservation(toBeCancelled);
+                  setToBeCancelled(null);
+                  setVisible(false);
+                }}
+                onCancel={() => setVisible(false)}
+              >
+                <p>Do you really want to cancel this reservation?</p>
+              </Modal>
+            </Card>
+          </div>
+        </Content>
+      </MainLayout>
+    </Layout>
   );
 };
 

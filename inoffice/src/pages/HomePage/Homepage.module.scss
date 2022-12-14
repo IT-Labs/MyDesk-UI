@@ -14,12 +14,12 @@
 }
 
 .pStyles {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
 }
 
 .inputSize {
-  width: 12.5rem;
+  width: 100%;
   scroll-behavior: auto;
 }
 
@@ -31,6 +31,7 @@
 
 .reserveForCoworker {
   margin-left: 5px;
+  max-width: 200px;
 }
 
 .menu {
@@ -100,10 +101,6 @@
   margin-top: 4%;
 }
 
-.buttonsSection {
-  margin-top: 1%;
-}
-
 .officeDropdown {
   margin-left: 3%;
 }
@@ -135,12 +132,11 @@
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+  margin-top: 1%;
+  justify-content: space-between;
 }
 
 .rightInputRow {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
   margin-bottom: 2.9rem;
 }
 
@@ -163,35 +159,89 @@
   font-size: 13px;
 }
 
-@media screen and (max-width: 820px) {
-  .leftSideHome {
-    display: block;
-    position: relative;
-    left: 20%;
+.coWorkerSelect {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 1082px) {
+  .pStyles {
+    font-size: 1rem;
+    font-weight: bold;
   }
-  .rightSideHome {
-    display: block;
+}
+
+@media screen and (max-width: 993px) {
+  .rightInputRow {
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
   }
-  .homeContent {
+
+  .leftInputRow {
+    margin-top: 2rem;
+    margin-bottom: 0px;
+  }
+  .pStyles {
+    margin-bottom: 0.2rem;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .rightInputRow {
+    width: 100%;
+  }
+
+  .leftInputRow {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .pStyles {
+    left: 0 !important;
+  }
+
+  .officeInput {
+    max-width: 100%;
+    div > div {
+      margin-bottom: 2px !important;
+    }
+  }
+  .inputWidth {
+    max-width: 100%;
+  }
+
+  .rightInputRow {
     display: flex;
+    width: 100%;
     justify-content: center;
-    overflow-x: hidden;
+  }
+
+  .leftInputRow {
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .reserveForCoworker {
+    margin-left: 5px;
+    max-width: 100%;
   }
   .buttonsSection {
     justify-content: center;
   }
-  .rightInputRow,
+}
+@media screen and (max-width: 480px) {
   .leftInputRow {
-    display: block;
-  }
-  .cardColColor {
-    width: 50rem !important;
-  }
-  .officeImgCol {
-    width: 400px;
+    justify-content: center;
+    margin-bottom: 1.5rem;
   }
 
-  .buttonReview {
-    flex-direction: column;
+  .officeInput {
+    max-width: 100%;
+    div > div {
+      margin-bottom: 2px !important;
+    }
+  }
+  .inputWidth {
+    max-width: 100%;
   }
 }

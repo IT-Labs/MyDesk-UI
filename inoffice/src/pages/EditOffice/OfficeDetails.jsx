@@ -2,7 +2,17 @@
 import React, { useEffect, useState } from "react";
 import styles from "../EditOffice/Editoffice.module.scss";
 import { DeleteFilled, QuestionCircleOutlined } from "@ant-design/icons";
-import { Checkbox, Form, Input, Button, Image, Popconfirm, Table } from "antd";
+import {
+  Checkbox,
+  Form,
+  Input,
+  Button,
+  Image,
+  Popconfirm,
+  Table,
+  Col,
+  Row,
+} from "antd";
 import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan/UploadOfficePlan";
 import Loading from "../../components/Loading/Loading";
@@ -19,6 +29,121 @@ const OfficeDetails = ({ props }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [saveBtnDisabled, setSaveBtnDisabled] = useState(true);
+
+  const columns = [
+    {
+      title: "Desk No.",
+      dataIndex: "indexForOffice",
+      key: 1,
+      align: "center",
+      width: "15%",
+    },
+    {
+      title: "Unavailable desks",
+
+      dataIndex: "unavailable",
+      key: 2,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            className={styles.checkbox}
+            data-cy="checkbox-unavailable"
+            checked={item.category?.unavailable}
+            onChange={() => check(item.id, "unavailable")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "15%",
+    },
+    {
+      title: "Single monitor",
+      dataIndex: "singleMonitor",
+      key: 3,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            className={styles.checkbox}
+            data-cy="checkbox-1monitor"
+            checked={item.category?.singleMonitor}
+            disabled={item.category?.doubleMonitor}
+            onChange={() => check(item.id, "singleMonitor")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "15%",
+    },
+    {
+      title: "Dual monitor",
+      dataIndex: "dualMonitor",
+      key: 4,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            className={styles.checkbox}
+            data-cy="checkbox-2monitor"
+            checked={item.category?.doubleMonitor}
+            disabled={item.category?.singleMonitor}
+            onChange={() => check(item.id, "dualMonitor")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "15%",
+    },
+    {
+      title: "Near window",
+      dataIndex: "nearWindow",
+      key: 5,
+
+      render: (text, item, index) => {
+        return (
+          <Checkbox
+            className={styles.checkbox}
+            data-cy="checkbox-nearwindow"
+            checked={item.category?.nearWindow}
+            onChange={() => check(item.id, "nearWindow")}
+          ></Checkbox>
+        );
+      },
+      align: "center",
+      width: "15%",
+    },
+    {
+      title: "Delete",
+      dataIndex: "delete",
+      align: "center",
+      key: 6,
+      borderRight: "none",
+      render: (text, item, id) => {
+        return (
+          <Popconfirm
+            title="Are you sure you want to delete this desk?"
+            onConfirm={() => deleteNotification(item.id)}
+            okText="OK"
+            cancelText="Cancel"
+            shape="round"
+            style={{ padding: 0 }}
+            placement="topRight"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <DeleteFilled
+              className={styles.deleteIconDesks}
+              data-cy="delete-desk"
+              key={item.id}
+              value={item.id}
+              style={{ padding: 0 }}
+            />
+          </Popconfirm>
+        );
+      },
+      width: "15%",
+    },
+  ];
 
   const getDesks = () => {
     setIsLoading(true);
@@ -45,14 +170,10 @@ const OfficeDetails = ({ props }) => {
         console.log(error);
       });
   };
+
   const getNewImage = () => {
     getImage();
   };
-
-  useEffect(() => {
-    getDesks();
-    getImage();
-  }, []);
 
   const save = () => {
     setIsLoading(true);
@@ -194,119 +315,10 @@ const OfficeDetails = ({ props }) => {
       });
   };
 
-  const columns = [
-    {
-      title: "Desk No.",
-      dataIndex: "indexForOffice",
-      key: 1,
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Unavailable desks",
-      dataIndex: "unavailable",
-      key: 2,
-
-      render: (text, item, index) => {
-        return (
-          <Checkbox
-            className={styles.checkbox}
-            data-cy="checkbox-unavailable"
-            checked={item.category?.unavailable}
-            onChange={() => check(item.id, "unavailable")}
-          ></Checkbox>
-        );
-      },
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Single monitor",
-      dataIndex: "singleMonitor",
-      key: 3,
-
-      render: (text, item, index) => {
-        return (
-          <Checkbox
-            className={styles.checkbox}
-            data-cy="checkbox-1monitor"
-            checked={item.category?.singleMonitor}
-            disabled={item.category?.doubleMonitor}
-            onChange={() => check(item.id, "singleMonitor")}
-          ></Checkbox>
-        );
-      },
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Dual monitor",
-      dataIndex: "dualMonitor",
-      key: 4,
-
-      render: (text, item, index) => {
-        return (
-          <Checkbox
-            className={styles.checkbox}
-            data-cy="checkbox-2monitor"
-            checked={item.category?.doubleMonitor}
-            disabled={item.category?.singleMonitor}
-            onChange={() => check(item.id, "dualMonitor")}
-          ></Checkbox>
-        );
-      },
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Near window",
-      dataIndex: "nearWindow",
-      key: 5,
-
-      render: (text, item, index) => {
-        return (
-          <Checkbox
-            className={styles.checkbox}
-            data-cy="checkbox-nearwindow"
-            checked={item.category?.nearWindow}
-            onChange={() => check(item.id, "nearWindow")}
-          ></Checkbox>
-        );
-      },
-      align: "center",
-      width: "15%",
-    },
-    {
-      title: "Delete",
-      dataIndex: "delete",
-      align: "center",
-      key: 6,
-      borderRight: "none",
-      render: (text, item, id) => {
-        return (
-          <Popconfirm
-            title="Are you sure you want to delete this desk?"
-            onConfirm={() => deleteNotification(item.id)}
-            okText="OK"
-            cancelText="Cancel"
-            shape="round"
-            style={{ padding: 0 }}
-            placement="topRight"
-            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-          >
-            <DeleteFilled
-              className={styles.deleteIconDesks}
-              data-cy="delete-desk"
-              key={item.id}
-              value={item.id}
-              style={{ padding: 0 }}
-            />
-          </Popconfirm>
-        );
-      },
-      width: "15%",
-    },
-  ];
+  useEffect(() => {
+    getDesks();
+    getImage();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -348,61 +360,85 @@ const OfficeDetails = ({ props }) => {
             </Button>
           </Form>
         </div>
-        <div className={styles.secondRow}>
-          <div className={styles.secondRowSize}>
-            <div id="scrollableDiv">
-              {isLoading ? (
-                <div className={styles.loading}>
-                  <Loading />
-                </div>
+
+        <Row gutter={[8, 8]} className={styles.tableRow}>
+          <Col
+            className={styles.tableCol}
+            span={12}
+            xl={12}
+            lg={12}
+            md={23}
+            sm={23}
+            xs={23}
+          >
+            <div>
+              <div id="scrollableDiv">
+                {isLoading ? (
+                  <div className={styles.loading}>
+                    <Loading />
+                  </div>
+                ) : (
+                  <Table
+                    bordered
+                    className={styles.newTable}
+                    dataSource={desks}
+                    columns={columns}
+                    pagination={false}
+                    scroll={{ y: 322 }}
+                  />
+                )}
+              </div>
+              <Popconfirm
+                title="Do you want to save this changes?"
+                onConfirm={() => save()}
+                okText="OK"
+                cancelText="Cancel"
+                className={saveBtnDisabled ? null : "greenBtn"}
+                shape="round"
+                placement="topRight"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                disabled={saveBtnDisabled}
+              >
+                <Button
+                  data-cy="save-button"
+                  style={{
+                    width: 150,
+                    marginLeft: 5,
+                    marginTop: 10,
+                    height: 30,
+                    cursor: "pointer",
+                  }}
+                  disabled={saveBtnDisabled}
+                >
+                  Save
+                </Button>
+              </Popconfirm>
+            </div>
+          </Col>
+          <Col
+            className={styles.tableCol}
+            span={12}
+            xl={12}
+            lg={12}
+            md={23}
+            sm={23}
+            xs={23}
+          >
+            <div className={styles.imgContainer}>
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  className={styles.officeImagePlan}
+                ></Image>
               ) : (
-                <Table
-                  bordered
-                  className={styles.newTable}
-                  dataSource={desks}
-                  columns={columns}
-                  pagination={false}
-                  scroll={{ y: 322 }}
+                <Image
+                  className={styles.officeImagePlan}
+                  src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
                 />
               )}
             </div>
-            <Popconfirm
-              title="Do you want to save this changes?"
-              onConfirm={() => save()}
-              okText="OK"
-              cancelText="Cancel"
-              className={saveBtnDisabled ? null : "greenBtn"}
-              shape="round"
-              placement="topRight"
-              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-              disabled={saveBtnDisabled}
-            >
-              <Button
-                data-cy="save-button"
-                style={{
-                  width: 150,
-                  marginLeft: 5,
-                  marginTop: 10,
-                  height: 30,
-                  cursor: "pointer",
-                }}
-                disabled={saveBtnDisabled}
-              >
-                Save
-              </Button>
-            </Popconfirm>
-          </div>
-          <div className={styles.imgContainer}>
-            {imageUrl ? (
-              <Image src={imageUrl} className={styles.officeImagePlan}></Image>
-            ) : (
-              <Image
-                className={styles.officeImagePlan}
-                src="https://i.postimg.cc/MpM7bn2J/Screenshot-5.png"
-              />
-            )}
-          </div>
-        </div>
+          </Col>
+        </Row>
       </div>
     </div>
   );

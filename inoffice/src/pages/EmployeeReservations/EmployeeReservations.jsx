@@ -1,7 +1,6 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
-import UserHead from "../../components/Head/UserHead";
-import { Card, Row, Col } from "antd";
+import { Card } from "antd";
 import FutureReservations from "./FutureReservations/FutureReservations";
 import PastReservations from "./PastReservations/PastReservations";
 import { useState, useEffect } from "react";
@@ -9,6 +8,7 @@ import jwt from "jwt-decode";
 import { CardTitle } from "./CardTitle";
 import api from "../../helper/api";
 import styles from "./Reservation.module.scss";
+import MainLayout from "../../layouts/MainLayout";
 
 const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
@@ -52,66 +52,45 @@ const EmployeeReservationList = () => {
 
   if (token.roles[0] === "EMPLOYEE") {
     return (
-      <>
-        <Layout>
-          <UserHead />
-          <Layout>
-            <Sidebar selected="1" />
-
-            <Content className={styles.contentStyle}>
-              <Card
-                className={styles.cardStyle}
-                title={<CardTitle data={data} />}
-                tabList={tabList}
-                activeTabKey={activeTabKey1}
-                onTabChange={(key) => {
-                  onTab1Change(key);
-                }}
-              >
-                {contentList[activeTabKey1]}
-              </Card>
-            </Content>
-          </Layout>
-        </Layout>
-        <Row className={styles.footerSection} align="center">
-          <Col align="center" span={24}>
-            <p className={styles.footerText}>
-              MyDesk ©2022 Created by MyDeskTeam
-            </p>
-          </Col>
-        </Row>
-      </>
+      <Layout>
+        <Sidebar selected="1" />
+        <MainLayout isHome={false}>
+          <Content className={styles.contentStyle}>
+            <Card
+              className={styles.cardStyle}
+              title={<CardTitle data={data} />}
+              tabList={tabList}
+              activeTabKey={activeTabKey1}
+              onTabChange={(key) => {
+                onTab1Change(key);
+              }}
+            >
+              {contentList[activeTabKey1]}
+            </Card>
+          </Content>
+        </MainLayout>
+      </Layout>
     );
   } else {
     return (
-      <>
-        <Layout>
-          <UserHead />
-          <Layout>
-            <Sidebar selected="5" />
-            <Content className={styles.contentStyle}>
-              <Card
-                className={styles.cardStyle}
-                title={<CardTitle data={data} />}
-                tabList={tabList}
-                activeTabKey={activeTabKey1}
-                onTabChange={(key) => {
-                  onTab1Change(key);
-                }}
-              >
-                {contentList[activeTabKey1]}
-              </Card>
-            </Content>
-          </Layout>
-        </Layout>
-        <Row className={styles.footerSection} align="center">
-          <Col align="center" span={24}>
-            <p className={styles.footerText}>
-              MyDesk ©2022 Created by MyDeskTeam
-            </p>
-          </Col>
-        </Row>
-      </>
+      <Layout>
+        <Sidebar selected="5" />
+        <MainLayout isHome={false}>
+          <Content className={styles.contentStyle}>
+            <Card
+              className={styles.cardStyle}
+              title={<CardTitle data={data} />}
+              tabList={tabList}
+              activeTabKey={activeTabKey1}
+              onTabChange={(key) => {
+                onTab1Change(key);
+              }}
+            >
+              {contentList[activeTabKey1]}
+            </Card>
+          </Content>
+        </MainLayout>
+      </Layout>
     );
   }
 };

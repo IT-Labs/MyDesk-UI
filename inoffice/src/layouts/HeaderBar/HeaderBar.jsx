@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
@@ -12,13 +12,14 @@ import { useSelector } from "react-redux";
 
 import { LogoutOutlined } from "@ant-design/icons";
 
-const UserHead = (props) => {
+const HeaderBar = (props) => {
   const media = window.matchMedia("(max-width: 820px)");
+
   const user = useSelector((state) => state.user.decodedUser);
   const navigate = useNavigate();
 
   return (
-    <Header className={styles.header}>
+    <Header className={props?.isHome ? styles.headerHome : styles.header}>
       {/* Hello x user here without the my account tab, same as the admin page*/}
 
       <div>{props?.isHome && <HeaderImg />}</div>
@@ -36,7 +37,11 @@ const UserHead = (props) => {
                 }}
               />
             )}
-            <NavLink data-cy="user-header-link" className={styles.link} to="/employee/reservations">
+            <NavLink
+              data-cy="user-header-link"
+              className={styles.link}
+              to="/employee/reservations"
+            >
               {media.matches ? "Dashboard" : user?.name}
             </NavLink>
             <Tooltip title="Log out">
@@ -61,4 +66,4 @@ const UserHead = (props) => {
   );
 };
 
-export default UserHead;
+export default HeaderBar;

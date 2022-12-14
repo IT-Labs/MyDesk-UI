@@ -1,4 +1,4 @@
-.header {
+.headerHome {
   display: flex;
   width: 100%;
   float: right;
@@ -6,13 +6,31 @@
   align-items: center;
   background-color: transparent !important;
   margin-top: 1em;
+  margin-bottom: 1.2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  background-color: transparent !important;
+  margin-top: 1em;
+  margin-bottom: 1.2rem;
+
+  .container {
+    position: relative;
+    left: 40px;
+  }
 }
 
 .sideBarLogo {
-  width: 165px !important;
+  background: url("../../assets/Logo\ MY\ DESK.svg") no-repeat;
+  width: 145px !important;
+  min-height: 70px;
   position: relative;
   top: 5px;
   left: -5% !important;
+  /* scale: calc(); */
 }
 
 .link {
@@ -67,5 +85,29 @@
 
   &:hover {
     filter: drop-shadow(0 0 3px white) !important;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .header {
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .sideBarLogo {
+    width: 110px !important;
+    left: -35% !important;
+  }
+  .container {
+    left: 40px;
+  }
+  .avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .link {
+    font-size: 13px;
   }
 }

@@ -185,13 +185,7 @@ const Login = () => {
               </Form>
             </div>
 
-            <p
-              style={{
-                fontSize: "1rem",
-                marginTop: "-40px",
-                marginBottom: "-22px",
-              }}
-            >
+            <p className={styles.loginDivider}>
               Or Log in with your Microsoft account
             </p>
             <MicrosoftLogin

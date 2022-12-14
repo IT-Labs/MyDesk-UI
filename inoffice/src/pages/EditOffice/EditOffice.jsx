@@ -1,22 +1,19 @@
 import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
-import UserHeade from "../../components/Head/UserHead";
-
 import { withRouter } from "../../helper/withRouterHelper";
-
 import OfficeDetails from "./OfficeDetails";
+import MainLayout from "../../layouts/MainLayout";
 
 const EditOffice = (props) => {
   return (
     <Layout>
-      <UserHeade />
-      <Layout>
-        <Sidebar selected="2" />
+      <Sidebar selected="2" />
+      <MainLayout isHome={false}>
         <Content>
           <OfficeDetails props={props} />
         </Content>
-      </Layout>
+      </MainLayout>
     </Layout>
   );
 };

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import UserHead from "../../components/Head/UserHead";
-import Layout, { Content } from "antd/lib/layout/layout";
 import {
   Button,
   Checkbox,
@@ -36,6 +34,7 @@ import {
 } from "../../components/notification/Notification";
 
 import { getAvatar } from "../../redux/Avatar/Avatar";
+import MainLayout from "../../layouts/MainLayout";
 
 const Home = () => {
   const [officeid, setofficeid] = useState();
@@ -281,197 +280,241 @@ const Home = () => {
 
   useEffect(() => {
     const btnEnable =
-      (selectedCard.length === 0 || !isAvailable || dates.length === 0)
-      || (forCoworker && Object.keys(selectedCoworker).length === 0);
+      selectedCard.length === 0 ||
+      !isAvailable ||
+      dates.length === 0 ||
+      (forCoworker && Object.keys(selectedCoworker).length === 0);
 
     setDisableReserveBtn(btnEnable);
   }, [dates, selectedCard, selectedCoworker, endDateRes, isAvailable]);
 
   return (
-    <Layout className={styles.layout}>
-      <UserHead isHome={true} />
-      <Layout className={styles.homeContent}>
-        <Content className={styles.content}>
-          <Row className={`${styles.leftSideHome} ${styles.contentRow} `}>
-            <Col span={10} xl={11} lg={11} md={11}>
-              <div className={styles.leftInputRow}>
-                <OfficeBranchSelection
-                  onOfficebranchChange={changeofficebranch}
-                  styles={styles.pStyles}
-                  dataCy="office-branch-select"
-                />
-                <div className={styles.leftInputs}>
-                  <p className={styles.pStyles}>Select date</p>
-                  <CalendarImplementation
-                    dateFunction={setDate}
-                    onSelectCard={onSelectCard}
-                    officeid={officeid}
-                    startDate={startDateRes}
-                    endDate={endDateRes}
-                    dates={dates}
-                    clearDate={clearDate}
-                    isHome={true}
-                  />
-                </div>
-              </div>
-              <Col className={`${styles.officeImgCol} ${styles.cardColColor}`}>
-                <OfficeImage officeid={officeid} />
-              </Col>
+    <MainLayout isHome={true}>
+      <Row className={`${styles.contentRow}`}>
+        <Col span={12} xl={11} lg={11} md={22} sm={22} xs={22}>
+          <Row gutter={[8, 8]} className={styles.leftInputRow}>
+            <Col
+              className={styles.officeInput}
+              span={12}
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={20}
+            >
+              <OfficeBranchSelection
+                onOfficebranchChange={changeofficebranch}
+                styles={styles.pStyles}
+                dataCy="office-branch-select"
+              />
             </Col>
             <Col
-              span={11}
-              xl={11}
-              lg={11}
-              md={11}
-              className={styles.rightSideHome}
+              className={styles.inputWidth}
+              span={12}
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={20}
             >
-              <div className={styles.rightInputRow} data-cy="desk-filters">
-                <div>
-                  <p className={styles.pStyles}>Search by name</p>
-                  <Input
-                    className={styles.inputSize}
-                    data-cy="search-by-name"
-                    value={employeeSearch}
-                    onChange={(e) =>
-                      setEmployeeSearch(e.target.value.replace(/\s+/, ""))
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "Escape") {
-                        setEmployeeSearch("");
-                      }
-                    }}
-                  />
-                  {invalidSearchInput ? (
-                    <Alert
-                      message="There is no data or input is invalid."
-                      data-cy="login-incorrect-credentials-message"
-                      type="error"
-                      className={`${styles.alert} ${styles.input}`}
-                    />
-                  ) : null}
-                </div>
-                <div>
-                  <p className={styles.pStyles}>Filter by availability</p>
-                  <Select
-                    showSearch
-                    data-cy="filter-by-availability"
-                    className={styles.inputSize}
-                    defaultValue={selectValue}
-                    value={selectValue}
-                    onChange={filterByAvailability}
-                  >
-                    <Select.Option value={null} key={1}>
-                      All
-                    </Select.Option>
-                    <Select.Option value={true} key={2}>
-                      Available
-                    </Select.Option>
-                    <Select.Option value={false} key={3}>
-                      Reserved
-                    </Select.Option>
-                  </Select>
-                </div>
-                <div>
-                  <p className={styles.pStyles}>Filter by category</p>
-                  <Dropdown
-                    overlay={
-                      <Menu
-                        className={styles.menu}
-                        data-cy="filter-by-category"
-                      >
-                        <Tooltip
-                          title={`${
-                            dualMonitor
-                              ? "Both options can not be selected at the same time."
-                              : ""
-                          }`}
-                        >
-                          <Menu.Item>
-                            <Checkbox
-                              checked={singleMonitor}
-                              onClick={clickSingleMonitor}
-                              disabled={dualMonitor}
-                            >
-                              Single monitor
-                            </Checkbox>
-                          </Menu.Item>
-                        </Tooltip>
-
-                        <Tooltip
-                          title={`${
-                            singleMonitor
-                              ? "Both options can not be selected at the same time."
-                              : ""
-                          }`}
-                        >
-                          <Menu.Item>
-                            <Checkbox
-                              checked={dualMonitor}
-                              onClick={clickDualMonitor}
-                              disabled={singleMonitor}
-                            >
-                              Dual monitor
-                            </Checkbox>
-                          </Menu.Item>
-                        </Tooltip>
-                        <Menu.Item key="2">
-                          <Checkbox
-                            checked={nearWindow}
-                            onClick={clickNearWindow}
-                          >
-                            Near window
-                          </Checkbox>
-                        </Menu.Item>
-                      </Menu>
-                    }
-                    trigger={["click"]}
-                  >
-                    <Button className={styles.inputSize}>
-                      <Space
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          width: "100%",
-                        }}
-                      >
-                        {singleMonitor && !nearWindow
-                          ? "Single Monitor"
-                          : dualMonitor && !nearWindow
-                          ? "Dual Monitor"
-                          : nearWindow && !singleMonitor && !dualMonitor
-                          ? "Near Window"
-                          : "All Categories"}
-                        <DownOutlined
-                          style={{
-                            color: "rgba(0,0,0,0.25)",
-                            fontSize: "12px",
-                            paddingLeft: "68px",
-                          }}
-                        />
-                      </Space>
-                    </Button>
-                  </Dropdown>
-                </div>
-              </div>
-              <Col
-                className={`${styles.cardsCol} ${styles.cardColColor} ${styles.scrollableDiv}`}
-              >
-                <CardsSection
-                  refresh={refreshCards}
-                  selectedCard={onSelectCard}
+              <div>
+                <p
+                  className={styles.pStyles}
+                  style={{ position: "relative", left: "19%" }}
+                >
+                  Select date
+                </p>
+                <CalendarImplementation
+                  dateFunction={setDate}
+                  onSelectCard={onSelectCard}
                   officeid={officeid}
-                  available={selectValue}
-                  employeeSearch={employeeSearch}
-                  categories={selectedCategories}
-                  getEmployeeSearch={getEmployeeSearch}
+                  startDate={startDateRes}
+                  endDate={endDateRes}
+                  dates={dates}
+                  clearDate={clearDate}
+                  isHome={true}
                 />
-              </Col>
+              </div>
             </Col>
           </Row>
 
-          <Row className={styles.buttonsSection}>
-            <div className={styles.buttonReview}>
+          <div className={`${styles.officeImgCol} ${styles.cardColColor}`}>
+            <OfficeImage officeid={officeid} />
+          </div>
+        </Col>
+        <Col span={12} xl={11} lg={11} md={22} sm={22} xs={22}>
+          <Row between="xs" className={styles.rightInputRow} gutter={[8, 8]}>
+            <Col
+              className={styles.inputWidth}
+              span={8}
+              xl={8}
+              lg={8}
+              md={8}
+              sm={8}
+              xs={20}
+            >
               <div>
+                <p className={styles.pStyles}>Search by name</p>
+                <Input
+                  className={styles.inputSize}
+                  data-cy="search-by-name"
+                  value={employeeSearch}
+                  onChange={(e) =>
+                    setEmployeeSearch(e.target.value.replace(/\s+/, ""))
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      setEmployeeSearch("");
+                    }
+                  }}
+                />
+                {invalidSearchInput ? (
+                  <Alert
+                    message="There is no data or input is invalid."
+                    data-cy="login-incorrect-credentials-message"
+                    type="error"
+                    className={`${styles.alert} ${styles.input}`}
+                  />
+                ) : null}
+              </div>
+            </Col>
+
+            <Col
+              className={styles.inputWidth}
+              span={8}
+              xl={8}
+              lg={8}
+              md={8}
+              sm={8}
+              xs={20}
+            >
+              <div>
+                <p className={styles.pStyles}>Filter by availability</p>
+                <Select
+                  showSearch
+                  data-cy="filter-by-availability"
+                  className={styles.inputSize}
+                  defaultValue={selectValue}
+                  value={selectValue}
+                  onChange={filterByAvailability}
+                >
+                  <Select.Option value={null} key={1}>
+                    All
+                  </Select.Option>
+                  <Select.Option value={true} key={2}>
+                    Available
+                  </Select.Option>
+                  <Select.Option value={false} key={3}>
+                    Reserved
+                  </Select.Option>
+                </Select>
+              </div>
+            </Col>
+
+            <Col
+              className={styles.inputWidth}
+              span={8}
+              xl={8}
+              lg={8}
+              md={8}
+              sm={8}
+              xs={20}
+            >
+              <div>
+                <p className={styles.pStyles}>Filter by category</p>
+                <Dropdown
+                  arrow={true}
+                  overlay={
+                    <Menu className={styles.menu} data-cy="filter-by-category">
+                      <Tooltip
+                        title={`${
+                          dualMonitor
+                            ? "Both options can not be selected at the same time."
+                            : ""
+                        }`}
+                      >
+                        <Menu.Item>
+                          <Checkbox
+                            checked={singleMonitor}
+                            onClick={clickSingleMonitor}
+                            disabled={dualMonitor}
+                          >
+                            Single monitor
+                          </Checkbox>
+                        </Menu.Item>
+                      </Tooltip>
+
+                      <Tooltip
+                        title={`${
+                          singleMonitor
+                            ? "Both options can not be selected at the same time."
+                            : ""
+                        }`}
+                      >
+                        <Menu.Item>
+                          <Checkbox
+                            checked={dualMonitor}
+                            onClick={clickDualMonitor}
+                            disabled={singleMonitor}
+                          >
+                            Dual monitor
+                          </Checkbox>
+                        </Menu.Item>
+                      </Tooltip>
+                      <Menu.Item key="2">
+                        <Checkbox
+                          checked={nearWindow}
+                          onClick={clickNearWindow}
+                        >
+                          Near window
+                        </Checkbox>
+                      </Menu.Item>
+                    </Menu>
+                  }
+                  trigger={["click"]}
+                >
+                  <Button className={styles.inputSize}>
+                    <Space
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      {singleMonitor && !nearWindow
+                        ? "Single Monitor"
+                        : dualMonitor && !nearWindow
+                        ? "Dual Monitor"
+                        : nearWindow && !singleMonitor && !dualMonitor
+                        ? "Near Window"
+                        : "All Categories"}
+                      <DownOutlined
+                        style={{
+                          color: "rgba(0,0,0,0.25)",
+                          fontSize: "12px",
+                          float: "right",
+                        }}
+                      />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </div>
+            </Col>
+          </Row>
+
+          <CardsSection
+            refresh={refreshCards}
+            selectedCard={onSelectCard}
+            officeid={officeid}
+            available={selectValue}
+            employeeSearch={employeeSearch}
+            categories={selectedCategories}
+            getEmployeeSearch={getEmployeeSearch}
+          />
+
+          <Row className={styles.buttonsSection} gutter={[8, 8]}>
+            <Col span={11} xl={11} lg={11} md={11} sm={11} xs={20}>
+              <div className={styles.coWorkerSelect}>
                 <Checkbox
                   data-cy="set-for-coworker-check"
                   onClick={() => setForCoworker(!forCoworker)}
@@ -485,7 +528,6 @@ const Home = () => {
                   showSearch
                   onChange={setCoworker}
                   disabled={!forCoworker}
-                  placeholder="Select a CoWorker"
                 >
                   {employees &&
                     employees.map((item) => (
@@ -502,70 +544,72 @@ const Home = () => {
                     ))}
                 </Select>
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <Button
-                  block
-                  data-cy="reserve-button"
-                  disabled={disableReserveBtn}
-                  onClick={() => checkTypeOfReservation()}
-                  className={`${styles.buttons} ${
-                    forCoworker ? styles.orangeBtn : styles.tealBtn
-                  }`}
-                  size="large"
-                >
-                  Reserve
-                </Button>
-                <Button
-                  block
-                  data-cy="show-reviews-button"
-                  disabled={selectedCard.length === 0 ? true : false}
-                  size="large"
-                  className={`${styles.buttons} ${styles.tealBtn}`}
-                  onClick={() => showReviewsForSelectedCard()}
-                >
-                  Show reviews
-                </Button>
-              </div>
-
-              <Modal
-                maskClosable={true}
-                title="Reviews for selected entity"
-                visible={isModalVisible}
-                onOk={closeModalFunction}
-                onCancel={closeModalFunction}
-                cancelButtonProps={{ style: { display: "none" } }}
-              >
-                <InfiniteScroll className={styles.reviewModal} dataLength={3}>
-                  <ul>
-                    {reviews &&
-                      reviews.map(({ id, reviews }) =>
-                        id ? <li key={id}>{reviews}</li> : <p>{reviews}</p>
-                      )}
-                  </ul>
-                </InfiniteScroll>
-              </Modal>
-              <Modal
-                title="Reserve desk for co-worker"
-                visible={showReserveForCoworker}
-                onCancel={() => setShowReserveForCoworker(false)}
-                onOk={() => reserveForCoworker(selectedCoworker)}
-              >
-                Are you sure you want to reserve this desk for{" "}
-                {selectedCoworker.firstName} {selectedCoworker.surname}?
-              </Modal>
-            </div>
-          </Row>
-
-          <Row className={styles.footerSection} align="center">
-            <Col align="center" span={24}>
-              <p className={styles.footerText}>
-                MyDesk ©2022 Created by MyDeskTeam
-              </p>
             </Col>
+
+            <Col
+              span={11}
+              xl={11}
+              lg={11}
+              md={11}
+              sm={11}
+              xs={20}
+              style={{ display: "flex" }}
+            >
+              <Button
+                block
+                data-cy="reserve-button"
+                disabled={disableReserveBtn}
+                onClick={() => checkTypeOfReservation()}
+                className={`${styles.buttons} ${
+                  forCoworker ? styles.orangeBtn : styles.tealBtn
+                }`}
+                size="large"
+              >
+                Reserve
+              </Button>
+
+              <Button
+                block
+                data-cy="show-reviews-button"
+                disabled={selectedCard.length === 0 ? true : false}
+                size="large"
+                className={`${styles.buttons} ${styles.tealBtn}`}
+                onClick={() => showReviewsForSelectedCard()}
+              >
+                Show reviews
+              </Button>
+            </Col>
+
+            <Modal
+              maskClosable={true}
+              title="Reviews for selected entity"
+              visible={isModalVisible}
+              onOk={closeModalFunction}
+              onCancel={closeModalFunction}
+              cancelButtonProps={{ style: { display: "none" } }}
+            >
+              <InfiniteScroll className={styles.reviewModal} dataLength={3}>
+                <ul>
+                  {reviews &&
+                    reviews.map(({ id, reviews }) =>
+                      id ? <li key={id}>{reviews}</li> : <p>{reviews}</p>
+                    )}
+                </ul>
+              </InfiniteScroll>
+            </Modal>
+            <Modal
+              title="Reserve desk for co-worker"
+              visible={showReserveForCoworker}
+              onCancel={() => setShowReserveForCoworker(false)}
+              onOk={() => reserveForCoworker()}
+            >
+              Are you sure you want to reserve this desk for{" "}
+              {selectedCoworker.firstName} {selectedCoworker.surname}?
+            </Modal>
           </Row>
-        </Content>
-      </Layout>
-    </Layout>
+        </Col>
+      </Row>
+    </MainLayout>
   );
 };
 

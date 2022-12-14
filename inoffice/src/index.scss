@@ -33,6 +33,20 @@ code {
   align-items: center;
 }
 
+.acccess-denied-wrap {
+  display: flex;
+  align-items: center;
+  height: 72vh;
+  width: 50%;
+  text-align: center;
+
+  h1 {
+    color: red;
+    position: relative;
+    left: 50%;
+  }
+}
+
 .MyAccountForm {
   position: absolute;
   left: 50%;
@@ -516,11 +530,6 @@ p {
 
 .sideBarLogo {
   background: url("./assets/Logo\ MY\ DESK.svg") no-repeat;
-  width: 155px !important;
-  top: 5px;
-  left: 22px;
-  min-height: 70px;
-  /* scale: calc(); */
 }
 
 .sideMenu {
@@ -547,4 +556,21 @@ p {
 
 .anticon-logout {
   height: 15px !important;
+}
+
+@media screen and (max-width: 820px) {
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 0px 0px;
+    overflow-wrap: break-word;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .userSearchSelect {
+    margin-bottom: 0.7rem;
+    left: 0px;
+  }
 }

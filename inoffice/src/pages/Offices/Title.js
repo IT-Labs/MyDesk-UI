@@ -1,11 +1,11 @@
 import React from "react";
 import AddOfficeContainer from "./AddOfficeContainer/AddOfficeContainer";
 
-const Title = ({ addOfficeText, onSubmit }) => {
+const Title = ({ addOfficeText, onSubmit, mediaMatches }) => {
   return (
     <div
       style={{
-        display: "flex",
+        display: !mediaMatches ? "flex" : "block",
         justifyContent: "space-between",
         alignItems: "center",
       }}

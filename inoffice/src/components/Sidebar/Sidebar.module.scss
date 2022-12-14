@@ -1,0 +1,14 @@
+.sideBarLogo {
+  width: 130px !important;
+  top: 7px;
+  left: 22px;
+  min-height: 70px;
+}
+
+@media screen and (max-width: 820px) {
+  .sideBarLogo {
+    width: 75px !important;
+    top: 10px;
+    left: 2px;
+  }
+}
