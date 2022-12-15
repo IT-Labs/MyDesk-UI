@@ -19,7 +19,7 @@ const EmployeeReservationList = () => {
 
   useEffect(() => {
     api
-      .get("admin/offices")
+      .get("employee/offices")
       .then((res) => {
         const sorted = res.data.sort((a, b) => {
           return a.name < b.name ? -1 : 1;
@@ -50,7 +50,7 @@ const EmployeeReservationList = () => {
     setActiveTabKey1(key);
   };
 
-  if (token.roles[0] === "EMPLOYEE") {
+  if (!token.roles || (token.roles && token.roles[0] === "EMPLOYEE")) {
     return (
       <Layout>
         <Sidebar selected="1" />

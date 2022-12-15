@@ -34,10 +34,8 @@ const Sidebar = (props) => {
       setWidth("100%");
     }
   };
-  if (
-    jwt(config.token).roles[0] === "ADMIN" ||
-    jwt(config.token).roles[1] === "ADMIN"
-  ) {
+  
+  if (jwt(config.token).roles && (jwt(config.token).roles[0] === "ADMIN" || jwt(config.token).roles[1] === "ADMIN")) {
     return (
       <Sider
         style={{

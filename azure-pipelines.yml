@@ -89,6 +89,7 @@ stages:
                 REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
                 REACT_APP_TENANT_ID: $(REACT_APP_TENANT_ID)
                 REACT_APP_URL: $(REACT_APP_URL)
+                REACT_APP_GOOGLE_CLIENT_ID: $(REACT_APP_GOOGLE_CLIENT_ID)
 
 
 - stage: Production
@@ -132,4 +133,5 @@ stages:
                 REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
                 REACT_APP_TENANT_ID: $(REACT_APP_TENANT_ID)
                 REACT_APP_URL: $(REACT_APP_URL)
+                REACT_APP_GOOGLE_CLIENT_ID: $(REACT_APP_GOOGLE_CLIENT_ID)
 

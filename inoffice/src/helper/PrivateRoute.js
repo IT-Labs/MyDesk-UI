@@ -3,7 +3,6 @@ import jwt from "jwt-decode";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAvatar } from "../redux/Avatar/Avatar";
-import { openNotification } from "../components/notification/Notification";
 
 /**
  * If the user is authenticated, then return the component, otherwise return the Navigate component.
@@ -13,12 +12,11 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("msal.idtoken");
   const navigate = useNavigate();
-  let isAuthenticated = false;
   let dateNow = new Date();
 
   useEffect(() => {
     dispatch(getAvatar());
-  }, []);
+  }, [dispatch]);
 
   if (!token) {
     navigate("/");
@@ -31,26 +29,14 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
     window.location.assign("/");
   }
 
-  if (
-    compRoles[0] === jwt(token).roles[0] ||
-    compRoles[0] === jwt(token).roles[1] ||
-    compRoles[0] === jwt(token).roles
-  ) {
-    isAuthenticated = true;
-  }
-
-  if (isAuthenticated) {
+  if (jwt(token).name || 
+     (jwt(token).roles && (jwt(token).roles === compRoles[0] || jwt(token).roles[0] === compRoles[0] || jwt(token).roles[1] === compRoles[0])))
+  {
     return <RouteComponent />;
   }
-  if (
-    compRoles[0] !== jwt(token).roles[0] ||
-    compRoles[0] !== jwt(token).roles[1] ||
-    compRoles[0] !== jwt(token).roles
-  ) {
-    localStorage.clear();
-    return <Navigate to="/denied" />;
-  }
-  return <Navigate to="/" />;
+
+  localStorage.clear();
+  return <Navigate to="/denied" />;
 };
 
 export default PrivateRoute;

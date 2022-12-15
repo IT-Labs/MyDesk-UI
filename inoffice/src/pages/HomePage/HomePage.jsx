@@ -176,7 +176,7 @@ const Home = () => {
       deskId: selectedCard.id,
       startDate: startDateRes,
       endDate: endDateRes,
-      employeeEmail: user.preferred_username,
+      employeeEmail: user.preferred_username ?? user.email,
     };
 
     sendReservation(data);

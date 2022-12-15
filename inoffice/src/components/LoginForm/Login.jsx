@@ -17,6 +17,7 @@ const Login = () => {
   let navigate = useNavigate();
   const url = process.env.REACT_APP_URL;
   const [postedOnce, setPostedOnce] = useState(false);
+  const [googleLogin, setGoogleLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(false);
@@ -46,7 +47,44 @@ const Login = () => {
     }
   }, []);
 
-  const loginHandler = async (err, data, msal) => {
+  useEffect(() => {
+    const clId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: clId,
+      callback: googleLoginCallbackHandler,
+    });
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
+
+  const googleLoginCallbackHandler = (res) => {
+
+    if (!res.credential) {
+      return;
+    }
+
+    setGoogleLogin(true);
+    const token = res.credential;
+    localStorage.setItem("msal.idtoken", token);
+
+    const data = jwt(token);
+    const userInfo = {
+      Email: data.email,
+      Firstname: data.given_name,
+      Surname: data.family_name,
+      JobTitle: data.jobTitle ? data.jobTitle : "",
+    };
+    sendData(userInfo);
+  };
+
+  const microsoftLoginHandler = async (err, data, msal) => {
+    if (googleLogin || !data) {
+      return;
+    }
+
     localStorage.setItem("accessToken", data.accessToken);
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
       localStorage.removeItem("msal.idtoken");
@@ -71,10 +109,14 @@ const Login = () => {
         .post("/authentication", userInfo)
         .then((res) => {
           setLoading(false);
+          setGoogleLogin(false);
           navigate("/employee/home");
         })
         .catch((err) => {
-          if (token.roles.length === 0) {
+          setGoogleLogin(false);
+          localStorage.removeItem("msal.idtoken");
+          console.log(err.response);
+          if (token.roles && token.roles.length === 0) {
             openError(
               "You do not posses the required roles to access this application"
             );
@@ -190,7 +232,7 @@ const Login = () => {
             </p>
             <MicrosoftLogin
               clientId={process.env.REACT_APP_CLIENT_ID}
-              authCallback={loginHandler}
+              authCallback={microsoftLoginHandler}
               tenantUrl={`https://login.microsoftonline.com/{${process.env.REACT_APP_TENANT_ID}}`}
               redirectUri={url}
               forceRedirectStrategy={true}
@@ -211,6 +253,9 @@ const Login = () => {
                 />
               </Button>
             </MicrosoftLogin>
+
+            {/* Google login */}
+            <div id="signInDiv"></div>
           </div>
         </div>
       )}

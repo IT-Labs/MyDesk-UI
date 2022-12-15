@@ -7,7 +7,7 @@ export const fetchEmployees = async (dispatch, user) => {
     .get("employee/all")
     .then(({ data }) => {
       const filteredData = data
-        .filter(({ email }) => email !== user.preferred_username)
+        .filter(({ email }) => email !== user.preferred_username ?? user.email)
         .sort((a, b) => a.firstName.localeCompare(b.firstName));
       dispatch(setEmployees(filteredData));
     })
