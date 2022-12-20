@@ -8,7 +8,6 @@ const Trigger = ({ addOfficeText, buttonRef, showModal }) => {
       data-cy="addoffice-button"
       block
       onClick={() => {
-        // window.location = "/admin/addoffice";
         showModal();
       }}
       id="addButton"

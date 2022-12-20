@@ -17,14 +17,14 @@ import CalendarImplementation from "../../components/inputs/Calendar/CalendarImp
 import OfficeImage from "../../components/inputs/OfficeImage/OfficeImage";
 import CardsSection from "../../components/CardsComponent/CardsSection";
 import styles from "./Homepage.module.scss";
-import api from "../../helper/api";
-
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { fetchEmployees } from "../../utils/fetchEmployees";
+import { fetchEmployeesApi } from "../../services/employee.service";
+import { showReviewsForSelectedCardApi } from "../../services/review.service";
+import { sendReservationApi } from "../../services/reservation.service";
 
 import { setEnd, setStart } from "../../redux/Date/Date";
 import { DownOutlined } from "@ant-design/icons";
@@ -37,7 +37,7 @@ import { getAvatar } from "../../redux/Avatar/Avatar";
 import MainLayout from "../../layouts/MainLayout";
 
 const Home = () => {
-  const [officeid, setofficeid] = useState();
+  const [officeId, setOfficeId] = useState();
   const [selectedCard, setSelectedCard] = useState([]);
   const [startDateRes, setStartDate] = useState([]);
   const [endDateRes, setEndDate] = useState([]);
@@ -53,7 +53,6 @@ const Home = () => {
   const [singleMonitor, setSingleMonitor] = useState(false);
   const [dualMonitor, setDualMonitor] = useState(false);
   const [nearWindow, setNearWindow] = useState(false);
-
   const [selectedCoworker, setSelectedCoworker] = useState({});
   const [showReserveForCoworker, setShowReserveForCoworker] = useState(false);
   const [invalidSearchInput, setInvalidSearchInput] = useState(false);
@@ -68,11 +67,11 @@ const Home = () => {
     setReviews([]);
   };
 
-  function setDate(startDate, endDate, range) {
+  const setDate = (startDate, endDate, range) => {
     setStartDate(startDate);
     setEndDate(endDate);
     setDates(range);
-  }
+  };
 
   const clickSingleMonitor = () => {
     setSingleMonitor(!singleMonitor);
@@ -98,77 +97,65 @@ const Home = () => {
     });
   };
 
-  async function changeofficebranch(value) {
+  const changeOfficeBranch = async (value) => {
     setDefCoWorkerValue("Select a CoWorker");
-    setofficeid(value);
+    setOfficeId(value);
     setForCoworker(false);
-  }
+  };
 
-  function onSelectCard(value, availability) {
+  const onSelectCard = (value, availability) => {
     setSelectedCard(value);
     setIsAvailable(availability);
-  }
+  };
 
-  function refresh() {
+  const getEmployeeSearch = (value) => {
+    setInvalidSearchInput(value);
+  };
+
+  const refresh = () => {
     setRefreshCards({});
-  }
+  };
 
-  const showReviewsForSelectedCard = () => {
+  const onShowReviewsForSelectedCard = async () => {
     setIsModalVisible(true);
-    api
-      .get(`entity/reviews/${selectedCard.id}`)
-      .then(({ data }) => {
-        if (data.length) {
-          setReviews(data);
-        } else {
-          setReviews([{ reviews: "There were no available reviews" }]);
-        }
-      })
-      .catch(() => {
-        setReviews(["There were no available reviews"]);
-      });
+    const reviews = await showReviewsForSelectedCardApi(selectedCard.id);
+    setReviews(reviews);
   };
 
   const getUsers = async () => {
-    fetchEmployees(dispatch, user);
+    fetchEmployeesApi(dispatch, user);
   };
 
-  useEffect(() => {
-    getUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const sendReservation = (data) => {
-    const config = {
-      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
-    };
-    api
-      .post("employee/reserve/coworker", data, config)
-      .then((response) => {
-        refresh();
-        setDates([]);
-        setSelectedCard([]);
-        setStartDate([]);
-        setEndDate([]);
-        openNotification("You have successfully reserved a desk.");
-      })
-      .catch((error) => {
-        console.log(error.response);
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(error.response.data.ErrorMessage);
-        setDates([]);
-        setSelectedCard([]);
-        setStartDate([]);
-        setEndDate([]);
-        setShowReserveForCoworker(false);
-      });
+  const filterByAvailability = (e) => {
+    setEmployeeSearch("");
+    setSelectValue(e);
   };
 
   const clearDate = () => {
     dispatch(setStart(null));
     dispatch(setEnd(null));
     setDates([]);
+  };
+
+  const sendReservation = (data, isCoworker) => {
+    sendReservationApi(data).then((res) => {
+      setDates([]);
+      setSelectedCard([]);
+      setStartDate([]);
+      setEndDate([]);
+      setShowReserveForCoworker(false);
+      setForCoworker(false);
+      if (res === undefined) {
+        return;
+      } else {
+        isCoworker
+          ? openNotification(
+              "You have successfully reserved for your co-worker"
+            )
+          : openNotification("You have successfully reserved a desk");
+        refresh();
+      }
+    });
   };
 
   const makeReservation = () => {
@@ -178,13 +165,7 @@ const Home = () => {
       endDate: endDateRes,
       employeeEmail: user.preferred_username ?? user.email,
     };
-
-    sendReservation(data);
-  };
-
-  const filterByAvailability = (e) => {
-    setEmployeeSearch("");
-    setSelectValue(e);
+    sendReservation(data, false);
   };
 
   const reserveForCoworker = async () => {
@@ -200,32 +181,7 @@ const Home = () => {
       employeeEmail: selectedCoworker.email,
       deskId: selectedCard.id,
     };
-    const config = {
-      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
-    };
-    api
-      .post("employee/reserve/coworker", data, config)
-      .then((response) => {
-        refresh();
-        setDates([]);
-        setSelectedCard([]);
-        setStartDate([]);
-        setEndDate([]);
-        openNotification("You have successfully reserved for your co-worker");
-        setShowReserveForCoworker(false);
-        setForCoworker(false);
-      })
-      .catch((error) => {
-        console.log(error.response);
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(error.response.data.ErrorMessage);
-        setDates([]);
-        setSelectedCard([]);
-        setStartDate([]);
-        setEndDate([]);
-        setShowReserveForCoworker(false);
-      });
+    sendReservation(data, true);
   };
 
   const checkTypeOfReservation = () => {
@@ -255,12 +211,9 @@ const Home = () => {
     setSelectedCoworker(foundEmployee);
   };
 
-  const getEmployeeSearch = (value) => {
-    setInvalidSearchInput(value);
-  };
-
   useEffect(() => {
     dispatch(getAvatar());
+    getUsers();
   }, []);
 
   useEffect(() => {
@@ -303,7 +256,7 @@ const Home = () => {
               xs={20}
             >
               <OfficeBranchSelection
-                onOfficebranchChange={changeofficebranch}
+                onOfficeBranchChange={changeOfficeBranch}
                 styles={styles.pStyles}
                 dataCy="office-branch-select"
               />
@@ -327,7 +280,6 @@ const Home = () => {
                 <CalendarImplementation
                   dateFunction={setDate}
                   onSelectCard={onSelectCard}
-                  officeid={officeid}
                   startDate={startDateRes}
                   endDate={endDateRes}
                   dates={dates}
@@ -339,7 +291,7 @@ const Home = () => {
           </Row>
 
           <div className={`${styles.officeImgCol} ${styles.cardColColor}`}>
-            <OfficeImage officeid={officeid} />
+            <OfficeImage officeId={officeId} />
           </div>
         </Col>
         <Col span={12} xl={11} lg={11} md={22} sm={22} xs={22}>
@@ -505,7 +457,7 @@ const Home = () => {
           <CardsSection
             refresh={refreshCards}
             selectedCard={onSelectCard}
-            officeid={officeid}
+            officeId={officeId}
             available={selectValue}
             employeeSearch={employeeSearch}
             categories={selectedCategories}
@@ -574,7 +526,7 @@ const Home = () => {
                 disabled={selectedCard.length === 0 ? true : false}
                 size="large"
                 className={`${styles.buttons} ${styles.tealBtn}`}
-                onClick={() => showReviewsForSelectedCard()}
+                onClick={() => onShowReviewsForSelectedCard()}
               >
                 Show reviews
               </Button>

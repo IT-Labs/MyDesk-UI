@@ -1,31 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
-import api from "../../../helper/api";
-import { useEffect, useState } from "react";
-import { Image } from "antd";
-import { Spin } from "antd";
+import { fetchOfficeImageApi } from "../../../services/office.service";
+import { Image, Spin } from "antd";
 
 const OfficeImage = (props) => {
-  const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const { matches } = window.matchMedia("(max-width: 820px)");
 
+  const fetchOfficePlan = async (officeId) => {
+    if (officeId) {
+      const { data: response } = await fetchOfficeImageApi(officeId);
+      setData(response);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-
-      if (props.officeid) {
-        const { data: response } = await api.get(
-          "employee/office/image/" + props.officeid
-        );
-        setData(response);
-        console.log(response);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, [props.officeid]);
+    fetchOfficePlan(props.officeId);
+  }, [props.officeId]);
 
   return (
     <div>

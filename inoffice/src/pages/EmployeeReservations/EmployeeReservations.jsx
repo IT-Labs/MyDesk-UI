@@ -6,31 +6,15 @@ import PastReservations from "./PastReservations/PastReservations";
 import { useState, useEffect } from "react";
 import jwt from "jwt-decode";
 import { CardTitle } from "./CardTitle";
-import api from "../../helper/api";
 import styles from "./Reservation.module.scss";
+import { fetchAllOfficesAdminApi } from "../../services/office.service";
 import MainLayout from "../../layouts/MainLayout";
+import { sortByName } from "../../utils/sortByName";
 
 const EmployeeReservationList = () => {
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
-
   const token = jwt(localStorage.getItem("msal.idtoken"));
-
   const [data, setData] = useState([]);
-
-  useEffect(() => {
-    api
-      .get("employee/offices")
-      .then((res) => {
-        const sorted = res.data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        });
-        setData(sorted);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
   const tabList = [
     {
       key: "tab1",
@@ -49,6 +33,13 @@ const EmployeeReservationList = () => {
   const onTab1Change = (key) => {
     setActiveTabKey1(key);
   };
+
+  useEffect(() => {
+    fetchAllOfficesAdminApi().then((res) => {
+      const sorted = sortByName(res.data);
+      setData(sorted);
+    });
+  }, []);
 
   if (!token.roles || (token.roles && token.roles[0] === "EMPLOYEE")) {
     return (

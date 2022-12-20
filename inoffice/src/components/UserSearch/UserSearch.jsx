@@ -1,31 +1,42 @@
-import { Modal, notification, Select, Table } from "antd";
+import { Modal, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
-import { fetchEmployees } from "../../utils/fetchEmployees";
-import api from "../../helper/api";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styles from "./UserSearch.module.scss";
-
 import moment from "moment";
-
 import { SearchOutlined } from "@ant-design/icons";
-import { getAllFutureReservations } from "../../utils/getAllFutureReservations";
+import { getAllFutureReservationsApi } from "../../services/reservation.service";
+import { fetchAllOfficesAdminApi } from "../../services/office.service";
+import { sortByName } from "../../utils/sortByName";
 
 const UserSearch = () => {
-  const dispatch = useDispatch();
   const [employee, setEmployee] = useState({});
   const [visible, setVisible] = useState(false);
   const [reservations, setReservations] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
-  const { decodedUser } = useSelector((state) => state.user);
+  const { employees } = useSelector((state) => state.employees);
+  const futureColumns = [
+    {
+      title: "Desk",
+      dataIndex: "entity",
+      key: 1,
+    },
+    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: 3,
+      sorter: {
+        compare: (a, b) => {
+          const date1 = new Date(a.startDate).getTime();
+          const date2 = new Date(b.startDate).getTime();
 
-  const getUsers = async () => {
-    fetchEmployees(dispatch, notification, decodedUser);
-  };
-
-  const sortFuture = (res) => {
-    const future = getAllFutureReservations(res);
-    setReservations(future);
-  };
+          return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+        },
+        multiple: 1,
+      },
+      sortDirections: ["descend"],
+    },
+  ];
 
   const sortResStruct = (res) => {
     const results = res
@@ -53,59 +64,19 @@ const UserSearch = () => {
 
         return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
       });
-    sortFuture(results);
+    setReservations(results);
   };
-
-  const futureColumns = [
-    {
-      title: "Desk",
-      dataIndex: "entity",
-      key: 1,
-    },
-    { title: "Office", dataIndex: ["desk", "office", "name"], key: 2 },
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: 3,
-      sorter: {
-        compare: (a, b) => {
-          const date1 = new Date(a.startDate).getTime();
-          const date2 = new Date(b.startDate).getTime();
-
-          return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
-        },
-        multiple: 1,
-      },
-      sortDirections: ["descend"],
-    },
-  ];
 
   const getAllRes = () => {
-    api
-      .get("employee/reservations/all")
-      .then(({ data }) => {
-        sortResStruct(data.values);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    api
-      .get("admin/offices")
-      .then(({ data }) => {
-        let sorted = data.sort((a, b) => {
-          return a.name < b.name ? -1 : b.name > a.name ? 1 : 0;
-        });
-        return sorted;
-      })
-      .catch((err) => console.log(err));
+    getAllFutureReservationsApi().then(({ data }) => {
+      sortResStruct(data.values);
+    });
+
+    fetchAllOfficesAdminApi().then(({ data }) => {
+      let sorted = sortByName(data);
+      return sorted;
+    });
   };
-
-  useEffect(() => {
-    getUsers();
-    getAllRes();
-  }, []);
-
-  const { employees } = useSelector((state) => state.employees);
 
   const findEmployee = (e) => {
     const foundEmployee = employees.find(
@@ -115,6 +86,11 @@ const UserSearch = () => {
     setVisible(true);
     setEmployee(foundEmployee);
   };
+
+  useEffect(() => {
+    getAllRes();
+  }, []);
+
   return (
     <>
       <Select

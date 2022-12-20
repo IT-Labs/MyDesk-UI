@@ -2,7 +2,7 @@ import { openError } from "../components/notification/Notification";
 import { setEmployees } from "../redux/Employees/employees";
 import api from "../helper/api";
 
-export const fetchEmployees = async (dispatch, user) => {
+export const fetchEmployeesApi = async (dispatch, user) => {
   await api
     .get("employee/all")
     .then(({ data }) => {
@@ -12,10 +12,17 @@ export const fetchEmployees = async (dispatch, user) => {
       dispatch(setEmployees(filteredData));
     })
     .catch((err) => {
-      err.response.status === 401
+      err.response && err.response.status === 401
         ? openError("Your session has expired, please login again.")
         : openError(
             "We could not get employees, you cannot reserve for other people."
           );
     });
+};
+
+export const updateEmployeeApi = (userId, body) => {
+  return api.put(`/admin/employee/${userId}`, body).catch((err) => {
+    openError(err.response.data[0]);
+    console.log(err.response);
+  });
 };

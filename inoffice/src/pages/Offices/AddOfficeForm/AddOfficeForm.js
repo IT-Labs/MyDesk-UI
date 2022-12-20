@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from "../../../helper/api";
+import { addOfficeApi } from "../../../services/office.service";
 import { Form, Input, Button } from "antd";
 import {
   openError,
@@ -42,11 +42,11 @@ const AddOfficeForm = () => {
     const name = e.name.replace(/\s+/, "-");
     const location = e.location.replace(/\s+/, "-");
 
-    const data = {
+    const newOffice = {
       name: name + " " + location,
     };
     const office = offices.find(
-      (item) => item.name.toLowerCase() === data.name.toLowerCase()
+      (item) => item.name.toLowerCase() === newOffice.name.toLowerCase()
     );
 
     if (office) {
@@ -61,17 +61,10 @@ const AddOfficeForm = () => {
       return;
     }
 
-    api
-      .post("admin/office", data)
-      .then((res) => {
-        openNotification("You have successfully added a new office");
-        window.location = "/admin/offices";
-      })
-      .catch((err) => {
-        err.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(err.response.data);
-      });
+    addOfficeApi(newOffice).then((res) => {
+      openNotification("You have successfully added a new office");
+      window.location = "/admin/offices";
+    });
   };
 
   return (

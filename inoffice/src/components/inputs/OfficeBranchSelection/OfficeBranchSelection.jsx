@@ -1,42 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "antd/dist/antd.css";
-import { Select, Form } from "antd";
-import api from "../../../helper/api";
-import { useEffect, useState } from "react";
-import { Spin } from "antd";
+import { Select, Form, Spin } from "antd";
+import { fetchAllOfficesApi } from "../../../services/office.service";
+import { sortByName } from "../../../utils/sortByName";
 
-const Officebranchselection = (props) => {
+const OfficeBranchSelection = (props) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const { Option } = Select;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data: response } = await api.get("employee/offices");
+  const fetchOffices = async () => {
+    setLoading(true);
 
-        const sorted = response.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        });
+    const { data: response } = await fetchAllOfficesApi();
+    const sorted = sortByName(response);
 
-        if (response.length) {
-          props.onOfficebranchChange(sorted[0].id);
-          setData(sorted);
-        }
-
-      } catch (error) {
-        console.error(error.message);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+    if (response.length) {
+      props.onOfficeBranchChange(sorted[0].id);
+      setData(sorted);
+    }
+    setLoading(false);
+  };
 
   const handleChange = (value) => {
-    props.onOfficebranchChange(value);
+    props.onOfficeBranchChange(value);
   };
+
+  useEffect(() => {
+    fetchOffices();
+  }, []);
 
   return (
     <div>
@@ -66,4 +58,4 @@ const Officebranchselection = (props) => {
     </div>
   );
 };
-export default Officebranchselection;
+export default OfficeBranchSelection;

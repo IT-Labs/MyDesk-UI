@@ -2,16 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import { Pie } from "@ant-design/charts";
-import api from "../../helper/api";
 import styles from "./Dashboard.module.scss";
 import { Button, Modal, Select, Table } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
-  FrownOutlined,
   InfoCircleFilled,
-  MehOutlined,
-  SmileOutlined,
 } from "@ant-design/icons";
 import CalendarImplementation from "../../components/inputs/Calendar/CalendarImplementation";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,10 +16,14 @@ import Moment from "moment";
 import { extendMoment } from "moment-range";
 import UserSearch from "../../components/UserSearch/UserSearch";
 import { setInitialDesks } from "../../redux/Dashboard/Dashboard";
+import { fetchAllDeskApi } from "../../services/desk.service";
+import { fetchAllOfficesAdminApi } from "../../services/office.service";
+import { getAllReviewsApi } from "../../services/review.service";
+import { addEmojiToReview } from "../../utils/addEmojiToReview";
 import MainLayout from "../../layouts/MainLayout";
+import { sortByName } from "../../utils/sortByName";
 
 const Dashboard = () => {
-  const [desks, setDesks] = useState([]);
   const [desksForSelectedOffice, setDesksForSelectedOffice] = useState([]);
   const [deskData, setDeskData] = useState([
     {
@@ -35,17 +35,15 @@ const Dashboard = () => {
       value: 0,
     },
   ]);
-  const [availableDesks, setAvailableDesks] = useState(0);
-  const [reservedDesks, setReservedDesks] = useState(0);
-  const [allDesks, setAllDesks] = useState(0);
+  const [availableDesksNumber, setAvailableDesksNumber] = useState(0);
+  const [reservedDesksNumber, setReservedDesksNumber] = useState(0);
+  const [allDesksNumber, setAllDesksNumber] = useState(0);
   const [writtenReview, setWrittenReview] = useState("");
   const [activeModal, setActiveModal] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [reviewsForSelectedOffice, setReviewsForSelectedOffice] = useState([]);
   const [offices, setOffices] = useState([]);
   const [initialReviews, setInitialReviews] = useState([]);
-  const start = useSelector((state) => state.date.start);
-  const end = useSelector((state) => state.date.end);
   const count = useRef(0);
   const initialDesk = useSelector((state) => state.dashboard.initialDesk);
   const moment = extendMoment(Moment);
@@ -89,7 +87,7 @@ const Dashboard = () => {
           overflow: "hidden",
           textOverflow: "ellipsis",
         },
-        content: `${allDesks ? allDesks : "0"}`,
+        content: `${allDesksNumber ? allDesksNumber : "0"}`,
       },
     },
     theme: {
@@ -189,10 +187,7 @@ const Dashboard = () => {
     if (!deskInfo.length) {
       return;
     }
-
     count.current = 0;
-    setDesks(deskInfo);
-
     deskInfo.forEach((item) => {
       if (item.category.unavailable) {
         count.current = count.current + 1;
@@ -201,34 +196,31 @@ const Dashboard = () => {
       }
     });
 
-    const unavailableData = count.current;
-
-    const availableDesk = parseInt(deskInfo.length) - unavailableData;
-
-    setAllDesks(deskInfo.length);
+    const unavailableDeskNo = count.current;
+    const availableDeskNo = parseInt(deskInfo.length) - unavailableDeskNo;
+    setAllDesksNumber(deskInfo.length);
     setDeskData([
       {
         type: "Available",
-        value: availableDesk,
+        value: availableDeskNo,
       },
       {
         type: "Reserved",
-        value: unavailableData,
+        value: unavailableDeskNo,
       },
     ]);
 
-    setAvailableDesks(availableDesk);
-    setReservedDesks(unavailableData);
+    setAvailableDesksNumber(availableDeskNo);
+    setReservedDesksNumber(unavailableDeskNo);
   };
 
   /**
    * It fetches data from an API, sorts it, and then sets it to a state.
    */
   const fetchOfficeData = async () => {
-    await api
-      .get("admin/offices")
+    await fetchAllOfficesAdminApi()
       .then(async ({ data }) => {
-        const sortedOffices = data.sort((a, b) => a.name.localeCompare(b.name));
+        const sortedOffices = sortByName(data);
         setOffices(sortedOffices);
 
         if (initialDesk.length === 0 || !initialDesk) {
@@ -259,17 +251,12 @@ const Dashboard = () => {
    * @returns An array of objects.
    */
   const fetchDeskData = async (officeId) => {
-    return api
-      .get("employee/office-desks/" + officeId)
-      .then((response) => {
-        const data = response.data.map((item) => {
-          return { ...item, officeId };
-        });
-        return data;
-      })
-      .catch((error) => {
-        console.error("error message");
+    return fetchAllDeskApi(officeId).then((response) => {
+      const desks = response.data.map((item) => {
+        return { ...item, officeId };
       });
+      return desks;
+    });
   };
 
   /**
@@ -280,7 +267,7 @@ const Dashboard = () => {
    * filter.
    * @returns the filtered data.
    */
-  const selectFilter = (officeId) => {
+  const selectOffice = (officeId) => {
     if (!officeId) {
       filterData(initialDesk, currentRange);
       setReviews(initialReviews);
@@ -310,8 +297,8 @@ const Dashboard = () => {
   };
 
   const clearDate = () => {
-    setAvailableDesks(0);
-    setReservedDesks(0);
+    setAvailableDesksNumber(0);
+    setReservedDesksNumber(0);
     setDeskData([
       {
         type: "Available",
@@ -322,7 +309,7 @@ const Dashboard = () => {
         value: 0,
       },
     ]);
-    setAllDesks(0);
+    setAllDesksNumber(0);
     dispatch(setStart(null));
     dispatch(setEnd(null));
     setDates([]);
@@ -333,35 +320,12 @@ const Dashboard = () => {
 
   /* Fetching reviews from an API and then mapping over the data to create a new array of objects. */
   const fetchReviews = () => {
-    api
-      .get("employee/reviews/all", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
-      })
-      .then(({ data }) => {
-        const better = data.map((item, id) => {
-          return {
-            ...item,
-            reviewOutput: item.reviewOutput ? (
-              item.reviewOutput === "Positive" ? (
-                <SmileOutlined className={styles.emoji} />
-              ) : (
-                <FrownOutlined className={styles.emoji} />
-              )
-            ) : (
-              <MehOutlined className={styles.emoji} />
-            ),
-            review:
-              item.reviews.length > 0 ? item.reviews : "This review is blank",
-            key: id,
-          };
-        });
-        setInitialReviews(better);
-        setReviews(better);
-      });
+    getAllReviewsApi().then(({ data }) => {
+      const addEmoji = addEmojiToReview(data);
+
+      setInitialReviews(addEmoji);
+      setReviews(addEmoji);
+    });
   };
 
   const filterReviewByDate = (range) => {
@@ -415,7 +379,7 @@ const Dashboard = () => {
               <Select
                 showSearch
                 placeholder="Select office"
-                onChange={selectFilter}
+                onChange={selectOffice}
                 className={styles.select}
                 optionFilterProp="children"
                 filterOption={(input, option) =>
@@ -452,7 +416,9 @@ const Dashboard = () => {
               <div className={styles.dashboardCard}>
                 <p className={styles.dashboardCardTitle}>AVAILABLE</p>
                 <div className={styles.tile}>
-                  <h2>{isNaN(availableDesks) ? 0 : availableDesks}</h2>
+                  <h2>
+                    {isNaN(availableDesksNumber) ? 0 : availableDesksNumber}
+                  </h2>
                   <CheckCircleFilled
                     className={`${styles.tabIcon} ${styles.checkmark}`}
                   />
@@ -461,7 +427,7 @@ const Dashboard = () => {
               <div className={styles.dashboardCard}>
                 <p>RESERVED</p>
                 <div className={styles.tile}>
-                  <h2>{reservedDesks ? reservedDesks : 0}</h2>
+                  <h2>{reservedDesksNumber ? reservedDesksNumber : 0}</h2>
                   <CloseCircleFilled
                     className={`${styles.tabIcon} ${styles.xmark}`}
                   />
@@ -470,7 +436,7 @@ const Dashboard = () => {
               <div className={styles.dashboardCard}>
                 <p>TOTAL</p>
                 <div className={styles.tile}>
-                  <h2>{allDesks}</h2>
+                  <h2>{allDesksNumber}</h2>
                   <InfoCircleFilled
                     className={`${styles.tabIcon} ${styles.imark}`}
                   />

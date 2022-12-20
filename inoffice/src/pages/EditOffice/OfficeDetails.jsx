@@ -13,9 +13,16 @@ import {
   Col,
   Row,
 } from "antd";
-import api from "../../helper/api";
 import UploadOfficePlan from "./UploadOfficePlan/UploadOfficePlan";
 import Loading from "../../components/Loading/Loading";
+import {
+  fetchAdminAllDeskApi,
+  updateOfficeDeskApi,
+  addNewDeskApi,
+  deleteDeskApi,
+} from "../../services/desk.service";
+import { fetchAdminOfficeImageApi } from "../../services/office.service";
+import { checkDeskProperty } from "../../utils/checkDeskProperty";
 import {
   openError,
   openNotification,
@@ -29,7 +36,6 @@ const OfficeDetails = ({ props }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [saveBtnDisabled, setSaveBtnDisabled] = useState(true);
-
   const columns = [
     {
       title: "Desk No.",
@@ -40,7 +46,6 @@ const OfficeDetails = ({ props }) => {
     },
     {
       title: "Unavailable desks",
-
       dataIndex: "unavailable",
       key: 2,
 
@@ -147,28 +152,20 @@ const OfficeDetails = ({ props }) => {
 
   const getDesks = () => {
     setIsLoading(true);
-    api
-      .get("admin/office-desks/" + officeId)
+    fetchAdminAllDeskApi(officeId)
       .then((res) => {
         setDesks(res.data);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
-        openNotification("There was an error while loading");
       });
   };
 
   const getImage = () => {
-    api
-      .get("admin/office/image/" + officeId)
-      .then((res) => {
-        setImageUrl(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchAdminOfficeImageApi(officeId).then((res) => {
+      setImageUrl(res.data);
+    });
   };
 
   const getNewImage = () => {
@@ -190,13 +187,7 @@ const OfficeDetails = ({ props }) => {
       };
     });
 
-    const config = {
-      Authorization: `Bearer ${localStorage.getItem("msal.idtoken")}`,
-      "Content-Type": "application/json",
-    };
-
-    api
-      .put("admin/office-desks", properlySortedData, config)
+    updateOfficeDeskApi(properlySortedData)
       .then((res) => {
         setSaveBtnDisabled(true);
         getDesks();
@@ -204,66 +195,15 @@ const OfficeDetails = ({ props }) => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error.response.data);
         setIsLoading(false);
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError("It seems there was an error while saving");
       });
   };
 
   const check = (id, category) => {
-    const newItem = desks.map((item) => {
-      if (item.id === id) {
-        if (category === "unavailable") {
-          return {
-            ...item,
-            category: {
-              ...item.category,
-              unavailable: !item.category?.unavailable ? true : false,
-            },
-          };
-        } else if (category === "singleMonitor") {
-          return {
-            ...item,
-            category: {
-              ...item.category,
-              singleMonitor: !item.category?.singleMonitor ? true : false,
-            },
-          };
-        } else if (category === "dualMonitor") {
-          return {
-            ...item,
-            category: {
-              ...item.category,
-              doubleMonitor: !item.category?.doubleMonitor ? true : false,
-            },
-          };
-        } else if (category === "nearWindow") {
-          return {
-            ...item,
-            category: {
-              ...item.category,
-              nearWindow: !item.category?.nearWindow ? true : false,
-            },
-          };
-        }
-      }
-      return item;
-    });
+    const newItem = checkDeskProperty(desks, id, category);
+
     setSaveBtnDisabled(false);
     setDesks(newItem);
-
-    // const newChecked = [...checked, checkedValues.target.value];
-    // setChecked(newChecked);
-    // const newUnchecked = unchecked.filter((item) => {
-    //   let flag = false;
-    //   newChecked.forEach((id) => {
-    //     if (id === item) flag = true;
-    //   });
-    //   return flag ? false : true;
-    // });
-    // setUnchecked(newUnchecked);
   };
 
   const handleSubmit = (e) => {
@@ -280,39 +220,20 @@ const OfficeDetails = ({ props }) => {
       openError("You cannot have more than 500 desks active");
       return;
     }
-    api
-      .post("admin/office-desks/" + officeId, data)
-      .then((res) => {
-        setSaveBtnDisabled(false);
-        openNotification("You have successfully added new entities");
-        getDesks();
-      })
-      .catch((error) => {
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(
-              "An error occurred while updating the entities, please try again"
-            );
 
-        console.log(error.response);
-      });
+    addNewDeskApi(officeId, data).then((res) => {
+      setSaveBtnDisabled(false);
+      openNotification("You have successfully added new entities");
+      getDesks();
+    });
   };
 
   const deleteNotification = (deskId) => {
-    api
-      .delete("admin/office-desks/" + deskId)
-      .then(() => {
-        setSaveBtnDisabled(false);
-        getDesks();
-        openNotification("You have successfully deleted the entity");
-      })
-      .catch((error) => {
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(
-              "An error occurred while deleting the entity, please try again"
-            );
-      });
+    deleteDeskApi(deskId).then(() => {
+      setSaveBtnDisabled(false);
+      getDesks();
+      openNotification("You have successfully deleted the entity");
+    });
   };
 
   useEffect(() => {

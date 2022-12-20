@@ -1,51 +1,38 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
-import api from "../../helper/api";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Typography, List, Card, Input } from "antd";
-import { Popconfirm, Row, Col } from "antd";
+import {
+  Button,
+  Typography,
+  List,
+  Card,
+  Input,
+  Popconfirm,
+  Row,
+  Col,
+} from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import "../Offices/Offices.css";
+import styles from "./Offices.module.scss";
 import Title from "./Title";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOffices } from "../../redux/Offices/offices";
-import {
-  openError,
-  openNotification,
-} from "../../components/notification/Notification";
+import { deleteOfficeApi } from "../../services/office.service";
+import { openNotification } from "../../components/notification/Notification";
 import MainLayout from "../../layouts/MainLayout";
 
 const Offices = () => {
   const [inputFilter, setInputFilter] = useState("");
   const [mediaMatches, setMediaMatches] = useState(false);
-  const data = useSelector((state) => state.offices.offices);
+  const offices = useSelector((state) => state.offices.offices);
   const dispatch = useDispatch();
+  const addOfficeText = "Add office";
   const media = window.matchMedia("(max-width: 820px)");
 
-  useEffect(() => {
-    dispatch(fetchOffices());
-  }, [dispatch]);
-
-  useEffect(() => {
-    setMediaMatches(media.matches);
-  }, [media]);
-
-  const deleteFunc = (value) => {
-    api
-      .delete("admin/office/" + value)
-      .then(() => {
-        dispatch(fetchOffices());
-        openNotification("You have successfully deleted the selected office");
-      })
-      .catch((error) => {
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(
-              "An error occurred while deleting the office, please try again"
-            );
-
-        console.log(error);
-      });
+  const deleteFunc = (officeId) => {
+    deleteOfficeApi(officeId).then(() => {
+      dispatch(fetchOffices());
+      openNotification("You have successfully deleted the selected office");
+    });
   };
 
   const handleChange = (e) => {
@@ -56,31 +43,23 @@ const Offices = () => {
     event.preventDefault(event);
   };
 
-  const addOfficeText = "Add office";
+  useEffect(() => {
+    dispatch(fetchOffices());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setMediaMatches(media.matches);
+  }, [media]);
 
   return (
     <Layout>
       <Sidebar selected="2" />
       <MainLayout isHome={false}>
-        <Content
-          style={{
-            display: "flex",
-            justifyContent: "top",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "80vh",
-          }}
-        >
-          <Row
-            style={{
-              background: "transparent",
-              width: "80%",
-              borderRadius: "14px",
-              border: 0,
-            }}
-          >
+        <Content className={styles.contentAnt}>
+          <Row className={styles.rowAnt}>
             <Col span={24}>
               <Card
+                className={styles.cardContainer}
                 title={
                   <Title
                     onSubmit={onSubmit}
@@ -94,18 +73,21 @@ const Offices = () => {
                   borderRadius: 7,
                 }}
               >
-                <div style={{ overflowX: "scroll" }}>
+                <div
+                  className={styles.contentWrapper}
+                  style={{ overflowX: "scroll" }}
+                >
                   <Input
-                    style={{ width: 200 }}
+                    className={styles.searchInput}
                     onChange={handleChange}
                     data-cy="SearchOffice-Input"
                     placeholder="Search Office"
                   />
                   <List
                     bordered
-                    style={{ minWidth: 400 }}
+                    className={styles.listAnt}
                     pagination={{ pageSize: 5, position: "bottom" }}
-                    dataSource={data.filter(({ name }) =>
+                    dataSource={offices.filter(({ name }) =>
                       name.toLowerCase().includes(inputFilter.toLowerCase())
                     )}
                     renderItem={(office) => (
@@ -139,7 +121,7 @@ const Offices = () => {
                         <Button
                           data-cy="editoffice-button"
                           type="primary"
-                          className="editButton"
+                          className={`${styles.editButton} editButton`}
                           onClick={() => {
                             window.location =
                               "edit/" + office.name + "/" + office.id;

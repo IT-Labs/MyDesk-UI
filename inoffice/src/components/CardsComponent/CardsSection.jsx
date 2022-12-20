@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { List, Card, Tooltip } from "antd";
 import InfiniteScroll from "react-infinite-scroll-component";
-import api from "../../helper/api";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import styles from "./CardsSection.module.scss";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { areIntervalsOverlapping } from "date-fns";
 import { checkAvailable, findAvailable } from "../../utils/checkAvailable.js";
+import { fetchDeskApi, fetchAllDeskApi } from "../../services/desk.service";
+import { filterByAvailable, getSpecificUser } from "./utils/filterByAvailable";
+import { filterByCategories } from "./utils/filterByCategories";
 let controller = new AbortController();
 
 const CardsSection = (props) => {
   const [loading, setLoading] = useState(false);
-  const [selectedCardInSection, setselectedCardInSection] = useState();
+  const [selectedCardInSection, setSelectedCardInSection] = useState();
   const [dataDesks, setDataDesks] = useState([]);
   const [allDesks, setAllDesks] = useState([]);
   const [desksByAvailable, setDesksByAvailable] = useState([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-
   const { Meta } = Card;
   const media = window.matchMedia("(max-width: 820px)");
-
   const start = useSelector((state) => state.date.start);
   const end = useSelector((state) => state.date.end);
 
@@ -38,7 +37,7 @@ const CardsSection = (props) => {
     }
 
     props.selectedCard(e, isAvailable);
-    setselectedCardInSection(e);
+    setSelectedCardInSection(e);
   };
 
   const setDesks = (desks) => {
@@ -53,22 +52,16 @@ const CardsSection = (props) => {
   };
 
   const getAllDesks = async () => {
-    if (!props.officeid) {
+    if (!props.officeId) {
       return;
     }
-    await api
-      .get(`employee/office-desks/${props.officeid}`, {
-        signal: controller.signal,
-      })
-      .then((response) => {
-        addAvailableProp(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+    fetchAllDeskApi(props.officeId).then((response) => {
+      addAvailableProp(response.data);
+    });
   };
 
-  function addAvailableProp(allDataDesk) {
+  const addAvailableProp = (allDataDesk) => {
     if (!allDataDesk.length) {
       return;
     }
@@ -78,32 +71,25 @@ const CardsSection = (props) => {
       return item;
     });
     setAllDesks(addAvailable);
-  }
+  };
 
   const fetchData = async (skipProp) => {
-    if (!props.officeid) {
+    if (!props.officeId) {
       return;
     }
-    await api
-      .get(`employee/office-desks/${props.officeid}/?top=20&skip=${skipProp}`, {
-        signal: controller.signal,
-      })
-      .then((response) => {
-        if (skipProp === 0) {
-          setDesks(response.data);
-          setHasMore(true);
-          setLoading(false);
-        } else {
-          setDesks([...dataDesks, ...response.data]);
-          if (!response.data.length) {
-            setHasMore(false);
-          }
-          setLoading(false);
+    fetchDeskApi(props.officeId, skipProp).then((response) => {
+      if (skipProp === 0) {
+        setDesks(response.data);
+        setHasMore(true);
+        setLoading(false);
+      } else {
+        setDesks([...dataDesks, ...response.data]);
+        if (!response.data.length) {
+          setHasMore(false);
         }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        setLoading(false);
+      }
+    });
   };
 
   const loadInitialDesks = () => {
@@ -124,42 +110,14 @@ const CardsSection = (props) => {
     fetchData(newSkip);
   };
 
-  const filterByAvailable = () => {
-    let filteredDesks = allDesks.filter((item) => {
-      if (props.employeeSearch.length === 0) {
-        if (props.available === null) {
-          return true;
-        } else if (
-          item.available &&
-          props.available &&
-          !item.category?.unavailable
-        ) {
-          return true;
-        } else if (!item.available && !props.available) {
-          return true;
-        }
-        return false;
-      }
-
-      const specificUser = item.reservations.find((info) => {
-        const newGuy = getSpecificUser(info);
-        if (
-          info.startDate === newGuy.startDate &&
-          info.endDate === newGuy.endDate
-        ) {
-          return true;
-        }
-        return false;
-      });
-
-      if (
-        `${specificUser?.employee?.firstName} ${specificUser?.employee?.surname}`
-          .toLowerCase()
-          .includes(props.employeeSearch.toLowerCase())
-      ) {
-        return true;
-      }
-    });
+  const onFilterByAvailable = () => {
+    let filteredDesks = filterByAvailable(
+      allDesks,
+      props.employeeSearch,
+      props.available,
+      start,
+      end
+    );
 
     filteredDesks.length === 0 && props.employeeSearch.length !== 0
       ? props.getEmployeeSearch(true)
@@ -169,69 +127,14 @@ const CardsSection = (props) => {
     setDesks(filteredDesks);
   };
 
-  const filterByCategories = () => {
+  const onFilterByCategories = () => {
     let desksNeedToFilter;
-
     if (props.available === null && !props.employeeSearch.length) {
       desksNeedToFilter = allDesks;
     } else {
       desksNeedToFilter = desksByAvailable;
     }
-
-    let filteredDesks = desksNeedToFilter.filter(({ category }) => {
-      if (
-        !props.categories.nearWindow &&
-        !props.categories.doubleMonitor &&
-        !props.categories.singleMonitor
-      )
-        return true;
-      if (
-        category &&
-        props.categories.nearWindow &&
-        !props.categories.doubleMonitor &&
-        !props.categories.singleMonitor &&
-        category.nearWindow
-      ) {
-        return true;
-      }
-      if (
-        category &&
-        props.categories.nearWindow &&
-        props.categories.doubleMonitor &&
-        !props.categories.singleMonitor &&
-        category.nearWindow &&
-        category.doubleMonitor
-      ) {
-        return true;
-      }
-      if (
-        category &&
-        props.categories.nearWindow &&
-        !props.categories.doubleMonitor &&
-        props.categories.singleMonitor &&
-        category.nearWindow &&
-        category.singleMonitor
-      ) {
-        return true;
-      }
-      if (
-        category &&
-        !props.categories.nearWindow &&
-        !props.categories.doubleMonitor &&
-        props.categories.singleMonitor &&
-        category.singleMonitor
-      ) {
-        return true;
-      }
-      if (
-        category &&
-        !props.categories.nearWindow &&
-        props.categories.doubleMonitor &&
-        !props.categories.singleMonitor &&
-        category.doubleMonitor
-      )
-        return true;
-    });
+    let filteredDesks = filterByCategories(props, desksNeedToFilter);
 
     setDesks(filteredDesks);
   };
@@ -244,18 +147,18 @@ const CardsSection = (props) => {
       controller.abort();
       controller = new AbortController();
     };
-  }, [props.officeid, props.refresh]);
+  }, [props.officeId, props.refresh]);
 
   useEffect(() => {
     setHasMore(false);
     setDesks([]);
-    filterByAvailable();
+    onFilterByAvailable();
   }, [props.available, props.employeeSearch]);
 
   useEffect(() => {
     setHasMore(false);
     setDesks([]);
-    filterByCategories();
+    onFilterByCategories();
   }, [props.categories]);
 
   useEffect(() => {
@@ -268,29 +171,9 @@ const CardsSection = (props) => {
       props?.categories?.doubleMonitor ||
       props?.categories?.nearWindow
     ) {
-      filterByCategories();
+      onFilterByCategories();
     }
   }, [desksByAvailable]);
-
-  const getSpecificUser = ({ startDate, endDate }) => {
-    if (start && end) {
-      const start1 = start?.split("T");
-      const end1 = end?.split("T");
-      const start2 = `${start1[0]}T00:00:00`;
-      const end2 = `${end1[0]}T00:00:00`;
-
-      const flag = areIntervalsOverlapping(
-        { start: new Date(startDate), end: new Date(endDate) },
-        { start: new Date(start2), end: new Date(end2) },
-        { inclusive: true }
-      );
-      if (flag) {
-        return { startDate: startDate, endDate: endDate };
-      }
-      return {};
-    }
-    return {};
-  };
 
   return (
     <div
@@ -317,7 +200,7 @@ const CardsSection = (props) => {
             const available = checkAvailable(item, start, end);
             Object.assign(item, { available: available });
             const specificUser = item.reservations.find((info) => {
-              const newGuy = getSpecificUser(info);
+              const newGuy = getSpecificUser(info, start, end);
               if (
                 info.startDate === newGuy.startDate &&
                 info.endDate === newGuy.endDate
@@ -337,7 +220,6 @@ const CardsSection = (props) => {
                 <Card
                   onClick={() => selectCard(item)}
                   bodyStyle={{
-                    // backgroundColor: checkAvailable(item.reservation),
                     background: item.category?.unavailable
                       ? "#c1c1c1"
                       : item.available

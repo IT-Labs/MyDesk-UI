@@ -1,7 +1,6 @@
 import React from "react";
 import "antd/dist/antd.css";
 import { Input, Modal, Button, Table } from "antd";
-import api from "../../../helper/api";
 import { useState, useEffect } from "react";
 import Loading from "../../../components/Loading/Loading";
 import styles from "../Reservation.module.scss";
@@ -12,6 +11,11 @@ import {
 } from "../../../components/notification/Notification";
 import { setPastReservations } from "../../../redux/MyReservations/PastReservations";
 import { sortByNewest } from "../../../utils/sortByNewest";
+import { getMyPastReservationsApi } from "../../../services/reservation.service";
+import {
+  showReviewApi,
+  writeReviewApi,
+} from "../../../services/review.service";
 
 let controller = new AbortController();
 
@@ -20,95 +24,14 @@ const PastReservations = ({ officeName }) => {
   const { officeSelect } = useSelector((state) => state.officeSelect);
   const { pastReservations } = useSelector((state) => state.pastReservations);
   const dispatch = useDispatch();
-
   const [loadingData, setLoading] = useState(true);
-
   const [refreshstate, setRefreshState] = useState();
   const [visible, setVisible] = useState(false);
   const [review, setReview] = useState("");
-  const [resid, setResid] = useState();
+  const [resId, setResId] = useState();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [writtenReview, setWrittenReview] = useState();
-
   const [btnDisabled, setBtnDisabled] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await api
-        .get("employee/past-reservations")
-        .then((response) => {
-          const sorted = sortByNewest(response.data.values);
-          setLoading(false);
-          dispatch(setPastReservations(sorted));
-        })
-        .catch((error) => {
-          console.error("Error message");
-          setLoading(false);
-        });
-    };
-    fetchData();
-  }, [refreshstate]);
-
-  useState(() => {
-    setWrittenReview("");
-  }, []);
-
-  const visibility = (item) => {
-    setVisible(true);
-    setResid(item.id);
-  };
-
-  const showReview = async (item) => {
-    await api
-      .get("employee/review/" + item.reviews[0].id)
-      .then((response) => {
-        setWrittenReview(response.data.reviews);
-      })
-      .catch((error) => {
-        console.error("Error message");
-      });
-    setShowReviewModal(true);
-  };
-
-  const writeReview = async () => {
-    const data = {
-      reservation: { id: resid },
-      reviews: review,
-    };
-    setLoading(true);
-    setBtnDisabled(true);
-
-    if (data.reviews.length < 6 || data.reviews.length > 200) {
-      openError("Please write a review with more than 6 and less than 200");
-      setLoading(false);
-      setBtnDisabled(false);
-      return;
-    }
-
-    await api
-      .post("employee/review", data)
-      .then((response) => {
-        setVisible(false);
-        setBtnDisabled(false);
-        setRefreshState({});
-        setLoading(false);
-        setReview("");
-        openNotification("Thank you. Your review has been successfully saved.");
-      })
-      .catch((error) => {
-        error.response.status === 401
-          ? openError("Your session has expired, please login again.")
-          : openError(
-              "An error occurred while saving your review, please try again"
-            );
-
-        setReview("");
-        setLoading(false);
-        setVisible(false);
-        setBtnDisabled(false);
-      });
-  };
-
   const columns = [
     {
       title: "Date",
@@ -145,6 +68,70 @@ const PastReservations = ({ officeName }) => {
       },
     },
   ];
+
+  useState(() => {
+    setWrittenReview("");
+  }, []);
+
+  const visibility = (item) => {
+    setVisible(true);
+    setResId(item.id);
+  };
+
+  const showReview = async (item) => {
+    await showReviewApi(item.reviews[0].id).then((response) => {
+      setWrittenReview(response.data.reviews);
+    });
+
+    setShowReviewModal(true);
+  };
+
+  const writeReview = async () => {
+    const data = {
+      reservation: { id: resId },
+      reviews: review,
+    };
+    setLoading(true);
+    setBtnDisabled(true);
+
+    if (data.reviews.length < 6 || data.reviews.length > 200) {
+      openError("Please write a review with more than 6 and less than 200");
+      setLoading(false);
+      setBtnDisabled(false);
+      return;
+    }
+
+    await writeReviewApi(data)
+      .then((response) => {
+        setVisible(false);
+        setBtnDisabled(false);
+        setRefreshState({});
+        setLoading(false);
+        setReview("");
+        openNotification("Thank you. Your review has been successfully saved.");
+      })
+      .catch((error) => {
+        setReview("");
+        setLoading(false);
+        setVisible(false);
+        setBtnDisabled(false);
+      });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getMyPastReservationsApi()
+        .then((response) => {
+          const sorted = sortByNewest(response.data.values);
+          setLoading(false);
+          dispatch(setPastReservations(sorted));
+        })
+        .catch((error) => {
+          setLoading(false);
+        });
+    };
+    fetchData();
+  }, [refreshstate]);
 
   return (
     <div>

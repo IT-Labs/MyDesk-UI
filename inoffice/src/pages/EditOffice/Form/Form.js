@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
-import api from "../../../helper/api";
+import { editOfficeApi } from "../../../services/office.service";
 import { withRouter } from "../../../helper/withRouterHelper";
 import {
   openError,
@@ -61,20 +61,13 @@ const AddOffice = (props) => {
       return;
     }
 
-    api
-      .put("admin/office/" + officeId, data)
-      .then(() => {
-        navigate(`/admin/edit/${data.name}/${officeId}`);
-        openNotification(
-          "You have successfully updated office plan/information"
-        );
-        props.hideModal();
-      })
-      .catch((error) => {
-        console.log(error.response);
-        openError("An office with that name and location already exists");
-      });
+    editOfficeApi(officeId, data).then(() => {
+      navigate(`/admin/edit/${data.name}/${officeId}`);
+      openNotification("You have successfully updated office plan/information");
+      props.hideModal();
+    });
   };
+
   return (
     <div>
       <Form
