@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import jwt from "jwt-decode";
 import { CardTitle } from "./CardTitle";
 import styles from "./Reservation.module.scss";
-import { fetchAllOfficesAdminApi } from "../../services/office.service";
+import { fetchAllOfficesApi } from "../../services/office.service";
 import MainLayout from "../../layouts/MainLayout";
 import { sortByName } from "../../utils/sortByName";
 
@@ -35,7 +35,7 @@ const EmployeeReservationList = () => {
   };
 
   useEffect(() => {
-    fetchAllOfficesAdminApi().then((res) => {
+    fetchAllOfficesApi().then((res) => {
       const sorted = sortByName(res.data);
       setData(sorted);
     });

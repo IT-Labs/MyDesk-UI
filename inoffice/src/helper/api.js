@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 /* Creating an instance of axios and adding the token to the header. */
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Methods": "*",
     "Content-Type": "application/json",
   },
 });

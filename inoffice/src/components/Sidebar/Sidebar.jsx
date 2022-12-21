@@ -34,16 +34,15 @@ const Sidebar = (props) => {
       setWidth("100%");
     }
   };
-  
-  if (jwt(config.token).roles && (jwt(config.token).roles[0] === "ADMIN" || jwt(config.token).roles[1] === "ADMIN")) {
+
+  if (
+    jwt(config.token).roles &&
+    (jwt(config.token).roles[0] === "ADMIN" ||
+      jwt(config.token).roles[1] === "ADMIN")
+  ) {
     return (
       <Sider
-        style={{
-          overflow: "none",
-          height: "100.7vh",
-          position: "relative",
-          left: 0,
-        }}
+        className={styles.sideBar}
         theme="light"
         collapsible
         collapsed={media.matches ? true : collapsed}
@@ -118,24 +117,26 @@ const Sidebar = (props) => {
 
   return (
     <Sider
+      className={styles.sideBar}
+      theme="light"
       collapsible
       collapsed={media.matches ? true : collapsed}
       onCollapse={onCollapse}
       trigger={
-        media.matches ? null : collapsed ? (
-          <RightCircleOutlined />
+        media.matches ? null : !collapsed ? (
+          <MenuFoldOutlined
+            onClick={() => {
+              setCollapsed(true);
+            }}
+          />
         ) : (
-          <LeftCircleOutlined />
+          <MenuUnfoldOutlined
+            onClick={() => {
+              setCollapsed(false);
+            }}
+          />
         )
       }
-      style={{
-        overflow: "hidden",
-        height: "100.7vh",
-        position: "relative",
-        top: "-70px",
-        left: 0,
-      }}
-      theme="light"
     >
       <Menu
         theme="light"
@@ -143,13 +144,23 @@ const Sidebar = (props) => {
         mode="inline"
         className="sideMenu"
       >
-        <Menu.Item key="0" className="sideBarLogo" style={{ width: width }}>
-          <NavLink id="myDeskLogo" to="/employee/home"></NavLink>
+        <Menu.Item
+          key="00"
+          className={`${styles.sideBarLogo} sideBarLogo`}
+          style={{ width: width }}
+        >
+          <div>
+            <Tooltip title="Home" placement="bottom">
+              <NavLink id="myDeskLogo" to="/employee/home"></NavLink>
+            </Tooltip>
+          </div>
         </Menu.Item>
-        <Menu.Item key="1" icon={<TeamOutlined />}>
-          <Link to={"/employee/reservations"}>
-            {!collapsed && <>My reservations</>}
-          </Link>
+        <Menu.Item key="01" icon={<FeatherIcon icon="coffee" />}>
+          <Tooltip title="My reservations">
+            <Link to={"/employee/reservations"}>
+              {!collapsed && <>My reservations</>}
+            </Link>
+          </Tooltip>
         </Menu.Item>
       </Menu>
     </Sider>
