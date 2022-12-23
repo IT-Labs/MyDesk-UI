@@ -33,35 +33,37 @@ const Login = () => {
     false
   );
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, [inputRef]);
+  const loadScript = (src) =>
+  new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) return resolve()
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = () => resolve()
+    script.onerror = (err) => reject(err)
+    document.body.appendChild(script)
+  })
 
-  useEffect(() => {
-    setErrorMsg(false);
-  }, [email, password]);
+  const initializeGoogleAccount = (clId) => {
 
-  useEffect(() => {
-    if (localStorage.getItem("msal.idtoken")) {
-      setLoading(true);
-    }
-  }, []);
+    const src = 'https://accounts.google.com/gsi/client'
+    loadScript(src)
+      .then(() => {
+        /*global google*/
 
-  useEffect(() => {
-    const clId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: clId,
-      callback: googleLoginCallbackHandler,
-    });
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-    });
-  }, []);
+        google.accounts.id.initialize({
+          client_id: clId,
+          callback: googleLoginCallbackHandler,
+        });
+    
+        google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+          theme: "outline",
+          size: "large",
+        });
+      })
+      .catch(console.error)
+  };
 
   const googleLoginCallbackHandler = (res) => {
-
     if (!res.credential) {
       return;
     }
@@ -153,6 +155,23 @@ const Login = () => {
         console.log(err.response);
       });
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
+
+  useEffect(() => {
+    setErrorMsg(false);
+  }, [email, password]);
+
+  useEffect(() => {
+    if (localStorage.getItem("msal.idtoken")) {
+      setLoading(true);
+    }
+
+    const clId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    initializeGoogleAccount(clId);
+  }, []);
 
   return (
     <>
