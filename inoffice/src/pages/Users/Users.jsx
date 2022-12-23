@@ -74,7 +74,12 @@ const Users = () => {
                   <List
                     bordered
                     className={styles.listAnt}
-                    pagination={{ pageSize: 5, position: "bottom" }}
+                    pagination={{
+                      pageSize: 5,
+                      position: "bottom",
+                      showSizeChanger: false,
+                      size: "small",
+                    }}
                     dataSource={employees.filter(
                       ({ firstName, surname }) =>
                         firstName
