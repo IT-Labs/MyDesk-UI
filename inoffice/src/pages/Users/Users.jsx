@@ -16,14 +16,9 @@ import MainLayout from "../../layouts/MainLayout";
 
 const Users = () => {
   const [inputFilter, setInputFilter] = useState("");
-  const office = useSelector((state) => state.offices.offices);
   const { decodedUser } = useSelector((state) => state.user);
   const employees = useSelector((state) => state.employees.employees);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchOffices());
-  }, []);
 
   const getUsers = async () => {
     fetchEmployeesApi(dispatch, decodedUser);
@@ -48,6 +43,11 @@ const Users = () => {
     getUsers();
   };
 
+  useEffect(() => {
+    dispatch(fetchOffices());
+    getUsers();
+  }, []);
+
   return (
     <Layout>
       <Sidebar selected="6" />
@@ -59,7 +59,7 @@ const Users = () => {
                 className={styles.cardContainer}
                 title={
                   <Title
-                    officeName={office ? office[0]?.name : "Office"}
+                    officeName="Users"
                     addUserTextBtn="Add user"
                     onSubmit={onSubmit}
                   />
@@ -92,6 +92,7 @@ const Users = () => {
                     renderItem={(user) => (
                       <List.Item>
                         <span>{`${user.firstName} ${user.surname}`}</span>
+                        <span>{`${user.email}`}</span>
                         <Popconfirm
                           title="Do you want to assign this user as admin?"
                           onConfirm={() => assignAsAdmin(user)}
