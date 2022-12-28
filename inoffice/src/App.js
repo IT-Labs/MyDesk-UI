@@ -6,8 +6,8 @@ import { useEffect, lazy, Suspense } from "react";
 import jwtDecode from "jwt-decode";
 import "./antd.less";
 import { openError } from "./components/notification/Notification";
-import { useDispatch } from "react-redux";
-import { setDecodedUser } from "./redux/User/user";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoggedUser } from "./redux/User/user";
 
 const Dashboard = lazy(() => import("./pages/Dashboard/Dashboard"));
 const Home = lazy(() => import("./pages/HomePage/HomePage"));
@@ -32,7 +32,7 @@ const App = () => {
     if (!localStorage.getItem("msal.idtoken")) return;
     try {
       let user = jwtDecode(localStorage.getItem("msal.idtoken"));
-      dispatch(setDecodedUser(user));
+      dispatch(setLoggedUser(user));
     } catch (err) {
       localStorage.removeItem("msal.idtoken");
       openError("Your session has expired.");

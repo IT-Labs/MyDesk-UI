@@ -31,6 +31,7 @@ import { fetchAllOfficesAdminApi } from "../../services/office.service";
 import { getImageApi } from "../../services/getImageApi";
 import MainLayout from "../../layouts/MainLayout";
 import { sortByName } from "../../utils/sortByName";
+import { useSelector } from "react-redux";
 
 const ReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -57,6 +58,8 @@ const ReservationList = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const media = window.matchMedia("(max-width: 820px)");
+  const loggedUser = useSelector((state) => state.user.loggedUser);
+  const { employees } = useSelector((state) => state.employees);
 
   const futureColumns = [
     {
@@ -76,12 +79,8 @@ const ReservationList = () => {
           >
             {!media.matches && (
               <img
-                src={record.avatar}
-                alt=""
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null;
-                  currentTarget.src = placeholderAvatar;
-                }}
+                src={record.avatar ?? placeholderAvatar}
+                alt="user avatar"
                 className={styles.avatar}
               />
             )}
@@ -208,6 +207,7 @@ const ReservationList = () => {
       ...item,
       avatar: image,
       employee: `${item.employee.firstName} ${item.employee.surname}`,
+      isSSOAccount: item.employee.isSSOAccount,
       office: item.desk.office.name
         ? item.desk.office.name
         : "Undefined office",
@@ -220,8 +220,7 @@ const ReservationList = () => {
       date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
         "DD/MM/YYYY"
       )}`,
-      email: item.employee.email,
-      ...item.employee,
+      email: item.employee.email
     };
   };
 
@@ -239,38 +238,48 @@ const ReservationList = () => {
     if (isAllFuture === null) {
       setLoadingTableData(false);
       setReservations(results);
-      getImagesForRes(results, null);
+      getImagesForReservations(results, null);
     } else if (isAllFuture) {
       setAllFutureReservations(results);
-      getImagesForRes(results, true);
+      getImagesForReservations(results, true);
     } else {
       setAllPastReservations(results);
-      getImagesForRes(results, false);
+      getImagesForReservations(results, false);
     }
 
     return;
   };
 
-  const getImagesForRes = async (res, isAllFuture) => {
-    const results = await Promise.all(
-      res.map(async (item) => {
-        const image = await getImage(item.email);
-        const info = await addImage(item, image).then((res) => {
-          return res;
-        });
+  const getImagesForReservations = async (reservations, isAllFuture) => {
 
-        return info;
-      })
+    const loggedEmployee = employees.find(
+      (employee) => employee.email === loggedUser.preferred_username
     );
 
+    if (loggedEmployee && loggedEmployee.isSSOAccount) {
+      reservations = await Promise.all(
+        reservations.map(async (reservation) => {
+
+          if (reservation.isSSOAccount && !reservation.email.includes('gmail.com')) {
+              const image = await getImage(reservation.email);
+              return await addImage(reservation, image).then((res) => {
+                return res;
+              });
+            }
+            
+            return reservation;
+          })
+        );
+    }
+
     if (isAllFuture === null) {
-      setInitRes(results);
-      setReservations(results);
+      setInitRes(reservations);
+      setReservations(reservations);
     } else if (isAllFuture) {
-      setAllFutureReservations(results);
+      setAllFutureReservations(reservations);
       setLoadingAllFutureReservations(true);
     } else {
-      setAllPastReservations(results);
+      setAllPastReservations(reservations);
       setLoadingAllPastReservations(true);
     }
   };

@@ -2,13 +2,13 @@ import { openError } from "../components/notification/Notification";
 import { setEmployees } from "../redux/Employees/employees";
 import api from "../helper/api";
 
-export const fetchEmployeesApi = async (dispatch, user) => {
+export const fetchEmployeesApi = async (dispatch) => {
   await api
     .get("employee/all")
     .then(({ data }) => {
-      const filteredData = data
-        .filter(({ email }) => email !== user.preferred_username ?? user.email)
-        .sort((a, b) => a.firstName.localeCompare(b.firstName));
+      const filteredData = data.sort((a, b) =>
+        a.firstName.localeCompare(b.firstName)
+      );
       dispatch(setEmployees(filteredData));
     })
     .catch((err) => {

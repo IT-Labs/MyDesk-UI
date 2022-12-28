@@ -1,40 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
-
 import placeholderAvatar from "../../assets/avatar.png";
-
 import HeaderImg from "./HeaderImg";
-
 import { Tooltip } from "antd";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 import { LogoutOutlined } from "@ant-design/icons";
+import { setLoggedUser } from "../../redux/User/user";
+import { clearAvatar } from "../../redux/Avatar/Avatar";
 
 const HeaderBar = (props) => {
   const media = window.matchMedia("(max-width: 820px)");
 
-  const user = useSelector((state) => state.user.decodedUser);
+  const user = useSelector((state) => state.user.loggedUser);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { avatar } = useSelector((state) => state.avatar);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    dispatch(setLoggedUser(null));
+    dispatch(clearAvatar());
+    navigate("/");
+  };
 
   return (
     <Header className={props?.isHome ? styles.headerHome : styles.header}>
-      {/* Hello x user here without the my account tab, same as the admin page*/}
-
       <div>{props?.isHome && <HeaderImg />}</div>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.items}>
             {!media.matches && (
               <img
-                src={localStorage.getItem("avatar")}
+                src={avatar ?? placeholderAvatar}
                 alt="avatar"
                 className={styles.avatar}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null;
-                  currentTarget.src = placeholderAvatar;
-                }}
               />
             )}
             <NavLink
@@ -46,16 +47,12 @@ const HeaderBar = (props) => {
             </NavLink>
             <Tooltip title="Log out">
               <LogoutOutlined
-                //css in jsx used here because of the API
                 style={{ color: "white" }}
                 className={`${styles.link} ${styles.logoutBtn}`}
                 data-cy="logout-button"
                 to="/"
-                onClick={() => {
-                  localStorage.clear();
-                  navigate("/");
-                }}
-              >
+                onClick={handleLogout}
+                >
                 Logout
               </LogoutOutlined>
             </Tooltip>

@@ -11,22 +11,28 @@ export const getAvatar = createAsyncThunk("avatar/getAvatar", async () => {
     .then((imgBlob) => {
       const imageObjURL = URL.createObjectURL(imgBlob);
       image = imageObjURL;
-      localStorage.setItem("avatar", imageObjURL);
     });
 
   return image;
 });
 
+
 const avatarSlice = createSlice({
   name: "avatar",
   initialState: {
-    avatar: "",
+    avatar: null,
+  },
+  reducers: {
+    clearAvatar: (state, action) => {
+      state.avatar = null;
+    }
   },
   extraReducers: {
     [getAvatar.fulfilled]: (state, action) => {
       state.avatar = action.payload;
-    },
+    }
   },
 });
 
+export const { clearAvatar } = avatarSlice.actions;
 export default avatarSlice.reducer;

@@ -7,6 +7,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { getAllFutureReservationsApi } from "../../services/reservation.service";
 import { fetchAllOfficesAdminApi } from "../../services/office.service";
 import { sortByName } from "../../utils/sortByName";
+import { filterEmployees } from "../../utils/filterEmployees";
 
 const UserSearch = () => {
   const [employee, setEmployee] = useState({});
@@ -14,6 +15,8 @@ const UserSearch = () => {
   const [reservations, setReservations] = useState([]);
   const [employeeName, setEmployeeName] = useState("");
   const { employees } = useSelector((state) => state.employees);
+  const loggedUser = useSelector((state) => state.user.loggedUser);
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
   const futureColumns = [
     {
       title: "Desk",
@@ -79,7 +82,7 @@ const UserSearch = () => {
   };
 
   const findEmployee = (e) => {
-    const foundEmployee = employees.find(
+    const foundEmployee = filteredEmployees.find(
       ({ firstName, surname, jobTitle }) =>
         `${firstName} ${surname} ${jobTitle}` === e
     );
@@ -90,6 +93,10 @@ const UserSearch = () => {
   useEffect(() => {
     getAllRes();
   }, []);
+
+  useEffect(() => {
+    setFilteredEmployees(filterEmployees(employees, loggedUser));
+  }, [employees, loggedUser]);
 
   return (
     <>
@@ -102,8 +109,8 @@ const UserSearch = () => {
         onSelect={findEmployee}
         suffixIcon={<PlaceholderText name={employeeName} />}
       >
-        {employees ? (
-          employees.map((item) => (
+        {filteredEmployees ? (
+          filteredEmployees.map((item) => (
             <Select.Option
               key={item.id}
               value={`${item.firstName} ${item.surname} ${item.jobTitle}`}

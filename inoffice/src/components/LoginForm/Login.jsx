@@ -34,33 +34,31 @@ const Login = () => {
   );
 
   const loadScript = (src) =>
-  new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) return resolve()
-    const script = document.createElement('script')
-    script.src = src
-    script.onload = () => resolve()
-    script.onerror = (err) => reject(err)
-    document.body.appendChild(script)
-  })
+    new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = (err) => reject(err);
+      document.body.appendChild(script);
+    });
 
   const initializeGoogleAccount = (clId) => {
-
-    const src = 'https://accounts.google.com/gsi/client'
+    const src = "https://accounts.google.com/gsi/client";
     loadScript(src)
       .then(() => {
         /*global google*/
-
         google.accounts.id.initialize({
           client_id: clId,
           callback: googleLoginCallbackHandler,
         });
-    
+
         google.accounts.id.renderButton(document.getElementById("signInDiv"), {
           theme: "outline",
           size: "large",
         });
       })
-      .catch(console.error)
+      .catch(console.error);
   };
 
   const googleLoginCallbackHandler = (res) => {

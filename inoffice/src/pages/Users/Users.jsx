@@ -7,21 +7,20 @@ import Title from "./Title";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOffices } from "../../redux/Offices/offices";
-import {
-  fetchEmployeesApi,
-  updateEmployeeApi,
-} from "../../services/employee.service";
+import { fetchEmployeesApi, updateEmployeeApi} from "../../services/employee.service";
 import { openNotification } from "../../components/notification/Notification";
 import MainLayout from "../../layouts/MainLayout";
+import { filterEmployees } from "../../utils/filterEmployees";
 
 const Users = () => {
   const [inputFilter, setInputFilter] = useState("");
-  const { decodedUser } = useSelector((state) => state.user);
   const employees = useSelector((state) => state.employees.employees);
+  const loggedUser = useSelector((state) => state.user.loggedUser);
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
   const dispatch = useDispatch();
 
   const getUsers = async () => {
-    fetchEmployeesApi(dispatch, decodedUser);
+    fetchEmployeesApi(dispatch);
   };
 
   const assignAsAdmin = (value) => {
@@ -47,6 +46,10 @@ const Users = () => {
     dispatch(fetchOffices());
     getUsers();
   }, []);
+
+  useEffect(() => {
+    setFilteredEmployees(filterEmployees(employees, loggedUser));
+  }, [employees, loggedUser]);
 
   return (
     <Layout>
@@ -80,7 +83,7 @@ const Users = () => {
                       showSizeChanger: false,
                       size: "small",
                     }}
-                    dataSource={employees.filter(
+                    dataSource={filteredEmployees.filter(
                       ({ firstName, surname }) =>
                         firstName
                           .toLowerCase()

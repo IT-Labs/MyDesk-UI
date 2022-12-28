@@ -19,22 +19,16 @@ import CardsSection from "../../components/CardsComponent/CardsSection";
 import styles from "./Homepage.module.scss";
 import Input from "antd/lib/input/Input";
 import InfiniteScroll from "react-infinite-scroll-component";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { fetchEmployeesApi } from "../../services/employee.service";
 import { showReviewsForSelectedCardApi } from "../../services/review.service";
 import { sendReservationApi } from "../../services/reservation.service";
-
 import { setEnd, setStart } from "../../redux/Date/Date";
 import { DownOutlined } from "@ant-design/icons";
-import {
-  openError,
-  openNotification,
-} from "../../components/notification/Notification";
-
+import { openError, openNotification } from "../../components/notification/Notification";
 import { getAvatar } from "../../redux/Avatar/Avatar";
 import MainLayout from "../../layouts/MainLayout";
+import { filterEmployees } from "../../utils/filterEmployees";
 
 const Home = () => {
   const [officeId, setOfficeId] = useState();
@@ -60,7 +54,8 @@ const Home = () => {
   const [disableReserveBtn, setDisableReserveBtn] = useState(true);
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
-  const user = useSelector((state) => state.user.decodedUser);
+  const loggedUser = useSelector((state) => state.user.loggedUser);
+  const [filteredEmployees, setFilteredEmployees] = useState(employees);
 
   const closeModalFunction = () => {
     setIsModalVisible(false);
@@ -74,7 +69,7 @@ const Home = () => {
   };
 
   const clickSingleMonitor = () => {
-    setSingleMonitor(!singleMonitor);
+    setSingleMonitor((singleMonitor) => !singleMonitor);
     setSelectedCategories({
       ...selectedCategories,
       singleMonitor: !singleMonitor,
@@ -82,7 +77,7 @@ const Home = () => {
   };
 
   const clickDualMonitor = () => {
-    setDualMonitor(!dualMonitor);
+    setDualMonitor((dualMonitor) => !dualMonitor);
     setSelectedCategories({
       ...selectedCategories,
       doubleMonitor: !dualMonitor,
@@ -90,7 +85,7 @@ const Home = () => {
   };
 
   const clickNearWindow = () => {
-    setNearWindow(!nearWindow);
+    setNearWindow((nearWindow) => !nearWindow);
     setSelectedCategories({
       ...selectedCategories,
       nearWindow: !nearWindow,
@@ -123,7 +118,7 @@ const Home = () => {
   };
 
   const getUsers = async () => {
-    fetchEmployeesApi(dispatch, user);
+    fetchEmployeesApi(dispatch);
   };
 
   const filterByAvailability = (e) => {
@@ -163,7 +158,7 @@ const Home = () => {
       deskId: selectedCard.id,
       startDate: startDateRes,
       endDate: endDateRes,
-      employeeEmail: user.preferred_username ?? user.email,
+      employeeEmail: loggedUser.preferred_username ?? loggedUser.email,
     };
     sendReservation(data, false);
   };
@@ -202,7 +197,7 @@ const Home = () => {
       setSelectedCoworker({});
       return;
     }
-    const foundEmployee = employees.find(
+    const foundEmployee = filteredEmployees.find(
       (item) => `${item.firstName} ${item.surname} ${item.jobTitle}` === val
     );
 
@@ -211,10 +206,25 @@ const Home = () => {
     setSelectedCoworker(foundEmployee);
   };
 
+  const getLoggedUserImage = () => {
+    const loggedEmployee = employees.find(
+      (employee) => employee.email === loggedUser.preferred_username
+    );
+    setFilteredEmployees(filterEmployees(employees, loggedUser));
+    if (loggedEmployee && loggedEmployee.isSSOAccount) {
+      dispatch(getAvatar());
+    }
+  };
+
   useEffect(() => {
-    dispatch(getAvatar());
     getUsers();
   }, []);
+
+  useEffect(() => {
+    if (loggedUser && employees.length) {
+      getLoggedUserImage();
+    }
+  }, [employees, loggedUser]);
 
   useEffect(() => {
     setSelectedCoworker({});
@@ -481,8 +491,8 @@ const Home = () => {
                   onChange={setCoworker}
                   disabled={!forCoworker}
                 >
-                  {employees &&
-                    employees.map((item) => (
+                  {filteredEmployees &&
+                    filteredEmployees.map((item) => (
                       <Select.Option
                         key={item.id}
                         value={`${item.firstName} ${item.surname} ${item.jobTitle}`}
