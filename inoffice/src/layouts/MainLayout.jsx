@@ -1,15 +1,25 @@
 import React from "react";
 import HeaderBar from "./HeaderBar/HeaderBar";
 import { Layout } from "antd";
+import styles from "./MainLayout.module.scss";
 
 const { Footer } = Layout;
 
-const MainLayout = ({ children, isHome, ...props }) => {
+const MainLayout = ({ children, isHome, isDashboard, ...props }) => {
   return (
     <Layout>
       <HeaderBar isHome={isHome} />
-      <div>{children}</div>
-      <Footer style={{ textAlign: "center" }}>
+      <div
+        className={
+          isHome || isDashboard
+            ? styles.contentChildrenAutoHeight
+            : styles.contentChildren
+        }
+      >
+        {children}
+      </div>
+
+      <Footer className={styles.footer}>
         MyDesk ©2022 Created by MyDeskTeam
       </Footer>
     </Layout>

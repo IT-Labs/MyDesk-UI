@@ -6,7 +6,6 @@ import api from "../../helper/api";
 import { useNavigate } from "react-router-dom";
 import jwt from "jwt-decode";
 import styles from "./Login.module.scss";
-import logo from "../../assets/Microsoft logo.png";
 import { Alert, Button, Checkbox, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { openError } from "../notification/Notification";
@@ -45,20 +44,17 @@ const Login = () => {
 
   const initializeGoogleAccount = (clId) => {
     const src = "https://accounts.google.com/gsi/client";
-    loadScript(src)
-      .then(() => {
-        /*global google*/
-        google.accounts.id.initialize({
-          client_id: clId,
-          callback: googleLoginCallbackHandler,
-        });
+    loadScript(src).then(() => {
+      /*global google*/
+      google.accounts.id.initialize({
+        client_id: clId,
+        callback: googleLoginCallbackHandler,
+      });
 
-        google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-          theme: "outline",
-          size: "large",
-        });
-      })
-      .catch(console.error);
+      google.accounts.id.renderButton(document.getElementById("signInGoogle"), {
+        text: "signin_with",
+      });
+    });
   };
 
   const googleLoginCallbackHandler = (res) => {
@@ -244,35 +240,27 @@ const Login = () => {
               </Form>
             </div>
 
-            <p className={styles.loginDivider}>
-              Or Log in with your Microsoft account
-            </p>
-            <MicrosoftLogin
-              clientId={process.env.REACT_APP_CLIENT_ID}
-              authCallback={microsoftLoginHandler}
-              tenantUrl={`https://login.microsoftonline.com/{${process.env.REACT_APP_TENANT_ID}}`}
-              redirectUri={url}
-              forceRedirectStrategy={true}
-              withUserData={true}
-              useLocalStorageCache={true}
-              className={styles.loginBtn}
-              graphScopes={["user.read", "user.readbasic.all"]}
-              prompt={"select_account"}
-            >
-              <Button
-                className={styles.btn}
-                data-cy="login-microsoftssobtn-button"
-              >
-                <img
-                  style={{ width: "150px", height: "50px" }}
-                  src={logo}
-                  alt="Sign on with microsoft"
-                />
-              </Button>
-            </MicrosoftLogin>
+            <p className={styles.loginDivider}>or login with</p>
 
-            {/* Google login */}
-            <div id="signInDiv"></div>
+            <div className={styles.loginButtons}>
+              <div className={styles.loginBtn}>
+                <MicrosoftLogin
+                  clientId={process.env.REACT_APP_CLIENT_ID}
+                  authCallback={microsoftLoginHandler}
+                  tenantUrl={`https://login.microsoftonline.com/{${process.env.REACT_APP_TENANT_ID}}`}
+                  redirectUri={url}
+                  forceRedirectStrategy={true}
+                  withUserData={true}
+                  useLocalStorageCache={true}
+                  buttonTheme="light"
+                  graphScopes={["user.read", "user.readbasic.all"]}
+                  prompt={"select_account"}
+                ></MicrosoftLogin>
+              </div>
+
+              {/* Google login */}
+              <div id="signInGoogle" alt="Sign in with Google"></div>
+            </div>
           </div>
         </div>
       )}

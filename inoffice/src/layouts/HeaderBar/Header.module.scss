@@ -24,13 +24,13 @@
 }
 
 .sideBarLogo {
-  background: url("../../assets/Logo\ MY\ DESK.svg") no-repeat;
+  background: url("../../assets/Logo\ MY\ DESK.png") no-repeat;
   width: 145px !important;
   min-height: 70px;
   position: relative;
   top: 5px;
   left: -5% !important;
-  /* scale: calc(); */
+  background-size: 100%;
 }
 
 .link {

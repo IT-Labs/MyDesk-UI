@@ -275,7 +275,7 @@ h1 {
 
 .ant-layout,
 .container {
-  background: url("./assets/Path\ 467.svg");
+  background-image: url("./assets/background.png");
   height: 100%;
   width: 100%;
   background-repeat: no-repeat;
@@ -529,7 +529,8 @@ p {
 }
 
 .sideBarLogo {
-  background: url("./assets/Logo\ MY\ DESK.svg") no-repeat;
+  background: url("./assets/Logo\ MY\ DESK.png") no-repeat;
+  background-size: 100%;
 }
 
 .sideMenu {

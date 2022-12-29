@@ -1,0 +1,16 @@
+.contentChildren {
+  height: 95vh;
+}
+
+.footer {
+  text-align: center;
+}
+
+@media screen and (max-width: 870px) {
+  .contentChildrenAutoHeight {
+    height: auto;
+  }
+  .contentChildren {
+    height: 95vh;
+  }
+}

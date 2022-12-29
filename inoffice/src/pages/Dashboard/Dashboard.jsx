@@ -366,7 +366,7 @@ const Dashboard = () => {
   return (
     <Layout>
       <Sidebar selected="1" />
-      <MainLayout isHome={false}>
+      <MainLayout isDashboard={true}>
         <Content className={styles.content}>
           <div className={styles.container}>
             <div>

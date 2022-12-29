@@ -9,7 +9,7 @@ const EditOffice = (props) => {
   return (
     <Layout>
       <Sidebar selected="2" />
-      <MainLayout isHome={false}>
+      <MainLayout isDashboard={true}>
         <Content>
           <OfficeDetails props={props} />
         </Content>
