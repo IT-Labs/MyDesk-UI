@@ -220,7 +220,7 @@ const ReservationList = () => {
       date: `${moment(start).format("DD/MM/YYYY")}-${moment(end).format(
         "DD/MM/YYYY"
       )}`,
-      email: item.employee.email
+      email: item.employee.email,
     };
   };
 
@@ -251,7 +251,6 @@ const ReservationList = () => {
   };
 
   const getImagesForReservations = async (reservations, isAllFuture) => {
-
     const loggedEmployee = employees.find(
       (employee) => employee.email === loggedUser.preferred_username
     );
@@ -259,17 +258,19 @@ const ReservationList = () => {
     if (loggedEmployee && loggedEmployee.isSSOAccount) {
       reservations = await Promise.all(
         reservations.map(async (reservation) => {
+          if (
+            reservation.isSSOAccount &&
+            !reservation.email.includes("gmail.com")
+          ) {
+            const image = await getImage(reservation.email);
+            return await addImage(reservation, image).then((res) => {
+              return res;
+            });
+          }
 
-          if (reservation.isSSOAccount && !reservation.email.includes('gmail.com')) {
-              const image = await getImage(reservation.email);
-              return await addImage(reservation, image).then((res) => {
-                return res;
-              });
-            }
-            
-            return reservation;
-          })
-        );
+          return reservation;
+        })
+      );
     }
 
     if (isAllFuture === null) {
@@ -553,16 +554,19 @@ const ReservationList = () => {
               }}
             >
               <div className={styles.inputs}>
-                <div>
-                  <SearchOutlined style={{ margin: 10 }} />
+                <div className={styles.filterInputs}>
+                  <SearchOutlined
+                    className={styles.hideIcon}
+                    style={{ margin: 10 }}
+                  />
                   <Tooltip title="Select which office you want to filter by">
                     <Select
                       showSearch
+                      className={styles.searchInput}
                       data-cy="office-branch-select"
                       defaultValue="Select office"
                       value={filterOffice}
                       onChange={(officeName) => setFilterOffice(officeName)}
-                      style={{ width: 200 }}
                       loading={loadingAllReservations}
                       disabled={loadingAllReservations}
                     >
@@ -577,12 +581,14 @@ const ReservationList = () => {
                     </Select>
                   </Tooltip>
                 </div>
-                <div>
-                  <FileSearchOutlined style={{ margin: 10 }} />
+                <div className={styles.filterInputs}>
+                  <FileSearchOutlined
+                    className={styles.inputIcon}
+                    style={{ margin: 10 }}
+                  />
                   <Tooltip title="Enter the First or the Last name of the user you want to search">
                     <Input
                       className={styles.searchInput}
-                      style={{ width: 200 }}
                       placeholder="Search by name"
                       data-cy="search-by-name-input"
                       disabled={loadingAllReservations}

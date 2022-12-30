@@ -24,7 +24,7 @@
 }
 
 .searchInput {
-  width: 300px;
+  width: 80%;
 }
 
 .searchInput:focus,
@@ -75,11 +75,30 @@
   font-size: 13px;
 }
 
+.filterInputs {
+  width: 200px;
+}
+
 @media screen and (max-width: 820px) {
   .content {
     .contentWrapper {
       width: 90%;
     }
+  }
+  .filterInputs {
+    width: 80%;
+  }
+  .cancelBtn,
+  .cancelBtn::after,
+  .cancelBtn:focus,
+  .cancelBtn .antd-btn .antd-btn-default {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .inputIcon {
+    display: none;
   }
 }
 
@@ -88,6 +107,14 @@
     display: block;
   }
   .inputs {
-    display: block;
+    display: flex;
+    flex-direction: column;
+  }
+  .filterInputs {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  .searchInput {
+    width: 100%;
   }
 }
