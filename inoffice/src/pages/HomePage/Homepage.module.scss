@@ -229,6 +229,7 @@
     justify-content: center;
   }
 }
+
 @media screen and (max-width: 480px) {
   .leftInputRow {
     justify-content: center;
@@ -243,5 +244,15 @@
   }
   .inputWidth {
     max-width: 100%;
+  }
+
+  .rightInputRow {
+    margin-bottom: 1rem;
+  }
+
+  .contentRow {
+    height: auto;
+    background: rgb(92, 177, 184);
+    padding: 5px;
   }
 }

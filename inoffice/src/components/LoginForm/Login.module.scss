@@ -142,7 +142,13 @@
   .form {
     padding: 0 50px;
   }
+
+  .alert {
+    height: 55px;
+    font-size: 12px;
+  }
 }
+
 @media screen and (max-width: 280px) {
   .login {
     width: 250px;
