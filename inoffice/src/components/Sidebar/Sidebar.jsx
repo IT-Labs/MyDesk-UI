@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Menu, Tooltip } from "antd";
-import {
-  LeftCircleOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  RightCircleOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import FeatherIcon from "feather-icons-react";
 import Sider from "antd/lib/layout/Sider";
 import jwt from "jwt-decode";

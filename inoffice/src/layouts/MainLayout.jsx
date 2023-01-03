@@ -8,7 +8,7 @@ const { Footer } = Layout;
 const MainLayout = ({ children, isHome, isDashboard, ...props }) => {
   return (
     <Layout>
-      <HeaderBar isHome={isHome} />
+      <HeaderBar isHome={isHome} isDashboard={isDashboard} />
       <div
         className={
           isHome || isDashboard

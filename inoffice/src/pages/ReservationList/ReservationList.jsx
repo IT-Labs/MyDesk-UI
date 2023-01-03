@@ -519,7 +519,7 @@ const ReservationList = () => {
 
   return (
     <Layout>
-      <Sidebar selected="4" />
+      <div>{!media.matches && <Sidebar selected="4" />}</div>
       <MainLayout isHome={false}>
         <Content className={styles.content}>
           <div className={styles.contentWrapper}>

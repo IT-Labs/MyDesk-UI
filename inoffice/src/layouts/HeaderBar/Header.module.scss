@@ -88,18 +88,49 @@
   }
 }
 
+.logoMenu {
+  .menuIcon {
+    position: relative;
+    top: 5px;
+    left: -35px;
+    color: black;
+    font-size: 40px;
+    margin-right: 5px;
+  }
+}
+
+.noDisplay {
+  display: none;
+}
+
+.drawerContent {
+  width: 225px !important;
+}
+
 @media screen and (max-width: 820px) {
   .header {
     margin-top: 0.3rem;
     margin-bottom: 0.3rem;
+    justify-content: space-between;
+  }
+
+  .container {
+    width: max-content;
+  }
+
+  .sideBarLogo {
+    width: 110px !important;
+    left: 0% !important;
+  }
+
+  .logoMenu {
+    .menuIcon {
+      font-size: 30px;
+    }
   }
 }
 
 @media screen and (max-width: 580px) {
-  .sideBarLogo {
-    width: 110px !important;
-    left: -35% !important;
-  }
   .container {
     left: 40px;
   }

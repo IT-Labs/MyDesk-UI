@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import { Header } from "antd/lib/layout/layout";
 import placeholderAvatar from "../../assets/avatar.png";
 import HeaderImg from "./HeaderImg";
-import { Tooltip } from "antd";
+import { Tooltip, Drawer } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { setLoggedUser } from "../../redux/User/user";
 import { clearAvatar } from "../../redux/Avatar/Avatar";
+import MobileMenu from "../MobileMenu/MobileMenu";
 
 const HeaderBar = (props) => {
   const media = window.matchMedia("(max-width: 820px)");
@@ -17,6 +18,7 @@ const HeaderBar = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { avatar } = useSelector((state) => state.avatar);
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -24,10 +26,39 @@ const HeaderBar = (props) => {
     dispatch(clearAvatar());
     navigate("/");
   };
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Header className={props?.isHome ? styles.headerHome : styles.header}>
-      <div>{props?.isHome && <HeaderImg />}</div>
+      <div className={props.isHome ? styles.noDisplay : styles.logoMenu}>
+        {props?.isHome ||
+          (media.matches && (
+            <MenuUnfoldOutlined
+              className={styles.menuIcon}
+              onClick={() => {
+                showDrawer();
+              }}
+            />
+          ))}
+
+        <Drawer
+          title="My Desk"
+          placement="left"
+          className={styles.drawerContent}
+          onClose={onClose}
+          getContainer={false}
+          visible={open}
+        >
+          <MobileMenu></MobileMenu>
+        </Drawer>
+      </div>
+      <div>{(props?.isHome || media.matches) && <HeaderImg />}</div>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.items}>
@@ -52,7 +83,7 @@ const HeaderBar = (props) => {
                 data-cy="logout-button"
                 to="/"
                 onClick={handleLogout}
-                >
+              >
                 Logout
               </LogoutOutlined>
             </Tooltip>

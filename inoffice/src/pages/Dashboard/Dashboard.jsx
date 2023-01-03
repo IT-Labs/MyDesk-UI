@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import { Pie } from "@ant-design/charts";
 import styles from "./Dashboard.module.scss";
-import { Button, Modal, Select, Table } from "antd";
+import { Button, Drawer, Modal, Select, Table } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
@@ -24,6 +24,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { sortByName } from "../../utils/sortByName";
 
 const Dashboard = () => {
+  const media = window.matchMedia("(max-width: 820px)");
   const [desksForSelectedOffice, setDesksForSelectedOffice] = useState([]);
   const [deskData, setDeskData] = useState([
     {
@@ -365,7 +366,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Sidebar selected="1" />
+      <div>{!media.matches && <Sidebar selected="1" />}</div>
       <MainLayout isDashboard={true}>
         <Content className={styles.content}>
           <div className={styles.container}>

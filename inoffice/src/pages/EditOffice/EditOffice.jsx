@@ -6,9 +6,10 @@ import OfficeDetails from "./OfficeDetails";
 import MainLayout from "../../layouts/MainLayout";
 
 const EditOffice = (props) => {
+  const media = window.matchMedia("(max-width: 820px)");
   return (
     <Layout>
-      <Sidebar selected="2" />
+      <div>{!media.matches && <Sidebar selected="2" />}</div>
       <MainLayout isDashboard={true}>
         <Content>
           <OfficeDetails props={props} />

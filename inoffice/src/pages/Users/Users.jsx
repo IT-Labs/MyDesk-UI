@@ -16,6 +16,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { filterEmployees } from "../../utils/filterEmployees";
 
 const Users = () => {
+  const media = window.matchMedia("(max-width: 820px)");
   const [inputFilter, setInputFilter] = useState("");
   const employees = useSelector((state) => state.employees.employees);
   const loggedUser = useSelector((state) => state.user.loggedUser);
@@ -109,7 +110,7 @@ const Users = () => {
 
   return (
     <Layout>
-      <Sidebar selected="6" />
+      <div>{!media.matches && <Sidebar selected="6" />}</div>
       <MainLayout isHome={false}>
         <Content className={styles.contentAnt}>
           <Row className={styles.rowAnt}>

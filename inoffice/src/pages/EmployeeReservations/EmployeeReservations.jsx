@@ -12,6 +12,7 @@ import MainLayout from "../../layouts/MainLayout";
 import { sortByName } from "../../utils/sortByName";
 
 const EmployeeReservationList = () => {
+  const media = window.matchMedia("(max-width: 820px)");
   const [activeTabKey1, setActiveTabKey1] = useState("tab1");
   const token = jwt(localStorage.getItem("msal.idtoken"));
   const [data, setData] = useState([]);
@@ -44,7 +45,7 @@ const EmployeeReservationList = () => {
   if (!token.roles || (token.roles && token.roles[0] === "EMPLOYEE")) {
     return (
       <Layout>
-        <Sidebar selected="1" />
+        <div>{!media.matches && <Sidebar selected="1" />}</div>
         <MainLayout isHome={false}>
           <Content className={styles.contentStyle}>
             <Card
@@ -65,7 +66,7 @@ const EmployeeReservationList = () => {
   } else {
     return (
       <Layout>
-        <Sidebar selected="5" />
+        <div>{!media.matches && <Sidebar selected="5" />}</div>
         <MainLayout isHome={false}>
           <Content className={styles.contentStyle}>
             <Card

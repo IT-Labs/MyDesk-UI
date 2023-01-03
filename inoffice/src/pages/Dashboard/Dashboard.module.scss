@@ -139,7 +139,7 @@
   display: flex;
   justify-content: center;
   position: relative;
-  top: -50px;
+  top: -20px;
 }
 
 .select {
@@ -211,6 +211,10 @@
     justify-content: center;
     align-items: center;
     position: relative;
+  }
+
+  .content {
+    top: 0px;
   }
 }
 

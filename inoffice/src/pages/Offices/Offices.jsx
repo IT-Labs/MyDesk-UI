@@ -53,7 +53,7 @@ const Offices = () => {
 
   return (
     <Layout>
-      <Sidebar selected="2" />
+      <div>{!media.matches && <Sidebar selected="2" />}</div>
       <MainLayout isHome={false}>
         <Content className={styles.contentAnt}>
           <Row className={styles.rowAnt}>
