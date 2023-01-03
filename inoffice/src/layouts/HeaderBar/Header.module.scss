@@ -96,6 +96,11 @@
     color: black;
     font-size: 40px;
     margin-right: 5px;
+    z-index: 1000;
+  }
+
+  .menuIconHide {
+    z-index: -1;
   }
 }
 
@@ -103,8 +108,13 @@
   display: none;
 }
 
-.drawerContent {
+.drawerContentOpen {
   width: 225px !important;
+  z-index: 1000 !important;
+}
+
+.drawerContentClosed {
+  z-index: -1 !important;
 }
 
 @media screen and (max-width: 820px) {

@@ -11,9 +11,7 @@ const MainLayout = ({ children, isHome, isDashboard, ...props }) => {
       <HeaderBar isHome={isHome} isDashboard={isDashboard} />
       <div
         className={
-          isHome || isDashboard
-            ? styles.contentChildrenAutoHeight
-            : styles.contentChildren
+          isHome ? styles.contentChildrenHome : styles.contentChildrenAutoHeight
         }
       >
         {children}

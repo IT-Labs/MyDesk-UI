@@ -13,7 +13,6 @@ import MobileMenu from "../MobileMenu/MobileMenu";
 
 const HeaderBar = (props) => {
   const media = window.matchMedia("(max-width: 820px)");
-
   const user = useSelector((state) => state.user.loggedUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ const HeaderBar = (props) => {
         {props?.isHome ||
           (media.matches && (
             <MenuUnfoldOutlined
-              className={styles.menuIcon}
+              className={open ? styles.menuIconHide : styles.menuIcon}
               onClick={() => {
                 showDrawer();
               }}
@@ -50,7 +49,9 @@ const HeaderBar = (props) => {
         <Drawer
           title="My Desk"
           placement="left"
-          className={styles.drawerContent}
+          className={
+            open ? styles.drawerContentOpen : styles.drawerContentClosed
+          }
           onClose={onClose}
           getContainer={false}
           visible={open}

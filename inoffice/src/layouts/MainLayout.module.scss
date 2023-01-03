@@ -6,11 +6,24 @@
   text-align: center;
 }
 
-@media screen and (max-width: 870px) {
+.contentChildrenAutoHeight {
+  height: 95vh;
+}
+.contentChildrenHome {
+  height: 95vh;
+}
+
+@media screen and (max-width: 690px) {
   .contentChildrenAutoHeight {
     height: auto;
   }
   .contentChildren {
     height: 95vh;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .contentChildrenHome {
+    height: auto;
   }
 }
