@@ -8,10 +8,8 @@ pool:
   vmImage: ubuntu-latest
   
 variables:
-  artifactName: 'drop'
-  serviceConnection: 'ITL Gold'
-  apiUrl: https://inofficeapinet-dev.azurewebsites.net
-  deployment_token_dev: '507e0b32e861f6806eb52709ec4fa5544d86bba4ffdd4bf15cd44524f9c8ef0c2-13c52ad2-1cb1-4b09-b5e6-de7261f7d83f003160518'
+  artifactName: 'www'
+  app_location: 'mydesk'
 
 stages:
 
@@ -26,25 +24,25 @@ stages:
     - script: npm install
       displayName: 'Install Dependencies'
       condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
-      workingDirectory: '$(System.DefaultWorkingDirectory)/inoffice'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/$(app_location)'
      
     - script: npm run build
       displayName: 'Build application'
       condition: ne(variables['Build.SourceBranch'], 'refs/heads/main')
-      workingDirectory: '$(System.DefaultWorkingDirectory)/inoffice'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/$(app_location)'
     
     - task: CopyFiles@2
       displayName: 'Copy Build Output'
       condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
       inputs:
-          Contents: 'inoffice/**'
+          Contents: '$(app_location)/**'
           TargetFolder: '$(Build.ArtifactStagingDirectory)'               
     - task: PublishBuildArtifacts@1
       displayName: 'Publish to Azure Pipelines'
       condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
       inputs:
           PathtoPublish: $(Build.ArtifactStagingDirectory)
-          ArtifactName: 'www'
+          ArtifactName: $(artifactName)
           
 
 - stage: Dev
@@ -71,19 +69,19 @@ stages:
               inputs:
                 buildType: current
                 downloadType: single
-                artifactName: www
+                artifactName: $(artifactName)
                 downloadPath: $(System.ArtifactsDirectory)
 
             - task: AzureStaticWebApp@0
               displayName: Deploy to dev
               inputs:
-                app_location: inoffice
+                app_location: $(app_location)
                 skip_app_build: false
                 skip_api_build: false
                 verbose: true
                 azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
                 deployment_environment: development
-                workingDirectory: $(System.ArtifactsDirectory)/www
+                workingDirectory: $(System.ArtifactsDirectory)/$(artifactName)
               env:
                 REACT_APP_API_URL: $(REACT_APP_API_URL)
                 REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
@@ -116,18 +114,18 @@ stages:
               inputs:
                 buildType: current
                 downloadType: single
-                artifactName: www
+                artifactName: $(artifactName)
                 downloadPath: $(System.ArtifactsDirectory)
 
             - task: AzureStaticWebApp@0
               displayName: Deploy to production
               inputs:
-                app_location: inoffice
+                app_location: $(app_location)
                 skip_app_build: false
                 skip_api_build: false
                 verbose: true
                 azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
-                workingDirectory: $(System.ArtifactsDirectory)/www
+                workingDirectory: $(System.ArtifactsDirectory)/$(artifactName)
               env:
                 REACT_APP_API_URL: $(REACT_APP_API_URL)
                 REACT_APP_CLIENT_ID: $(REACT_APP_CLIENT_ID)
