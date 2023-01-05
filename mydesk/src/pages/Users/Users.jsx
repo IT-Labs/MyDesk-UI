@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Card, Input, Popconfirm, Row, Col, Table } from "antd";
+import { Button, Card, Input, Popconfirm, Row, Col, Table, Alert } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./Users.module.scss";
 import Title from "./Title";
@@ -17,10 +17,12 @@ import { filterEmployees } from "../../utils/filterEmployees";
 
 const Users = () => {
   const media = window.matchMedia("(max-width: 820px)");
-  const [inputFilter, setInputFilter] = useState("");
+  const [inputSearchUser, setInputSearchUser] = useState("");
   const employees = useSelector((state) => state.employees.employees);
   const loggedUser = useSelector((state) => state.user.loggedUser);
-  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [usersResult, setUsersResult] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [invalidSearchInput, setInvalidSearchInput] = useState(false);
   const dispatch = useDispatch();
   const usersColumns = [
     {
@@ -91,8 +93,22 @@ const Users = () => {
     });
   };
 
-  const handleChange = (e) => {
-    setInputFilter(e.target.value);
+  const onUserSearch = (e) => {
+    const inputValue = e.target.value;
+
+    setFilteredUsers(
+      usersResult.filter(
+        ({ firstName, surname }) =>
+          firstName.toLowerCase().includes(inputValue.toLowerCase()) ||
+          surname.toLowerCase().includes(inputValue.toLowerCase())
+      )
+    );
+
+    if (!inputValue) {
+      setInvalidSearchInput(false);
+    }
+
+    setInputSearchUser(inputValue);
   };
 
   const onSubmit = () => {
@@ -105,7 +121,15 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredEmployees(filterEmployees(employees, loggedUser));
+    if (!filteredUsers.length && inputSearchUser) {
+      setInvalidSearchInput(true);
+      return;
+    }
+    setInvalidSearchInput(false);
+  }, [filteredUsers]);
+
+  useEffect(() => {
+    setUsersResult(filterEmployees(employees, loggedUser));
   }, [employees, loggedUser]);
 
   return (
@@ -126,22 +150,28 @@ const Users = () => {
                 }
               >
                 <div style={{ overflowX: "scroll" }}>
-                  <Input
-                    className={styles.searchInput}
-                    onChange={handleChange}
-                    placeholder="Search Users"
-                  />
+                  <div className={styles.searchInput}>
+                    <Input onChange={onUserSearch} placeholder="Search Users" />
+                    {invalidSearchInput ? (
+                      <Alert
+                        message="There is no data or input is invalid."
+                        type="error"
+                        className={`${styles.alert} ${styles.input}`}
+                      />
+                    ) : null}
+                  </div>
+
                   <Table
                     style={{ overflow: "auto", overflowY: "hidden" }}
                     columns={usersColumns}
-                    dataSource={filteredEmployees.filter(
+                    dataSource={usersResult.filter(
                       ({ firstName, surname }) =>
                         firstName
                           .toLowerCase()
-                          .includes(inputFilter.toLowerCase()) ||
+                          .includes(inputSearchUser.toLowerCase()) ||
                         surname
                           .toLowerCase()
-                          .includes(inputFilter.toLowerCase())
+                          .includes(inputSearchUser.toLowerCase())
                     )}
                     pagination={{
                       pageSize: 5,
