@@ -45,7 +45,9 @@ const App = () => {
       <Routes>
         <Route
           path="/employee/home"
-          element={<PrivateRoute component={Home} compRoles={["EMPLOYEE"]} />}
+          element={
+            <PrivateRoute component={Home} compRoles={["EMPLOYEE", "gmail"]} />
+          }
         />
         <Route path="/" element={<Login />} />
         <Route exact path="/admin/edit/:name/:id" element={<EditOffice />} />
@@ -70,7 +72,7 @@ const App = () => {
           element={
             <PrivateRoute
               component={EmployeeReservationList}
-              compRoles={["EMPLOYEE", "ADMIN"]}
+              compRoles={["EMPLOYEE", "gmail"]}
             />
           }
         />

@@ -22,7 +22,7 @@ const PrivateRoute = ({ component: RouteComponent, compRoles }) => {
   }
 
   if (
-    jwt(token).name ||
+    (jwt(token).email && jwt(token).email.includes(compRoles[1])) ||
     (jwt(token).roles &&
       (jwt(token).roles === compRoles[0] ||
         jwt(token).roles[0] === compRoles[0] ||
