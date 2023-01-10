@@ -42,10 +42,13 @@ const EmployeeReservationList = () => {
     });
   }, []);
 
-  if (!token.roles || (token.roles && token.roles[0] === "EMPLOYEE")) {
+  if (
+    token.roles &&
+    (token.roles[0] === "ADMIN" || token.roles[1] === "ADMIN")
+  ) {
     return (
       <Layout>
-        <div>{!media.matches && <Sidebar selected="1" />}</div>
+        <div>{!media.matches && <Sidebar selected="5" />}</div>
         <MainLayout isHome={false}>
           <Content className={styles.contentStyle}>
             <Card
@@ -66,7 +69,7 @@ const EmployeeReservationList = () => {
   } else {
     return (
       <Layout>
-        <div>{!media.matches && <Sidebar selected="5" />}</div>
+        <div>{!media.matches && <Sidebar selected="1" />}</div>
         <MainLayout isHome={false}>
           <Content className={styles.contentStyle}>
             <Card

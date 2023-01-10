@@ -564,6 +564,10 @@ p {
   top: 60px !important;
 }
 
+.ant-drawer-content-wrapper {
+  width: 250px !important;
+}
+
 @media screen and (max-width: 820px) {
   .ant-table-thead > tr > th,
   .ant-table-tbody > tr > td,
