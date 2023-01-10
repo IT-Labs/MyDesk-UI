@@ -72,7 +72,10 @@
 
 .alert {
   height: 25px;
+  width: max-content;
   font-size: 13px;
+  top: 2px;
+  left: -35px;
 }
 
 .filterInputs {
@@ -94,11 +97,19 @@
   .cancelBtn .antd-btn .antd-btn-default {
     width: 100%;
   }
+
+  .alert {
+    left: 35px;
+  }
 }
 
 @media screen and (max-width: 670px) {
   .inputIcon {
     display: none;
+  }
+
+  .alert {
+    left: 0px;
   }
 }
 
