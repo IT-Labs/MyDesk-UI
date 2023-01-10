@@ -62,7 +62,11 @@ const HeaderBar = (props) => {
         </div>
       )}
 
-      <div>{(props?.isHome || media.matches) && <HeaderImg />}</div>
+      <div>
+        {(props?.isHome || media.matches) && (
+          <HeaderImg isHome={props.isHome} />
+        )}
+      </div>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.items}>
