@@ -35,30 +35,33 @@ const HeaderBar = (props) => {
 
   return (
     <Header className={props?.isHome ? styles.headerHome : styles.header}>
-      <div className={props.isHome ? styles.noDisplay : styles.logoMenu}>
-        {props?.isHome ||
-          (media.matches && (
-            <MenuUnfoldOutlined
-              className={open ? styles.menuIconHide : styles.menuIcon}
-              onClick={() => {
-                showDrawer();
-              }}
-            />
-          ))}
+      {!props.isHome && (
+        <div className={props.isHome ? styles.noDisplay : styles.logoMenu}>
+          {props?.isHome ||
+            (media.matches && (
+              <MenuUnfoldOutlined
+                className={open ? styles.menuIconHide : styles.menuIcon}
+                onClick={() => {
+                  showDrawer();
+                }}
+              />
+            ))}
 
-        <Drawer
-          title="My Desk"
-          placement="left"
-          className={
-            open ? styles.drawerContentOpen : styles.drawerContentClosed
-          }
-          onClose={onClose}
-          getContainer={false}
-          visible={open}
-        >
-          <MobileMenu></MobileMenu>
-        </Drawer>
-      </div>
+          <Drawer
+            title="My Desk"
+            placement="left"
+            className={
+              open ? styles.drawerContentOpen : styles.drawerContentClosed
+            }
+            onClose={onClose}
+            getContainer={false}
+            visible={open}
+          >
+            <MobileMenu></MobileMenu>
+          </Drawer>
+        </div>
+      )}
+
       <div>{(props?.isHome || media.matches) && <HeaderImg />}</div>
       <div className={styles.container}>
         <div className={styles.content}>
