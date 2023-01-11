@@ -58,11 +58,13 @@ const Users = () => {
       dataIndex: "assign",
       width: "5px",
       key: 3,
-      render: (text, data, index) => {
+      render: (text, user, index) => {
         return (
           <Popconfirm
-            title="Do you want to assign this user as admin?"
-            onConfirm={() => assignAsAdmin(data)}
+            title={`Do you want to assign this ${
+              !user.isAdmin ? "user" : "admin"
+            } as ${user.isAdmin ? "user" : "admin"}`}
+            onConfirm={() => assignAs(user)}
             okText="Yes"
             cancelText="No"
             className={styles.assignAsAdminButton}
@@ -70,7 +72,9 @@ const Users = () => {
             placement="topRight"
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
-            <Button type="primary">Assign as admin</Button>
+            <Button type="primary">
+              {!user.isAdmin ? "Assign as admin" : "Assign as user"}
+            </Button>
           </Popconfirm>
         );
       },
@@ -81,14 +85,17 @@ const Users = () => {
     fetchEmployeesApi(dispatch);
   };
 
-  const assignAsAdmin = (value) => {
+  const assignAs = (user) => {
     const body = {
-      isAdmin: false,
+      isAdmin: !user.isAdmin,
     };
 
-    updateEmployeeApi(value.id, body).then((res) => {
+    updateEmployeeApi(user.id, body).then(() => {
+      getUsers();
       openNotification(
-        `${value.firstName} ${value.surname} has been made admin successfully.`
+        `${user.firstName} ${user.surname} has been made ${
+          user.isAdmin ? "user" : "admin"
+        } successfully.`
       );
     });
   };
@@ -179,6 +186,7 @@ const Users = () => {
                       showSizeChanger: false,
                       size: "small",
                     }}
+                    rowKey="id"
                   />
                 </div>
               </Card>
