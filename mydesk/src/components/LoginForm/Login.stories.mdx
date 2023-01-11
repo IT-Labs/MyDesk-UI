@@ -11,13 +11,22 @@ import { Button } from "antd";
 <Canvas name="Login">
   <Story name="Login">
     <p>
-      In the login form we use the react-microsoft-login library. This library
+      In the login form we use three different way to login user in our application.
+      First, we can sign in with custom login form, when we enter our email, password and press Login button. 
+      
+      Second, we use the react-microsoft-login library. This library
       is used to simplify the entire process for SSO and makes the application
       more secure. We define our client id and tenant id from the Azure portal,
       what graph permissions that we want, in this case user.readbasic.all and
       user.read, a redirect url so it knows where to go when you enter all
       microsoft information needed, and a callback function to get all other
       information including the access token which we use for the graph api.
+
+      Third way is with using Google Identity services for authorization. Sign in with Google helps you
+      to quickly and easily manage user authentication on your website. Users sign into a Google account,
+      provide their consent, and securely share their profile information with your platform. Sign-in refers
+      to logging users into your website using their active Google account with a personalized sign-in button
+      or One Tap and Automatic sign-in for users already logged in to their Google account.
     </p>
     <Button style={{ height: 60}}>
       <img
@@ -26,5 +35,6 @@ import { Button } from "antd";
         alt="Sign on with microsoft"
       />
     </Button>
+
   </Story>
 </Canvas>
