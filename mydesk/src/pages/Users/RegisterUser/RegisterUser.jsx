@@ -46,7 +46,8 @@ const RegisterUser = (props) => {
 
   const passwordValidation = () => {
     return (
-      ((password.length < 8 && password.length >= 20) ||
+      (password.length < 8 ||
+        password.length >= 20 ||
         !password.match(/[A-Z]/) ||
         !password.match(/[a-z]/) ||
         !password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) ??
@@ -55,6 +56,11 @@ const RegisterUser = (props) => {
   };
 
   const handleRegister = async () => {
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)) {
+      openError("Invalid email address. Please enter a valid email address.");
+      return;
+    }
+
     if (passwordValidation()) {
       openError(
         "Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number."
@@ -83,7 +89,7 @@ const RegisterUser = (props) => {
       })
       .catch((err) => {
         console.log(err);
-        if (!err.response) {
+        if (!err.response || !err.response.data) {
           openError("Something went wrong. Please try again");
           return;
         }
