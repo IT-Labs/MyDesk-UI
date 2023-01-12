@@ -26,9 +26,22 @@ export class CommonsPage {
     return cy.get(".ant-notification-notice-description");
   }
 
+  accessDeniedMessage() {
+    return cy.get(".acccess-denied-wrap h1");
+  }
+
   /**
    * Methods.
    */
+
+  verifyAccessDeniedMessageIsDisplayed() {
+    this.accessDeniedMessage()
+      .should(
+        "have.text",
+        "401: Sorry, You Are Not Allowed to Access This Page"
+      )
+      .and("be.visible");
+  }
 }
 
 export const commonsPage = new CommonsPage();
