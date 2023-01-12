@@ -22,7 +22,7 @@ export const fetchEmployeesApi = async (dispatch) => {
 
 export const updateEmployeeApi = (userId, body) => {
   return api.put(`/admin/employee/${userId}`, body).catch((err) => {
-    openError(err.response.data[0]);
+    openError(err.response.data.ErrorMessage ?? err.response.data);
     console.log(err.response);
   });
 };

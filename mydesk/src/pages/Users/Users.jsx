@@ -61,10 +61,8 @@ const Users = () => {
       render: (text, user, index) => {
         return (
           <Popconfirm
-            title={`Do you want to assign this ${
-              !user.isAdmin ? "user" : "admin"
-            } as ${user.isAdmin ? "user" : "admin"}`}
-            onConfirm={() => assignAs(user)}
+            title={user.isAdmin ? "Do you want to assign this admin as user" : "Do you want to assign this user as admin"}
+            onConfirm={() => assignUserAsAdmin(user)}
             okText="Yes"
             cancelText="No"
             className={styles.assignAsAdminButton}
@@ -73,7 +71,7 @@ const Users = () => {
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           >
             <Button type="primary">
-              {!user.isAdmin ? "Assign as admin" : "Assign as user"}
+              {user.isAdmin ? "Assign as user" : "Assign as admin"}
             </Button>
           </Popconfirm>
         );
@@ -85,15 +83,21 @@ const Users = () => {
     fetchEmployeesApi(dispatch);
   };
 
-  const assignAs = (user) => {
+  const assignUserAsAdmin = (user) => {
     const body = {
       isAdmin: !user.isAdmin,
     };
 
-    updateEmployeeApi(user.id, body).then(() => {
+    updateEmployeeApi(user.id, body).then((response) => {
+      
+      if (!response) {
+        return;
+      }
+
       getUsers();
+
       openNotification(
-        `${user.firstName} ${user.surname} has been made ${
+        `${user.firstName} ${user.surname} has been set as ${
           user.isAdmin ? "user" : "admin"
         } successfully.`
       );
