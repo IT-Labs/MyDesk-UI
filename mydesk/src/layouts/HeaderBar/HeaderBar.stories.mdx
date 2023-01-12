@@ -1,6 +1,6 @@
 import { Meta, Canvas, Story } from "@storybook/addon-docs";
-import logo from "../../assets/Group 190.svg";
-import avatar from "../../assets/avatar.png"
+import logo from "../../assets/Logo MY DESK.png";
+import avatar from "../../assets/avatar.png";
 import { LogoutOutlined } from "@ant-design/icons";
 
 <Meta title="Header" />
@@ -12,13 +12,31 @@ import { LogoutOutlined } from "@ant-design/icons";
     <p>
       The header component uses multiple components
       <ul>
-        <li>The logo: <img src={logo} alt="logo" style={{width: 60, height: 60}} /></li>
-        <li>The log out button: <LogoutOutlined style={{position: "relative", top: "-10px"}}/></li>
-        <li>And the user information: <span>John Doe</span><img src={avatar} alt='avatar' style={{width: 45, height: 45, borderRadius: "50%"}}/> </li>
+        <li>
+          The logo:{" "}
+          <img src={logo} alt="logo" style={{ width: 60, height: 60 }} />
+        </li>
+        <li>
+          The log out button:{" "}
+          <LogoutOutlined style={{ position: "relative", top: "-10px" }} />
+        </li>
+        <li>
+          And the user information: <span>John Doe</span>
+          <img
+            src={avatar}
+            alt="avatar"
+            style={{ width: 45, height: 45, borderRadius: "50%" }}
+          />{" "}
+        </li>
       </ul>
-      When clicking on the logo, it takes you to the homepage where you can make a reservation in any office of your choice.<br/>
-      By clicking the logout button you remove your current access to the page and will have to log in again to access the application's features<br />
-      The user information tab is used to travel to the dashboard of sorts. This is covered in greater detail in the Sidebar story.
+      When clicking on the logo, it takes you to the homepage where you can make
+      a reservation in any office of your choice.
+      <br />
+      By clicking the logout button you remove your current access to the page
+      and will have to log in again to access the application's features
+      <br />
+      The user information tab is used to travel to the dashboard of sorts. This
+      is covered in greater detail in the Sidebar story.
     </p>
   </Story>
 </Canvas>
