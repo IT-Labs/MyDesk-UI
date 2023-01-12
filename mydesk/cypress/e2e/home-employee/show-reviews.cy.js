@@ -1,13 +1,13 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
-import * as userData from "../../fixtures/userData.json";
+import * as adminUserData from "../../fixtures/adminUserData.json";
 
 describe("Show reviews in Homepage", () => {
   it("Verify user is not able to click on the Show reviews button before selecting the entity", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     homeEmployeePage.assertShowReviewsButtonIsDisabled();
   });
@@ -15,8 +15,8 @@ describe("Show reviews in Homepage", () => {
   it("Verify user is able to click on the Show reviews button after selecting the entity", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");
@@ -31,8 +31,8 @@ describe("Show reviews in Homepage", () => {
   it("Verify clicking OK button closes the modal", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");
@@ -50,8 +50,8 @@ describe("Show reviews in Homepage", () => {
   it.skip("Verify clicking outside the modal closes it", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
 
     homeEmployeePage.selectOffice("Blue-Office Resen");

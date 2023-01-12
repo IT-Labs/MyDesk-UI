@@ -1,7 +1,7 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
 import { employeeReservationsPage } from "../../support/pages/employee-reservations";
-import * as userData from "../../fixtures/userData.json";
+import * as adminUserData from "../../fixtures/adminUserData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
 import * as officesData from "../../fixtures/officesData.json";
 import * as apiEndpoints from "../../fixtures/apiEndpoints.json";
@@ -10,8 +10,8 @@ describe("Users can select a desk", () => {
   it("Verify that the homepage offices list contains all the offices that are placed in the admin Offices list", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     homeEmployeePage.getOfficesListInHomepage();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
@@ -22,12 +22,12 @@ describe("Users can select a desk", () => {
   it("Verify that the user can select an office from the list", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     homeEmployeePage.assertUserNameInHeader(
-      `${userData.cypressAutomationFirstName} ${userData.cypressAutomationLastName}`
+      `${adminUserData.cypressAutomationFirstName} ${adminUserData.cypressAutomationLastName}`
     );
     cy.assertLoadingDotsNotVisible();
     cy.visit(urlSlugs.employee + urlSlugs.reservations);
@@ -36,12 +36,12 @@ describe("Users can select a desk", () => {
   });
 
   it("Verify that correct data is returned when office is selected on home employee page", () => {
-    const SKOPJE_OFFICE_ID = 77;
+    const SKOPJE_OFFICE_ID = 1;
 
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     cy.assertLoadingDotsNotVisible();
