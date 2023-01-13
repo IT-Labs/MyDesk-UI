@@ -36,18 +36,24 @@ export class OfficesPage {
    */
 
   searchOffice(office) {
-    this.searchOfficeField()
-    .clear()
-    .type(office);
+    this.searchOfficeField().clear().type(office);
   }
 
   deleteOffice() {
     this.deleteOfficeButton().click();
-    cy.contains('Yes').click();
+    cy.contains("Yes").click();
   }
 
   verifySuccessfullyDeletedOfficeMessage() {
-    cy.contains('You have successfully deleted the selected office').should('be.visible');
+    cy.contains("You have successfully deleted the selected office").should(
+      "be.visible"
+    );
+  }
+
+  verifySuccessfullyAddedNewOfficeMessage() {
+    cy.contains("You have successfully added a new office").should(
+      "be.visible"
+    );
   }
 
   editOffice() {
@@ -59,7 +65,9 @@ export class OfficesPage {
     this.officeNameField().type(officeName);
     this.officeLocationField().type(officeLocation);
     this.saveNewOfficeButton().click();
+    cy.wait(3000);
+    //this.verifySuccessfullyAddedNewOfficeMessage();
   }
- }
+}
 
- export const officesPage = new OfficesPage();
+export const officesPage = new OfficesPage();

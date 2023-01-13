@@ -1,5 +1,5 @@
 import { loginPage } from "../../support/pages/login";
-import * as userData from "../../fixtures/userData.json";
+import * as adminUserData from "../../fixtures/adminUserData.json";
 
 describe("Login failed functionality", () => {
   const INCORRECT_PASSWORD = "incorrect-password";
@@ -12,7 +12,10 @@ describe("Login failed functionality", () => {
 
   it("Verifies user cannot login with valid email and invalid password", () => {
     cy.visit("/");
-    loginPage.doLogin(userData.cypressAutomationUserEmail, INCORRECT_PASSWORD);
+    loginPage.doLogin(
+      adminUserData.cypressAutomationUserEmail,
+      INCORRECT_PASSWORD
+    );
     loginPage.verifyIncorrectCredentialsMessageIsDisplayed();
   });
 

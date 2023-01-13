@@ -1,6 +1,6 @@
 import { loginPage } from "../../support/pages/login";
 import { homeEmployeePage } from "../../support/pages/home-employee";
-import * as userData from "../../fixtures/userData.json";
+import * as adminUserData from "../../fixtures/adminUserData.json";
 
 describe("Remember me functionality", () => {
   it("Remember me checkbox on login page is unselected by default", () => {
@@ -13,12 +13,12 @@ describe("Remember me functionality", () => {
   it.skip("Verify that when the “Remember me” checkbox on login page is selected, credentials are remembered", () => {
     cy.visit("/");
     loginPage.doLoginWithRemember(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     homeEmployeePage.clickLogoutButton();
     loginPage.assertCredentialsAreRemembered(
-      userData.cypressAutomationUserEmail
+      adminUserData.cypressAutomationUserEmail
     );
   });
 });

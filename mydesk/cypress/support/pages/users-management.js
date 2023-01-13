@@ -1,11 +1,18 @@
+import { commonsPage } from "./commons";
 import * as adminUserData from "../../fixtures/adminUserData.json";
 
-export class RegisterPage {
+export class UsersManagementPage {
   /**
    * Locators.
    */
-  createYourAccountLabel() {
-    return cy.get("[data-cy=create-your-account-label]");
+
+  addNewUserButton() {
+    return cy.get("#addButton");
+  }
+
+  closeModalIcon() {
+    // TODO: Add data-cy to code
+    return cy.get('button[aria-labelledby="close-modal"]');
   }
 
   emailInput() {
@@ -21,7 +28,11 @@ export class RegisterPage {
   }
 
   jobTitleInput() {
-    return cy.get("[data-cy=register-jobtitle-input]");
+    // TODO: Add data-cy to code
+    return cy.get(
+      "#job .ant-input-group .ant-select .ant-select-selector .ant-select-selection-search .ant-select-selection-search-input"
+    );
+    //return cy.get("[data-cy=register-jobtitle-input]");
   }
 
   passwordInputField() {
@@ -55,10 +66,28 @@ export class RegisterPage {
   /**
    * Methods.
    */
-  assertCreateYourAccountLabelIsDisplayed(email, password) {
-    this.createYourAccountLabel()
-      .should("have.text", "Create your account")
-      .and("be.visible");
+
+  clickAddNewUserButton() {
+    this.addNewUserButton().click();
+  }
+
+  closeAddUserModalForm() {
+    this.closeModalIcon().click();
+  }
+
+  addNewUser(email) {
+    this.clickAddNewUserButton();
+    this.populateRegisterForm(email);
+    this.clickRegisterSubmitButton();
+  }
+
+  verifySuccessfullyAddedNewUserMessage() {
+    commonsPage
+      .notificationModalMessageLabel()
+      .should("have.text", "Notification");
+    commonsPage
+      .notificationModalDescriptionLabel()
+      .should("have.text", "Registration successful.");
   }
 
   enterEmailAddress(email) {
@@ -73,8 +102,8 @@ export class RegisterPage {
     this.lastNameInput().type(lastName);
   }
 
-  enterJobTitle(jobTitle = "Job title") {
-    this.jobTitleInput().type(jobTitle);
+  enterJobTitle(jobTitle = "Senior Quality Assurance Engineer") {
+    this.jobTitleInput().type(`${jobTitle}{enter}`);
   }
 
   enterPassword(password = adminUserData.genericPassword) {
@@ -113,7 +142,7 @@ export class RegisterPage {
     email,
     firstName = "First name",
     lastName = "Last name",
-    jobTitle = "Job title",
+    jobTitle = "Senior Quality Assurance Engineer",
     password = "TestPassword123!",
     confirmationPassword = "TestPassword123!"
   ) {
@@ -194,5 +223,4 @@ export class RegisterPage {
     this.registerSubmitButton().should("be.visible");
   }
 }
-
-export const registerPage = new RegisterPage();
+export const usersManagementPage = new UsersManagementPage();
