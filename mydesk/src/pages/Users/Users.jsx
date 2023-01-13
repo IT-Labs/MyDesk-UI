@@ -1,6 +1,16 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Layout, { Content } from "antd/lib/layout/layout";
-import { Button, Card, Input, Popconfirm, Row, Col, Table, Alert } from "antd";
+import {
+  Button,
+  Card,
+  Input,
+  Popconfirm,
+  Row,
+  Col,
+  Table,
+  Alert,
+  Tooltip,
+} from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import styles from "./Users.module.scss";
 import Title from "./Title";
@@ -59,9 +69,14 @@ const Users = () => {
       width: "5px",
       key: 3,
       render: (text, user, index) => {
+        const isSSOUser = user.isSSOAccount;
         return (
           <Popconfirm
-            title={user.isAdmin ? "Do you want to assign this admin as user" : "Do you want to assign this user as admin"}
+            title={
+              user.isAdmin
+                ? "Do you want to assign this admin as user"
+                : "Do you want to assign this user as admin"
+            }
             onConfirm={() => assignUserAsAdmin(user)}
             okText="Yes"
             cancelText="No"
@@ -69,10 +84,19 @@ const Users = () => {
             shape="round"
             placement="topRight"
             icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            disabled={isSSOUser}
           >
-            <Button type="primary">
-              {user.isAdmin ? "Assign as user" : "Assign as admin"}
-            </Button>
+            {!isSSOUser ? (
+              <Button type="primary">
+                {user.isAdmin ? "Assign as user" : "Assign as admin"}
+              </Button>
+            ) : (
+              <Tooltip title="SSO user cannot be set as admin.">
+                <Button disabled={true} type="primary">
+                  {user.isAdmin ? "Assign as user" : "Assign as admin"}
+                </Button>
+              </Tooltip>
+            )}
           </Popconfirm>
         );
       },
@@ -89,7 +113,6 @@ const Users = () => {
     };
 
     updateEmployeeApi(user.id, body).then((response) => {
-      
       if (!response) {
         return;
       }
