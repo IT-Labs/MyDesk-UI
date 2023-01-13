@@ -54,9 +54,7 @@ export class AdminReservationsPage {
 
   assertOfficeIsFiltered(officeName) {
     this.officeBranchFilterDropdown().click({ force: true });
-    this.officeBranchFilterInput().type(`${officeName}{enter}`, {
-      force: true,
-    });
+    this.officeBranchFilterInput().type(`${officeName}{enter}`);
     this.selectedOfficeLabel().should("have.text", officeName);
 
     this.myReservationsTableBody()
