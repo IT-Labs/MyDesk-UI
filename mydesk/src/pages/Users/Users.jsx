@@ -69,7 +69,7 @@ const Users = () => {
       width: "5px",
       key: 3,
       render: (text, user, index) => {
-        const isSSOUser = user.isSSOAccount || user.email.includes("gmail.com");
+        const isSSOUser = user.isSSOAccount;
         return (
           <Popconfirm
             title={
