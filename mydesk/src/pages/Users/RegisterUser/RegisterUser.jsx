@@ -32,6 +32,7 @@ const RegisterUser = (props) => {
     },
     false
   );
+
   unselectableConfirmPassword?.addEventListener(
     "select",
     function () {
@@ -40,28 +41,29 @@ const RegisterUser = (props) => {
     false
   );
 
-  const checkPassword = () => {
-    return confirmPassword !== password ?? true;
-  };
-
-  const passwordValidation = () => {
+  const isPasswordFormatValid = () => {
     return (
-      ((password.length < 8 && password.length >= 20) ||
-        !password.match(/[A-Z]/) ||
-        !password.match(/[a-z]/) ||
-        !password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) ??
-      true
+        password.length >= 8 &&
+        password.length <= 20 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/.test(password)
     );
   };
 
   const handleRegister = async () => {
-    if (passwordValidation()) {
-      openError(
-        "Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number."
-      );
+
+    if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)) {
+      openError("Invalid email address. Please enter a valid email address.");
       return;
     }
-    if (checkPassword()) {
+
+    if (!isPasswordFormatValid()) {
+      openError("Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number.");
+      return;
+    }
+    
+    if (confirmPassword !== password) {
       setErrorMsg(true);
       return;
     }
@@ -82,12 +84,12 @@ const RegisterUser = (props) => {
         props.showRegisterForm(false);
       })
       .catch((err) => {
-        console.log(err);
-        if (!err.response) {
+        console.log(err.response);
+        if (!err.response || !err.response.data) {
           openError("Something went wrong. Please try again");
           return;
         }
-        openError(err.response.data[0]);
+        openError(Array.isArray(err.response.data) ? err.response.data[0] : err.response.data);
       });
   };
 
