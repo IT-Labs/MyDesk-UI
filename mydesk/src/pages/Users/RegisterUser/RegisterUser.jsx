@@ -43,26 +43,27 @@ const RegisterUser = (props) => {
 
   const isPasswordFormatValid = () => {
     return (
-        password.length >= 8 &&
-        password.length <= 20 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/.test(password)
+      password.length >= 8 &&
+      password.length <= 20 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/.test(password)
     );
   };
 
   const handleRegister = async () => {
-
     if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)) {
       openError("Invalid email address. Please enter a valid email address.");
       return;
     }
 
     if (!isPasswordFormatValid()) {
-      openError("Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number.");
+      openError(
+        "Password must contain between 8 and 20 characters, at least one upper character, one lower case character, one special character, and one number."
+      );
       return;
     }
-    
+
     if (confirmPassword !== password) {
       setErrorMsg(true);
       return;
@@ -89,7 +90,11 @@ const RegisterUser = (props) => {
           openError("Something went wrong. Please try again");
           return;
         }
-        openError(Array.isArray(err.response.data) ? err.response.data[0] : err.response.data);
+        openError(
+          Array.isArray(err.response.data)
+            ? err.response.data[0]
+            : err.response.data
+        );
       });
   };
 
@@ -111,143 +116,136 @@ const RegisterUser = (props) => {
 
   return (
     <div>
-      <div className={styles.title}>
-        <p data-cy="create-your-account-label">Create user</p>
-      </div>
-      <div>
-        <Form className={styles.form} onFinish={handleRegister}>
+      <Form className={styles.form} onFinish={handleRegister}>
+        <Input
+          className={styles.input}
+          placeholder="Email"
+          data-cy="register-email-input"
+          type="TextArea"
+          prefix={<MailOutlined className="site-form-item-icon" />}
+          defaultValue=""
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          ref={inputRef}
+        />
+        <Form.Item
+          style={{ marginBottom: "0px" }}
+          rules={[
+            {
+              message: "First Name must contain only upper and lower character",
+              validator: (_, value) => {
+                if (value.match(/^[A-Za-z]*$/)) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject("Some message here");
+                }
+              },
+            },
+          ]}
+        >
           <Input
             className={styles.input}
-            placeholder="Email"
-            data-cy="register-email-input"
+            placeholder="First Name"
+            data-cy="register-firstname-input"
             type="TextArea"
-            prefix={<MailOutlined className="site-form-item-icon" />}
+            prefix={<UserOutlined className="site-form-item-icon" />}
             defaultValue=""
             required
-            onChange={(e) => setEmail(e.target.value)}
-            ref={inputRef}
+            onChange={(e) => setFirstName(e.target.value)}
           />
-          <Form.Item
-            style={{ marginBottom: "0px" }}
-            rules={[
-              {
-                message:
-                  "First Name must contain only upper and lower character",
-                validator: (_, value) => {
-                  if (value.match(/^[A-Za-z]*$/)) {
-                    return Promise.resolve();
-                  } else {
-                    return Promise.reject("Some message here");
-                  }
-                },
+        </Form.Item>
+        <Form.Item
+          style={{ marginBottom: "0px" }}
+          rules={[
+            {
+              message: "Last Name must contain only upper and lower character",
+              validator: (_, value) => {
+                if (value.match(/^[A-Za-z]*$/)) {
+                  return Promise.resolve();
+                } else {
+                  return Promise.reject("Some message here");
+                }
               },
-            ]}
+            },
+          ]}
+        >
+          <Input
+            className={styles.input}
+            placeholder="Last Name"
+            data-cy="register-lastname-input"
+            type="TextArea"
+            required
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            defaultValue=""
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </Form.Item>
+
+        <SelectComponent
+          data={allJobs}
+          onSelectChange={onSelectChange}
+        ></SelectComponent>
+
+        <Form.Item>
+          <Input.Password
+            className={styles.input}
+            id="password"
+            data-cy="password-input"
+            placeholder="Password"
+            prefix={<LockOutlined />}
+            defaultValue=""
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            onPaste={(e) => {
+              e.preventDefault();
+              return false;
+            }}
+            onCopy={(e) => {
+              e.preventDefault();
+              return false;
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          />
+
+          <Input.Password
+            className={styles.input}
+            id="confirmPassword"
+            data-cy="password-confirm-input"
+            placeholder="Confirm Password"
+            prefix={<LockOutlined />}
+            defaultValue=""
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            onPaste={(e) => {
+              e.preventDefault();
+              return false;
+            }}
+            onCopy={(e) => {
+              e.preventDefault();
+              return false;
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          />
+          {errorMsg ? (
+            <Alert
+              data-cy="password-not-matching-alert"
+              message="Password didn't match! Try again."
+              type="error"
+              className={styles.alert}
+            />
+          ) : null}
+
+          <Button
+            htmlType="submit"
+            data-cy="register-submit-button"
+            className={`${styles.buttons} ${styles.tealBtn}`}
+            block
+            size="large"
           >
-            <Input
-              className={styles.input}
-              placeholder="First Name"
-              data-cy="register-firstname-input"
-              type="TextArea"
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              defaultValue=""
-              required
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item
-            style={{ marginBottom: "0px" }}
-            rules={[
-              {
-                message:
-                  "Last Name must contain only upper and lower character",
-                validator: (_, value) => {
-                  if (value.match(/^[A-Za-z]*$/)) {
-                    return Promise.resolve();
-                  } else {
-                    return Promise.reject("Some message here");
-                  }
-                },
-              },
-            ]}
-          >
-            <Input
-              className={styles.input}
-              placeholder="Last Name"
-              data-cy="register-lastname-input"
-              type="TextArea"
-              required
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              defaultValue=""
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </Form.Item>
-
-          <SelectComponent
-            data={allJobs}
-            onSelectChange={onSelectChange}
-          ></SelectComponent>
-
-          <Form.Item>
-            <Input.Password
-              className={styles.input}
-              id="password"
-              data-cy="password-input"
-              placeholder="Password"
-              prefix={<LockOutlined />}
-              defaultValue=""
-              required
-              onChange={(e) => setPassword(e.target.value)}
-              onPaste={(e) => {
-                e.preventDefault();
-                return false;
-              }}
-              onCopy={(e) => {
-                e.preventDefault();
-                return false;
-              }}
-              onMouseDown={(e) => e.preventDefault()}
-            />
-
-            <Input.Password
-              className={styles.input}
-              id="confirmPassword"
-              data-cy="password-confirm-input"
-              placeholder="Confirm Password"
-              prefix={<LockOutlined />}
-              defaultValue=""
-              required
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              onPaste={(e) => {
-                e.preventDefault();
-                return false;
-              }}
-              onCopy={(e) => {
-                e.preventDefault();
-                return false;
-              }}
-              onMouseDown={(e) => e.preventDefault()}
-            />
-            {errorMsg ? (
-              <Alert
-                data-cy="password-not-matching-alert"
-                message="Password didn't match! Try again."
-                type="error"
-                className={styles.alert}
-              />
-            ) : null}
-
-            <Button
-              htmlType="submit"
-              data-cy="register-submit-button"
-              className={`${styles.buttons} ${styles.tealBtn}`}
-              block
-              size="large"
-            >
-              Register
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

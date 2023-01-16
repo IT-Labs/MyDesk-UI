@@ -330,6 +330,13 @@ td {
   display: none;
 }
 
+.addUserModal {
+  width: 420px !important;
+  .ant-modal-close-x {
+    display: block;
+  }
+}
+
 .ant-pagination-item {
   color: $teal;
   border-radius: 50%;
