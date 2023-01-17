@@ -3,5 +3,8 @@
   "admin": "/admin",
   "home": "/home",
   "reservations": "/reservations",
-  "offices": "/offices"
+  "offices": "/offices",
+  "users": "/users",
+  "dashboard": "/dashboard",
+  "denied": "/denied"
 }
