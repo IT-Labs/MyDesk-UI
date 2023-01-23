@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import RegisterModal from "../RegisterModal";
 import AddUserButton from "../AddUserButton/AddUserButton";
+import { Modal } from "antd";
+import RegisterUser from "../RegisterUser/RegisterUser";
 
 const AddUsersContainer = (props) => {
   const [isShown, setIsShown] = useState(false);
@@ -33,13 +34,18 @@ const AddUsersContainer = (props) => {
         }}
         addUserTextBtn={props.addUserTextBtn}
       />
-      {isShown ? (
-        <RegisterModal
-          onSubmit={onSubmit}
-          closeModal={closeModal}
-          onKeyDown={onKeyDown}
-        />
-      ) : null}
+
+      <Modal
+        title="Create user"
+        open={isShown}
+        closable={true}
+        onCancel={closeModal}
+        onKeyDown={onKeyDown}
+        footer={null}
+        className="addUserModal"
+      >
+        <RegisterUser showRegisterForm={onSubmit} />
+      </Modal>
     </>
   );
 };
