@@ -35,7 +35,7 @@ export class LoginPage {
   }
 
   microsoftSSOButton() {
-    return cy.get('[data-cy="login-microsoftssobtn-button"]');
+    return cy.get("[class*='loginButtons']").find("svg");
   }
 
   welcomeBackText() {
@@ -121,7 +121,7 @@ export class LoginPage {
   }
 
   verifyLoginPageTitle() {
-    cy.title().should("include", "inOffice");
+    cy.title().should("include", "MyDesk");
   }
 
   assertCredentialsAreRemembered(email) {

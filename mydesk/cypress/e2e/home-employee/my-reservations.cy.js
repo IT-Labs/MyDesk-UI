@@ -1,14 +1,14 @@
 import { loginPage } from "../../support/pages/login";
 import { employeeReservationsPage } from "../../support/pages/employee-reservations";
-import * as userData from "../../fixtures/userData.json";
+import * as adminUserData from "../../fixtures/adminUserData.json";
 import * as urlSlugs from "../../fixtures/urlSlugs.json";
 
 describe("Employees can manage their reservations", () => {
   it("Verify reserved desk is displayed in My reservations", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     cy.assertLoadingDotsNotVisible();
@@ -21,8 +21,8 @@ describe("Employees can manage their reservations", () => {
   it("Verify future reserved desk can be cancelled in My reservations", () => {
     cy.visit("/");
     loginPage.doLogin(
-      userData.cypressAutomationUserEmail,
-      userData.genericPassword
+      adminUserData.cypressAutomationUserEmail,
+      adminUserData.genericPassword
     );
     cy.url().should("contain", urlSlugs.employee + urlSlugs.home);
     cy.assertLoadingDotsNotVisible();

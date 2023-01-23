@@ -548,6 +548,7 @@ const Home = () => {
               visible={isModalVisible}
               onOk={closeModalFunction}
               onCancel={closeModalFunction}
+              data-cy="modal-container"
               cancelButtonProps={{ style: { display: "none" } }}
             >
               <InfiniteScroll className={styles.reviewModal} dataLength={3}>

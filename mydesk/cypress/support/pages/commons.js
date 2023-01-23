@@ -26,9 +26,29 @@ export class CommonsPage {
     return cy.get(".ant-notification-notice-description");
   }
 
+  adminPagesTitle() {
+    return cy.get(".ant-card-head-title p");
+  }
+  accessDeniedMessage() {
+    return cy.get(".acccess-denied-wrap h1");
+  }
+
   /**
    * Methods.
    */
+
+  assertTitleInAdminPages(pageName) {
+    this.adminPagesTitle().should("have.text", pageName).and("be.visible");
+  }
+  git;
+  verifyAccessDeniedMessageIsDisplayed() {
+    this.accessDeniedMessage()
+      .should(
+        "have.text",
+        "401: Sorry, You Are Not Allowed to Access This Page"
+      )
+      .and("be.visible");
+  }
 }
 
 export const commonsPage = new CommonsPage();
