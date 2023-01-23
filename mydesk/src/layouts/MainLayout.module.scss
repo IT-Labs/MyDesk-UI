@@ -1,10 +1,13 @@
 .contentChildren {
   height: 95vh;
+  margin-left: 200px;
 }
 
 .contentChildrenDashboard {
   height: 95vh;
+  margin-left: 200px;
 }
+
 .contentChildrenHome {
   height: 95vh;
 }
@@ -13,9 +16,26 @@
   text-align: center;
 }
 
+.footerDashboard {
+  text-align: center;
+  margin-left: 200px;
+}
+
 @media screen and (max-width: 992px) {
   .contentChildrenHome {
     height: auto;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .contentChildrenHome {
+    height: auto;
+  }
+
+  .contentChildrenDashboard,
+  .contentChildren,
+  .footerDashboard {
+    margin-left: 0px;
   }
 }
 
@@ -23,7 +43,13 @@
   .contentChildrenDashboard {
     height: auto;
   }
+
   .contentChildren {
     height: 95vh;
+  }
+}
+@media screen and (max-width: 380px) {
+  .contentChildren {
+    height: auto;
   }
 }

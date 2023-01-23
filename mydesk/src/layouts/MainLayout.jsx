@@ -21,7 +21,7 @@ const MainLayout = ({ children, isHome, isDashboard, ...props }) => {
         {children}
       </div>
 
-      <Footer className={styles.footer}>
+      <Footer className={isHome ? styles.footer : styles.footerDashboard}>
         MyDesk ©2022 Created by MyDeskTeam
       </Footer>
     </Layout>
