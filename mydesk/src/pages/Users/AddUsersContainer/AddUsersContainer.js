@@ -43,6 +43,7 @@ const AddUsersContainer = (props) => {
         onKeyDown={onKeyDown}
         footer={null}
         className="addUserModal"
+        destroyOnClose={true}
       >
         <RegisterUser showRegisterForm={onSubmit} />
       </Modal>
