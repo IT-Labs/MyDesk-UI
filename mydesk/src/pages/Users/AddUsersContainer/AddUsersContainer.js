@@ -37,12 +37,13 @@ const AddUsersContainer = (props) => {
 
       <Modal
         title="Create user"
-        open={isShown}
+        visible={isShown}
         closable={true}
         onCancel={closeModal}
         onKeyDown={onKeyDown}
         footer={null}
         className="addUserModal"
+        destroyOnClose={true}
       >
         <RegisterUser showRegisterForm={onSubmit} />
       </Modal>
