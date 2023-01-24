@@ -37,7 +37,7 @@ const AddUsersContainer = (props) => {
 
       <Modal
         title="Create user"
-        open={isShown}
+        visible={isShown}
         closable={true}
         onCancel={closeModal}
         onKeyDown={onKeyDown}
