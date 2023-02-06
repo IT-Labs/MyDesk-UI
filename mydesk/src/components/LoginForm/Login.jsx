@@ -14,6 +14,8 @@ import { encode as base64_encode } from "base-64";
 
 const Login = () => {
   let navigate = useNavigate();
+  let microsoftLoginInProgress;
+  let controller = new AbortController();
   const url = process.env.REACT_APP_URL;
   const [postedOnce, setPostedOnce] = useState(false);
   const [googleLogin, setGoogleLogin] = useState(false);
@@ -77,9 +79,11 @@ const Login = () => {
   };
 
   const microsoftLoginHandler = async (err, data, msal) => {
-    if (googleLogin || !data) {
+    if (googleLogin || microsoftLoginInProgress || !data) {
       return;
     }
+
+    microsoftLoginInProgress = true;
 
     localStorage.setItem("accessToken", data.accessToken);
     if (Date.now() >= jwt(localStorage.getItem("msal.idtoken")).exp * 1000) {
@@ -106,6 +110,7 @@ const Login = () => {
         .then((res) => {
           setLoading(false);
           setGoogleLogin(false);
+          microsoftLoginInProgress = false;
           navigate("/employee/home");
         })
         .catch((err) => {
@@ -165,6 +170,10 @@ const Login = () => {
 
     const clId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     initializeGoogleAccount(clId);
+    return () => {
+      controller.abort();
+      controller = new AbortController();
+    };
   }, []);
 
   return (
